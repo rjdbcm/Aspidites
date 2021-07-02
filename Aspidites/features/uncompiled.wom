@@ -1,0 +1,9 @@
+(A(a = 3 -> int; b = 3 -> int))
+   <*>a+b"
+
+i<@>(1,2,3)
+   print(i)
+
+C = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 5+3*(6**2)}
+
+colors <- list[3]

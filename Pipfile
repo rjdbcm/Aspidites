@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+six = "*"
+decorator = "*"
+future = "*"
+pyparsing = "*"
+pyrsistent = "*"
+restrictedpython = "*"
+numpy = "*"
+cython = "*"
+
+[dev-packages]
+mypy = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-depends = "*"
+pytest-mypy = "*"
+pytest-sugar = "*"
+pytest-xdist = "*"
+hypothesis = "*"
+
+[requires]
+python_version = "3.9"
