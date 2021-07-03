@@ -31,7 +31,7 @@ Aspidites (shield-bearer) is written in python and targets Cython
 |:---------|:-------|:------------------------------------------------------|
 | respects | ->     | `identifier` -> `constraining clauses`                    |
 | imposes  | <-     | `identifier` <- `imposed clauses`                         |
-| loops    | <@>    | `identifier` <@> `iterable container`<br>`...` |
+| loops    | <@>    | `identifier` <@> `iterable container`<br>`indent` `...` |
 | maybe    | <>     | <>`callable reference`                                  |
 | surely   | []     | []`callable reference`                                  |
 | return   | <*>    | <*>`statement `                                        |
