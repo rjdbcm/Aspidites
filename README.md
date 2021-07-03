@@ -29,11 +29,11 @@ Aspidites (shield-bearer) is written in python and targets Cython
 
 | Verbage  | Symbol | Example                                               |
 |:---------|:-------|:------------------------------------------------------|
-| respects | ->     | `identifier` -> `constraining clauses`                    |
-| imposes  | <-     | `identifier` <- `imposed clauses`                         |
-| loops    | <@>    | `identifier` <@> `iterable container`<br>`indent` `...` |
-| maybe    | <>     | <>`callable reference`                                  |
-| surely   | []     | []`callable reference`                                  |
-| return   | <*>    | <*>`statement `                                        |
-| pragma   |  #     | #`compiler directive`
+| respects | `->`     | `identifier` `->` `constraining clauses`                    |
+| imposes  | `<-`     | `identifier` `<-` `imposed clauses`                         |
+| loops    | `<@> `   | `identifier` `<@>` `iterable container`<br>`indent` `...` |
+| maybe    | `<>`     | `<>` `callable reference`                                  |
+| surely   | `[]`     | `[]` `callable reference`                                  |
+| return   | `<*>`    | `<*>` `statement `                                        |
+| pragma   |  `#`     | `#` `compiler directive`
 
