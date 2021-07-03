@@ -35,7 +35,6 @@ from Aspidites.features.RestrictedPython import safe_globals
 safe_globals.update(globals()) # add all imports to globals
 globals().update(safe_globals)
 
-
 $code
 
 """)
