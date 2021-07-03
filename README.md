@@ -6,6 +6,10 @@ Aspidites programming language.
 
 Aspidites (shield-bearer) is written in python and targets Cython
 
+### Core Dependencies
+
+- Cython
+- 
 
 ## Paradigms
 

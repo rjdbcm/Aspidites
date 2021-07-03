@@ -31,7 +31,7 @@ from pyrsistent import pvector
 from pyrsistent import PRecord
 from pyrsistent import PClass
 
-from RestrictedPython import safe_globals
+from Aspidites.features.RestrictedPython import safe_globals
 safe_globals.update(globals()) # add all imports to globals
 globals().update(safe_globals)
 
