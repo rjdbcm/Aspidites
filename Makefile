@@ -21,3 +21,6 @@ clean-test: ## remove test and coverage artifacts
 
 test-all:
 	pytest tests --cov Aspidites --cov-report=html:.coverage_html --cov-report=term-missing
+
+patch-version:
+	bump2version patch
