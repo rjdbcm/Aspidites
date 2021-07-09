@@ -1,6 +1,6 @@
-from Aspidites.features.contracts import new_contract
+from Aspidites.libraries.contracts import new_contract
 import numpy as np
-from Aspidites.features.contracts.interface import describe_value, describe_type
+from Aspidites.libraries.contracts.interface import describe_value, describe_type
 
 __all__ = ['finite']
 

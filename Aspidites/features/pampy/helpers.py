@@ -6,6 +6,8 @@ from typing import (
     TypeVar,
 )
 
+from pyrsistent import PVector
+
 try:
     from typing import GenericMeta
 except ImportError:

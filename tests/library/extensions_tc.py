@@ -1,5 +1,5 @@
-from Aspidites.features.contracts import new_contract
-from Aspidites.features.contracts.test_registrar import fail, good, syntax_fail
+from Aspidites.libraries.contracts import new_contract
+from Aspidites.libraries.contracts.test_registrar import fail, good, syntax_fail
 
 
 

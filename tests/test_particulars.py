@@ -1,7 +1,7 @@
-from Aspidites.features.contracts import parse
-from Aspidites.features.contracts.interface import Where, ContractSyntaxError
-from Aspidites.features.contracts.library import *  # @UnusedWildImport
-from Aspidites.features.contracts.syntax import ParseFatalException, ParseException
+from Aspidites.libraries.contracts import parse
+from Aspidites.libraries.contracts.interface import Where, ContractSyntaxError
+from Aspidites.libraries.contracts.library import *  # @UnusedWildImport
+from Aspidites.libraries.contracts.syntax import ParseFatalException, ParseException
 import unittest
 
 

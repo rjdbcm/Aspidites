@@ -1,4 +1,4 @@
-from Aspidites.features.RestrictedPython._compat import IS_PY38_OR_GREATER
+from Aspidites.libraries.RestrictedPython._compat import IS_PY38_OR_GREATER
 from tests.helper import restricted_exec
 
 

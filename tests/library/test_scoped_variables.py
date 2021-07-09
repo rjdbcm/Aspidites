@@ -1,13 +1,13 @@
 import pytest
 
-from Aspidites.features.contracts import ContractException, check, contract, decorate, fail, parse
-from Aspidites.features.contracts.interface import (
+from Aspidites.libraries.contracts import ContractException, check, contract, decorate, fail, parse
+from Aspidites.libraries.contracts.interface import (
     ContractNotRespected,
     ExternalScopedVariableNotFound
 )
-from Aspidites.features.contracts.library import EqualTo
-from Aspidites.features.contracts.library.types_misc import CheckType
-from Aspidites.features.contracts.utils import check_isinstance
+from Aspidites.libraries.contracts.library import EqualTo
+from Aspidites.libraries.contracts.library.types_misc import CheckType
+from Aspidites.libraries.contracts.utils import check_isinstance
 
 
 def test_raw_parse():

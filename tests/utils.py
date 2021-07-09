@@ -1,8 +1,8 @@
 import six
 
-from Aspidites.features.contracts.interface import (ContractSyntaxError, describe_value,
+from Aspidites.libraries.contracts.interface import (ContractSyntaxError, describe_value,
                          ContractNotRespected)
-from Aspidites.features.contracts.main import parse_contract_string, check_contracts
+from Aspidites.libraries.contracts.main import parse_contract_string, check_contracts
 
 
 def check_contracts_ok(contract, value):

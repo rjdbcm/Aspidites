@@ -11,9 +11,9 @@ from pyparsing import (
 )
 from string import Template
 from pyrsistent import pvector, pset, pmap, PVector, PSet, PMap
-from Aspidites.features.contracts.syntax import contract_expression, EqualTo
-from Aspidites.features.contracts import new_contract, contract, ContractNotRespected
-from Aspidites.features.RestrictedPython import safe_globals
+from Aspidites.libraries.contracts.syntax import contract_expression, EqualTo
+from Aspidites.libraries.contracts import new_contract, contract, ContractNotRespected
+from Aspidites.libraries.RestrictedPython import safe_globals
 
 _contract_expression = contract_expression.copy()
 _contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")

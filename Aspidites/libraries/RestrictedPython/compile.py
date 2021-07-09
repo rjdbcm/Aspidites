@@ -1,7 +1,7 @@
 from collections import namedtuple
-from Aspidites.features.RestrictedPython._compat import IS_CPYTHON
-from Aspidites.features.RestrictedPython._compat import IS_PY2
-from Aspidites.features.RestrictedPython.transformer import RestrictingNodeTransformer
+from Aspidites.libraries.RestrictedPython._compat import IS_CPYTHON
+from Aspidites.libraries.RestrictedPython._compat import IS_PY2
+from Aspidites.libraries.RestrictedPython.transformer import RestrictingNodeTransformer
 
 import ast
 import warnings

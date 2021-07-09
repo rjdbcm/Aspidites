@@ -1,4 +1,4 @@
-from Aspidites.features.RestrictedPython.Eval import RestrictionCapableEval
+from Aspidites.libraries.RestrictedPython.Eval import RestrictionCapableEval
 
 import pytest
 

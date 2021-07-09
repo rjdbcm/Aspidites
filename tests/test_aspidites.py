@@ -1,8 +1,8 @@
-from Aspidites.features.contracts import ContractNotRespected
+from Aspidites.libraries.contracts import ContractNotRespected
 from hypothesis import given, assume, strategies as st
 import pytest as pt
 from Aspidites.parser import parse_module
-from Aspidites.templates import env, setup
+from Aspidites.templates import lib, setup
 from Aspidites.monads import Maybe, Undefined, Surely
 from Aspidites.compiler import compile_to_c, compile_to_pyx
 
@@ -18,7 +18,7 @@ code_ = parse_module("(Add(x = 3 -> int; y = 3 -> int))"
 
 def test_compile_module():
 
-    compile(env.substitute(code='\n'.join(code_)), '', 'exec')
+    compile(lib.substitute(code='\n'.join(code_)), '', 'exec')
 
 
 @given(x=st.integers())

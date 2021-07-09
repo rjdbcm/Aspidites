@@ -1,7 +1,7 @@
-from Aspidites.features.RestrictedPython import compile_restricted_eval
-from Aspidites.features.RestrictedPython import compile_restricted_exec
+from Aspidites.libraries.RestrictedPython import compile_restricted_eval
+from Aspidites.libraries.RestrictedPython import compile_restricted_exec
 
-import Aspidites.features.RestrictedPython.Guards
+import Aspidites.libraries.RestrictedPython.Guards
 
 
 def _compile(compile_func, source):
@@ -20,7 +20,7 @@ def _execute(code, glb, exc_func):
     if glb is None:
         glb = {}
     if '__builtins__' not in glb:
-        glb['__builtins__'] = Aspidites.features.RestrictedPython.Guards.safe_builtins.copy()
+        glb['__builtins__'] = Aspidites.libraries.RestrictedPython.Guards.safe_builtins.copy()
     if exc_func == 'eval':
         return eval(code, glb)
     else:

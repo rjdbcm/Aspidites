@@ -11,8 +11,8 @@ def ist(C):
 
 
 def m_new_contract(name, f):
-    from Aspidites.features.contracts.library.extensions import CheckCallable
-    from Aspidites.features.contracts.library.extensions import Extension
+    from Aspidites.libraries.contracts.library.extensions import CheckCallable
+    from Aspidites.libraries.contracts.library.extensions import Extension
     Extension.registrar[name] = CheckCallable(f)
     
 

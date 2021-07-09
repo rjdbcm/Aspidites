@@ -1,6 +1,6 @@
-from Aspidites.features.RestrictedPython import compile_restricted_exec
-from Aspidites.features.RestrictedPython._compat import IS_PY35_OR_GREATER
-from Aspidites.features.RestrictedPython.transformer import RestrictingNodeTransformer
+from Aspidites.libraries.RestrictedPython import compile_restricted_exec
+from Aspidites.libraries.RestrictedPython._compat import IS_PY35_OR_GREATER
+from Aspidites.libraries.RestrictedPython.transformer import RestrictingNodeTransformer
 
 import pytest
 

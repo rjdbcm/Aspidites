@@ -1,6 +1,6 @@
 """ Other testing examples """
 
-from Aspidites.features.contracts.test_registrar import good, fail
+from Aspidites.libraries.contracts.test_registrar import good, fail
 
 # dummy
 good(['*'], [0])

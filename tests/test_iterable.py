@@ -2,7 +2,7 @@ import unittest
 from collections import Iterable
 
 from Aspidites.features.pampy import HEAD, TAIL, MatchError, match_iterable as mi
-from Aspidites.features.pampy.pampy import _
+from Aspidites.features.pampy.pampy import ANY
 
 
 class IterableTests(unittest.TestCase):
@@ -23,20 +23,20 @@ class IterableTests(unittest.TestCase):
         self.assertEqual(self.mi(33, [1, 2]), (False, []))
 
     def test_match_iterable_underscore(self):
-        self.assertEqual(self.mi([1, _, 3], [1, 2, 3]), (True, [2]))
-        self.assertEqual(self.mi([1, _, _], [1, 2, 3]), (True, [2, 3]))
-        self.assertEqual(self.mi([_, 2, _], [1, 2, 3]), (True, [1, 3]))
+        self.assertEqual(self.mi([1, ANY, 3], [1, 2, 3]), (True, [2]))
+        self.assertEqual(self.mi([1, ANY, ANY], [1, 2, 3]), (True, [2, 3]))
+        self.assertEqual(self.mi([ANY, 2, ANY], [1, 2, 3]), (True, [1, 3]))
 
     def test_match_iterable_pattern_longer_than_var(self):
-        self.assertEqual(self.mi([_, _, _], [1, 2]), (False, []))
-        self.assertEqual(self.mi([_, 2, _], [1, 2]), (False, []))
+        self.assertEqual(self.mi([ANY, ANY, ANY], [1, 2]), (False, []))
+        self.assertEqual(self.mi([ANY, 2, ANY], [1, 2]), (False, []))
 
     def test_match_iterable_nested(self):
         self.assertEqual(self.mi([1, [2, 3]], [1, [2, 3]]), (True, []))
-        self.assertEqual(self.mi([1, [2, _]], [1, [2, 3]]), (True, [3]))
-        self.assertEqual(self.mi([1, [2, _], _],
+        self.assertEqual(self.mi([1, [2, ANY]], [1, [2, 3]]), (True, [3]))
+        self.assertEqual(self.mi([1, [2, ANY], ANY],
                                  [1, [2, 3], 4]), (True, [3, 4]))
-        self.assertEqual(self.mi([1, [2, [_, 4], _], _],
+        self.assertEqual(self.mi([1, [2, [ANY, 4], ANY], ANY],
                                  [1, [2, [3, 4], 5], 6]), (True, [3, 5, 6]))
 
     def test_match_iterable_basic_HEAD(self):
@@ -45,16 +45,16 @@ class IterableTests(unittest.TestCase):
 
     def test_match_iterable_HEAD(self):
         self.assertEqual(self.mi([HEAD, 2], [1, 2]), (True, [1]))
-        self.assertEqual(self.mi([HEAD, _], [1, 2]), (True, [1, 2]))
+        self.assertEqual(self.mi([HEAD, ANY], [1, 2]), (True, [1, 2]))
 
     def test_match_iterable_TAIL(self):
         self.assertEqual(self.mi([TAIL],         [1, 2, 3]), (True, [[1, 2, 3]]))
-        self.assertEqual(self.mi([_, TAIL],      [1, 2, 3]), (True, [1, [2, 3]]))
-        self.assertEqual(self.mi([_, _, TAIL],   [1, 2, 3]), (True, [1, 2, [3]]))
+        self.assertEqual(self.mi([ANY, TAIL],      [1, 2, 3]), (True, [1, [2, 3]]))
+        self.assertEqual(self.mi([ANY, ANY, TAIL],   [1, 2, 3]), (True, [1, 2, [3]]))
 
-        self.assertEqual(self.mi([_, TAIL],      [1]),       (True, [1, []]))
-        self.assertEqual(self.mi([_, TAIL],      [1, 2]),    (True, [1, [2]]))
-        self.assertEqual(self.mi([_, _, TAIL],   [1, 2]),    (True, [1, 2, []]))
+        self.assertEqual(self.mi([ANY, TAIL],      [1]),       (True, [1, []]))
+        self.assertEqual(self.mi([ANY, TAIL],      [1, 2]),    (True, [1, [2]]))
+        self.assertEqual(self.mi([ANY, ANY, TAIL],   [1, 2]),    (True, [1, 2, []]))
 
     def test_match_iterable_HEAD_TAIL(self):
         self.assertEqual(self.mi([HEAD, TAIL], [1, 2, 3]),   (True, [1, [2, 3]]))

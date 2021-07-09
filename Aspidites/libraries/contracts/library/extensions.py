@@ -68,7 +68,7 @@ class Extension(Contract):
             callable_thing = contract_ext.callable 
          
             test_args = ('value',) + args
-            from Aspidites.features.contracts.inspection import check_callable_accepts_these_arguments, InvalidArgs
+            from Aspidites.libraries.contracts.inspection import check_callable_accepts_these_arguments, InvalidArgs
          
             try:
                 check_callable_accepts_these_arguments(callable_thing, test_args, kwargs)

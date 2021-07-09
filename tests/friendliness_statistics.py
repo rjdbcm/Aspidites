@@ -1,6 +1,6 @@
-from Aspidites.features.contracts.test_registrar import (good_examples, semantic_fail_examples,
+from Aspidites.libraries.contracts.test_registrar import (good_examples, semantic_fail_examples,
                                       contract_fail_examples)
-from Aspidites.features.contracts import parse, ContractSyntaxError
+from Aspidites.libraries.contracts import parse, ContractSyntaxError
 
 
 def get_all_strings():

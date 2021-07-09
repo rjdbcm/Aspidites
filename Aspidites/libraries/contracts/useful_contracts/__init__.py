@@ -1,4 +1,4 @@
-from Aspidites.features.contracts import new_contract
+from Aspidites.libraries.contracts import new_contract
 
 try:
     import numpy

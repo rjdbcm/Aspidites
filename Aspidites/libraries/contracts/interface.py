@@ -20,7 +20,7 @@ class Where(object):
     """
 
     def __init__(self, string, character, character_end=None):
-        from Aspidites.features.contracts.utils import raise_desc
+        from Aspidites.libraries.contracts.utils import raise_desc
         if not isinstance(string, six.string_types):
             msg = 'I expect the string to be a str, not %r' % string
             raise ValueError(msg)
@@ -63,7 +63,7 @@ class Where(object):
 
     def get_substring(self):
         """ Returns the substring to which we refer. Raises error if character_end is None """
-        from Aspidites.features.contracts.utils import raise_desc
+        from Aspidites.libraries.contracts.utils import raise_desc
 
         if self.character_end is None:
             msg = 'Character end is None'
@@ -225,7 +225,7 @@ def location(line, col, s):
 
 
 def add_prefix(s, prefix):
-    from Aspidites.features.contracts import check_isinstance
+    from Aspidites.libraries.contracts import check_isinstance
     check_isinstance(s, six.string_types)
     check_isinstance(prefix, six.string_types)
     result = ""

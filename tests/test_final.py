@@ -1,6 +1,6 @@
 import pytest as pt
 from Aspidites import final, heritable
-from Aspidites.features.contracts import ContractNotRespected
+from Aspidites.libraries.contracts import ContractNotRespected
 
 
 class A(metaclass=final):

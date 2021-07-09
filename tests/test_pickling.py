@@ -1,6 +1,6 @@
 from .utils import check_contracts_fail
-from Aspidites.features.contracts import ContractNotRespected, parse, Contract
-from Aspidites.features.contracts.test_registrar import (semantic_fail_examples,
+from Aspidites.libraries.contracts import ContractNotRespected, parse, Contract
+from Aspidites.libraries.contracts.test_registrar import (semantic_fail_examples,
     contract_fail_examples, good_examples)
 import pickle
 

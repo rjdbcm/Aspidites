@@ -12,7 +12,7 @@ from typing import (
     Tuple,
     List,
     Pattern as RegexPattern,
-    Callable,
+    Callable
 )
 import inspect
 
@@ -35,8 +35,12 @@ from Aspidites.features.pampy.helpers import (
     get_extra,
 )
 
+from Aspidites.monads import Undefined
+
+from pyrsistent import v, PVector, pvector
+
 T = TypeVar('T')
-_ = ANY = UnderscoreType()
+ANY = UnderscoreType()
 HEAD = HeadType()
 REST = TAIL = TailType()
 
@@ -56,20 +60,20 @@ def run(action, var):
         return action
 
 
-def match_value(pattern, value) -> Tuple[bool, List]:
+def match_value(pattern, value) -> Tuple[bool, PVector]:
     if value is PaddedValue:
-        return False, []
+        return False, v()
     elif is_typing_stuff(pattern):
         return match_typing_stuff(pattern, value)
     elif isinstance(pattern, (int, float, str, bool, Enum)):
         eq = pattern == value
         type_eq = type(pattern) == type(value)
-        return eq and type_eq, []
+        return eq and type_eq, v()
     elif pattern is None:
-        return value is None, []
+        return value is None, v()
     elif isinstance(pattern, type):
         if isinstance(value, pattern):
-            return True, [value]
+            return True, pvector([value])
     elif isinstance(pattern, (list, tuple)):
         return match_iterable(pattern, value)
     elif isinstance(pattern, dict):
@@ -78,7 +82,7 @@ def match_value(pattern, value) -> Tuple[bool, List]:
         return_value = pattern(value)
 
         if isinstance(return_value, bool):
-            return return_value, [value]
+            return return_value, pvector([value])
         elif isinstance(return_value, tuple) and len(return_value) == 2 \
                 and isinstance(return_value[0], bool) and isinstance(return_value[1], list):
             return return_value
@@ -89,19 +93,19 @@ def match_value(pattern, value) -> Tuple[bool, List]:
     elif isinstance(pattern, RegexPattern):
         rematch = pattern.search(value)
         if rematch is not None:
-            return True, list(rematch.groups())
-    elif pattern is _:
-        return True, [value]
+            return True, pvector(rematch.groups())
+    elif pattern is ANY:
+        return True, pvector([value])
     elif pattern is HEAD or pattern is TAIL:
         raise MatchError("HEAD or TAIL should only be used inside an Iterable (list or tuple).")
     elif is_dataclass(pattern) and pattern.__class__ == value.__class__:
         return match_dict(pattern.__dict__, value.__dict__)
-    return False, []
+    return False, v()
 
 
-def match_dict(pattern, value) -> Tuple[bool, List]:
+def match_dict(pattern, value) -> Tuple[bool, PVector]:
     if not isinstance(value, dict) or not isinstance(pattern, dict):
-        return False, []
+        return False, v()
 
     total_extracted = []
     still_usable_value_keys = set(value.keys())
@@ -125,8 +129,8 @@ def match_dict(pattern, value) -> Tuple[bool, List]:
                     still_usable_value_keys.remove(vkey)
                     break
         if not matched_left_and_right:
-            return False, []
-    return True, total_extracted
+            return False, v()
+    return True, pvector(total_extracted)
 
 
 def only_padded_values_follow(padded_pairs, i):
@@ -139,9 +143,9 @@ def only_padded_values_follow(padded_pairs, i):
     return True
 
 
-def match_iterable(patterns, values) -> Tuple[bool, List]:
+def match_iterable(patterns, values) -> Tuple[bool, PVector]:
     if not isinstance(patterns, Iterable) or not isinstance(values, Iterable):
-        return False, []
+        return False, v()
 
     total_extracted = []
     padded_pairs = list(zip_longest(patterns, values, fillvalue=PaddedValue))
@@ -152,7 +156,7 @@ def match_iterable(patterns, values) -> Tuple[bool, List]:
                 raise MatchError("HEAD can only be in first position of a pattern.")
             else:
                 if value is PaddedValue:
-                    return False, []
+                    return False, v()
                 else:
                     total_extracted += [value]
         elif pattern is TAIL:
@@ -165,13 +169,13 @@ def match_iterable(patterns, values) -> Tuple[bool, List]:
         else:
             matched, extracted = match_value(pattern, value)
             if not matched:
-                return False, []
+                return False, v()
             else:
                 total_extracted += extracted
-    return True, total_extracted
+    return True, pvector(total_extracted)
 
 
-def match_typing_stuff(pattern, value) -> Tuple[bool, List]:
+def match_typing_stuff(pattern, value) -> Tuple[bool, PVector]:
     if pattern == Any:
         return match_value(ANY, value)
     elif is_union(pattern):
@@ -180,34 +184,34 @@ def match_typing_stuff(pattern, value) -> Tuple[bool, List]:
             if is_matched:
                 return True, extracted
         else:
-            return False, []
+            return False, v()
     elif is_newtype(pattern):
         return match_value(pattern.__supertype__, value)
     elif is_generic(pattern):
         return match_generic(pattern, value)
     else:
-        return False, []
+        return False, v()
 
 
-def match_generic(pattern: Generic[T], value) -> Tuple[bool, List]:
+def match_generic(pattern: Generic[T], value) -> Tuple[bool, PVector]:
     if get_extra(pattern) == type:       # Type[int] for example
         real_value = None
         if is_newtype(value):
             real_value = value
             value = get_real_type(value)
         if not inspect.isclass(value):
-            return False, []
+            return False, pvector([])
 
         type_ = pattern.__args__[0]
         if type_ == Any:
-            return True, [real_value or value]
+            return True, pvector([real_value or value])
         if is_newtype(type_):   # NewType case
             type_ = get_real_type(type_)
 
         if issubclass(value, type_):
-            return True, [real_value or value]
+            return True, pvector([real_value or value])
         else:
-            return False, []
+            return False, pvector([])
 
     elif get_extra(pattern) == ACallable:
         if callable(value):
@@ -216,11 +220,11 @@ def match_generic(pattern: Generic[T], value) -> Tuple[bool, List]:
             artgtypes = [annotations.get(arg, Any) for arg in spec.args]
             ret_type = annotations.get('return', Any)
             if pattern == Callable[[*artgtypes], ret_type]:
-                return True, [value]
+                return True, pvector([value])
             else:
-                return False, []
+                return False, pvector([])
         else:
-            return False, []
+            return False, pvector([])
 
     elif get_extra(pattern) == tuple:
         return match_value(pattern.__args__, value)
@@ -228,36 +232,36 @@ def match_generic(pattern: Generic[T], value) -> Tuple[bool, List]:
     elif issubclass(get_extra(pattern), Mapping):
         type_matched, _captured = match_value(get_extra(pattern), value)
         if not type_matched:
-            return False, []
+            return False, pvector([])
         k_type, v_type = pattern.__args__
 
         key_example = peek(value)
         key_matched, _captured = match_value(k_type, key_example)
         if not key_matched:
-            return False, []
+            return False, pvector([])
 
         value_matched, _captured = match_value(v_type, value[key_example])
         if not value_matched:
-            return False, []
+            return False, pvector([])
         else:
-            return True, [value]
+            return True, pvector([value])
 
     elif issubclass(get_extra(pattern), Iterable):
         type_matched, _captured = match_value(get_extra(pattern), value)
         if not type_matched:
-            return False, []
+            return False, pvector([])
         v_type, = pattern.__args__
         v = peek(value)
         value_matched, _captured = match_value(v_type, v)
         if not value_matched:
-            return False, []
+            return False, pvector([])
         else:
-            return True, [value]
+            return True, pvector([value])
     else:
-        return False, []
+        return False, pvector([])
 
 
-def match(var, *args, default=NoDefault, strict=True):
+def match(var, *args, **kwargs):  # , default=NoDefault, strict=True
     """
     Match `var` against a number of potential patterns.
 
@@ -267,9 +271,9 @@ def match(var, *args, default=NoDefault, strict=True):
         3,              "this matches the number 3",
         int,            "matches any integer",
         (str, int),     lambda a, b: "a tuple (a, b) you can use in a function",
-        [1, 2, _],      "any list of 3 elements that begins with [1, 2]",
-        {'x': _},       "any dict with a key 'x' and any value associated",
-        _,              "anything else"
+        [1, 2, ANY],      "any list of 3 elements that begins with [1, 2]",
+        {'x': ANY},       "any dict with a key 'x' and any value associated",
+        ANY,              "anything else"
     )
     ```
 
@@ -279,14 +283,14 @@ def match(var, *args, default=NoDefault, strict=True):
                  Actions can be either a literal value or a callable which will be called with the arguments that were
                     matched in corresponding pattern.
     :param default: If `default` is specified then it will be returned if none of the patterns match.
-                    If `default` is unspecified then a `MatchError` will be thrown instead.
+                    If `default` is unspecified then a `MatchError` will be thrown instead depending on the setting of strict.
     :return: The result of the action which corresponds to the first matching pattern.
     """
     if len(args) % 2 != 0:
         raise MatchError("Every guard must have an action.")
 
-    if default is NoDefault and strict is False:
-        default = False
+    default = False if 'default' not in kwargs.keys() else kwargs['default']
+    strict = True if 'strict' not in kwargs.keys() else kwargs['strict']
 
     pairs = list(pairwise(args))
     patterns = [patt for (patt, action) in pairs]
@@ -298,9 +302,9 @@ def match(var, *args, default=NoDefault, strict=True):
             lambda_args = args if len(args) > 0 else BoxedArgs(var)
             return run(action, lambda_args)
 
-    if default is NoDefault:
-        if _ not in patterns:
-            raise MatchError("'_' not provided. This case is not handled:\n%s" % str(var))
+    if default is False and strict:
+        if ANY not in patterns:
+            return Undefined()
     else:
         return default
 

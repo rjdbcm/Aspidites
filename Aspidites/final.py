@@ -1,5 +1,5 @@
 from typing import Callable, Tuple
-from Aspidites.features.contracts import new_contract, contract, check
+from Aspidites.libraries.contracts import new_contract, contract, check
 from pyrsistent import pmap
 # very simple final classes without
 

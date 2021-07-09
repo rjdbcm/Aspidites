@@ -1,9 +1,9 @@
 import unittest
 
-from Aspidites.features.contracts import (decorate, contract,
+from Aspidites.libraries.contracts import (decorate, contract,
                 ContractException, ContractNotRespected)
 
-from Aspidites.features.contracts.interface import MissingContract
+from Aspidites.libraries.contracts.interface import MissingContract
 
 
 class DecoratorTests(unittest.TestCase):

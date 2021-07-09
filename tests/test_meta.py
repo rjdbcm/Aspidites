@@ -3,9 +3,9 @@ import functools
 import unittest
 import pytest as pt
 
-from Aspidites.features.contracts import ContractNotRespected, contract, ContractsMeta
-from Aspidites.features.contracts import CannotDecorateClassmethods
-from Aspidites.features.contracts import with_metaclass
+from Aspidites.libraries.contracts import ContractNotRespected, contract, ContractsMeta
+from Aspidites.libraries.contracts import CannotDecorateClassmethods
+from Aspidites.libraries.contracts import with_metaclass
 
 
 def expected_failure(test):

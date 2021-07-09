@@ -9,25 +9,32 @@ Aspidites (shield-bearer) is written in python and targets Cython
 ### Core Dependencies
 
 - Cython
-- 
+- Pyrsistent
+- PyParsing
 
 ## Paradigms
 
-- negotiably-typed
-- pragmatic
-- declarative
-- functional
-- constrained logic
+- `negotiably-typed`
+- `pragmatic`
+- `declarative`
+- `functional`
+- `constrained logic`
 
 ## Inspirations
+- [`coconut`](http://coconut-lang.org/)
+- [`Ada`](https://www.adacore.com/get-started)
+- [`Scala`](https://www.scala-lang.org/)
+- [`Prolog`](https://www.swi-prolog.org/features.html)
+- [`Curry`](https://curry.pages.ps.informatik.uni-kiel.de/curry-lang.org/)
+- [`Cobra`](http://cobra-language.com/)
+- [`J`](https://www.jsoftware.com/#/README)
+- [`ELI`](https://fastarray.appspot.com/index.html)
 
-- [Ada](https://www.adacore.com/get-started)
-- [Scala](https://www.scala-lang.org/)
-- [Prolog](https://www.swi-prolog.org/features.html)
-- [Curry](https://curry.pages.ps.informatik.uni-kiel.de/curry-lang.org/)
-- [Cobra](http://cobra-language.com/)
-- [J](https://www.jsoftware.com/#/README)
-- [ELI](https://fastarray.appspot.com/index.html)
+## Goals
+
+- Terseness that mixes keywords and symbolic operations in order to make code both concise ___and___ readable.
+- Great for writing high-integrity code that works natively with CPython.
+- Usable for general purpose ___or___ scientific computing.
 
 # Syntax
 

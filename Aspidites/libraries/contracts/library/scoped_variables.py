@@ -3,7 +3,7 @@ from ..syntax import S, W
 from ..utils import ignore_typeerror
 from pyparsing import Word, alphanums
 import inspect
-from Aspidites.features.contracts.library.types_misc import CheckType
+from Aspidites.libraries.contracts.library.types_misc import CheckType
 
 
 def _lookup_from_calling_scope(token):
@@ -94,9 +94,9 @@ def scoped_parse_action(s, loc, tokens):
     where = W(s, loc)
     val = _lookup_from_calling_scope(tokens[0])
 
-    from Aspidites.features.contracts.library.simple_values import SimpleRValue
+    from Aspidites.libraries.contracts.library.simple_values import SimpleRValue
 
-    from Aspidites.features.contracts.inspection import can_be_used_as_a_type
+    from Aspidites.libraries.contracts.inspection import can_be_used_as_a_type
 
     if can_be_used_as_a_type(val):
         return CheckType(val)

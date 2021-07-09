@@ -22,6 +22,4 @@ pytest-mypy = "*"
 pytest-sugar = "*"
 pytest-xdist = "*"
 hypothesis = "*"
-
-[requires]
-python_version = "3.9"
+pipenv = "*"

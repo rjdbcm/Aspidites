@@ -1,4 +1,4 @@
-from Aspidites.features.RestrictedPython import RestrictingNodeTransformer
+from Aspidites.libraries.RestrictedPython import RestrictingNodeTransformer
 
 import ast
 

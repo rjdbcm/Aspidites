@@ -1,7 +1,7 @@
-from Aspidites.features.RestrictedPython import compile_restricted_exec
-from Aspidites.features.RestrictedPython._compat import IS_PY2
-from Aspidites.features.RestrictedPython._compat import IS_PY3
-from Aspidites.features.RestrictedPython.Guards import guarded_unpack_sequence
+from Aspidites.libraries.RestrictedPython import compile_restricted_exec
+from Aspidites.libraries.RestrictedPython._compat import IS_PY2
+from Aspidites.libraries.RestrictedPython._compat import IS_PY3
+from Aspidites.libraries.RestrictedPython.Guards import guarded_unpack_sequence
 from tests.helper import restricted_exec
 
 import pytest
@@ -14,7 +14,7 @@ functiondef_err_msg = 'Line 1: "_bad" is an invalid variable ' \
 def test_RestrictingNodeTransformer__visit_FunctionDef__1():
     """It prevents function arguments starting with `_`."""
     result = compile_restricted_exec("def foo(_bad): pass")
-    # Aspidites.features.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
+    # Aspidites.libraries.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
     # the error message twice. This is necessary as otherwise *_bad and **_bad
     # would be allowed.
     assert functiondef_err_msg in result.errors
@@ -23,7 +23,7 @@ def test_RestrictingNodeTransformer__visit_FunctionDef__1():
 def test_RestrictingNodeTransformer__visit_FunctionDef__2():
     """It prevents function keyword arguments starting with `_`."""
     result = compile_restricted_exec("def foo(_bad=1): pass")
-    # Aspidites.features.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
+    # Aspidites.libraries.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
     # the error message twice. This is necessary as otherwise *_bad and **_bad
     # would be allowed.
     assert functiondef_err_msg in result.errors
@@ -47,7 +47,7 @@ def test_RestrictingNodeTransformer__visit_FunctionDef__4():
 def test_RestrictingNodeTransformer__visit_FunctionDef__5():  # pragma: PY2
     """It prevents function arguments starting with `_` in tuples."""
     result = compile_restricted_exec("def foo((a, _bad)): pass")
-    # Aspidites.features.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
+    # Aspidites.libraries.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
     # the error message twice. This is necessary as otherwise *_bad and **_bad
     # would be allowed.
     assert functiondef_err_msg in result.errors
@@ -59,7 +59,7 @@ def test_RestrictingNodeTransformer__visit_FunctionDef__5():  # pragma: PY2
 def test_RestrictingNodeTransformer__visit_FunctionDef__6():  # pragma: PY2
     """It prevents function arguments starting with `_` in tuples."""
     result = compile_restricted_exec("def foo(a, (c, (_bad, c))): pass")
-    # Aspidites.features.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
+    # Aspidites.libraries.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
     # the error message twice. This is necessary as otherwise *_bad and
     # **_bad would be allowed.
     assert functiondef_err_msg in result.errors

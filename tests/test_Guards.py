@@ -1,10 +1,10 @@
-from Aspidites.features.RestrictedPython import compile_restricted_exec
-from Aspidites.features.RestrictedPython._compat import IS_PY2
-from Aspidites.features.RestrictedPython._compat import IS_PY3
-from Aspidites.features.RestrictedPython.Guards import guarded_unpack_sequence
-from Aspidites.features.RestrictedPython.Guards import safe_builtins
-from Aspidites.features.RestrictedPython.Guards import safe_globals
-from Aspidites.features.RestrictedPython.Guards import safer_getattr
+from Aspidites.libraries.RestrictedPython import compile_restricted_exec
+from Aspidites.libraries.RestrictedPython._compat import IS_PY2
+from Aspidites.libraries.RestrictedPython._compat import IS_PY3
+from Aspidites.libraries.RestrictedPython.Guards import guarded_unpack_sequence
+from Aspidites.libraries.RestrictedPython.Guards import safe_builtins
+from Aspidites.libraries.RestrictedPython.Guards import safe_globals
+from Aspidites.libraries.RestrictedPython.Guards import safer_getattr
 from tests.helper import restricted_eval
 from tests.helper import restricted_exec
 
@@ -186,7 +186,7 @@ def test_Guards__safer_getattr__2():
     """It prevents using the format method of a unicode.
 
     format() is considered harmful:
-    http://lucumr.pocoo.org/2016/12/29/careful-with-str-format/
+    https://lucumr.pocoo.org/2016/12/29/careful-with-str-format/
     """
     glb = {
         '__builtins__': safe_builtins,

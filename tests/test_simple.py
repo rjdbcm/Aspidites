@@ -1,7 +1,7 @@
 import traceback
 
-from Aspidites.features.contracts.main import parse_contract_string
-from Aspidites.features.contracts.test_registrar import (
+from Aspidites.libraries.contracts.main import parse_contract_string
+from Aspidites.libraries.contracts.test_registrar import (
     good_examples, semantic_fail_examples,
     syntax_fail_examples, contract_fail_examples
 )
@@ -11,7 +11,7 @@ from .utils import check_contracts_ok, check_syntax_fail, check_contracts_fail
 from . import test_multiple  # @UnusedImport
 
 # Import all the symbols needed to eval() the __repr__() output.
-from Aspidites.features.contracts.library import *  # @UnusedWildImport @UnresolvedImport
+from Aspidites.libraries.contracts.library import *  # @UnusedWildImport @UnresolvedImport
 
 
 ## If you want to try only some tests, set select to True, and add them below.

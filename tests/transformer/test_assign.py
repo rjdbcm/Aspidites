@@ -1,5 +1,5 @@
-from Aspidites.features.RestrictedPython._compat import IS_PY2
-from Aspidites.features.RestrictedPython.Guards import guarded_unpack_sequence
+from Aspidites.libraries.RestrictedPython._compat import IS_PY2
+from Aspidites.libraries.RestrictedPython.Guards import guarded_unpack_sequence
 from tests.helper import restricted_exec
 
 import pytest

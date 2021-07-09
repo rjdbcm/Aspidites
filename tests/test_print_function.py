@@ -1,9 +1,9 @@
-from Aspidites.features.RestrictedPython.PrintCollector import PrintCollector
+from Aspidites.libraries.RestrictedPython.PrintCollector import PrintCollector
 
-import Aspidites.features.RestrictedPython
+import Aspidites.libraries.RestrictedPython
 
 
-compiler = Aspidites.features.RestrictedPython.compile.compile_restricted_exec
+compiler = Aspidites.libraries.RestrictedPython.compile.compile_restricted_exec
 
 
 ALLOWED_PRINT_FUNCTION = """

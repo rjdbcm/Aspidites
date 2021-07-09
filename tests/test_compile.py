@@ -1,11 +1,11 @@
-from Aspidites.features.RestrictedPython import compile_restricted
-from Aspidites.features.RestrictedPython import compile_restricted_eval
-from Aspidites.features.RestrictedPython import compile_restricted_exec
-from Aspidites.features.RestrictedPython import compile_restricted_single
-from Aspidites.features.RestrictedPython import CompileResult
-from Aspidites.features.RestrictedPython._compat import IS_PY2
-from Aspidites.features.RestrictedPython._compat import IS_PY3
-from Aspidites.features.RestrictedPython._compat import IS_PY38_OR_GREATER
+from Aspidites.libraries.RestrictedPython import compile_restricted
+from Aspidites.libraries.RestrictedPython import compile_restricted_eval
+from Aspidites.libraries.RestrictedPython import compile_restricted_exec
+from Aspidites.libraries.RestrictedPython import compile_restricted_single
+from Aspidites.libraries.RestrictedPython import CompileResult
+from Aspidites.libraries.RestrictedPython._compat import IS_PY2
+from Aspidites.libraries.RestrictedPython._compat import IS_PY3
+from Aspidites.libraries.RestrictedPython._compat import IS_PY38_OR_GREATER
 from tests.helper import restricted_eval
 
 import platform
@@ -205,7 +205,7 @@ def test_compile___compile_restricted_mode__1(recwarn, mocker):
     """It warns when using another Python implementation than CPython."""
     if platform.python_implementation() == 'CPython':  # pragma: no cover
         # Using CPython we have to fake the check:
-        mocker.patch('Aspidites.features.RestrictedPython.compile.IS_CPYTHON', new=False)
+        mocker.patch('Aspidites.libraries.RestrictedPython.compile.IS_CPYTHON', new=False)
     with pytest.warns(RuntimeWarning) as record:
         compile_restricted('42')
     assert len(record) == 1

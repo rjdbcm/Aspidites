@@ -15,7 +15,7 @@
 # AccessControl.ZopeGuards contains a large set of wrappers for builtins.
 # DocumentTemplate.DT_UTil contains a few.
 
-from Aspidites.features.RestrictedPython import _compat
+from Aspidites.libraries.RestrictedPython import _compat
 
 
 if _compat.IS_PY2:  # pragma: PY2

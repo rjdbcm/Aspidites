@@ -1,6 +1,6 @@
 import unittest
 
-from Aspidites.features.contracts import (check, ContractNotRespected, Contract, parse,
+from Aspidites.libraries.contracts import (check, ContractNotRespected, Contract, parse,
                        check_multiple, ContractSyntaxError, fail)
 
 

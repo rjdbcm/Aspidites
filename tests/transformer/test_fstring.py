@@ -1,7 +1,7 @@
-from Aspidites.features.RestrictedPython import compile_restricted_exec
-from Aspidites.features.RestrictedPython._compat import IS_PY36_OR_GREATER
-from Aspidites.features.RestrictedPython._compat import IS_PY38_OR_GREATER
-from Aspidites.features.RestrictedPython.PrintCollector import PrintCollector
+from Aspidites.libraries.RestrictedPython import compile_restricted_exec
+from Aspidites.libraries.RestrictedPython._compat import IS_PY36_OR_GREATER
+from Aspidites.libraries.RestrictedPython._compat import IS_PY38_OR_GREATER
+from Aspidites.libraries.RestrictedPython.PrintCollector import PrintCollector
 
 import pytest
 

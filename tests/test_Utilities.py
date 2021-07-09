@@ -1,5 +1,5 @@
-from Aspidites.features.RestrictedPython.Utilities import reorder
-from Aspidites.features.RestrictedPython.Utilities import test
+from Aspidites.libraries.RestrictedPython.Utilities import reorder
+from Aspidites.libraries.RestrictedPython.Utilities import test
 
 
 def test_Utilities__test_1():

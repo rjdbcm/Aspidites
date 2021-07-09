@@ -11,7 +11,7 @@ from typing import (
 from functools import reduce
 
 from Aspidites.features.pampy import match, REST, TAIL, HEAD, match_value, match_iterable
-from Aspidites.features.pampy.pampy import _
+from Aspidites.features.pampy.pampy import ANY
 
 
 class PampyElaborateTests(unittest.TestCase):
@@ -21,14 +21,14 @@ class PampyElaborateTests(unittest.TestCase):
             return match(n,
                          1, 1,
                          2, 1,
-                         _, lambda x: fib(x - 1) + fib(x - 2))
+                         ANY, lambda x: fib(x - 1) + fib(x - 2))
 
         self.assertEqual(fib(1), 1)
         self.assertEqual(fib(7), 13)
 
     def test_slide1(self):
         _input = [1, 2, 3]
-        pattern = [1, _, 3]
+        pattern = [1, ANY, 3]
         action = lambda x: "it's {}".format(x)
         self.assertEqual(match(_input, pattern, action), "it's 2")
 
@@ -44,12 +44,12 @@ class PampyElaborateTests(unittest.TestCase):
                          (int, int), "a tuple made of two ints",
                          [1], "the list [1]",
                          [1, 2, 3], "the list [1, 2, 3]",
-                         [1, _, 3], "the list [1, _, 3]",
+                         [1, ANY, 3], "the list [1, ANY, 3]",
                          (str, str), lambda a, b: "%s %s" % (a, b),
-                         [1, 2, _], lambda x: "the list [1, 2, _]",
+                         [1, 2, ANY], lambda x: "the list [1, 2, ANY]",
                          [1, 2, 4], "the list [1, 2, 4]",  # this can never be matched
 
-                         [1, [2, _], _], lambda a, b: "[1, [2, %s], %s]" % (a, b),
+                         [1, [2, ANY], ANY], lambda a, b: "[1, [2, %s], %s]" % (a, b),
                          )
 
         assert parser(3) == "the integer 3"
@@ -59,8 +59,8 @@ class PampyElaborateTests(unittest.TestCase):
         assert parser({'a': 1}) == "any dictionary"
         assert parser([1]) == "the list [1]"
         assert parser([1, 2, 3]) == "the list [1, 2, 3]"
-        assert parser([1, 2, 4]) == "the list [1, 2, _]"
-        assert parser([1, 3, 3]) == "the list [1, _, 3]"
+        assert parser([1, 2, 4]) == "the list [1, 2, ANY]"
+        assert parser([1, 3, 3]) == "the list [1, ANY, 3]"
         assert parser(("hello", "world")) == "hello world"
         assert parser([1, [2, 3], 4]) == "[1, [2, 3], 4]"
 
@@ -85,7 +85,7 @@ class PampyElaborateTests(unittest.TestCase):
         def myzip(a, b):
             return match((a, b),
                          ([], []), [],
-                         ([_, TAIL], [_, TAIL]), lambda ha, ta, hb, tb: [(ha, hb)] + myzip(ta, tb)
+                         ([ANY, TAIL], [ANY, TAIL]), lambda ha, ta, hb, tb: [(ha, hb)] + myzip(ta, tb)
                          )
 
         self.assertEqual(myzip([1, 2, 3], [4, 5, 6]), [(1, 4), (2, 5), (3, 6)])
@@ -93,8 +93,8 @@ class PampyElaborateTests(unittest.TestCase):
 
     def test_lambda_cond(self):
         cond = lambda x: x < 10
-        self.assertEqual(match(3, cond, "action", _, "else"), "action")
-        self.assertEqual(match(11, cond, "action1", _, "else"), "else")
+        self.assertEqual(match(3, cond, "action", ANY, "else"), "action")
+        self.assertEqual(match(11, cond, "action1", ANY, "else"), "else")
 
     def test_lambda_cond_arg_passing(self):
         def f(x):
@@ -119,8 +119,8 @@ class PampyElaborateTests(unittest.TestCase):
             cutenesses = []
             for pet in pets:
                 match(pet,
-                      {_: {"cuteness": _}}, lambda key, x: cutenesses.append(x),
-                      {_: {"cuty": _}}, lambda key, x: cutenesses.append(x)
+                      {ANY: {"cuteness": ANY}}, lambda key, x: cutenesses.append(x),
+                      {ANY: {"cuty": ANY}}, lambda key, x: cutenesses.append(x)
                       )
             return sum(cutenesses) / len(cutenesses)
 
@@ -136,7 +136,7 @@ class PampyElaborateTests(unittest.TestCase):
                 return match(var,
                      pattern1, repack,
                      pattern2, repack,
-                     _,        (False, [])
+                     ANY,        (False, [])
                 )
 
             return f
@@ -152,7 +152,7 @@ class PampyElaborateTests(unittest.TestCase):
                 args = []
                 for pattern, actual in [(year, var.year), (month, var.month), (day, var.day),
                                         (hour, var.hour), (minute, var.minute), (second, var.second)]:
-                    if pattern is _:
+                    if pattern is ANY:
                         args.append(actual)
                     elif pattern != actual:
                         return False, []
@@ -164,9 +164,9 @@ class PampyElaborateTests(unittest.TestCase):
         def test(var):
             return match(var,
                 datetime_p(2018, 12, 23), 'full match',
-                datetime_p(2018, _, _), lambda month, day: f'{month}/{day} in 2018',
-                datetime_p(_, _, _, _, _, _), 'any datetime',
-                _, 'not a datetime'
+                datetime_p(2018, ANY, ANY), lambda month, day: f'{month}/{day} in 2018',
+                datetime_p(ANY, ANY, ANY, ANY, ANY, ANY), 'any datetime',
+                ANY, 'not a datetime'
             )
 
         self.assertEqual(test(datetime(2018, 12, 23)), 'full match')
@@ -202,7 +202,7 @@ class PampyElaborateTests(unittest.TestCase):
                 timestamp, lambda x: datetime.fromtimestamp(x),
                 Union[day_tuple, dt_tuple], lambda *x: datetime(*x),
                 datetime_p(["%Y-%m-%d", "%Y-%m-%d %H:%M:%S"]), lambda x: x,
-                _, None
+                ANY, None
             )
 
         key_date_tuple = (2018, 1, 1)

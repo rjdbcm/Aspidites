@@ -1,4 +1,4 @@
-from Aspidites.features.contracts.main import new_contract
+from Aspidites.libraries.contracts.main import new_contract
 
 __all__ = []
 

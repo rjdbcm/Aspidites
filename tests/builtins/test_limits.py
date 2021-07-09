@@ -1,6 +1,6 @@
-from Aspidites.features.RestrictedPython.Limits import limited_list
-from Aspidites.features.RestrictedPython.Limits import limited_range
-from Aspidites.features.RestrictedPython.Limits import limited_tuple
+from Aspidites.libraries.RestrictedPython.Limits import limited_list
+from Aspidites.libraries.RestrictedPython.Limits import limited_range
+from Aspidites.libraries.RestrictedPython.Limits import limited_tuple
 
 import pytest
 

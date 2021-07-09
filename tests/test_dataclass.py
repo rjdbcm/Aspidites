@@ -1,7 +1,7 @@
 import unittest
 import sys
 
-from Aspidites.features.pampy.pampy import match, _
+from Aspidites.features.pampy.pampy import match, ANY
 
 
 class PampyDataClassesTests(unittest.TestCase):
@@ -19,9 +19,9 @@ class PampyDataClassesTests(unittest.TestCase):
         def f(x):
             return match(x,
                          Point(1, 2), '1',
-                         Point(_, 2), str,
-                         Point(1, _), str,
-                         Point(_, _), lambda a, b: str(a + b)
+                         Point(ANY, 2), str,
+                         Point(1, ANY), str,
+                         Point(ANY, ANY), lambda a, b: str(a + b)
                          )
 
         self.assertEqual(f(Point(1, 2)), '1')
@@ -47,10 +47,10 @@ class PampyDataClassesTests(unittest.TestCase):
 
         def what_is(x):
             return match(x,
-                         Dog(_, 0), 'good boy',
-                         Dog(_, _), 'doggy!',
-                         Cat(_, 0), 'tommy?',
-                         Cat(_, _), 'a cat'
+                         Dog(ANY, 0), 'good boy',
+                         Dog(ANY, ANY), 'doggy!',
+                         Cat(ANY, 0), 'tommy?',
+                         Cat(ANY, ANY), 'a cat'
                          )
 
         self.assertEqual(what_is(Cat("cat", 0)), 'tommy?')

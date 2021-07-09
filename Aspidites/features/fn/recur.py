@@ -1,6 +1,7 @@
 """Provides decorators to deal with tail calls in recursive functions."""
-
+import warnings
 from collections import namedtuple
+from Aspidites.libraries.contracts import contract
 
 
 class tco(object):
@@ -27,7 +28,8 @@ class tco(object):
 
     __slots__ = "func",
 
-    def __init__(self, func):
+    @contract()
+    def __init__(self, func: 'Callable'):
         self.func = func
 
     def __call__(self, *args, **kwargs):
@@ -45,6 +47,8 @@ class tco(object):
             # impossible to use such function in tail calls loop?
             if callable(act):
                 action = act
+            else:
+                warnings.warn("Optimized tail call to %s failed." % act)
             kwargs = result[2] if len(result) > 2 else {}
 
 

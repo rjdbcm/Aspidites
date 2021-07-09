@@ -5,7 +5,7 @@ import traceback
 from _warnings import warn
 from Aspidites.templates import _warning
 
-from Aspidites.features.contracts import ContractNotRespected
+from Aspidites.libraries.contracts import ContractNotRespected
 
 from Aspidites import final
 from contextlib import suppress
@@ -195,5 +195,3 @@ class Surely:
     def __new__(cls, instance__=Undefined(), *args, **kwargs):
         cls.__instance__ = instance__
         return cls.__instance__
-
-
