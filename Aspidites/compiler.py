@@ -36,9 +36,10 @@ def compile_module(code: 'code', fname: 'str' = "compiled.pyx", bytecode: 'bool'
         os.popen(f'cython {fname} --force {"--verbose" * verb}')
         file = app_name + ".c"
         dir = os.path.dirname(file)
+        setup_py = os.path.join(dir, 'setup.py')
         module_name = app_name.replace('/', '.')
-        with open('setup.py', 'w') as f:
+        with open(setup_py, 'w') as f:
             f.write(setup.substitute(app_name=module_name, ext_name=app_name,
                                      src_file=file, inc_dirs=[], libs=[], lib_dirs=[], **kwargs))
-        with os.popen(f'{sys.executable} setup.py build build_ext --inplace') as p:
+        with os.popen(f'{sys.executable} {setup_py} build build_ext --inplace') as p:
             print(p.read())

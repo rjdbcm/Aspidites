@@ -17,7 +17,11 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .tox/
 	rm -f .coverage
 	rm -fr htmlcov/
+	rm -fr .hypothesis/
+	rm -fr .coverage_html/
 	rm -fr .pytest_cache
+	rm -fr examples/setup.py
+	find . -name 'compiled*' -exec rm -fr {} +
 
 test-all:
 	pytest tests --cov Aspidites --cov-report=html:.coverage_html --cov-report=term-missing

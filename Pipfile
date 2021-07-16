@@ -14,11 +14,10 @@ cython = "*"
 pyparsing = "*"
 
 [dev-packages]
-mypy = "*"
 pytest = "*"
+pytest-pylint = "*"
 pytest-cov = "*"
 pytest-mock = "*"
-pytest-mypy = "*"
 pytest-sugar = "*"
 pytest-xdist = "*"
 hypothesis = "*"
