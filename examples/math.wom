@@ -1,0 +1,8 @@
+(Add(x = 3 -> int; y = 3 -> int))
+	<*>x+y
+i<@>(1,2,3)
+	pass
+C = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 5+3*(6**2)}
+colors <- list[3]
+x = Add(3, 3)
+y = Add(4, 3.5)

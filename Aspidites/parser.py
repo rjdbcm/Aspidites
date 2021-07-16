@@ -233,11 +233,9 @@ for_stmt = Group(delimitedList(identifier) + for_loop + tupleStr | listStr |
                  funcCall + suite | pass_stmt).setParseAction(cvt_for_stmt)
 rvalue << (funcCall | listItem)
 simple_assign << Group(identifier + "=" + rvalue).setParseAction(lambda t: ' '.join(t[0]))
-stmt << ( contract_define |funcDef | for_stmt | pass_stmt | simple_assign |
-comment_line)
+stmt << (funcDef | contract_define | for_stmt | pass_stmt | simple_assign | comment_line)
 
 module_body = OneOrMore(stmt)
-
 parse_module = module_body.parseString
 
 # reassign builtin collections contracts to check for pyrsistent version

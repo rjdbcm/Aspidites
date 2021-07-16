@@ -1,19 +1,16 @@
+import glob
+import os
+
 from Aspidites.libraries.contracts import ContractNotRespected
 from hypothesis import given, assume, strategies as st
 import pytest as pt
 from Aspidites.parser import parse_module
 from Aspidites.templates import lib, setup
 from Aspidites.monads import Maybe, Undefined, Surely
-from Aspidites.compiler import compile_to_c, compile_to_pyx
+from Aspidites.compiler import compile_module
 
-
-code_ = parse_module("(Add(x = 3 -> int; y = 3 -> int))"
-                     "\n\t<*>x+y"
-                     "\ni<@>(1,2,3)"
-                     "\n\tpass"
-                     "\nC = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 5+3*(6**2)}"
-                     "\ncolors <- list[3]"
-                     "\nx = Add(3, 3)\ny = Add(4, 3.5)", parseAll=True)
+with open('examples/math.wom', 'r') as f:
+    code_ = parse_module(f.read())
 
 
 def test_compile_module():
@@ -58,11 +55,9 @@ def test_integer_monad(x):
 
 def test_compile_to_shared_object():
 
-    compile_to_pyx(code_, 'compiled.pyx', bytecode=True)
+    compile_module(code_, 'tests/compiled.pyx', bytecode=True)
 
-    compile_to_c('compiled', 'compiled.pyx')
-
-    from build.compiled import Add, x, y
+    from compiled import Add, x, y
 
     with pt.raises(ContractNotRespected):
         Add(x=6.5, y=12)
@@ -73,3 +68,7 @@ def test_compile_to_shared_object():
     assert y() == Undefined()
     assert Add(x=3, y=2) == 5
 
+
+def teardown_function():
+    for file in glob.glob('tests/compiled.*'):
+        os.remove(file)
