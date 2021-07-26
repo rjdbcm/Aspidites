@@ -1,7 +1,7 @@
-from Aspidites.libraries.RestrictedPython import compile_restricted_exec
-from Aspidites.libraries.RestrictedPython import safe_globals
-from Aspidites.libraries.RestrictedPython.Eval import default_guarded_getiter
-from Aspidites.libraries.RestrictedPython.Guards import guarded_iter_unpack_sequence
+from Aspidites._vendor.RestrictedPython import compile_restricted_exec
+from Aspidites._vendor.RestrictedPython import safe_globals
+from Aspidites._vendor.RestrictedPython.Eval import default_guarded_getiter
+from Aspidites._vendor.RestrictedPython.Guards import guarded_iter_unpack_sequence
 
 import pytest
 

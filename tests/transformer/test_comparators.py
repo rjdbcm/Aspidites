@@ -1,4 +1,5 @@
 from tests.helper import restricted_eval
+import warnings
 
 
 def test_RestrictingNodeTransformer__visit_Eq__1():
@@ -38,7 +39,9 @@ def test_RestrictingNodeTransformer__visit_Is__1():
 
 def test_RestrictingNodeTransformer__visit_IsNot__1():
     """It allows `is not` expressions."""
-    assert restricted_eval('2 is not None') is True
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        assert restricted_eval('2 is not None') is True
 
 
 def test_RestrictingNodeTransformer__visit_In_List():

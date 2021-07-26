@@ -1,7 +1,7 @@
 import unittest
 
-from Aspidites.libraries.contracts.docstring_parsing import DocStringInfo, Arg, number_of_spaces
-from Aspidites.libraries.contracts.interface import add_prefix
+from Aspidites._vendor.contracts.docstring_parsing import DocStringInfo, Arg, number_of_spaces
+from Aspidites._vendor.contracts.interface import add_prefix
 
 
 examples = {"""

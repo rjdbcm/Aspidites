@@ -1,7 +1,7 @@
-from Aspidites.libraries.RestrictedPython import compile_restricted_function
-from Aspidites.libraries.RestrictedPython import PrintCollector
-from Aspidites.libraries.RestrictedPython import safe_builtins
-from Aspidites.libraries.RestrictedPython._compat import IS_PY38_OR_GREATER
+from Aspidites._vendor.RestrictedPython import compile_restricted_function
+from Aspidites._vendor.RestrictedPython import PrintCollector
+from Aspidites._vendor.RestrictedPython import safe_builtins
+from Aspidites._vendor._compat import IS_PY38_OR_GREATER
 from types import FunctionType
 
 

@@ -6,7 +6,7 @@ else:
 
     import unittest
 
-    from Aspidites.libraries.contracts import decorate, new_contract, ContractNotRespected
+    from Aspidites._vendor.contracts import decorate, new_contract, ContractNotRespected
 
     new_contract('rgb', 'array[HxWx3],H>0,W>0')
     new_contract('rgba', 'array[HxWx4],H>0,W>0')

@@ -1,4 +1,5 @@
 from tests.helper import restricted_eval
+import warnings
 
 
 def test_Is():
@@ -6,4 +7,6 @@ def test_Is():
 
 
 def test_NotIs():
-    assert restricted_eval('1 is not True') is True
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        assert restricted_eval('1 is not True') is True

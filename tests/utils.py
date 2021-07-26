@@ -1,12 +1,12 @@
-import six
+from Aspidites._vendor._compat import basestring
 
-from Aspidites.libraries.contracts.interface import (ContractSyntaxError, describe_value,
-                         ContractNotRespected)
-from Aspidites.libraries.contracts.main import parse_contract_string, check_contracts
+from Aspidites._vendor.contracts.interface import (ContractSyntaxError, describe_value,
+                                                   ContractNotRespected)
+from Aspidites._vendor.contracts.main import parse_contract_string, check_contracts
 
 
 def check_contracts_ok(contract, value):
-    if isinstance(contract, six.string_types):
+    if isinstance(contract, basestring):
         contract = [contract]
         value = [value]
     context = check_contracts(contract, value)
@@ -18,7 +18,7 @@ def check_contracts_ok(contract, value):
 
 def check_contracts_fail(contract, value, error=ContractNotRespected):
     """ Returns the exception """
-    if isinstance(contract, six.string_types):
+    if isinstance(contract, basestring):
         contract = [contract]
         value = [value]
 
@@ -47,7 +47,7 @@ def check_contracts_fail(contract, value, error=ContractNotRespected):
 
 
 def check_syntax_fail(string):
-    assert isinstance(string, six.string_types)
+    assert isinstance(string, basestring)
 
     try:
         parsed_contract = parse_contract_string(string)

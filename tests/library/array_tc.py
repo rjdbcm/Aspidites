@@ -2,7 +2,7 @@ from numpy import zeros, ones
 import numpy as np
 
 from . import syntax_fail, good, fail
-from Aspidites.libraries.contracts.library.array import np_int_dtypes, np_uint_dtypes, \
+from Aspidites._vendor.contracts.library.array import np_int_dtypes, np_uint_dtypes, \
     np_float_dtypes
 
 a_u8 = np.zeros((3, 4), dtype='uint8')
@@ -151,7 +151,7 @@ fail('seq[6]', np.ones((2, 4)))
 good('finite', 1)
 good('finite', 0)
 good('finite', -1)
-good('finite', np.float(1))
+good('finite', np.float_(1))
 fail('finite', np.inf)
 fail('finite', np.nan)
 

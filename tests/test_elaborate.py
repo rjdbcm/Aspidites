@@ -10,8 +10,8 @@ from typing import (
 
 from functools import reduce
 
-from Aspidites.features.pampy import match, REST, TAIL, HEAD, match_value, match_iterable
-from Aspidites.features.pampy.pampy import ANY
+from Aspidites._vendor import match, REST, TAIL
+from Aspidites._vendor import ANY
 
 
 class PampyElaborateTests(unittest.TestCase):

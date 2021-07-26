@@ -1,7 +1,7 @@
 import unittest
 
-from Aspidites.libraries.contracts import (check, ContractNotRespected, Contract, parse,
-                       check_multiple, ContractSyntaxError, fail)
+from Aspidites._vendor.contracts import (check, ContractNotRespected, Contract, parse,
+                                         check_multiple, ContractSyntaxError, fail)
 
 
 class TestIdioms(unittest.TestCase):

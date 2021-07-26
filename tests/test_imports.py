@@ -2,10 +2,10 @@
 Tests about imports
 """
 
-from Aspidites.libraries.RestrictedPython import compile_restricted_exec
-from Aspidites.libraries.RestrictedPython import safe_builtins
-from Aspidites.libraries.RestrictedPython._compat import IS_PY2
-from Aspidites.libraries.RestrictedPython._compat import IS_PY3
+from Aspidites._vendor.RestrictedPython import compile_restricted_exec
+from Aspidites._vendor.RestrictedPython import safe_builtins
+from Aspidites._vendor._compat import IS_PY2
+from Aspidites._vendor._compat import IS_PY3
 from tests.helper import restricted_exec
 
 import pytest

@@ -1,5 +1,5 @@
-from Aspidites.libraries.RestrictedPython import compile_restricted_eval
-from Aspidites.libraries.RestrictedPython._compat import IS_PY35_OR_GREATER
+from Aspidites._vendor.RestrictedPython import compile_restricted_eval
+from Aspidites._vendor._compat import IS_PY35_OR_GREATER
 from tests.helper import restricted_eval
 
 import pytest

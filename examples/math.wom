@@ -1,4 +1,4 @@
-(Add(x = 3 -> int; y = 3 -> int))
+(Add(x = 3 -> int; y = 3 -> int)) int
 	<*>x+y
 i<@>(1,2,3)
 	pass

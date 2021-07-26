@@ -7,13 +7,12 @@ from pyparsing import (
     ParseElementEnhance, oneOf, Optional, OneOrMore, OnlyOnce, Word,  alphanums, alphas,
     Suppress, unicodeString, quotedString, replaceWith, nums, Combine, Forward,
     FollowedBy, Literal, infixNotation, Keyword, opAssoc, Group, delimitedList, Regex, col,
-    matchOnlyAtCol, Empty, conditionAsParseAction
+    matchOnlyAtCol, Empty, conditionAsParseAction, ParseException
 )
 from string import Template
 from pyrsistent import pvector, pset, pmap, PVector, PSet, PMap
-from Aspidites.libraries.contracts.syntax import contract_expression, EqualTo
-from Aspidites.libraries.contracts import new_contract, contract, ContractNotRespected
-from Aspidites.libraries.RestrictedPython import safe_globals
+from Aspidites._vendor.contracts.syntax import contract_expression, EqualTo
+from Aspidites._vendor.contracts import new_contract, contract, ContractNotRespected
 
 _contract_expression = contract_expression.copy()
 _contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")
@@ -176,8 +175,7 @@ R_UMB = Keyword("->").setParseAction(lambda t: COL)
 L_UMB = Keyword("<-").setParseAction(lambda t: 'new_contract')
 
 
-
-identifier = Word(alphas + "-_", alphanums + "-_")
+identifier = Word(alphas + "_", alphanums + "_")
 contract_define = identifier + L_UMB + _contract_expression #  ^ funcCall
 contract_define.setParseAction(cvtContractDefine)
 contract_respect = R_UMB + _contract_expression
@@ -201,19 +199,21 @@ dictStr <<= (
 private_def_decl = Literal("(").setParseAction(replaceWith('def '))
 def_args = Optional(delimitedList(contract_assign, delim=';')).setParseAction(lambda t:
                                                                               ','.join(t))
-args_end = Group(Literal(")") + Literal(")")).setParseAction(replaceWith(')'))
+args_end = Group(Literal(")") + Literal(")")).setParseAction(replaceWith(') -> '))
 def_args = Group("(" + def_args + args_end).setParseAction(lambda t: ''.join(*t))
 
 public = '@contract()\n@cython.binding(True)\n'
 
-funcDecl = Group(private_def_decl + identifier + def_args).setParseAction(lambda t:
+funcDecl = Group(private_def_decl + identifier + def_args + _contract_expression).setParseAction(lambda t:
                                                                           public + ''.join(*t) + COL)
 comment_line = Regex(r"^(?:.*)\`.*").suppress()
 for_loop = Literal("<@>").setParseAction(replaceWith('for '))
 return_none = Literal("<*>").setParseAction(replaceWith('return '))
+yield_none = Literal("<^>").setParseAction(replaceWith('yield '))
 return_value = return_none + rvalue
+yield_value = yield_none + rvalue
 ret_stmt = Group(return_value).setParseAction(lambda t: ''.join(*t))
-funcDef = Group(funcDecl + suite).setParseAction(lambda t: '\n\t'.join(t[0]))
+funcDef = Group(funcDecl + suite).setParseAction(lambda t: '\n    '.join(t[0]))
 pass_stmt = Keyword("pass").setParseAction(lambda t: str(*t))
 suite << IndentedBlock((funcDef | contract_assign | for_stmt | ret_stmt | pass_stmt))
 funcCall = Group(identifier + "(" + Optional(delimitedList(rvalue)) + ")").setParseAction(lambda t: "Maybe" + t[0][1] + t[0][0] + ',' + ','.join(t[0][2:-1]) + t[0][-1])
@@ -222,7 +222,7 @@ funcCall = Group(identifier + "(" + Optional(delimitedList(rvalue)) + ")").setPa
 def cvt_for_stmt(toks):
     for t in toks:
         if t[0] in "pass":
-            return "\tpass"
+            return "    pass"
         t[0], t[1] = t[1], t[0]
         t.insert(2, " in ")
         t.append(":")
@@ -236,11 +236,13 @@ simple_assign << Group(identifier + "=" + rvalue).setParseAction(lambda t: ' '.j
 stmt << (funcDef | contract_define | for_stmt | pass_stmt | simple_assign | comment_line)
 
 module_body = OneOrMore(stmt)
-parse_module = module_body.parseString
 
-# reassign builtin collections contracts to check for pyrsistent version
-new_contract('pmap', lambda x: isinstance(x, PMap))
-new_contract('pvec', lambda x: isinstance(x, PVector))
-new_contract('pset', lambda x: isinstance(x, PSet))
-safe_globals.update({'contract': contract, 'pvec': PVector, 'pmap': PMap, 'pset': PSet})
+
+def parse_module(module, window_size=10):
+    try:
+        return module_body.parseString(module)
+    except ParseException as e:
+        raise e.__class__(e.pstr[e.loc: e.loc+window_size], loc=e.loc)
+
+
 

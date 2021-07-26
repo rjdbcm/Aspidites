@@ -1,36 +1,26 @@
 # contents of app_main.py
-import os
 import sys
+import traceback
+import warnings
+from contextlib import suppress
 import argparse as ap
-import pytest_cov
-from functools import partial
+from pyparsing import ParseBaseException
+import pyparsing
 from Cython import __version__ as cy_version
 from Cython.Compiler import Options
-import pytest_mypy
-import pytest_mock
-import pytest_sugar
-import pytest_pylint
-from semantic_version import Version
+with suppress(ImportError):
+    import pytest_cov
+    import pytest_mock
+    import pytest_pylint
+from Aspidites._vendor.semantic_version import Version
+from Aspidites._vendor.RestrictedPython import safe_globals
 from Aspidites.parser import parse_module
 from Aspidites.compiler import compile_module
-from Aspidites.features.pampy import match
+
 
 cy_version = Version.coerce(cy_version)
 
-
-def main():
-    if cy_version.major == 3:
-        from Cython.Compiler.CmdLine import create_cython_argparser
-        cy_parser = create_cython_argparser()
-    else:
-        cy_parser = ap.ArgumentParser(add_help=False)
-
-    if len(sys.argv) > 1 and sys.argv[1] == "--pytest" or sys.argv[1] == '-t':
-        import pytest
-        sys.exit(
-            pytest.main(sys.argv[2:], plugins=[pytest_pylint, pytest_mock, pytest_cov]))
-    else:
-        cy_kwargs = {
+cy_kwargs = {
             "annotate"              : Options.annotate,
             "annotate_coverage_xml" : Options.annotate_coverage_xml,
             "buffer_max_dims"       : Options.buffer_max_dims,
@@ -51,6 +41,30 @@ def main():
             "embed"                 : Options.embed
         }
 
+
+def main():
+    # any failure results in falling back to the `Cython.Compiler.Options` API
+    cy3_fallback_mode: bool = False
+    dummy = ap.ArgumentParser(add_help=False)
+    if cy_version.major == 3:
+        try:
+            from Cython.Compiler.CmdLine import create_cython_argparser
+            cy_parser = create_cython_argparser()
+        except Exception as e:
+            warnings.warn('\n' + ''.join(traceback.format_tb(e.__traceback__)) + 'Falling back to Cython 0.X Options API', ImportWarning)
+            cy3_fallback_mode = True
+            cy_parser = dummy
+    else:
+        cy_parser = dummy
+    if len(sys.argv) == 1:
+        print("%s called without arguments. Next time try --help or -h." % sys.argv[0])
+        exit(1)
+    if len(sys.argv) > 1 and sys.argv[1] == "--pytest" or sys.argv[1] == '-pt':
+        with suppress(ImportError):
+            import pytest
+            sys.exit(
+                pytest.main(sys.argv[2:], plugins=[pytest_pylint, pytest_mock, pytest_cov]))
+    else:
         def add_pre_cy3_args(parser):
             cy_arg_group = parser.add_argument_group("optional Cython arguments")
             for k, v in cy_kwargs.items():
@@ -59,42 +73,54 @@ def main():
                         default=v,
                         action='store_true' if type(v) == bool else 'store'
                 )
-
         asp_parser = ap.ArgumentParser(description=__doc__,
-                                       formatter_class=ap.RawDescriptionHelpFormatter,
                                        parents=[cy_parser],
                                        add_help=not bool(cy_version.major)
                                        )
         asp_parser.add_argument('-pt', '--pytest',
-                                help="run pytest with options", metavar='pytest args')
+                                help="run pytest with args", metavar='ARGS')
+        asp_parser.add_argument('-mp', '--mypy',
+                                help="run mypy with args", metavar='ARGS')
         asp_parser.add_argument("target",
                                 help="source to compile")
         # Compatible with Cython 0.X:
         # 3.0 switched to using the argparse module
-        if cy_version.major == 0:
-            asp_parser.add_argument('-o', '--output')
+        if cy_version.major == 0 or cy3_fallback_mode:
+            asp_parser.add_argument('-o', '--output', metavar='PATH/TO/FILE',
+                                    help='filename to compile to')
+            asp_parser.add_argument('-f', '--force', action='store_true',
+                                    help='forcibly overwrite existing files')
             asp_parser.add_argument("-p", "--compile-pyc", action="store_true",
                                     help="compile to python bytecode")
             asp_parser.add_argument('-c', '--compile-c', action="store_true",
-                                    help="compile to C")
+                                    help="compile to C and execute setup")
+            asp_parser.add_argument('--build-requires', default='', metavar='',
+                                    help='additional requirements needed to execute setup (default: %(default)s)')
             asp_parser.add_argument('-v', "--verbose",
                                     default=0,
                                     action='count',
-                                    help="increase output verbosity (default: %(default)s)")
+                                    help="increase output verbosity (default: %(default)s) e.g. -v, -vv, -vvv ")
             add_pre_cy3_args(asp_parser)
+            asp_parser = get_parser()
             args, other_args = asp_parser.parse_known_args()
             for k in cy_kwargs.keys():
                 cy_kwargs[k] = args.__getattribute__(k)
         else:
-            args = asp_parser.parse_args()
+            args, other_args = asp_parser.parse_known_args()
 
         if args.verbose >= 2:
             print(asp_parser.__repr__())
         with open(args.target, 'r') as t:
             code = parse_module(t.read())
-            compile_module(code, fname=args.output, bytecode=args.compile_pyc,
-                           c=args.compile_c, verbose=args.verbose, **cy_kwargs)
+            compile_module(code, fname=args.output, force=args.force,
+                           bytecode=args.compile_pyc,
+                           c=args.compile_c, build_requires=args.build_requires,
+                           verbose=args.verbose, *other_args, **cy_kwargs)
 
+            # # reassign builtin collections contracts to check for pyrsistent version
+            # new_contract('pmap', lambda x: isinstance(x, PMap))
+            # new_contract('pvec', lambda x: isinstance(x, PVector))
+            # new_contract('pset', lambda x: isinstance(x, PSet))
+            # safe_globals.update(
+            #         {'contract': contract, 'pvec': PVector, 'pmap': PMap, 'pset': PSet})
 
-if __name__ == '__main__':
-    main()

@@ -1,7 +1,7 @@
 import unittest
 
-from Aspidites.features import match_dict, match
-from Aspidites.features.pampy.pampy import ANY
+from Aspidites._vendor import match_dict, match
+from Aspidites._vendor import ANY
 
 
 class IterableTests(unittest.TestCase):

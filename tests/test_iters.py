@@ -1,7 +1,8 @@
 import operator
 import pytest
 from hypothesis import given, strategies as st
-from Aspidites.features.fn import iters, F, _
+from Aspidites._vendor.fn import F, _
+from Aspidites._vendor.fn import iters
 
 
 def test_take():

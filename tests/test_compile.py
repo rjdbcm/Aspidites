@@ -1,11 +1,11 @@
-from Aspidites.libraries.RestrictedPython import compile_restricted
-from Aspidites.libraries.RestrictedPython import compile_restricted_eval
-from Aspidites.libraries.RestrictedPython import compile_restricted_exec
-from Aspidites.libraries.RestrictedPython import compile_restricted_single
-from Aspidites.libraries.RestrictedPython import CompileResult
-from Aspidites.libraries.RestrictedPython._compat import IS_PY2
-from Aspidites.libraries.RestrictedPython._compat import IS_PY3
-from Aspidites.libraries.RestrictedPython._compat import IS_PY38_OR_GREATER
+from Aspidites._vendor.RestrictedPython import compile_restricted
+from Aspidites._vendor.RestrictedPython import compile_restricted_eval
+from Aspidites._vendor.RestrictedPython import compile_restricted_exec
+from Aspidites._vendor.RestrictedPython import compile_restricted_single
+from Aspidites._vendor.RestrictedPython import CompileResult
+from Aspidites._vendor._compat import IS_PY2
+from Aspidites._vendor._compat import IS_PY3
+from Aspidites._vendor._compat import IS_PY38_OR_GREATER
 from tests.helper import restricted_eval
 
 import platform
@@ -116,7 +116,7 @@ def no_exec():
 
 @pytest.mark.skipif(
     IS_PY2,
-    reason="exec statement in Python 2 is handled by Aspidites.features.RestrictedPython ")
+    reason="exec statement in Python 2 is handled by Aspidites._vendor.RestrictedPython ")
 def test_compile__compile_restricted_exec__10():  # pragma: PY3
     """It is a SyntaxError to use the `exec` statement. (Python 3 only)"""
     result = compile_restricted_exec(EXEC_STATEMENT)
@@ -205,7 +205,7 @@ def test_compile___compile_restricted_mode__1(recwarn, mocker):
     """It warns when using another Python implementation than CPython."""
     if platform.python_implementation() == 'CPython':  # pragma: no cover
         # Using CPython we have to fake the check:
-        mocker.patch('Aspidites.libraries.RestrictedPython.compile.IS_CPYTHON', new=False)
+        mocker.patch('Aspidites._vendor.RestrictedPython.compile.IS_CPYTHON', new=False)
     with pytest.warns(RuntimeWarning) as record:
         compile_restricted('42')
     assert len(record) == 1

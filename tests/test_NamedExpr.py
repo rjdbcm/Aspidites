@@ -3,9 +3,9 @@
 
 from ast import NodeTransformer
 from ast import parse
-from Aspidites.libraries.RestrictedPython import compile_restricted
-from Aspidites.libraries.RestrictedPython import safe_globals
-from Aspidites.libraries.RestrictedPython._compat import IS_PY38_OR_GREATER
+from Aspidites._vendor.RestrictedPython import compile_restricted
+from Aspidites._vendor.RestrictedPython import safe_globals
+from Aspidites._vendor._compat import IS_PY38_OR_GREATER
 from unittest import skipUnless
 from unittest import TestCase
 

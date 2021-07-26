@@ -1,10 +1,10 @@
-from Aspidites.libraries.RestrictedPython import compile_restricted_exec
-from Aspidites.libraries.RestrictedPython._compat import IS_PY2
-from Aspidites.libraries.RestrictedPython._compat import IS_PY3
-from Aspidites.libraries.RestrictedPython.Guards import guarded_unpack_sequence
-from Aspidites.libraries.RestrictedPython.Guards import safe_builtins
-from Aspidites.libraries.RestrictedPython.Guards import safe_globals
-from Aspidites.libraries.RestrictedPython.Guards import safer_getattr
+from Aspidites._vendor.RestrictedPython import compile_restricted_exec
+from Aspidites._vendor._compat import IS_PY2
+from Aspidites._vendor._compat import IS_PY3
+from Aspidites._vendor.RestrictedPython.Guards import guarded_unpack_sequence
+from Aspidites._vendor.RestrictedPython.Guards import safe_builtins
+from Aspidites._vendor.RestrictedPython.Guards import safe_globals
+from Aspidites._vendor.RestrictedPython.Guards import safer_getattr
 from tests.helper import restricted_eval
 from tests.helper import restricted_exec
 

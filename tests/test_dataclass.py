@@ -1,7 +1,6 @@
 import unittest
-import sys
 
-from Aspidites.features.pampy.pampy import match, ANY
+from Aspidites._vendor import match, ANY
 
 
 class PampyDataClassesTests(unittest.TestCase):

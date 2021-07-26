@@ -1,8 +1,8 @@
 import unittest
-from collections import Iterable
+from collections.abc import Iterable
 
-from Aspidites.features.pampy import HEAD, TAIL, MatchError, match_iterable as mi
-from Aspidites.features.pampy.pampy import ANY
+from Aspidites._vendor import HEAD, TAIL, MatchError, match_iterable as mi
+from Aspidites._vendor import ANY
 
 
 class IterableTests(unittest.TestCase):

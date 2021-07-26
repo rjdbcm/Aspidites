@@ -1,7 +1,8 @@
 import pytest as pt
 
-from Aspidites.features.fn import _, underscore
-from Aspidites.features.fn.uniform import reduce
+from Aspidites._vendor.fn import _
+from Aspidites._vendor.fn import underscore
+from Aspidites._vendor.fn import reduce
 
 
 

@@ -15,8 +15,7 @@ from typing import (
     Type,
 )
 
-from Aspidites.features.pampy import (
-    match,
+from Aspidites._vendor import (
     match_value,
 )
 

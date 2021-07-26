@@ -1,4 +1,4 @@
-from Aspidites.libraries.contracts import contract, new_contract, ContractNotRespected
+from Aspidites._vendor.contracts import contract, new_contract, ContractNotRespected
 import unittest
 
 

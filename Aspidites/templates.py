@@ -1,10 +1,13 @@
 from string import Template
 
 _warning = Template("""
-File:      $file - $lineno
-Function:  $func
-Statement: $atfault
--------------------------------------------------------------------------------------------
+$file:$lineno:
+$func
+Statement:
+$atfault
+Bound Variables:
+$bound
+Complaint Information:
 $tb
 """)
 
@@ -39,7 +42,7 @@ setup(
 
 lib = Template("""# cython language_level=3
 # THIS FILE IS GENERATED - DO NOT EDIT #
-import cython
+import cython # type: ignore
 from pyrsistent import (
                         pset, 
                         pmap, 
@@ -48,11 +51,15 @@ from pyrsistent import (
                         PRecord,
                         PClass
                         )
-from Aspidites.features import *
+from Aspidites._vendor import *
 from Aspidites.monads import Maybe, Surely, Undefined
-from Aspidites.libraries.contracts import contract, new_contract
-from Aspidites.libraries.RestrictedPython import safe_globals
-safe_globals.update(globals()) # add all imports to globals
-globals().update(safe_globals)
+from Aspidites._vendor.contracts import contract, new_contract
+from Aspidites._vendor.RestrictedPython import safe_builtins
+globals().update(dict(__builtins__=safe_builtins)) # add all imports to globals
+
+
 $code
 """)
+
+pyproject = Template("""[build-system]
+requires = ["setuptools", "wheel", "Cython", $build_requires]""")

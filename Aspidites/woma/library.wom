@@ -1,0 +1,17 @@
+number <- int|float|complex
+
+(Add(x -> number;
+     y -> number
+     )) number
+     <*> x + y
+
+(Sub(x -> number;
+     y -> number;
+     )) number
+     <*> x - y
+
+(Div(x -> number;
+     y -> number;
+     )) number
+     <*> x / y
+

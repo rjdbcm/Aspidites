@@ -3,8 +3,7 @@ from enum import Enum
 import re
 
 import Aspidites.monads
-from Aspidites.features.pampy import match_value, match, HEAD, TAIL, MatchError
-from Aspidites.features.pampy.pampy import ANY
+from Aspidites._vendor.pampy import ANY, match_value, match, HEAD, TAIL, MatchError
 
 
 class PampyBasicTests(unittest.TestCase):
@@ -125,8 +124,8 @@ class PampyBasicTests(unittest.TestCase):
     def test_regex_groups(self):
         def what_is(pet):
             return match(pet,
-                re.compile('(\w+)-(\w+)-cat$'),     lambda name, my: 'cat '+name,
-                re.compile('(\w+)-(\w+)-dog$'),     lambda name, my: 'dog '+name,
+                re.compile(r'(\w+)-(\w+)-cat$'),     lambda name, my: 'cat '+name,
+                re.compile(r'(\w+)-(\w+)-dog$'),     lambda name, my: 'dog '+name,
                 ANY,                                  "something else"
             )
 

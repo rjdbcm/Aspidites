@@ -1,7 +1,7 @@
 import operator
 from hypothesis import strategies as st
-from hypothesis import given, assume
-from Aspidites.features.fn import F, _, iters, curried
+from hypothesis import given
+from Aspidites._vendor.fn import F, _, curried
 
 
 def test_curried():

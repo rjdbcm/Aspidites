@@ -1,4 +1,4 @@
-from Aspidites.libraries.RestrictedPython.Guards import guarded_iter_unpack_sequence
+from Aspidites._vendor.RestrictedPython.Guards import guarded_iter_unpack_sequence
 from tests.helper import restricted_exec
 
 import types

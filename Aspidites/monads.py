@@ -1,18 +1,21 @@
+import sys
 import shutil
 import inspect
 from pyrsistent import pvector, v
 import traceback
+import operator as op
 from _warnings import warn
+from Aspidites.api import create_warning
 from Aspidites.templates import _warning
-
-from Aspidites.libraries.contracts import ContractNotRespected
-
+from Aspidites._vendor.fn import apply
+from Aspidites._vendor.contracts import ContractNotRespected
+from Aspidites.api import bordered, ContractBreachWarning
 from Aspidites import final
 from contextlib import suppress
 
 
 class Maybe:
-    """Sandboxes a Definitely call and handles ContractNotRespected by returning Undefined"""
+    """Sandboxes a Surely call and handles ContractNotRespected by returning Undefined"""
     __metaclass__ = final
     __slots__ = v('_func', '_args', '_kwargs', '__instance__')
 
@@ -43,27 +46,20 @@ class Maybe:
     def __call__(self, debug=False, warn_undefined=True):
         try:
             with suppress(ValueError):
-                val = self.func(*self.args, **self.kwargs)
+                val = apply(self.func, self.args, self.kwargs)
             with suppress(UnboundLocalError):
                 self.__instance__ = Surely(val)
+                # SURELY #
                 return self.__instance__
-            # self.__instance__ = Undefined()
+            self.__instance__ = Undefined()
         except ContractNotRespected as e:
             if warn_undefined:
-                tb_scope = len(inspect.trace()) if debug else 1
-                for i in range(tb_scope):
-                    stack = inspect.stack()
-                    locals = stack[1][0].f_locals
-                    str_locals = str()
-                    for k,v in locals.items():
-                        str_locals += k + ": " + str(v) + "\n"
-                    the_caller = stack[1][0].f_code
-                    fname, lineno, func, atfault = inspect.trace()[i][1], inspect.trace()[i][2], \
-                                                   inspect.trace()[i][3], inspect.trace()[i][4]
-                    atfault = str(atfault[0]).strip("\n").lstrip(' ') + "\n" + str_locals
-                    w = _warning.safe_substitute(file=fname, lineno=lineno, func=func + str(the_caller), atfault=atfault,
-                                        tb=str(e))
-                    warn(w, category=RuntimeWarning)
+                scope = len(inspect.trace()) if debug else 1
+                for i in range(scope):
+                    stack = inspect.stack(scope)
+                    w = create_warning(self.func, self.args, self.kwargs, stack, e)
+                    warn(w, category=ContractBreachWarning)
+            # UNDEFINED #
             self.__instance__ = Undefined()
             return self.__instance__
 
@@ -103,7 +99,7 @@ class Undefined:
         return self
 
     def __str__(self):
-        return str()
+        return str(self.__repr__())
 
     def __float__(self):
         return float()
@@ -148,50 +144,54 @@ class Surely:
                   '__float__',
                   '__complex__')
 
+    def __try_except_undefined__(self, other=None, call=None):
+        if call:
+            # noinspection PyComparisonWithNone
+            return call(
+                self.__instance__
+            ) if other == None else call(
+                    self.__instance__, other
+            )
+        else:
+            return self.__instance__
+
     def __hash__(self):
-        return hash(self.__instance__)
+        return self.__try_except_undefined__(call=hash)
 
     def __eq__(self, other):
-        return self.__hash__ == other.__hash__
+        return self.__try_except_undefined__(other, op.eq)
 
     def __add__(self, other):
-        return self.__instance___ + other
+        return self.__try_except_undefined__(other, op.add)
 
     def __sub__(self, other):
-        return self.__instance__ - other
+        return self.__try_except_undefined__(other, op.sub)
 
     def __neg__(self):
-        return -self.__instance__
+        return self.__try_except_undefined__(call=op.neg)
 
     def __invert__(self):
-        try:
-            return ~self.__instance__
-        except TypeError:
-            return Undefined()
+        return self.__try_except_undefined__(call=op.invert)
 
     def __mul__(self, other):
-        return self.__instance__ * other
+        return self.__try_except_undefined__(other, op.mul)
 
     def __truediv__(self, other):
-        return self.__instance__ / other
+        return self.__try_except_undefined__(other, op.truediv)
 
     def __floordiv__(self, other):
-        return self.__instance__ // other
+        return self.__try_except_undefined__(other, op.floordiv)
 
     def __oct__(self):
-        try:
-            return oct(self.__instance__)
-        except TypeError:
-            return Undefined()
+        return self.__try_except_undefined__(call=oct)
 
     def __nonzero__(self):
-        return bool(self.__instance__)
+        return self.__try_except_undefined__(call=bool)
 
     @classmethod
     def __call__(cls, *args, **kwargs):
         return cls.__instance__
 
-    # basically deep magic
     def __new__(cls, instance__=Undefined(), *args, **kwargs):
         cls.__instance__ = instance__
         return cls.__instance__

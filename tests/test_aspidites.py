@@ -1,9 +1,10 @@
 import glob
 import os
 
-from Aspidites.libraries.contracts import ContractNotRespected
+from Aspidites._vendor.contracts import ContractNotRespected
 from hypothesis import given, assume, strategies as st
 import pytest as pt
+from Aspidites.__main__ import cy_kwargs
 from Aspidites.parser import parse_module
 from Aspidites.templates import lib, setup
 from Aspidites.monads import Maybe, Undefined, Surely
@@ -14,7 +15,6 @@ with open('examples/math.wom', 'r') as f:
 
 
 def test_compile_module():
-
     compile(lib.substitute(code='\n'.join(code_)), '', 'exec')
 
 
@@ -55,14 +55,14 @@ def test_integer_monad(x):
 
 def test_compile_to_shared_object():
 
-    compile_module(code_, 'tests/compiled.pyx', bytecode=True)
+    compile_module(code_, 'examples/compiled.py', bytecode=True, **cy_kwargs)
 
     from compiled import Add, x, y
 
     with pt.raises(ContractNotRespected):
         Add(x=6.5, y=12)
 
-    cs = Maybe(Add, {'x': 6.5, 'y': 12})
+    cs = Maybe(Add, 6.5, 12)
     assert cs() == Undefined()
     assert x() == 6
     assert y() == Undefined()
@@ -70,5 +70,9 @@ def test_compile_to_shared_object():
 
 
 def teardown_function():
-    for file in glob.glob('tests/compiled.*'):
+    for file in glob.glob('examples/compiled.*'):
         os.remove(file)
+    try:
+        os.remove('examples/setup.py')
+    except FileNotFoundError:
+        pass

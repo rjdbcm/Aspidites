@@ -1,4 +1,4 @@
-from Aspidites.libraries.RestrictedPython import compile_restricted_exec
+from Aspidites._vendor.RestrictedPython import compile_restricted_exec
 
 
 import_errmsg = (

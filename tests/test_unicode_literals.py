@@ -1,8 +1,6 @@
 # encoding: utf-8
-from __future__ import unicode_literals
-
-from Aspidites.libraries.contracts import contract
-from Aspidites.libraries.contracts.main import parse_contract_string
+from Aspidites._vendor.contracts import contract
+from Aspidites._vendor.contracts.main import parse_contract_string
 name = 'helló wörld from one'
 
 import unittest

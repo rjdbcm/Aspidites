@@ -1,10 +1,12 @@
 import operator
 import sys
+from datetime import timedelta as delta
+import hypothesis
 import pytest as pt
 import hypothesis.strategies as st
 from hypothesis import given, assume
 
-from Aspidites.features.fn import recur
+from Aspidites._vendor.fn import recur
 
 
 # no fuzzing just tested at 10x the recursion limit
@@ -37,8 +39,10 @@ def test_tco_decorator(limit=sys.getrecursionlimit() * 10):
     assert sum(range(limit)) == tco_accumulate(iter(range(limit)))
 
 
-@given(st.integers(min_value=2, max_value=10000))
+@hypothesis.settings(deadline=delta(milliseconds=400))
+@given(st.integers(min_value=2, max_value=1000))
 def test_tco_different_functions(i: int):
+    # noinspection PyUnusedLocal
     assume(not i % 2)  # even only
 
     @recur.tco

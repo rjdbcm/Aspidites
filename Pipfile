@@ -4,17 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-six = "*"
-decorator = "*"
-future = "*"
 pyrsistent = "*"
 numpy = "*"
-semantic-version = "*"
 cython = "*"
 pyparsing = "*"
+mypy = "*"
 
 [dev-packages]
 pytest = "*"
+pytest-mypy = "*"
 pytest-pylint = "*"
 pytest-cov = "*"
 pytest-mock = "*"

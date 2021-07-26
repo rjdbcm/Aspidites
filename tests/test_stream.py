@@ -1,8 +1,7 @@
-import pytest as pt
-from typing import Iterable
 from hypothesis import given
 from hypothesis import strategies as st
-from Aspidites.features.fn import Stream, iters
+from Aspidites._vendor.fn import Stream
+from Aspidites._vendor.fn import iters
 
 
 @given(st.lists(st.integers(), min_size=1))

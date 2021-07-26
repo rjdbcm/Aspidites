@@ -1,5 +1,5 @@
-from Aspidites.libraries.RestrictedPython import compile_restricted_exec
-from Aspidites.libraries.RestrictedPython.Guards import guarded_unpack_sequence
+from Aspidites._vendor.RestrictedPython import compile_restricted_exec
+from Aspidites._vendor.RestrictedPython.Guards import guarded_unpack_sequence
 from tests.helper import restricted_exec
 
 import contextlib

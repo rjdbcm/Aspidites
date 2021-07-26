@@ -1,6 +1,7 @@
 import operator
 import itertools
-from Aspidites.features.fn import op, _, F, iters
+from Aspidites._vendor.fn import _, F
+from Aspidites._vendor.fn import op
 
 
 def test_unfold():

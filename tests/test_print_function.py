@@ -1,45 +1,45 @@
-from Aspidites.libraries.RestrictedPython.PrintCollector import PrintCollector
+from Aspidites._vendor.RestrictedPython.PrintCollector import PrintCollector
 
-import Aspidites.libraries.RestrictedPython
+import Aspidites._vendor.RestrictedPython
 
 
-compiler = Aspidites.libraries.RestrictedPython.compile.compile_restricted_exec
+compiler = Aspidites._vendor.RestrictedPython.compile.compile_restricted_exec
 
 
 ALLOWED_PRINT_FUNCTION = """
-from __future__ import print_function
+
 print ('Hello World!')
 """
 
 ALLOWED_PRINT_FUNCTION_WITH_END = """
-from __future__ import print_function
+
 print ('Hello World!', end='')
 """
 
 ALLOWED_PRINT_FUNCTION_MULTI_ARGS = """
-from __future__ import print_function
+
 print ('Hello World!', 'Hello Earth!')
 """
 
 ALLOWED_PRINT_FUNCTION_WITH_SEPARATOR = """
-from __future__ import print_function
+
 print ('a', 'b', 'c', sep='|', end='!')
 """
 
 PRINT_FUNCTION_WITH_NONE_SEPARATOR = """
-from __future__ import print_function
+
 print ('a', 'b', sep=None)
 """
 
 
 PRINT_FUNCTION_WITH_NONE_END = """
-from __future__ import print_function
+
 print ('a', 'b', end=None)
 """
 
 
 PRINT_FUNCTION_WITH_NONE_FILE = """
-from __future__ import print_function
+
 print ('a', 'b', file=None)
 """
 
@@ -91,7 +91,7 @@ def test_print_function__simple_prints():
 
 
 ALLOWED_PRINT_FUNCTION_WITH_STAR_ARGS = """
-from __future__ import print_function
+
 to_print = (1, 2, 3)
 print(*to_print)
 """
@@ -116,7 +116,7 @@ def test_print_function_with_star_args(mocker):
 
 
 ALLOWED_PRINT_FUNCTION_WITH_KWARGS = """
-from __future__ import print_function
+
 to_print = (1, 2, 3)
 kwargs = {'sep': '-', 'end': '!', 'file': None}
 print(*to_print, **kwargs)
@@ -149,7 +149,7 @@ def test_print_function_with_kw_args(mocker):
 
 
 PROTECT_WRITE_ON_FILE = """
-from __future__ import print_function
+
 print ('a', 'b', file=stream)
 """
 
@@ -184,7 +184,7 @@ def test_print_function__protect_file(mocker):
 # 'printed' is scope aware.
 # => on a new function scope a new printed is generated.
 INJECT_PRINT_COLLECTOR_NESTED = """
-from __future__ import print_function
+
 def f2():
     return 'f2'
 
@@ -228,7 +228,7 @@ def test_print_function__with_printed_no_print():
 
 
 WARN_PRINTED_NO_PRINT_NESTED = """
-from __future__ import print_function
+
 print ('a')
 def foo():
     return printed
@@ -245,7 +245,7 @@ def test_print_function__with_printed_no_print_nested():
 
 
 WARN_PRINT_NO_PRINTED = """
-from __future__ import print_function
+
 def foo():
     print (1)
 """
@@ -260,7 +260,7 @@ def test_print_function__with_print_no_printed():
 
 
 WARN_PRINT_NO_PRINTED_NESTED = """
-from __future__ import print_function
+
 print ('a')
 def foo():
     print ('x')
@@ -282,7 +282,7 @@ def test_print_function__with_print_no_printed_nested():
 # generated.
 
 NO_PRINT_SCOPES = """
-from __future__ import print_function
+
 def class_scope():
     class A:
         print ('a')
@@ -321,7 +321,7 @@ def test_print_function_no_new_scope():
 
 
 PASS_PRINT_FUNCTION = """
-from __future__ import print_function
+
 def main():
     def do_stuff(func):
         func(1)
@@ -342,7 +342,7 @@ def test_print_function_pass_print_function():
 
 
 CONDITIONAL_PRINT = """
-from __future__ import print_function
+
 def func(cond):
     if cond:
         print(1)
