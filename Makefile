@@ -1,4 +1,4 @@
-clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
+clean: clean-build clean-pyc clean-test clean-md5 ## remove all build, test, coverage and Python artifacts
 
 clean-build: ## remove build artifacts
 	rm -fr build/
@@ -6,6 +6,9 @@ clean-build: ## remove build artifacts
 	rm -fr .eggs/
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
+
+clean-md5:
+	find . -name '*.md5' -exec rm -f {} +
 
 clean-pyc: ## remove Python file artifacts
 	find . -name '*.pyc' -exec rm -f {} +
@@ -21,12 +24,14 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .coverage_html/
 	rm -fr .pytest_cache
 	rm -fr .mypy_cache
+	rm -fr examples/py.typed
+	rm -fr examples/__init__.py
 	rm -fr examples/setup.py
 	rm -fr examples/pyproject.toml
 	find . -name 'compiled*' -exec rm -fr {} +
 
 test-all:
-	pytest tests --cov Aspidites --cov-report=html:.coverage_html --full-trace
+	pytest tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
 
 patch-version:
 	bump2version patch

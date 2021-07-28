@@ -1,0 +1,46 @@
+`first-class functions`
+(Add(x = 3 -> int; y = 3 -> int)) int
+	<*>x+y
+
+`generators`
+(Yield123()) Generator
+	<^>Add(0, 1)
+	<^>Add(0, 2)
+	<^>Add(0, 3)
+
+`loops`
+i<@>(1,2,3)
+	pass
+
+`persistent vectors`
+D = [2, 4, 6, 8, 10]
+
+`persistent sets`
+G = {'a', 'b', 'c'}
+
+`persistent mappings`
+C = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 5+3*(6**2)}
+
+`new contracts can impose more complex contractual clauses`
+colors <- list[3](int, <256)
+
+`any woma function can be used in place or as an enclosing scope`
+x = Add(3, 3)...
+
+`seamless exception handling allows tracing of undefined code branches`
+y = Add(4, 3.5)
+
+`mixed usage of closure and regular function calls`
+z = Add(x(), 3)
+
+`Scala-style closure functions`
+scala = (_ * 2)
+val = scala(_ + _)
+val = val(scala)
+
+`modulus and division by 0 handled`
+denom = 0
+div_by_zero = 1 / denom
+mod_zero = 1 % denom
+div_by_zero2 = 1 / 0
+mod_zero = 1 % 0

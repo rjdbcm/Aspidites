@@ -10,7 +10,7 @@ from Aspidites.templates import lib, setup
 from Aspidites.monads import Maybe, Undefined, Surely
 from Aspidites.compiler import compile_module
 
-with open('examples/math.wom', 'r') as f:
+with open('examples/examples.wom', 'r') as f:
     code_ = parse_module(f.read())
 
 
@@ -57,16 +57,19 @@ def test_compile_to_shared_object():
 
     compile_module(code_, 'examples/compiled.py', bytecode=True, **cy_kwargs)
 
-    from compiled import Add, x, y
+    from compiled import Add, x, y, z, scala, val, div_by_zero, Yield123
 
     with pt.raises(ContractNotRespected):
         Add(x=6.5, y=12)
 
-    cs = Maybe(Add, 6.5, 12)
-    assert cs() == Undefined()
+    assert [1, 2, 3] == [i for i in Yield123()]
+    assert Maybe(Add, 6.5, 12)() == Undefined()
     assert x() == 6
-    assert y() == Undefined()
+    assert y == Undefined()
+    assert z == 9
     assert Add(x=3, y=2) == 5
+    assert val == Undefined()
+    assert div_by_zero == Undefined()
 
 
 def teardown_function():

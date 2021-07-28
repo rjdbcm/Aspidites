@@ -2,10 +2,16 @@ import typing
 from textwrap import wrap as _wrap
 from .templates import _warning
 from os import get_terminal_size
+from pyrsistent import pvector, pmap, inc, rex, discard, PVector
+from ._vendor.fn import F, _
+from ._vendor.fn.underscore import ArityError
 
 
 class ContractBreachWarning(RuntimeWarning):
     pass
+
+
+
 
 
 def wrap(text, width=160, pad=True, padchar=' '):
@@ -15,12 +21,15 @@ def wrap(text, width=160, pad=True, padchar=' '):
     line instead. This way list formatting is not mangled by textwrap.wrap.
     """
     wrapped_lines = []
-    for l in text.splitlines():
-        line = _wrap(l, width, replace_whitespace=False)
-        if pad:
-            for s in line:
-                s += padchar * width
-        wrapped_lines.extend(line)
+    try:
+        for l in text.splitlines():
+            line = _wrap(l, width, replace_whitespace=False)
+            if pad:
+                for s in line:
+                    s += padchar * width
+            wrapped_lines.extend(line)
+    except ArityError:
+        wrapped_lines.extend([str(text)])
 
     return wrapped_lines
 
@@ -60,7 +69,7 @@ def create_warning(func, args, kwargs, stack, exc=Exception()):
         name = func.__name__
     else:
         name = str(func)
-    atfault = name + '(' + str(args).strip('()') + fkwargs + ')'
+    atfault = name if isinstance(exc, ArityError) else name + '(' + str(args).strip('()') + fkwargs + ')'
     return _warning.safe_substitute(file=fname,
                                     lineno=lineno,
                                     func=bordered(func_name),

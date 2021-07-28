@@ -43,6 +43,7 @@ setup(
 lib = Template("""# cython language_level=3
 # THIS FILE IS GENERATED - DO NOT EDIT #
 import cython # type: ignore
+from collections.abc import Generator
 from pyrsistent import (
                         pset, 
                         pmap, 
@@ -51,11 +52,11 @@ from pyrsistent import (
                         PRecord,
                         PClass
                         )
-from Aspidites._vendor import *
-from Aspidites.monads import Maybe, Surely, Undefined
+from Aspidites._vendor import F, _
+from Aspidites.monads import Maybe, Surely, Undefined, SafeDiv, SafeMod
 from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.RestrictedPython import safe_builtins
-globals().update(dict(__builtins__=safe_builtins)) # add all imports to globals
+globals().update(dict(__builtins__=safe_builtins))  # add all imports to globals
 
 
 $code

@@ -1,3 +1,4 @@
+import contextlib
 import os.path
 import sys
 
@@ -78,23 +79,37 @@ def cvtDict(t):
 
 
 def cvtList(t):
-    return pvector(t.asList())
+    t = t.asList()
+    for i, v in enumerate(t):
+        if isinstance(v, str):  # string keys only
+            t[i] = v
+        else:  # integer key
+            t[i] = int(v)
+    t = f'{", ".join(t)}'
+    return f'pvector([{t}])'
 
 
 def cvtSet(t):
-    pset(t.asList())
+    t = t.asList()
+    for i, v in enumerate(t):
+        if isinstance(v, str):  # string keys only
+            t[i] = v
+        else:  # integer key
+            t[i] = int(v)
+    t = f'{", ".join(t)}'
+    return f'pset({{{t}}})'
 
 
 def cvtContractAssign(t):
     t = swap_val_to_idx(list(t), COL, 1)
     t[2], t[4] = t[4], t[2]
-    return ''.join((str(t) for t in t))
+    return ' '.join((str(t) for t in t))
 
 
 def cvtContractDefine(t):
     t[0], t[1] = t[1], t[0]
     t[1] = "'" + t[1] + "'"
-    args = f"({','.join(t[1:])})"
+    args = f"({', '.join(t[1:])})"
     t = t[0] + args
     return ''.join(t)
 
@@ -114,11 +129,13 @@ lparen, rparen, lbrack, rbrack, lbrace, rbrace, colon, comma = map(
 )
 unistr = unicodeString().setParseAction(lambda t: t[0][2:-1])
 quoted_str = quotedString().setParseAction(lambda t: t[0])
+backquoted_str = Combine(Regex(r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`").setParseAction(lambda t: t[0])
 boolLiteral = oneOf("True False", asKeyword=True).setParseAction(cvtBool)
 null = Keyword("None").setParseAction(replaceWith(None))
 integer = Word(nums).setParseAction(cvtInt)
 real = Combine(Word(nums) + "." + Word(nums))
 listStr = Forward()
+setStr = Forward()
 dictStr = Forward()
 tupleStr = Forward()
 simple_assign = Forward()
@@ -127,16 +144,32 @@ pass_stmt = Forward()
 suite = Forward()
 rvalue = Forward()
 stmt = Forward()
-
-
+underscore = Literal("_")
+funcCall = Forward()
 identifier = Word(alphas + "-_", alphanums + "-_").setName('VAR_ID')
-operand = real | integer | identifier
+operand = real | integer | identifier | underscore
 
 signop = oneOf("+ -")
-multop = oneOf("* /")
+multop = oneOf("* / %")
 plusop = oneOf("+ -")
 exponp = Literal("**")
 factop = Literal("!")
+
+
+def pre_eval(expr):
+    if '/' in expr:
+        return 'SafeDiv(' + expr.replace('/', ', ') + ')'
+    elif '%' in expr:
+        return 'SafeMod(' + expr.replace('%', ', ') + ')'
+
+
+def cvt_arith_expr(tks):
+    expr = ''.join((str(t) for t in tks))
+    try:
+        return pre_eval(expr)
+    except ZeroDivisionError:
+        return 'Undefined()'
+
 
 arith_expr = Combine(infixNotation(
     operand,
@@ -147,7 +180,8 @@ arith_expr = Combine(infixNotation(
         (multop, 2, opAssoc.LEFT),
         (plusop, 2, opAssoc.LEFT),
     ], lpar="(", rpar=")"
-)).setParseAction(lambda tks: ''.join((str(t) for t in tks)))
+)).setParseAction(cvt_arith_expr)
+
 
 comparisonop = oneOf("< <= > >= != ==")
 comp_expr = infixNotation(
@@ -163,7 +197,8 @@ listItem = (
     | unistr
     | boolLiteral
     | null
-    | Group(listStr)
+    | listStr
+    | setStr
     | tupleStr
     | dictStr
     | comp_expr
@@ -188,7 +223,11 @@ tupleStr <<= (
 
 listStr <<= (
     lbrack + Optional(delimitedList(listItem) + Optional(comma)) + rbrack
-).setParseAction(cvtList, lambda t: t[0])
+).setParseAction(cvtList)
+
+setStr <<= (
+    lbrace + Optional(delimitedList(listItem) + Optional(comma)) + rbrace
+).setParseAction(cvtSet)
 
 dictEntry = Group(listItem + colon + listItem)
 dictStr <<= (
@@ -198,7 +237,7 @@ dictStr <<= (
 
 private_def_decl = Literal("(").setParseAction(replaceWith('def '))
 def_args = Optional(delimitedList(contract_assign, delim=';')).setParseAction(lambda t:
-                                                                              ','.join(t))
+                                                                              ', '.join(t))
 args_end = Group(Literal(")") + Literal(")")).setParseAction(replaceWith(') -> '))
 def_args = Group("(" + def_args + args_end).setParseAction(lambda t: ''.join(*t))
 
@@ -206,17 +245,21 @@ public = '@contract()\n@cython.binding(True)\n'
 
 funcDecl = Group(private_def_decl + identifier + def_args + _contract_expression).setParseAction(lambda t:
                                                                           public + ''.join(*t) + COL)
-comment_line = Regex(r"^(?:.*)\`.*").suppress()
+comment_line = backquoted_str.setParseAction(lambda s, loc, t: '# comment_line %s:' % (len([c for c in s[:loc] if c == '\n']) + 1) + t[0])
 for_loop = Literal("<@>").setParseAction(replaceWith('for '))
 return_none = Literal("<*>").setParseAction(replaceWith('return '))
 yield_none = Literal("<^>").setParseAction(replaceWith('yield '))
 return_value = return_none + rvalue
 yield_value = yield_none + rvalue
 ret_stmt = Group(return_value).setParseAction(lambda t: ''.join(*t))
-funcDef = Group(funcDecl + suite).setParseAction(lambda t: '\n    '.join(t[0]))
+yield_stmt = Group(yield_value).setParseAction(lambda t: ''.join(*t))
+funcDef = Group(funcDecl + suite).setParseAction(lambda t: '\n    '.join(t[0]) + '\n\n')
 pass_stmt = Keyword("pass").setParseAction(lambda t: str(*t))
-suite << IndentedBlock((funcDef | contract_assign | for_stmt | ret_stmt | pass_stmt))
-funcCall = Group(identifier + "(" + Optional(delimitedList(rvalue)) + ")").setParseAction(lambda t: "Maybe" + t[0][1] + t[0][0] + ',' + ','.join(t[0][2:-1]) + t[0][-1])
+suite << IndentedBlock((comment_line | ret_stmt | yield_stmt | funcDef | contract_assign | for_stmt | pass_stmt))
+sep = ', '
+lambda_def = Combine(Group("(" + arith_expr | comp_expr + ")"))
+funcCall = Group(identifier + "(" + Optional(delimitedList(rvalue)) + ")").setParseAction(lambda t: "Maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1] + '()')  # if len(t[0]) != 3 else t[0][0] + '()')
+closCall = Group(identifier + "(" + Optional(delimitedList(rvalue)) + ")").setParseAction(lambda t: "Maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1]) + Suppress(Literal("..."))
 
 
 def cvt_for_stmt(toks):
@@ -230,19 +273,20 @@ def cvt_for_stmt(toks):
 
 
 for_stmt = Group(delimitedList(identifier) + for_loop + tupleStr | listStr |
-                 funcCall + suite | pass_stmt).setParseAction(cvt_for_stmt)
-rvalue << (funcCall | listItem)
+                 funcCall + suite | yield_stmt | pass_stmt).setParseAction(cvt_for_stmt)
+rvalue << (closCall | funcCall | listItem | lambda_def)
 simple_assign << Group(identifier + "=" + rvalue).setParseAction(lambda t: ' '.join(t[0]))
-stmt << (funcDef | contract_define | for_stmt | pass_stmt | simple_assign | comment_line)
+stmt << (comment_line | funcDef | contract_define | for_stmt | pass_stmt | yield_stmt | simple_assign)
 
 module_body = OneOrMore(stmt)
 
 
 def parse_module(module, window_size=10):
     try:
-        return module_body.parseString(module)
+        return module_body.parseString(module, parseAll=True)
     except ParseException as e:
         raise e.__class__(e.pstr[e.loc: e.loc+window_size], loc=e.loc)
 
 
-
+# if __name__ == "__main__":
+#     print(parse_module(open('../examples/math.wom').read()))

@@ -8,10 +8,27 @@ from _warnings import warn
 from Aspidites.api import create_warning
 from Aspidites.templates import _warning
 from Aspidites._vendor.fn import apply
+from Aspidites._vendor.fn.underscore import ArityError
 from Aspidites._vendor.contracts import ContractNotRespected
 from Aspidites.api import bordered, ContractBreachWarning
 from Aspidites import final
 from contextlib import suppress
+
+
+def SafeDiv(a, b):
+    """evaluates an expression and replaces indeterminate forms with Undefined instances"""
+    stack = inspect.stack()
+    w = create_warning(stack[0][3], [a, b], {}, stack, ZeroDivisionError('Division by zero is Undefined.'))
+    warn(w, category=RuntimeWarning)
+    return b and a/b or Undefined()
+
+
+def SafeMod(a, b):
+    """evaluates an expression and replaces indeterminate forms with Undefined instances"""
+    stack = inspect.stack()
+    w = create_warning(stack[0][3], [a, b], {}, stack, ZeroDivisionError('Modulus zero is Undefined.'))
+    warn(w, category=RuntimeWarning)
+    return b and a % b or Undefined()
 
 
 class Maybe:
@@ -52,13 +69,13 @@ class Maybe:
                 # SURELY #
                 return self.__instance__
             self.__instance__ = Undefined()
-        except ContractNotRespected as e:
+        except (ContractNotRespected, ArityError, ZeroDivisionError) as e:
             if warn_undefined:
                 scope = len(inspect.trace()) if debug else 1
                 for i in range(scope):
                     stack = inspect.stack(scope)
                     w = create_warning(self.func, self.args, self.kwargs, stack, e)
-                    warn(w, category=ContractBreachWarning)
+                    warn(w, category=ContractBreachWarning if isinstance(e, ContractNotRespected) else RuntimeWarning)
             # UNDEFINED #
             self.__instance__ = Undefined()
             return self.__instance__

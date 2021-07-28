@@ -1,7 +1,6 @@
 import collections.abc as collections
 
 
-
 def ist(C):
     def f(x):
         f.__name__ = 'isinstance_of_%s' % C.__name__
@@ -21,7 +20,7 @@ m_new_contract('Container', ist(collections.Container))
 m_new_contract('Iterable', ist(collections.Iterable))
 
 m_new_contract('Hashable', ist(collections.Hashable))
-
+m_new_contract('Generator', ist(collections.Generator))
 
 
 m_new_contract('Iterator', ist(collections.Iterator))

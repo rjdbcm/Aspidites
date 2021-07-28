@@ -35,10 +35,10 @@ from Aspidites._vendor.pampy.helpers import (
 
 from Aspidites.monads import Undefined
 
-from pyrsistent import v, PVector, pvector
+from pyrsistent import v, PVector, pvector, ny
 
 T = TypeVar('T')
-ANY = UnderscoreType()
+ANY = ny
 HEAD = HeadType()
 REST = TAIL = TailType()
 
