@@ -2,7 +2,7 @@
 import traceback
 import warnings
 
-from Aspidites._vendor._compat import IS_PY3, unicode
+from Aspidites._vendor._compat import IS_PY3, unicode, basestring
 
 from .interface import describe_type, describe_value  # @UnusedImport # old interface
 

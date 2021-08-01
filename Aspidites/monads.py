@@ -1,7 +1,8 @@
 import sys
 import shutil
 import inspect
-from pyrsistent import pvector, v
+import typing
+from pyrsistent import pvector, v, PMap, PVector
 import traceback
 import operator as op
 from _warnings import warn
@@ -9,6 +10,7 @@ from Aspidites.api import create_warning
 from Aspidites.templates import _warning
 from Aspidites._vendor.fn import apply
 from Aspidites._vendor.fn.underscore import ArityError
+from Aspidites._vendor.fn.recur import tco
 from Aspidites._vendor.contracts import ContractNotRespected
 from Aspidites.api import bordered, ContractBreachWarning
 from Aspidites import final
@@ -20,7 +22,7 @@ def SafeDiv(a, b):
     stack = inspect.stack()
     w = create_warning(stack[0][3], [a, b], {}, stack, ZeroDivisionError('Division by zero is Undefined.'))
     warn(w, category=RuntimeWarning)
-    return b and a/b or Undefined()
+    return b and a/b or Undefined(SafeDiv, a=a, b=b)
 
 
 def SafeMod(a, b):
@@ -28,7 +30,7 @@ def SafeMod(a, b):
     stack = inspect.stack()
     w = create_warning(stack[0][3], [a, b], {}, stack, ZeroDivisionError('Modulus zero is Undefined.'))
     warn(w, category=RuntimeWarning)
-    return b and a % b or Undefined()
+    return b and a % b or Undefined(SafeMod, a=a, b=b)
 
 
 class Maybe:
@@ -41,6 +43,23 @@ class Maybe:
         self._args = args
         self._kwargs = kwargs
         self.__instance__ = Undefined()
+
+    def __repr__(self):
+        return (self.__class__.__name__
+                + '('
+                + ', '.join([str(self._func.__name__),
+                             str(self._args).strip('()'),
+                             *[str(k) + ' = ' + str(v) for k, v in self._kwargs.items()]
+                             ]
+                            )
+                + ')'
+                + (
+                    ' -> %s' % Undefined()
+                    if
+                    self.__instance__ == Undefined()
+                    else
+                    ' -> %s' % str(self.__instance__))
+                )
 
     def __invert__(self):
         return ~self.__instance__
@@ -68,7 +87,7 @@ class Maybe:
                 self.__instance__ = Surely(val)
                 # SURELY #
                 return self.__instance__
-            self.__instance__ = Undefined()
+            self.__instance__ = Undefined(self.func, self.args, self.kwargs)
         except (ContractNotRespected, ArityError, ZeroDivisionError) as e:
             if warn_undefined:
                 scope = len(inspect.trace()) if debug else 1
@@ -77,7 +96,7 @@ class Maybe:
                     w = create_warning(self.func, self.args, self.kwargs, stack, e)
                     warn(w, category=ContractBreachWarning if isinstance(e, ContractNotRespected) else RuntimeWarning)
             # UNDEFINED #
-            self.__instance__ = Undefined()
+            self.__instance__ = Undefined(self.func, self.args, self.kwargs)
             return self.__instance__
 
 
@@ -141,11 +160,11 @@ class Undefined:
         return False
 
     def __call__(self, *args, **kwargs):
-        return self.__new__(self.__class__)
+        return self.__new__(self.__class__, *args, **kwargs)
 
     def __new__(mcs, *args, **kwargs):
         if mcs.__instance is None:
-            mcs.__instance = super(Undefined, mcs).__new__(mcs)
+            mcs.__instance = super(Undefined, mcs).__new__(mcs, *args, **kwargs)
             mcs.__instance__ = mcs.__instance
         return mcs.__instance__  # instance descriptor from __slots__ -> actual instance
 
@@ -212,3 +231,4 @@ class Surely:
     def __new__(cls, instance__=Undefined(), *args, **kwargs):
         cls.__instance__ = instance__
         return cls.__instance__
+

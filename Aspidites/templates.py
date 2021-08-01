@@ -40,22 +40,27 @@ setup(
                            libraries=$libs, library_dirs=$lib_dirs)],)
 """)
 
-lib = Template("""# cython language_level=3
+lib = Template("""# cython: language_level=3
 # THIS FILE IS GENERATED - DO NOT EDIT #
-import cython # type: ignore
+import cython  # type: ignore
+from typing import Any
 from collections.abc import Generator
 from pyrsistent import (
-                        pset, 
-                        pmap, 
-                        pvector, 
-                        s, v, m, 
-                        PRecord,
-                        PClass
-                        )
+    pset, 
+    pmap, 
+    pvector, 
+    s, v, m, 
+    PRecord,
+    PClass
+)
 from Aspidites._vendor import F, _
 from Aspidites.monads import Maybe, Surely, Undefined, SafeDiv, SafeMod
 from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.RestrictedPython import safe_builtins
+# DECLARATIONS TO ALLOW CONTRACTS TO TYPE CHECK #
+procedure: None
+coroutine: Generator
+number: Any
 globals().update(dict(__builtins__=safe_builtins))  # add all imports to globals
 
 

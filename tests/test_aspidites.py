@@ -57,7 +57,7 @@ def test_compile_to_shared_object():
 
     compile_module(code_, 'examples/compiled.py', bytecode=True, **cy_kwargs)
 
-    from compiled import Add, x, y, z, scala, val, div_by_zero, Yield123
+    from compiled import Add, x, y, z, scala, val, div_by_zero, Yield123, Hello, Hello2
 
     with pt.raises(ContractNotRespected):
         Add(x=6.5, y=12)
@@ -65,17 +65,19 @@ def test_compile_to_shared_object():
     assert [1, 2, 3] == [i for i in Yield123()]
     assert Maybe(Add, 6.5, 12)() == Undefined()
     assert x() == 6
-    assert y == Undefined()
+    assert y() == Undefined()
     assert z == 9
     assert Add(x=3, y=2) == 5
-    assert val == Undefined()
-    assert div_by_zero == Undefined()
+    assert val() == Undefined()
+    assert div_by_zero() == Undefined()
+    Hello()
 
 
-def teardown_function():
-    for file in glob.glob('examples/compiled.*'):
-        os.remove(file)
-    try:
-        os.remove('examples/setup.py')
-    except FileNotFoundError:
-        pass
+#
+# def teardown_function():
+#     for file in glob.glob('examples/compiled.*'):
+#         os.remove(file)
+#     try:
+#         os.remove('examples/setup.py')
+#     except FileNotFoundError:
+#         pass

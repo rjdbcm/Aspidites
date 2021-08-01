@@ -44,4 +44,4 @@ ContractsMeta.__module__ = 'contracts'
 # And after everything else is loaded, load the  utils
 from .useful_contracts import *
 # After everything is loaded, load aliases
-# from .library import miscellaneous_aliases  # @UnusedImport
+from .library import miscellaneous_aliases  # @UnusedImport

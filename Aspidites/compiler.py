@@ -1,14 +1,18 @@
+import contextlib
+import functools
 import os
 import pprint
 import sys
+from glob import glob
 from typing import Union, Text, List
 import warnings
 from warnings import warn
 import traceback
 from hashlib import md5
 import mypy
-from pyrsistent import PClass, pmap
+from pyrsistent import PClass, pmap, PMap
 from Aspidites._vendor.contracts import contract, new_contract, ContractNotRespected
+from Aspidites._vendor.fn import _, F
 from pyparsing import ParseResults
 import py_compile
 from Cython.Compiler import Options
@@ -20,6 +24,26 @@ from Aspidites.monads import Maybe, Undefined
 MD5 = '.md5'
 
 code = new_contract('code', lambda x: isinstance(x, ParseResults))
+
+
+@contextlib.contextmanager
+def working_directory(path):
+    """
+    A context manager which changes the working directory to the given
+    path, and then changes it back to its previous value on exit.
+    Usage:
+    > # Do something in original directory
+    > with working_directory('/my/new/path'):
+    >     # Do something in new directory
+    > # Back to old directory
+    """
+
+    prev_cwd = os.getcwd()
+    os.chdir(path)
+    try:
+        yield
+    finally:
+        os.chdir(prev_cwd)
 
 
 def checksum(fname, write=True, check=False):
@@ -45,11 +69,25 @@ def checksum(fname, write=True, check=False):
                 old = digest.read()
                 new = curr_hash.hexdigest()
                 if new == old:
-                    print('md5 digest check successful: %s' % fname)
+                    print('md5 digest check successful: %s, %s == %s' % (fname, new, old))
                     return new
                 else:
-                    print('md5 digest failure: %s' % fname)
+                    print('md5 digest failure: %s, %s != %s' % (fname, new, old))
                     return ''
+
+
+class CheckedFileStack:
+    def __init__(self, initial=None, pre_size=8192):
+        if initial is None:
+            initial = {}
+        self._files = pmap(initial, pre_size)
+        self.all_files = self._files.evolver()
+
+    def register(self, fname):
+        self.all_files.set(*checksum(fname))
+
+    def finalize(self):
+        return self.all_files.persistent()
 
 
 @contract()
@@ -61,24 +99,30 @@ def compile_module(code: 'code',
                    build_requires: 'list|str' = '',
                    verbose: 'int' = 0,
                    *args, **kwargs):
+
     app_name = os.path.splitext(fname)[0]
     module_name = app_name.replace('/', '.')
     file_c = app_name + ".c"
     dir = os.path.dirname(file_c)
+    glob_so = app_name + '.*.so'
     init_py = os.path.join(dir, '__init__.py')
     py_typed = os.path.join(dir, 'py.typed')
-    all_files = pmap().evolver()
+    stack = CheckedFileStack()
     mode = 'x' if force else 'w'
-    with open(fname, mode) as f:
-        print(lib.substitute(code='\n'.join(code)), file=f)
+    open(fname, mode).write(lib.substitute(code='\n'.join(code)))
+    stack.register(fname)
     open(py_typed, 'w').write('# THIS FILE IS GENERATED - DO NOT EDIT #')
+    stack.register(py_typed)
     open(init_py, 'w').write('# THIS FILE IS GENERATED - DO NOT EDIT #')
-    all_files.set(*checksum(fname))
+    stack.register(init_py)
     verb = int(bool(verbose))
     mypy_args = [
         '-m', module_name,
         '--follow-imports=skip',
         '--show-error-context',
+        '--show-error-codes',
+        '--allow-incomplete-defs',
+        '--disable-error-code=valid-type',
         # '--disallow-untyped-defs',
         # '--disallow-untyped-calls',
     ]
@@ -88,14 +132,13 @@ def compile_module(code: 'code',
     print('mypy type report:', '\n', type_report) if type_report else None
     print('mypy error report:', '\n', error_report) if error_report else None
     print('mypy returned with exit code:', return_code)
-    all_files.set(*checksum(fname))
     exit(return_code) if return_code != 0 else print('running compile')
 
     if bytecode:
         fname_pyc = app_name + ".pyc"
         quiet = tuple(reversed(range(3))).index(verbose if verbose < 2 else 2)
         py_compile.compile(fname, fname_pyc, quiet=quiet)
-        all_files.set(*checksum(fname_pyc))
+        stack.register(fname_pyc)
 
     if c:
         os.popen(f'cython {fname} {"--force" * force} {"--verbose" * verb}')
@@ -104,18 +147,21 @@ def compile_module(code: 'code',
         with open(setup_py, mode) as f:
             f.write(setup.substitute(app_name=module_name, ext_name=app_name,
                                      src_file=file_c, inc_dirs=[], libs=[], lib_dirs=[], **kwargs))
-        all_files.set(*checksum(setup_py))
+        stack.register(setup_py)
         with os.popen(f'{sys.executable} {setup_py} build build_ext --inplace') as p:
             print(p.read())
-        all_files.set(*checksum(file_c))
+        stack.register(file_c)
+        with working_directory(dir):
+            for i in glob(glob_so):
+                stack.register(i)
         with open(pyproject_toml, mode) as f:
             f.write(pyproject.substitute(build_requires=build_requires))
-        all_files.set(*checksum(pyproject_toml))
-        all_files = all_files.persistent()
-        print('running checksums')
-        for k, v in all_files.items():
-            digest = checksum(v, write=False, check=True)
-            try:
-                all_files.get(digest)
-            except AttributeError:                    #449779cbdc60682faf8b1327d1d315ca
-                raise RuntimeError('\nfor file %s\n%s\n  did not match cached digest\n%s')
+        stack.register(pyproject_toml)
+    all_file_checksums = stack.finalize()
+    print('running checksums')
+    for k, v in all_file_checksums.items():
+        digest = checksum(v, write=False, check=True)
+        try:
+            all_file_checksums.get(digest)
+        except AttributeError:                    #449779cbdc60682faf8b1327d1d315ca
+            raise RuntimeError('\nfor file %s\n%s\n  did not match cached digest\n%s')

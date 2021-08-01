@@ -1,17 +1,15 @@
 import typing
+from inspect import signature, isfunction
 from textwrap import wrap as _wrap
 from .templates import _warning
 from os import get_terminal_size
 from pyrsistent import pvector, pmap, inc, rex, discard, PVector
 from ._vendor.fn import F, _
-from ._vendor.fn.underscore import ArityError
+from ._vendor.fn.underscore import ArityError, _Callable
 
 
 class ContractBreachWarning(RuntimeWarning):
     pass
-
-
-
 
 
 def wrap(text, width=160, pad=True, padchar=' '):
@@ -54,7 +52,11 @@ def format_locals(locals, exc: 'Exception'):
     locals_ = dict(filter(lambda x: x[1] != str(exc), locals))
     str_locals = str()
     for k, v_ in locals_.items():
-        str_locals += k + ": " + str(v_) + "\n"
+        if str(k).startswith('@'): continue
+        if isfunction(v_):
+            str_locals += k + ": " + str(signature(v_)).replace("'", '') + "\n"
+        else:
+            str_locals += k + ": " + str(v_) + "\n"
     return str_locals.rstrip('\n')
 
 
