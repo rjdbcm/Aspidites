@@ -35,3 +35,9 @@ test-all:
 
 patch:
 	bump2version patch
+
+minor:
+	bump2version minor
+
+major:
+	bump2version major

@@ -1,4 +1,5 @@
 # contents of app_main.py
+import os
 import sys
 import traceback
 import warnings
@@ -94,6 +95,8 @@ def main():
                                     help="compile to python bytecode")
             asp_parser.add_argument('-c', '--compile-c', action="store_true",
                                     help="compile to C and execute setup")
+            asp_parser.add_argument('--embed-python', action='store_true',
+                                    help='')
             asp_parser.add_argument('--build-requires', default='', metavar='',
                                     help='additional requirements needed to execute setup (default: %(default)s)')
             asp_parser.add_argument('-v', "--verbose",
@@ -101,7 +104,6 @@ def main():
                                     action='count',
                                     help="increase output verbosity (default: %(default)s) e.g. -v, -vv, -vvv ")
             add_pre_cy3_args(asp_parser)
-            asp_parser = get_parser()
             args, other_args = asp_parser.parse_known_args()
             for k in cy_kwargs.keys():
                 cy_kwargs[k] = args.__getattribute__(k)
@@ -112,9 +114,15 @@ def main():
             print(asp_parser.__repr__())
         with open(args.target, 'r') as t:
             code = parse_module(t.read())
-            compile_module(code, fname=args.output, force=args.force,
+            if args.output is None:
+                args.output = os.path.join(os.path.dirname(args.target), 'compiled.py')
+            compile_module(code,
+                           fname=args.output,
+                           force=args.force,
+                           embed_python=args.embed_python,
                            bytecode=args.compile_pyc,
-                           c=args.compile_c, build_requires=args.build_requires,
+                           c=args.compile_c,
+                           build_requires=args.build_requires,
                            verbose=args.verbose, *other_args, **cy_kwargs)
 
             # # reassign builtin collections contracts to check for pyrsistent version

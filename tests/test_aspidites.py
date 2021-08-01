@@ -57,7 +57,7 @@ def test_compile_to_shared_object():
 
     compile_module(code_, 'examples/compiled.py', bytecode=True, **cy_kwargs)
 
-    from compiled import Add, x, y, z, scala, val, div_by_zero, Yield123, Hello, Hello2
+    from examples.compiled import Add, x, y, z, scala, val, div_by_zero, Yield123, Hello, Hello2
 
     with pt.raises(ContractNotRespected):
         Add(x=6.5, y=12)

@@ -11,6 +11,8 @@ Aspidites (shield-bearer) is written in python and targets Cython
 - Cython
 - Pyrsistent
 - PyParsing
+- MyPy
+- Optional(NumPy)
 
 ## Paradigms
 
