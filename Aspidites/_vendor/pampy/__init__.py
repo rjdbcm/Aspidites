@@ -1,6 +1,8 @@
 import sys
-from .pampy import match, ANY, HEAD, TAIL, REST, MatchError  # no _
-from .pampy import match_value, match_iterable, match_dict
+
+from .pampy import (ANY, HEAD, REST, TAIL, MatchError, match,  # no _
+                    match_dict, match_iterable, match_value)
+
 __version__ = '0.3.0'
 
 

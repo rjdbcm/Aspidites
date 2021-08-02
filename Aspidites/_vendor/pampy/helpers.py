@@ -1,10 +1,5 @@
 import inspect
-from typing import (
-    Union,
-    Any,
-    Iterable,
-    TypeVar,
-)
+from typing import Any, Iterable, TypeVar, Union
 
 from pyrsistent import PVector
 

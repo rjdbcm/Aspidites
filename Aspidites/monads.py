@@ -1,42 +1,75 @@
-import sys
-import shutil
 import inspect
-import typing
-from pyrsistent import pvector, v, PMap, PVector
-import traceback
 import operator as op
-from _warnings import warn
-from Aspidites.api import create_warning
-from Aspidites.templates import _warning
-from Aspidites._vendor.fn import apply
-from Aspidites._vendor.fn.underscore import ArityError
-from Aspidites._vendor.fn.recur import tco
-from Aspidites._vendor.contracts import ContractNotRespected
-from Aspidites.api import bordered, ContractBreachWarning
-from Aspidites import final
+import shutil
+import sys
+import traceback
+import typing
+from math import inf, isinf
 from contextlib import suppress
+
+from _warnings import warn
+from pyrsistent import PMap, PVector, pvector, v
+
+from Aspidites import final
+from Aspidites._vendor.contracts import ContractNotRespected
+from Aspidites._vendor.fn import apply
+from Aspidites._vendor.fn.recur import tco
+from Aspidites._vendor.fn.underscore import ArityError
+from Aspidites.api import ContractBreachWarning, bordered, create_warning
+from Aspidites.templates import _warning, i3e_754_1985
+
 
 
 def SafeDiv(a, b):
-    """evaluates an expression and replaces indeterminate forms with Undefined instances"""
+    """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
+    msg = i3e_754_1985.substitute(msg="Division by zero is Undefined")
     stack = inspect.stack()
-    w = create_warning(stack[0][3], [a, b], {}, stack, ZeroDivisionError('Division by zero is Undefined.'))
+    w = create_warning(
+        stack[0][3],
+        [a, b],
+        {},
+        stack,
+        ZeroDivisionError(msg)
+    )
     warn(w, category=RuntimeWarning)
-    return b and a/b or Undefined(SafeDiv, a=a, b=b)
+    return b and a / b or Undefined(SafeDiv, a=a, b=b)
 
 
 def SafeMod(a, b):
-    """evaluates an expression and replaces indeterminate forms with Undefined instances"""
+    """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
+    msg = i3e_754_1985.substitute(msg="Modulus by zero is Undefined")
     stack = inspect.stack()
-    w = create_warning(stack[0][3], [a, b], {}, stack, ZeroDivisionError('Modulus zero is Undefined.'))
+    w = create_warning(
+        stack[0][3],
+        [a, b],
+        {},
+        stack,
+        ZeroDivisionError(msg)
+    )
     warn(w, category=RuntimeWarning)
     return b and a % b or Undefined(SafeMod, a=a, b=b)
 
 
+def SafeExp(a, b):
+    msg = i3e_754_1985.substitute(msg="%s**%s == Undefined" % (str(a), str(b),))
+    indeterminate = lambda x, y: isinf(x) and y == 0
+    stack = inspect.stack()
+    w = create_warning(
+            stack[0][3], [a, b], {}, stack,
+            ArithmeticError(msg)
+    )
+    warn(w, category=RuntimeWarning)
+    if indeterminate(a, b) or indeterminate(b, a):
+        return Undefined(SafeExp, a=a, b=b)
+    else:
+        return b and a**b or Undefined(SafeExp, a=a, b=b)
+
+
 class Maybe:
     """Sandboxes a Surely call and handles ContractNotRespected by returning Undefined"""
+
     __metaclass__ = final
-    __slots__ = v('_func', '_args', '_kwargs', '__instance__')
+    __slots__ = v("_func", "_args", "_kwargs", "__instance__")
 
     def __init__(self, func, *args, **kwargs):
         self._func = func
@@ -45,21 +78,23 @@ class Maybe:
         self.__instance__ = Undefined()
 
     def __repr__(self):
-        return (self.__class__.__name__
-                + '('
-                + ', '.join([str(self._func.__name__),
-                             str(self._args).strip('()'),
-                             *[str(k) + ' = ' + str(v) for k, v in self._kwargs.items()]
-                             ]
-                            )
-                + ')'
-                + (
-                    ' -> %s' % Undefined()
-                    if
-                    self.__instance__ == Undefined()
-                    else
-                    ' -> %s' % str(self.__instance__))
-                )
+        return (
+            self.__class__.__name__
+            + "("
+            + ", ".join(
+                [
+                    str(self._func.__name__),
+                    str(self._args).strip("()"),
+                    *[str(k) + " = " + str(v) for k, v in self._kwargs.items()],
+                ]
+            )
+            + ")"
+            + (
+                " -> %s" % Undefined()
+                if self.__instance__ == Undefined()
+                else " -> %s" % str(self.__instance__)
+            )
+        )
 
     def __invert__(self):
         return ~self.__instance__
@@ -94,7 +129,12 @@ class Maybe:
                 for i in range(scope):
                     stack = inspect.stack(scope)
                     w = create_warning(self.func, self.args, self.kwargs, stack, e)
-                    warn(w, category=ContractBreachWarning if isinstance(e, ContractNotRespected) else RuntimeWarning)
+                    warn(
+                        w,
+                        category=ContractBreachWarning
+                        if isinstance(e, ContractNotRespected)
+                        else RuntimeWarning,
+                    )
             # UNDEFINED #
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
             return self.__instance__
@@ -103,8 +143,9 @@ class Maybe:
 class Undefined:
     """A monad for a failed programmatic unit; like NoneType but hashable.
     Falsy singleton"""
+
     __metaclass__ = final
-    __slots__ = v('__weakref__', '__instance__')
+    __slots__ = v("__weakref__", "__instance__")
     __instance = None
 
     def __hash__(self):
@@ -171,22 +212,20 @@ class Undefined:
 
 class Surely:
     """A monad for a successful programmatic unit
-      Truthy, defers to an instance of a successful computation"""
+    Truthy, defers to an instance of a successful computation"""
+
     __metaclass__ = final
-    __slots__ = v('__weakref__',
-                  '__instance__'
-                  '__str__',
-                  '__int__',
-                  '__float__',
-                  '__complex__')
+    __slots__ = v(
+        "__weakref__", "__instance__" "__str__", "__int__", "__float__", "__complex__"
+    )
 
     def __try_except_undefined__(self, other=None, call=None):
         if call:
             # noinspection PyComparisonWithNone
-            return call(
-                self.__instance__
-            ) if other == None else call(
-                    self.__instance__, other
+            return (
+                call(self.__instance__)
+                if other == None
+                else call(self.__instance__, other)
             )
         else:
             return self.__instance__
@@ -231,4 +270,3 @@ class Surely:
     def __new__(cls, instance__=Undefined(), *args, **kwargs):
         cls.__instance__ = instance__
         return cls.__instance__
-

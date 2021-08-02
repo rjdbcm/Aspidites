@@ -106,7 +106,7 @@ class TestMeta(unittest.TestCase):
             @classmethod
             @contract(a='>0')
             def f(cls, a):
-                print('called A.f(%s)' % a)
+                # print('called A.f(%s)' % a)
                 pass
 
         self.assertRaises(ContractNotRespected, A.f, 0)
@@ -115,7 +115,7 @@ class TestMeta(unittest.TestCase):
 
             @classmethod
             def f(cls, a):
-                print('called B.f(%s)' % a)
+                # print('called B.f(%s)' % a)
                 pass
 
         self.assertRaises(ContractNotRespected, B.f, 0) # this doesn't work
@@ -128,7 +128,7 @@ class TestMeta(unittest.TestCase):
             @classmethod
             @contract(a='>0')
             def f(cls, a):
-                print('called A.f(%s)' % a)
+                # print('called A.f(%s)' % a)
                 pass
 
         self.assertRaises(ContractNotRespected, A.f, 0)
@@ -137,7 +137,7 @@ class TestMeta(unittest.TestCase):
 
             @classmethod
             def f(cls, a):
-                print('called B.f(%s)' % a)
+                # print('called B.f(%s)' % a)
                 pass
 
         self.assertRaises(ContractNotRespected, B.f, 0) # this doesn't work

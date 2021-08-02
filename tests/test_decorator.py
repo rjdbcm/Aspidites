@@ -181,7 +181,7 @@ class ExtraTestCase(unittest.TestCase):
         # see https://github.com/micheles/decorator/issues/120
         @decorator
         def prnt(func, index=0, *args, **kw):
-            print(args[index])
+            # print(args[index])
             return func(*args, **kw)
 
         @prnt(index=2)  # print the value of the third argument

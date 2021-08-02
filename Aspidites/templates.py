@@ -1,5 +1,8 @@
 from string import Template
 
+i3e_754_1985 = Template("""
+$msg; this behavior diverges from IEEE 754-1985.""")
+
 makefile = Template("""clean: clean-build clean-pyc clean-md5 ## remove all build, test, coverage and Python artifacts
 
 project = $project
@@ -85,7 +88,7 @@ from pyrsistent import (
     PClass
 )
 from Aspidites._vendor import F, _
-from Aspidites.monads import Maybe, Surely, Undefined, SafeDiv, SafeMod
+from Aspidites.monads import Maybe, Surely, Undefined, SafeDiv, SafeMod, SafeExp
 from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.RestrictedPython import safe_builtins
 # DECLARATIONS TO ALLOW CONTRACTS TO TYPE CHECK #

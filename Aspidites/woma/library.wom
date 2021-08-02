@@ -7,3 +7,5 @@
 (Div(x = 0 -> number; y = 0 -> number)) number
 	<*> x / y
 
+(Exp(x = 0 -> number: y = 0 -> number)) number
+	<*> x ** y

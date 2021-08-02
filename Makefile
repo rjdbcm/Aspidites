@@ -24,11 +24,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .coverage_html/
 	rm -fr .pytest_cache
 	rm -fr .mypy_cache
-	rm -fr examples/py.typed
-	rm -fr examples/__init__.py
-	rm -fr examples/setup.py
-	rm -fr examples/pyproject.toml
-	find . -name 'compiled*' -exec rm -fr {} +
+	cd examples && $(MAKE) uninstall
 
 test-all:
 	pytest tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys

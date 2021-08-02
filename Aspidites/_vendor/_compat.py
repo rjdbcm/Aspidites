@@ -1,7 +1,6 @@
 import platform
 import sys
 
-
 _version = sys.version_info
 IS_PY2 = _version.major == 2
 IS_PY3 = _version.major == 3

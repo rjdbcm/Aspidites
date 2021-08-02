@@ -1,6 +1,8 @@
 from typing import Callable, Tuple
-from Aspidites._vendor.contracts import new_contract, contract, check
+
 from pyrsistent import pmap
+
+from Aspidites._vendor.contracts import check, contract, new_contract
 
 
 @new_contract
