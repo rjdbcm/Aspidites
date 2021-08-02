@@ -2,17 +2,17 @@ import contextlib
 import os
 import typing
 from hashlib import md5
-from inspect import signature, isfunction
+from inspect import isfunction, signature
+from os import get_terminal_size
 from textwrap import wrap as _wrap
 
 from pyparsing import ParseResults
+from pyrsistent import PVector, discard, inc, pmap, pvector, rex
 
 from ._vendor.contracts import new_contract
-from .templates import _warning
-from os import get_terminal_size
-from pyrsistent import pvector, pmap, inc, rex, discard, PVector
 from ._vendor.fn import F, _
 from ._vendor.fn.underscore import ArityError, _Callable
+from .templates import _warning
 
 
 class ContractBreachWarning(RuntimeWarning):

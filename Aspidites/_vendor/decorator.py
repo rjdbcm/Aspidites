@@ -32,14 +32,14 @@ Decorator module, see
 https://github.com/micheles/decorator/blob/master/docs/documentation.md
 for the documentation.
 """
+import inspect
+import itertools
+import operator
 import re
 import sys
-import inspect
-import operator
-import itertools
-from typing import Any, TypeVar, cast, Callable
 from contextlib import _GeneratorContextManager
 from inspect import getfullargspec, iscoroutinefunction, isgeneratorfunction
+from typing import Any, Callable, TypeVar, cast
 
 __version__ = '5.0.9'
 

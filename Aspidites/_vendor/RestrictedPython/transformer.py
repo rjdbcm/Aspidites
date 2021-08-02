@@ -22,15 +22,11 @@ the parsed python code to create a modified AST for a byte code generation.
 # http://docs.plone.org/develop/styleguide/python.html
 
 
-from .._compat import IS_PY2
-from .._compat import IS_PY3
-from .._compat import IS_PY34_OR_GREATER
-from .._compat import IS_PY35_OR_GREATER
-
 import ast
 import contextlib
 import textwrap
 
+from .._compat import IS_PY2, IS_PY3, IS_PY34_OR_GREATER, IS_PY35_OR_GREATER
 
 # For AugAssign the operator must be converted to a string.
 IOPERATOR_TO_STR = {

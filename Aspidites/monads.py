@@ -1,20 +1,21 @@
-import sys
-import shutil
 import inspect
-import typing
-from pyrsistent import pvector, v, PMap, PVector
-import traceback
 import operator as op
-from _warnings import warn
-from Aspidites.api import create_warning
-from Aspidites.templates import _warning
-from Aspidites._vendor.fn import apply
-from Aspidites._vendor.fn.underscore import ArityError
-from Aspidites._vendor.fn.recur import tco
-from Aspidites._vendor.contracts import ContractNotRespected
-from Aspidites.api import bordered, ContractBreachWarning
-from Aspidites import final
+import shutil
+import sys
+import traceback
+import typing
 from contextlib import suppress
+
+from _warnings import warn
+from pyrsistent import PMap, PVector, pvector, v
+
+from Aspidites import final
+from Aspidites._vendor.contracts import ContractNotRespected
+from Aspidites._vendor.fn import apply
+from Aspidites._vendor.fn.recur import tco
+from Aspidites._vendor.fn.underscore import ArityError
+from Aspidites.api import ContractBreachWarning, bordered, create_warning
+from Aspidites.templates import _warning
 
 
 def SafeDiv(a, b):
