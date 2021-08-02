@@ -17,7 +17,7 @@ import py_compile
 from Cython.Compiler import Options
 from Aspidites import final
 from contextlib import suppress
-from Aspidites.templates import lib, setup, pyproject
+from Aspidites.templates import lib, setup, pyproject, makefile
 from Aspidites.monads import Maybe, Undefined
 from mypy import api
 
@@ -49,31 +49,32 @@ def working_directory(path):
 def checksum(fname, write=True, check=False):
     base, name = os.path.split(fname)
     fname_md5 = os.path.join(base, '.' + name) + '.md5'
+
+    def read_md5(data):
+        curr_hash = md5()
+        chunk = data.read(8192)
+        while chunk:
+            curr_hash.update(chunk)
+            chunk = data.read(8192)
+        return curr_hash
+
     if write:
         with open(fname, 'rb') as data:
-            curr_hash = md5()
-            chunk = data.read(8192)
-            while chunk:
-                curr_hash.update(chunk)
-                chunk = data.read(8192)
-            with open(fname_md5, 'w') as digest:
-                digest.write(curr_hash.hexdigest())
-            return pmap({curr_hash.hexdigest(): fname}).items()[0]  # immutable
+            curr_hash = read_md5(data)
+            with open(fname_md5, 'wb') as digest:
+                digest.write(curr_hash.digest())
+            return pmap({curr_hash.digest(): fname}).items()[0]  # immutable
     if check:
-        with open(fname_md5, 'r') as digest:
+        with open(fname_md5, 'rb') as digest:
             with open(fname, 'rb') as data:
-                curr_hash = md5()
-                chunk = data.read(8192)
-                while chunk:
-                    curr_hash.update(chunk)
-                    chunk = data.read(8192)
+                curr_hash = read_md5(data)
                 old = digest.read()
-                new = curr_hash.hexdigest()
+                new = curr_hash.digest()
                 if new == old:
-                    print('md5 digest check successful: %s, %s == %s' % (fname, new, old))
+                    print('md5 digest check successful: %s, %s == %s' % (fname, new.hex(), old.hex()))
                     return new
                 else:
-                    print('md5 digest failure: %s, %s != %s' % (fname, new, old))
+                    print('md5 digest failure: %s, %s != %s' % (fname, new.hex(), old.hex()))
                     return ''
 
 
@@ -102,11 +103,13 @@ def compile_module(code: 'code',
                    *args, **kwargs):
 
     app_name = os.path.splitext(fname)[0]
+    project = os.path.basename(app_name)
     module_name = app_name.replace('/', '.')
     file_c = app_name + ".c"
     dir = os.path.dirname(file_c)
     glob_so = app_name + '.*.so'
     init_py = os.path.join(dir, '__init__.py')
+    make_ = os.path.join(dir, 'Makefile')
     py_typed = os.path.join(dir, 'py.typed')
     stack = CheckedFileStack()
     mode = 'x' if force else 'w'
@@ -116,6 +119,8 @@ def compile_module(code: 'code',
     stack.register(py_typed)
     open(init_py, 'w').write('# THIS FILE IS GENERATED - DO NOT EDIT #')
     stack.register(init_py)
+    open(make_, mode).write(makefile.substitute(project=project))
+    stack.register(make_)
     verb = int(bool(verbose))
     mypy_args = [
         '-m', module_name,

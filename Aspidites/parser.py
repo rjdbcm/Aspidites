@@ -58,15 +58,15 @@ def cvt_int(t):
     return int(t[0])
 
 
-def cvtReal(t):
+def cvt_real(t):
     return float(t[0])
 
 
-def cvtTuple(t):
+def cvt_tuple(t):
     return '(' + ', '.join(t.asList()) + ')'
 
 
-def cvtDict(t):
+def cvt_dict(t):
     t = t.asList()
     for i, v in enumerate(t):
         key, val = v
@@ -78,7 +78,7 @@ def cvtDict(t):
     return f'pmap({{{t}}})'
 
 
-def cvtList(t):
+def cvt_list(t):
     t = t.asList()
     for i, v in enumerate(t):
         if isinstance(v, str):  # string keys only
@@ -89,7 +89,7 @@ def cvtList(t):
     return f'pvector([{t}])'
 
 
-def cvtSet(t):
+def cvt_set(t):
     t = t.asList()
     for i, v in enumerate(t):
         if isinstance(v, str):  # string keys only
@@ -100,13 +100,13 @@ def cvtSet(t):
     return f'pset({{{t}}})'
 
 
-def cvtContractAssign(t):
-    t = swap_val_to_idx(list(t), COL, 1)
+def cvt_contract_assign(t):
+    t = swap_val_to_idx(list(t), col, 1)
     t[2], t[4] = t[4], t[2]
     return ' '.join((str(t) for t in t))
 
 
-def cvtContractDefine(t):
+def cvt_contract_define(t):
     t[0], t[1] = t[1], t[0]
     t[1] = "'" + t[1] + "'"
     args = f"({', '.join(t[1:])})"
@@ -119,7 +119,7 @@ def cvtContractDefine(t):
 def swap_val_to_idx(lst: list, val, idx: int) -> list:
     val_idx = lst.index(val)
     if val_idx == idx:
-        pass # maybe error?
+        pass  # maybe error?
     lst[val_idx], lst[idx] = lst[idx], lst[val_idx]
     return lst
 
@@ -129,7 +129,7 @@ lparen, rparen, lbrack, rbrack, lbrace, rbrace, colon, comma = map(
 )
 unistr = unicodeString().setParseAction(lambda t: t[0][2:-1])
 quoted_str = quotedString().setParseAction(lambda t: t[0])
-boolLiteral = oneOf("True False", asKeyword=True).setParseAction(cvt_bool)
+bool_literal = oneOf("True False", asKeyword=True).setParseAction(cvt_bool)
 null = Keyword("None").setParseAction(replaceWith(None))
 integer = Word(nums).setParseAction(cvt_int)
 real = Combine(Word(nums) + "." + Word(nums))
@@ -145,7 +145,7 @@ suite = Forward()
 rvalue = Forward()
 stmt = Forward()
 underscore = Literal("_")
-funcCall = Forward()
+func_call = Forward()
 identifier = Word(alphas + "-_", alphanums + "-_").setName('VAR_ID')
 operand = complex_ | real | integer | identifier | underscore
 
@@ -156,19 +156,12 @@ exponp = Literal("**")
 factop = Literal("!")
 
 
-def pre_eval(expr):
+def cvt_arith_expr(tks):
+    expr = ''.join((str(t) for t in tks))
     if '/' in expr:
         return 'Maybe(SafeDiv, ' + expr.replace('/', ', ') + ')'
     elif '%' in expr:
         return 'Maybe(SafeMod, ' + expr.replace('%', ', ') + ')'
-
-
-def cvt_arith_expr(tks):
-    expr = ''.join((str(t) for t in tks))
-    try:
-        return pre_eval(expr)
-    except ZeroDivisionError:
-        return 'Undefined()'
 
 
 arith_expr = Combine(infixNotation(
@@ -188,7 +181,7 @@ comp_expr = infixNotation(
     arith_expr, [(comparisonop, 2, opAssoc.LEFT),]
 )
 
-listItem = (
+list_item = (
         real
         | arith_expr
         | integer
@@ -205,35 +198,35 @@ listItem = (
         | comp_expr
 )
 
-EQ = Literal("=")
-COL = ":"
-respects = Keyword("->").setParseAction(lambda t: COL)
+eq = Literal("=")
+col = ":"
+respects = Keyword("->").setParseAction(lambda t: col)
 imposes = Keyword("<-").setParseAction(lambda t: 'new_contract')
 
 
 identifier = Word(alphas + "_", alphanums + "_")
 contract_define = identifier + imposes + _contract_expression #  ^ funcCall
-contract_define.setParseAction(cvtContractDefine)
+contract_define.setParseAction(cvt_contract_define)
 contract_respect = respects + _contract_expression
-contract_assign = identifier + EQ + listItem + contract_respect
-contract_assign.setParseAction(cvtContractAssign)
+contract_assign = identifier + eq + list_item + contract_respect
+contract_assign.setParseAction(cvt_contract_assign)
 
 tuple_str <<= (
-    lparen + Optional(delimitedList(listItem)) + Optional(comma) + rparen
+        lparen + Optional(delimitedList(list_item)) + Optional(comma) + rparen
 ).setParseAction(cvtTuple)
 
 list_str <<= (
-    lbrack + Optional(delimitedList(listItem) + Optional(comma)) + rbrack
-).setParseAction(cvtList)
+        lbrack + Optional(delimitedList(list_item) + Optional(comma)) + rbrack
+).setParseAction(cvt_list)
 
 set_str <<= (
-    lbrace + Optional(delimitedList(listItem) + Optional(comma)) + rbrace
-).setParseAction(cvtSet)
+        lbrace + Optional(delimitedList(list_item) + Optional(comma)) + rbrace
+).setParseAction(cvt_set)
 
-dictEntry = Group(listItem + colon + listItem)
+dict_entry = Group(list_item + colon + list_item)
 dict_str <<= (
-    lbrace + Optional(delimitedList(dictEntry) + Optional(comma)) + rbrace
-).setParseAction(cvtDict)
+        lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace
+).setParseAction(cvt_dict)
 
 
 private_def_decl = Literal("(").setParseAction(replaceWith('def '))
@@ -244,11 +237,11 @@ def_args = Group("(" + def_args + args_end).setParseAction(lambda t: ''.join(*t)
 
 std_decor = '@contract()\n@cython.binding(True)\n'
 
-funcDecl = Group(private_def_decl
-                 + identifier
-                 + def_args
-                 + _contract_expression
-                 ).setParseAction(lambda t: std_decor + ''.join(*t) + COL)
+func_decl = Group(private_def_decl
+                  + identifier
+                  + def_args
+                  + _contract_expression
+                  ).setParseAction(lambda t: std_decor + ''.join(*t) + col)
 comment_line = Combine(
         Regex(
                 r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`"
@@ -263,13 +256,13 @@ return_value = return_none + rvalue
 yield_value = yield_none + rvalue
 ret_stmt = Group(return_value).setParseAction(lambda t: ''.join(*t))
 yield_stmt = Group(yield_value).setParseAction(lambda t: ''.join(*t))
-funcDef = Group(funcDecl + suite).setParseAction(lambda t: '\n    '.join(t[0]) + '\n\n')
+func_def = Group(func_decl + suite).setParseAction(lambda t: '\n    '.join(t[0]) + '\n\n')
 pass_stmt = Keyword("pass").setParseAction(lambda t: str(*t))
-suite << IndentedBlock((comment_line | pass_stmt | ret_stmt | yield_stmt | funcCall | funcDef | contract_assign)).setParseAction(lambda t: ('\n    '.join(t.asList())))
+suite << IndentedBlock((comment_line | pass_stmt | ret_stmt | yield_stmt | func_call | funcDef | contract_assign)).setParseAction(lambda t: ('\n    '.join(t.asList())))
 sep = ', '
 lambda_def = Combine(Group("(" + arith_expr | comp_expr + ")"))
-funcCall = Group(identifier + "(" + Optional(delimitedList(rvalue)) + ")").setParseAction(lambda t: "Maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1] + '()')  # if len(t[0]) != 3 else t[0][0] + '()')
-closCall = Group(identifier + "(" + Optional(delimitedList(rvalue)) + ")").setParseAction(lambda t: "Maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1]) + Suppress(Literal("..."))
+func_call = Group(identifier + "(" + Optional(delimitedList(rvalue)) + ")").setParseAction(lambda t: "Maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1] + '()')  # if len(t[0]) != 3 else t[0][0] + '()')
+clos_call = Group(identifier + "(" + Optional(delimitedList(rvalue)) + ")").setParseAction(lambda t: "Maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1]) + Suppress(Literal("..."))
 
 
 def cvt_for_stmt(toks):
@@ -282,7 +275,7 @@ def cvt_for_stmt(toks):
 
 # for_stmt = Group(delimitedList(identifier) + for_loop + tuple_str | list_str |
 #                  funcCall).setParseAction(cvt_for_stmt)
-rvalue << (closCall | funcCall | listItem | lambda_def)
+rvalue << (clos_call | func_call | list_item | lambda_def)
 simple_assign << Group(identifier + "=" + rvalue).setParseAction(lambda t: ' '.join(t[0]))
 stmt << (funcDef | contract_define | simple_assign | comment_line)
 
