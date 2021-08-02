@@ -101,7 +101,7 @@ def cvt_set(t):
 
 
 def cvt_contract_assign(t):
-    t = swap_val_to_idx(list(t), col, 1)
+    t = swap_val_to_idx(list(t), ':', 1)
     t[2], t[4] = t[4], t[2]
     return ' '.join((str(t) for t in t))
 
@@ -189,7 +189,7 @@ list_item = (
         | complex_
         | quoted_str
         | unistr
-        | boolLiteral
+        | bool_literal
         | null
         | list_str
         | set_str
@@ -199,8 +199,7 @@ list_item = (
 )
 
 eq = Literal("=")
-col = ":"
-respects = Keyword("->").setParseAction(lambda t: col)
+respects = Keyword("->").setParseAction(lambda t: ':')
 imposes = Keyword("<-").setParseAction(lambda t: 'new_contract')
 
 
@@ -213,7 +212,7 @@ contract_assign.setParseAction(cvt_contract_assign)
 
 tuple_str <<= (
         lparen + Optional(delimitedList(list_item)) + Optional(comma) + rparen
-).setParseAction(cvtTuple)
+).setParseAction(cvt_tuple)
 
 list_str <<= (
         lbrack + Optional(delimitedList(list_item) + Optional(comma)) + rbrack
@@ -241,7 +240,7 @@ func_decl = Group(private_def_decl
                   + identifier
                   + def_args
                   + _contract_expression
-                  ).setParseAction(lambda t: std_decor + ''.join(*t) + col)
+                  ).setParseAction(lambda t: std_decor + ''.join(*t) + ':')
 comment_line = Combine(
         Regex(
                 r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`"
@@ -258,7 +257,7 @@ ret_stmt = Group(return_value).setParseAction(lambda t: ''.join(*t))
 yield_stmt = Group(yield_value).setParseAction(lambda t: ''.join(*t))
 func_def = Group(func_decl + suite).setParseAction(lambda t: '\n    '.join(t[0]) + '\n\n')
 pass_stmt = Keyword("pass").setParseAction(lambda t: str(*t))
-suite << IndentedBlock((comment_line | pass_stmt | ret_stmt | yield_stmt | func_call | funcDef | contract_assign)).setParseAction(lambda t: ('\n    '.join(t.asList())))
+suite << IndentedBlock((comment_line | pass_stmt | ret_stmt | yield_stmt | func_call | func_def | contract_assign)).setParseAction(lambda t: ('\n    '.join(t.asList())))
 sep = ', '
 lambda_def = Combine(Group("(" + arith_expr | comp_expr + ")"))
 func_call = Group(identifier + "(" + Optional(delimitedList(rvalue)) + ")").setParseAction(lambda t: "Maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1] + '()')  # if len(t[0]) != 3 else t[0][0] + '()')
@@ -277,7 +276,7 @@ def cvt_for_stmt(toks):
 #                  funcCall).setParseAction(cvt_for_stmt)
 rvalue << (clos_call | func_call | list_item | lambda_def)
 simple_assign << Group(identifier + "=" + rvalue).setParseAction(lambda t: ' '.join(t[0]))
-stmt << (funcDef | contract_define | simple_assign | comment_line)
+stmt << (func_def | contract_define | simple_assign | comment_line)
 
 module_body = OneOrMore(stmt)
 

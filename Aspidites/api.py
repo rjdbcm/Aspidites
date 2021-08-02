@@ -1,6 +1,13 @@
+import contextlib
+import os
 import typing
+from hashlib import md5
 from inspect import signature, isfunction
 from textwrap import wrap as _wrap
+
+from pyparsing import ParseResults
+
+from ._vendor.contracts import new_contract
 from .templates import _warning
 from os import get_terminal_size
 from pyrsistent import pvector, pmap, inc, rex, discard, PVector
@@ -78,3 +85,73 @@ def create_warning(func, args, kwargs, stack, exc=Exception()):
                                     atfault=bordered(atfault),
                                     bound=bordered(str_locals),
                                     tb=bordered(str(exc)))
+
+
+MD5 = '.md5'
+code = new_contract('code', lambda x: isinstance(x, ParseResults))
+
+
+@contextlib.contextmanager
+def working_directory(path):
+    """
+    A context manager which changes the working directory to the given
+    path, and then changes it back to its previous value on exit.
+    Usage:
+    > # Do something in original directory
+    > with working_directory('/my/new/path'):
+    >     # Do something in new directory
+    > # Back to old directory
+    """
+
+    prev_cwd = os.getcwd()
+    os.chdir(path)
+    try:
+        yield
+    finally:
+        os.chdir(prev_cwd)
+
+
+def checksum(fname, write=True, check=False):
+    base, name = os.path.split(fname)
+    fname_md5 = os.path.join(base, '.' + name) + '.md5'
+
+    def read_md5(data):
+        curr_hash = md5()
+        chunk = data.read(8192)
+        while chunk:
+            curr_hash.update(chunk)
+            chunk = data.read(8192)
+        return curr_hash
+
+    if write:
+        with open(fname, 'rb') as data:
+            curr_hash = read_md5(data)
+            with open(fname_md5, 'wb') as digest:
+                digest.write(curr_hash.digest())
+            return pmap({curr_hash.digest(): fname}).items()[0]  # immutable
+    if check:
+        with open(fname_md5, 'rb') as digest:
+            with open(fname, 'rb') as data:
+                curr_hash = read_md5(data)
+                old = digest.read()
+                new = curr_hash.digest()
+                if new == old:
+                    print('md5 digest check successful: %s, %s == %s' % (fname, new.hex(), old.hex()))
+                    return new
+                else:
+                    print('md5 digest failure: %s, %s != %s' % (fname, new.hex(), old.hex()))
+                    return ''
+
+
+class CheckedFileStack:
+    def __init__(self, initial=None, pre_size=8192):
+        if initial is None:
+            initial = {}
+        self._files = pmap(initial, pre_size)
+        self.all_files = self._files.evolver()
+
+    def register(self, fname):
+        self.all_files.set(*checksum(fname))
+
+    def finalize(self):
+        return self.all_files.persistent()
