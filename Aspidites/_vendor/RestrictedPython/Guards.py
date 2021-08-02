@@ -17,6 +17,7 @@
 
 from Aspidites._vendor import _compat
 
+
 if _compat.IS_PY2:  # pragma: PY2
     import __builtin__ as builtins
 else:  # pragma: PY3

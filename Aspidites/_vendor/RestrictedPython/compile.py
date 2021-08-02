@@ -1,10 +1,11 @@
+from collections import namedtuple
+from Aspidites._vendor._compat import IS_CPYTHON
+from Aspidites._vendor._compat import IS_PY2
+from Aspidites._vendor.RestrictedPython.transformer import RestrictingNodeTransformer
+
 import ast
 import warnings
-from collections import namedtuple
 
-from Aspidites._vendor._compat import IS_CPYTHON, IS_PY2
-from Aspidites._vendor.RestrictedPython.transformer import \
-    RestrictingNodeTransformer
 
 CompileResult = namedtuple(
     'CompileResult', 'code, errors, warnings, used_names')

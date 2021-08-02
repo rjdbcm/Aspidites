@@ -1,22 +1,19 @@
 import contextlib
 import os.path
 import sys
-from os import PathLike
-from string import Template
 
 from Cython.Build import cythonize
-from pyparsing import (Combine, Empty, FollowedBy, Forward, Group, Keyword,
-                       Literal, OneOrMore, OnlyOnce, Optional,
-                       ParseElementEnhance, ParseException, Regex, Suppress,
-                       Word, alphanums, alphas, col, conditionAsParseAction,
-                       delimitedList, infixNotation, matchOnlyAtCol, nums,
-                       oneOf, opAssoc, quotedString, replaceWith,
-                       unicodeString)
-from pyrsistent import PMap, PSet, PVector, pmap, pset, pvector
-
-from Aspidites._vendor.contracts import (ContractNotRespected, contract,
-                                         new_contract)
-from Aspidites._vendor.contracts.syntax import EqualTo, contract_expression
+from os import PathLike
+from pyparsing import (
+    ParseElementEnhance, oneOf, Optional, OneOrMore, OnlyOnce, Word,  alphanums, alphas,
+    Suppress, unicodeString, quotedString, replaceWith, nums, Combine, Forward,
+    FollowedBy, Literal, infixNotation, Keyword, opAssoc, Group, delimitedList, Regex, col,
+    matchOnlyAtCol, Empty, conditionAsParseAction, ParseException
+)
+from string import Template
+from pyrsistent import pvector, pset, pmap, PVector, PSet, PMap
+from Aspidites._vendor.contracts.syntax import contract_expression, EqualTo
+from Aspidites._vendor.contracts import new_contract, contract, ContractNotRespected
 
 _contract_expression = contract_expression.copy()
 _contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")

@@ -1,23 +1,41 @@
-import inspect
-from collections.abc import Callable as ACallable
-from collections.abc import Iterable, Mapping
-from enum import Enum
+from collections.abc import (
+    Iterable,
+    Mapping,
+    Callable as ACallable,
+)
 from itertools import zip_longest
-from typing import Any, Callable, Generic
-from typing import Pattern as RegexPattern
-from typing import Tuple, TypeVar
+from enum import Enum
+from typing import (
+    Any,
+    Generic,
+    TypeVar,
+    Tuple,
+    Pattern as RegexPattern,
+    Callable
+)
+import inspect
 
-from pyrsistent import PVector, ny, pvector, v
+from Aspidites._vendor.pampy.helpers import (
+    UnderscoreType,
+    HeadType,
+    TailType,
+    get_lambda_args_error_msg,
+    BoxedArgs,
+    PaddedValue,
+    is_typing_stuff,
+    is_dataclass,
+    is_generic,
+    is_newtype,
+    is_union,
+    pairwise,
+    peek,
+    get_real_type,
+    get_extra,
+)
 
-from Aspidites._vendor.pampy.helpers import (BoxedArgs, HeadType, PaddedValue,
-                                             TailType, UnderscoreType,
-                                             get_extra,
-                                             get_lambda_args_error_msg,
-                                             get_real_type, is_dataclass,
-                                             is_generic, is_newtype,
-                                             is_typing_stuff, is_union,
-                                             pairwise, peek)
 from Aspidites.monads import Undefined
+
+from pyrsistent import v, PVector, pvector, ny
 
 T = TypeVar('T')
 ANY = ny

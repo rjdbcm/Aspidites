@@ -1,25 +1,23 @@
 # contents of app_main.py
-import argparse as ap
 import os
 import sys
 import traceback
 import warnings
 from contextlib import suppress
-
+import argparse as ap
+from pyparsing import ParseBaseException
 import pyparsing
 from Cython import __version__ as cy_version
 from Cython.Compiler import Options
-from pyparsing import ParseBaseException
-
 with suppress(ImportError):
     import pytest_cov
     import pytest_mock
     import pytest_pylint
-
-from Aspidites._vendor.RestrictedPython import safe_globals
 from Aspidites._vendor.semantic_version import Version
-from Aspidites.compiler import compile_module
+from Aspidites._vendor.RestrictedPython import safe_globals
 from Aspidites.parser import parse_module
+from Aspidites.compiler import compile_module
+
 
 cy_version = Version.coerce(cy_version)
 

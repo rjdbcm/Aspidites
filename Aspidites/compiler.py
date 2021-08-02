@@ -1,14 +1,13 @@
 import os
-import py_compile
 import sys
 from glob import glob
 from warnings import warn
-
-from mypy import api
-
 from Aspidites._vendor.contracts import contract
+import py_compile
+
 from Aspidites.api import CheckedFileStack, checksum
-from Aspidites.templates import lib, makefile, pyproject, setup
+from Aspidites.templates import lib, setup, pyproject, makefile
+from mypy import api
 
 
 @contract()
