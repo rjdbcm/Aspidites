@@ -8,61 +8,61 @@ from math import inf, isinf
 from contextlib import suppress
 
 from _warnings import warn
-from pyrsistent import PMap, PVector, pvector, v
-
+from pyrsistent import v
 from Aspidites import final
-from Aspidites._vendor.contracts import ContractNotRespected
+from Aspidites._vendor.contracts import ContractNotRespected, contract
 from Aspidites._vendor.fn import apply
-from Aspidites._vendor.fn.recur import tco
 from Aspidites._vendor.fn.underscore import ArityError
-from Aspidites.api import ContractBreachWarning, bordered, create_warning
-from Aspidites.templates import _warning, i3e_754_1985
+from Aspidites.api import ContractBreachWarning, create_warning
 
 
-
-def SafeDiv(a, b):
+# noinspection PyPep8Naming
+@contract
+def SafeDiv(a: 'number', b: 'number') -> 'number':
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
-    msg = i3e_754_1985.substitute(msg="Division by zero is Undefined")
-    stack = inspect.stack()
-    w = create_warning(
-        stack[0][3],
-        [a, b],
-        {},
-        stack,
-        ZeroDivisionError(msg)
-    )
-    warn(w, category=RuntimeWarning)
-    return b and a / b or Undefined(SafeDiv, a=a, b=b)
+    if b == 0:
+        stack = inspect.stack()
+        w = create_warning(
+            stack[0][3],
+            [a, b],
+            {},
+            stack,
+            ZeroDivisionError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
+        )
+        warn(w, category=RuntimeWarning)
+        return Undefined(SafeDiv, a=a, b=b)
+    return a / b
 
 
-def SafeMod(a, b):
+# noinspection PyPep8Naming
+@contract
+def SafeMod(a: 'number', b: 'number') -> 'number':
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
-    msg = i3e_754_1985.substitute(msg="Modulus by zero is Undefined")
-    stack = inspect.stack()
-    w = create_warning(
-        stack[0][3],
-        [a, b],
-        {},
-        stack,
-        ZeroDivisionError(msg)
-    )
-    warn(w, category=RuntimeWarning)
-    return b and a % b or Undefined(SafeMod, a=a, b=b)
+    if b == 0:
+        stack = inspect.stack()
+        w = create_warning(
+            stack[0][3],
+            [a, b],
+            {},
+            stack,
+            ZeroDivisionError("Modulus by zero is Undefined; this behavior diverges from IEEE 754-1985.")
+        )
+        warn(w, category=RuntimeWarning)
+        return Undefined(SafeMod, a=a, b=b)
+    return a % b
 
 
-def SafeExp(a, b):
-    msg = i3e_754_1985.substitute(msg="%s**%s == Undefined" % (str(a), str(b),))
-    indeterminate = lambda x, y: isinf(x) and y == 0
-    stack = inspect.stack()
-    w = create_warning(
+# noinspection PyPep8Naming
+def SafeExp(a: 'number', b: 'number') -> 'number':
+    if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # 0**0, inf**0, 0**inf
+        stack = inspect.stack()
+        w = create_warning(
             stack[0][3], [a, b], {}, stack,
-            ArithmeticError(msg)
-    )
-    warn(w, category=RuntimeWarning)
-    if indeterminate(a, b) or indeterminate(b, a):
+            ArithmeticError("%s**%s" % (str(a), str(b),) + " == Undefined; this behavior diverges from IEEE 754-1985.")
+        )
+        warn(w, category=RuntimeWarning)
         return Undefined(SafeExp, a=a, b=b)
-    else:
-        return b and a**b or Undefined(SafeExp, a=a, b=b)
+    return a**b
 
 
 class Maybe:

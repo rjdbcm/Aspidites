@@ -9,6 +9,7 @@ numpy = "*"
 cython = "*"
 pyparsing = "*"
 mypy = "*"
+pytest = "*"
 
 [dev-packages]
 pytest = "*"

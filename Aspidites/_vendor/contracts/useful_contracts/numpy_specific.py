@@ -1,17 +1,19 @@
 from Aspidites._vendor.contracts import new_contract
 import numpy as np
 from Aspidites._vendor.contracts.interface import describe_value, describe_type
-
 __all__ = ['finite']
+
 
 @new_contract
 def finite(x):
     return np.isfinite(x).all()
 
+
 new_contract('np_scalar_uint', 'np_uint8|np_uint16|np_uint32|np_uint64')
 new_contract('np_scalar_int', 'np_int8|np_int16|np_int32|np_int64')
 new_contract('np_scalar_float', 'np_float32|np_float64')
 new_contract('np_scalar_type', 'np_scalar_int|np_scalar_uint|np_scalar_float')
+
 
 @new_contract  
 def np_zeroshape_array(x):

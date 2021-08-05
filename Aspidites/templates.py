@@ -1,7 +1,5 @@
 from string import Template
 
-i3e_754_1985 = Template("""
-$msg; this behavior diverges from IEEE 754-1985.""")
 
 makefile = Template("""clean: clean-build clean-pyc clean-md5 ## remove all build, test, coverage and Python artifacts
 
@@ -71,7 +69,7 @@ Options.embed = $embed
 setup(
     name='$app_name',
     ext_modules=[Extension('$ext_name', ['$src_file'], include_dirs=$inc_dirs,
-                           libraries=$libs, library_dirs=$lib_dirs)],)
+                           libraries=$libs, extra_compile_args=['-Wall'], library_dirs=$lib_dirs)],)
 """)
 
 lib = Template("""# cython: language_level=3
