@@ -39,11 +39,17 @@ Aspidites is the reference implementation of the Woma programming language compi
 
 # Syntax
 
-| Verbage   | Symbol   | Example                                                       |
-|:----------|:---------|:--------------------------------------------------------------|
-| respects<br>✅| `->`     | `identifier` `->` `constraining clauses`                    |
-| imposes<br>✅| `<-`     | `identifier` `<-` `imposed clauses`                         |
-| loops<br>❌| `<@> `   | `identifier` `<@>` `iterable container`<br>`indent` `...`   |
-| return  <br>✅| `<*>`    | `<*>` `statement `                                          |
-| pragma  <br>❌|  `#`     | `#` `compiler directive`                                    |
+| Working?      | Symbol        | Verbage             |  Example                                                       |
+|:--------------|:--------------|:--------------------|:---------------------------------------------------------------|
+| ✅            | `->`          |respects             | `identifier` `->` `constraining clauses`                       |
+| ✅            | `<-`          |imposes              | `identifier` `<-` `imposed clauses`                            |
+| ❌`           | `<@> `        |loops                | `identifier` `<@>` `iterable container`<br>`indent` `...`      |
+| ✅            | `<*>`         |return               | `<*>` `statement `                                             |
+| ✅            |  `#`          |pragma               | `#` `compiler directive`                                       |
 
+# Examples
+
+```
+(Greeter(name -> str)) str!=name
+    <*>print('Greetings,', name)
+```

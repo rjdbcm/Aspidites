@@ -74,7 +74,7 @@ setup(
     ext_modules=cythonize(exts))
 """)
 
-lib = Template("""# cython: language_level=3, annotation_typing=True
+lib = Template("""# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8
 # THIS FILE IS GENERATED - DO NOT EDIT #
 import cython  # type: ignore
 from typing import Any

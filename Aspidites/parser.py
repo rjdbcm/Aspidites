@@ -1,12 +1,5 @@
 # Aspidites is Copyright 2021, Ross J. Duff.
 # See LICENSE.txt for more info.
-import contextlib
-import os.path
-import sys
-from os import PathLike
-from string import Template
-
-from Cython.Build import cythonize
 from pyparsing import (
     Combine,
     Empty,
@@ -37,14 +30,44 @@ from pyparsing import (
     replaceWith,
     unicodeString,
 )
-from pyrsistent import PMap, PSet, PVector, pmap, pset, pvector
 
-from Aspidites.monads import Maybe
-from Aspidites._vendor.contracts import ContractNotRespected, contract, new_contract
-from Aspidites._vendor.contracts.syntax import EqualTo, contract_expression
+from Aspidites._vendor.contracts import contract, new_contract
+from Aspidites._vendor.contracts.syntax import contract_expression
 
 _contract_expression = contract_expression.copy()
 _contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")
+
+available_pragmas = [
+    'cython.binding',
+    'cython.boundscheck',
+    'cython.wraparound',
+    'cython.initializedcheck',
+    'cython.nonecheck',
+    'cython.overflowcheck',
+    'cython.overflowcheck.fold',
+    'cython.embedsignature',
+    'cython.cdivision',
+    'cython.cdivision_warnings',
+    'cython.always_allow_keywords',
+    'cython.c_api_binop_methods',
+    'cython.profile',
+    'cython.linetrace',
+    'cython.infer_types',
+    'cython.type_version_tag',
+    'cython.unraisable_tracebacks',
+    'cython.iterable_coroutine',
+    'cython.emit_code_comments',
+    'cython.cpp_locals',
+    'cython.optimize.use_switch',
+    'cython.optimize.unpack_method_calls',
+    'cython.warn.undeclared',
+    'cython.warn.unreachable',
+    'cython.warn.maybe_uninitialized',
+    'cython.warn.unused',
+    'cython.warn.unused_arg',
+    'cython.warn.unused_result',
+    'cython.warn.multiple_declarators'
+]
 
 
 class IndentedBlock(ParseElementEnhance):
@@ -271,9 +294,14 @@ def_args = Optional(delimitedList(contract_assign, delim=";")).setParseAction(
 args_end = Group(Literal(")") + Literal(")")).setParseAction(replaceWith(") -> "))
 def_args = Group("(" + def_args + args_end).setParseAction(lambda t: "".join(*t))
 
-std_decor = "@contract()\n@cython.binding(True)\n"
+std_decor = "@contract()\n"
 
-func_decl = Group(
+pragmas = Combine(
+    Literal("#").setParseAction(replaceWith('@'))
+    + oneOf(' '.join(available_pragmas))
+    + '(' + oneOf('True False') + ')'
+).setParseAction(lambda t: t[0] + '\n')
+func_decl = Group(Optional(OneOrMore(pragmas)) +
     private_def_decl + identifier + def_args + _contract_expression
 ).setParseAction(lambda t: std_decor + "".join(*t) + ":")
 comment_line = (
