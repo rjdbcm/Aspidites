@@ -1,6 +1,6 @@
 # Aspidites
 
-Aspidites is the reference implementation of the Woma programming language compiler.
+Aspidites is the reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler.
 
 ### Core Dependencies
 
