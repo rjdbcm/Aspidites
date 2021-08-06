@@ -1,3 +1,5 @@
+# Aspidites is Copyright 2021, Ross J. Duff.
+# See LICENSE.txt for more info.
 import inspect
 import operator as op
 import shutil
@@ -13,12 +15,12 @@ from Aspidites import final
 from Aspidites._vendor.contracts import ContractNotRespected, contract
 from Aspidites._vendor.fn import apply
 from Aspidites._vendor.fn.underscore import ArityError
+
 from Aspidites.api import ContractBreachWarning, create_warning
 
 
 # noinspection PyPep8Naming
-@contract
-def SafeDiv(a: 'number', b: 'number') -> 'number':
+def SafeDiv(a, b):
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
     if b == 0:
         stack = inspect.stack()
@@ -35,8 +37,7 @@ def SafeDiv(a: 'number', b: 'number') -> 'number':
 
 
 # noinspection PyPep8Naming
-@contract
-def SafeMod(a: 'number', b: 'number') -> 'number':
+def SafeMod(a, b):
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
     if b == 0:
         stack = inspect.stack()
@@ -53,7 +54,7 @@ def SafeMod(a: 'number', b: 'number') -> 'number':
 
 
 # noinspection PyPep8Naming
-def SafeExp(a: 'number', b: 'number') -> 'number':
+def SafeExp(a, b):
     if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # 0**0, inf**0, 0**inf
         stack = inspect.stack()
         w = create_warning(

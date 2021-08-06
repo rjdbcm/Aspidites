@@ -1,3 +1,6 @@
+# Aspidites is Copyright 2021, Ross J. Duff.
+# See LICENSE.txt for more info.
+
 import contextlib
 import os
 import typing

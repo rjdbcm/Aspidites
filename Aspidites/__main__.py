@@ -6,43 +6,42 @@ import traceback
 import warnings
 from contextlib import suppress
 
-import pyparsing
 from Cython import __version__ as cy_version
 from Cython.Compiler import Options
-from pyparsing import ParseBaseException
 
 with suppress(ImportError):
     import pytest_cov
     import pytest_mock
     import pytest_pylint
 
-from Aspidites._vendor.RestrictedPython import safe_globals
 from Aspidites._vendor.semantic_version import Version
 from Aspidites.compiler import compile_module
 from Aspidites.parser import parse_module
 
 cy_version = Version.coerce(cy_version)
-
-cy_kwargs = {
-            "annotate"              : Options.annotate,
-            "annotate_coverage_xml" : Options.annotate_coverage_xml,
-            "buffer_max_dims"       : Options.buffer_max_dims,
-            "cache_builtins"        : Options.cache_builtins,
-            "cimport_from_pyx"      : Options.cimport_from_pyx,
-            "clear_to_none"         : Options.clear_to_none,
-            "closure_freelist_size" : Options.closure_freelist_size,
-            "convert_range"         : Options.convert_range,
-            "docstrings"            : Options.docstrings,
-            "embed_pos_in_docstring": Options.embed_pos_in_docstring,
-            "generate_cleanup_code" : Options.generate_cleanup_code,
-            "fast_fail"             : Options.fast_fail,
-            "warning_errors"        : Options.warning_errors,
-            "error_on_unknown_names": Options.error_on_unknown_names,
-            "error_on_uninitialized": Options.error_on_uninitialized,
-            "gcc_branch_hints"      : Options.gcc_branch_hints,
-            "lookup_module_cpdef"   : Options.lookup_module_cpdef,
-            "embed"                 : Options.embed
-        }
+cy_opt = [
+    "annotate",
+    "annotate_coverage_xml",
+    "buffer_max_dims",
+    "cache_builtins",
+    "cimport_from_pyx",
+    "clear_to_none",
+    "closure_freelist_size",
+    "convert_range",
+    "docstrings",
+    "embed_pos_in_docstring",
+    "generate_cleanup_code",
+    "fast_fail",
+    "warning_errors",
+    "error_on_unknown_names",
+    "error_on_uninitialized",
+    "gcc_branch_hints",
+    "lookup_module_cpdef",
+    "embed",
+]
+cy_kwargs = dict(
+    zip(cy_opt,
+        map(lambda x: getattr(Options, x), cy_opt)))
 
 
 def main():
@@ -54,7 +53,9 @@ def main():
             from Cython.Compiler.CmdLine import create_cython_argparser
             cy_parser = create_cython_argparser()
         except Exception as e:
-            warnings.warn('\n' + ''.join(traceback.format_tb(e.__traceback__)) + 'Falling back to Cython 0.X Options API', ImportWarning)
+            warnings.warn(
+                '\n' + ''.join(traceback.format_tb(e.__traceback__)) + 'Falling back to Cython 0.X Options API',
+                ImportWarning)
             cy3_fallback_mode = True
             cy_parser = dummy
     else:
@@ -72,10 +73,11 @@ def main():
             cy_arg_group = parser.add_argument_group("optional Cython arguments")
             for k, v in cy_kwargs.items():
                 cy_arg_group.add_argument(
-                        f'--{k.replace("_", "-")}',
-                        default=v,
-                        action='store_true' if type(v) == bool else 'store'
+                    f'--{k.replace("_", "-")}',
+                    default=v,
+                    action='store_true' if type(v) == bool else 'store'
                 )
+
         asp_parser = ap.ArgumentParser(description=__doc__,
                                        parents=[cy_parser],
                                        add_help=not bool(cy_version.major)
@@ -133,4 +135,3 @@ def main():
             # new_contract('pset', lambda x: isinstance(x, PSet))
             # safe_globals.update(
             #         {'contract': contract, 'pvec': PVector, 'pmap': PMap, 'pset': PSet})
-

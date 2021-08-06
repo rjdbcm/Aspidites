@@ -1,5 +1,6 @@
+# Aspidites is Copyright 2021, Ross J. Duff.
+# See LICENSE.txt for more info.
 from string import Template
-
 
 makefile = Template("""clean: clean-build clean-pyc clean-md5 ## remove all build, test, coverage and Python artifacts
 
@@ -66,13 +67,14 @@ Options.gcc_branch_hints = $gcc_branch_hints
 Options.lookup_module_cpdef = $lookup_module_cpdef
 Options.embed = $embed
 
+exts = [Extension('$ext_name', ['$src_file'], include_dirs=$inc_dirs, libraries=$libs, extra_compile_args=['-Wall'], library_dirs=$lib_dirs)]
+
 setup(
     name='$app_name',
-    ext_modules=[Extension('$ext_name', ['$src_file'], include_dirs=$inc_dirs,
-                           libraries=$libs, extra_compile_args=['-Wall'], library_dirs=$lib_dirs)],)
+    ext_modules=cythonize(exts))
 """)
 
-lib = Template("""# cython: language_level=3
+lib = Template("""# cython: language_level=3, annotation_typing=True
 # THIS FILE IS GENERATED - DO NOT EDIT #
 import cython  # type: ignore
 from typing import Any

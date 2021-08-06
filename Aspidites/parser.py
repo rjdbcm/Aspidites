@@ -1,3 +1,5 @@
+# Aspidites is Copyright 2021, Ross J. Duff.
+# See LICENSE.txt for more info.
 import contextlib
 import os.path
 import sys
@@ -37,6 +39,7 @@ from pyparsing import (
 )
 from pyrsistent import PMap, PSet, PVector, pmap, pset, pvector
 
+from Aspidites.monads import Maybe
 from Aspidites._vendor.contracts import ContractNotRespected, contract, new_contract
 from Aspidites._vendor.contracts.syntax import EqualTo, contract_expression
 
@@ -338,12 +341,18 @@ stmt << (func_def | contract_define | simple_assign | comment_line)
 
 module_body = OneOrMore(stmt)
 
-
-def parse_module(module, window_size=80):
+@new_contract
+def woma_module(text: 'str'):
     try:
-        return module_body.parseString(module, parseAll=True)
+        module_body.parseString(text, parseAll=True)
     except ParseException as e:
-        raise SyntaxError(str(e))
+        raise ValueError(str(e))
+    else:
+        return True
+
+@contract
+def parse_module(module: 'woma_module'):
+    return module_body.parseString(module, parseAll=True)
 
 
 # if __name__ == "__main__":

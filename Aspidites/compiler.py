@@ -1,3 +1,6 @@
+# Aspidites is Copyright 2021, Ross J. Duff.
+# See LICENSE.txt for more info.
+
 import os
 import py_compile
 import sys
@@ -85,7 +88,7 @@ def compile_module(
                 setup.substitute(
                     app_name=module_name,
                     ext_name=app_name,
-                    src_file=file_c,
+                    src_file=fname,
                     inc_dirs=[],
                     libs=[],
                     lib_dirs=[],
