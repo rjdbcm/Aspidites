@@ -29,6 +29,9 @@ clean-test: ## remove test and coverage artifacts
 test-all:
 	pytest tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
 
+coverage:
+	pytest tests --cov Aspidites
+
 patch:
 	bump2version patch
 
