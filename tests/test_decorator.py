@@ -13,10 +13,10 @@ import inspect
 from asyncio import get_event_loop
 from collections import defaultdict, ChainMap, abc as c
 from Aspidites._vendor.decorator import dispatch_on, contextmanager, decorator
-try:
-    from . import decorator_documentation as doc  # good with pytest
-except ImportError:
-    import decorator_documentation as doc  # good with `python src/tests/test.py`
+# try:
+#     from . import decorator_documentation as doc  # good with pytest
+# except ImportError:
+#     import decorator_documentation as doc  # good with `python src/tests/test.py`
 
 
 @contextmanager
@@ -74,131 +74,131 @@ class GeneratorCallerTestCase(unittest.TestCase):
         self.assertEqual(list(new()), [1, 4, 9])
 
 
-class DocumentationTestCase(unittest.TestCase):
-    def test(self):
-        err = doctest.testmod(doc)[0]
-        self.assertEqual(err, 0)
-
-    def test_copy_dunder_attrs(self):
-        traced = doc.trace(doc.foo)
-        self.assertIn('documentation', traced.__module__)
-        self.assertEqual(traced.__annotations__, {})
-        self.assertEqual(traced.__defaults__, (None,))
-
-    def test_singledispatch1(self):
-        with assertRaises(RuntimeError):
-            doc.singledispatch_example1()
-
-    def test_singledispatch2(self):
-        doc.singledispatch_example2()
-
-    def test_context_manager(self):
-
-        @contextmanager
-        def before_after(before, after):
-            print(before)
-            yield
-            print(after)
-
-        @before_after('BEFORE', 'AFTER')
-        def hello_user(user):
-            print('hello %s' % user)
-
-        argspec = inspect.getfullargspec(hello_user)
-        self.assertEqual(argspec.args, ['user'])
-
-
-class ExtraTestCase(unittest.TestCase):
-    def test_qualname(self):
-        self.assertEqual(doc.operation1.__qualname__, 'operation1')
-
-    def test_signature(self):
-        sig = inspect.signature(doc.f1)
-        self.assertEqual(str(sig), '(x)')
-
-    def test_unique_filenames(self):
-        @decorator
-        def d1(f, *args, **kwargs):
-            return f(*args, **kwargs)
-
-        @decorator
-        def d2(f, *args, **kwargs):
-            return f(*args, **kwargs)
-
-        @d1
-        def f1(x, y, z):
-            pass
-
-        @d2
-        def f2(x, y, z):
-            pass
-
-        f1_orig = f1
-
-        @d1
-        def f1(x, y, z):
-            pass
-
-        self.assertEqual(d1.__code__.co_filename,
-                         d2.__code__.co_filename)
-        self.assertEqual(f1.__code__.co_filename,
-                         f2.__code__.co_filename)
-        self.assertEqual(f1_orig.__code__.co_filename,
-                         f1.__code__.co_filename)
-
-    def test_no_first_arg(self):
-        @decorator
-        def example(*args, **kw):
-            return args[0](*args[1:], **kw)
-
-        @example
-        def func(**kw):
-            "Docstring"
-            return kw
-
-        # there is no confusion when passing args as a keyword argument
-        self.assertEqual(func(args='a'), {'args': 'a'})
-        self.assertEqual(func.__doc__, "Docstring")
-
-    def test_decorator_factory(self):
-        # similar to what IPython is doing in traitlets.config.application
-        @decorator
-        def catch_config_error(method, app, *args, **kwargs):
-            return method(app)
-        catch_config_error(lambda app, **kw: None)(1)
-
-    def test_add1(self):
-        # similar to what IPython is doing in traitlets.config.application
-        @decorator
-        def add(func, const=1, *args, **kwargs):
-            return const + func(*args, **kwargs)
-
-        def f(x):
-            return x
-        self.assertEqual(add(f, 2)(0), 2)
-
-    def test_dan_schult(self):
-        # see https://github.com/micheles/decorator/issues/120
-        @decorator
-        def prnt(func, index=0, *args, **kw):
-            # print(args[index])
-            return func(*args, **kw)
-
-        @prnt(index=2)  # print the value of the third argument
-        def f(a, b, c=None):
-            return [a, b, c]
-
-        self.assertEqual(f(0, 1), [0, 1, None])
-
-    def test_slow_wrapper(self):
-        # see https://github.com/micheles/decorator/issues/123
-        dd = defaultdict(list)
-        doc.trace(defaultdict.__setitem__)(dd, 'x', [1])
-        self.assertEqual(dd['x'], [1])
-        doc.trace(defaultdict.__delitem__)(dd, 'x')
-        self.assertEqual(dd['x'], [])
-        # NB: defaultdict.__getitem__ has no signature and cannot be
-        # decorated in CPython, while it is regular in PyPy
+# class DocumentationTestCase(unittest.TestCase):
+#     def test(self):
+#         err = doctest.testmod(doc)[0]
+#         self.assertEqual(err, 0)
+#
+#     def test_copy_dunder_attrs(self):
+#         traced = doc.trace(doc.foo)
+#         self.assertIn('documentation', traced.__module__)
+#         self.assertEqual(traced.__annotations__, {})
+#         self.assertEqual(traced.__defaults__, (None,))
+#
+#     def test_singledispatch1(self):
+#         with assertRaises(RuntimeError):
+#             doc.singledispatch_example1()
+#
+#     def test_singledispatch2(self):
+#         doc.singledispatch_example2()
+#
+#     def test_context_manager(self):
+#
+#         @contextmanager
+#         def before_after(before, after):
+#             print(before)
+#             yield
+#             print(after)
+#
+#         @before_after('BEFORE', 'AFTER')
+#         def hello_user(user):
+#             print('hello %s' % user)
+#
+#         argspec = inspect.getfullargspec(hello_user)
+#         self.assertEqual(argspec.args, ['user'])
+#
+#
+# class ExtraTestCase(unittest.TestCase):
+#     def test_qualname(self):
+#         self.assertEqual(doc.operation1.__qualname__, 'operation1')
+#
+#     def test_signature(self):
+#         sig = inspect.signature(doc.f1)
+#         self.assertEqual(str(sig), '(x)')
+#
+#     def test_unique_filenames(self):
+#         @decorator
+#         def d1(f, *args, **kwargs):
+#             return f(*args, **kwargs)
+#
+#         @decorator
+#         def d2(f, *args, **kwargs):
+#             return f(*args, **kwargs)
+#
+#         @d1
+#         def f1(x, y, z):
+#             pass
+#
+#         @d2
+#         def f2(x, y, z):
+#             pass
+#
+#         f1_orig = f1
+#
+#         @d1
+#         def f1(x, y, z):
+#             pass
+#
+#         self.assertEqual(d1.__code__.co_filename,
+#                          d2.__code__.co_filename)
+#         self.assertEqual(f1.__code__.co_filename,
+#                          f2.__code__.co_filename)
+#         self.assertEqual(f1_orig.__code__.co_filename,
+#                          f1.__code__.co_filename)
+#
+#     def test_no_first_arg(self):
+#         @decorator
+#         def example(*args, **kw):
+#             return args[0](*args[1:], **kw)
+#
+#         @example
+#         def func(**kw):
+#             "Docstring"
+#             return kw
+#
+#         # there is no confusion when passing args as a keyword argument
+#         self.assertEqual(func(args='a'), {'args': 'a'})
+#         self.assertEqual(func.__doc__, "Docstring")
+#
+#     def test_decorator_factory(self):
+#         # similar to what IPython is doing in traitlets.config.application
+#         @decorator
+#         def catch_config_error(method, app, *args, **kwargs):
+#             return method(app)
+#         catch_config_error(lambda app, **kw: None)(1)
+#
+#     def test_add1(self):
+#         # similar to what IPython is doing in traitlets.config.application
+#         @decorator
+#         def add(func, const=1, *args, **kwargs):
+#             return const + func(*args, **kwargs)
+#
+#         def f(x):
+#             return x
+#         self.assertEqual(add(f, 2)(0), 2)
+#
+#     def test_dan_schult(self):
+#         # see https://github.com/micheles/decorator/issues/120
+#         @decorator
+#         def prnt(func, index=0, *args, **kw):
+#             # print(args[index])
+#             return func(*args, **kw)
+#
+#         @prnt(index=2)  # print the value of the third argument
+#         def f(a, b, c=None):
+#             return [a, b, c]
+#
+#         self.assertEqual(f(0, 1), [0, 1, None])
+#
+#     def test_slow_wrapper(self):
+#         # see https://github.com/micheles/decorator/issues/123
+#         dd = defaultdict(list)
+#         doc.trace(defaultdict.__setitem__)(dd, 'x', [1])
+#         self.assertEqual(dd['x'], [1])
+#         doc.trace(defaultdict.__delitem__)(dd, 'x')
+#         self.assertEqual(dd['x'], [])
+#         # NB: defaultdict.__getitem__ has no signature and cannot be
+#         # decorated in CPython, while it is regular in PyPy
 
 
 # ################### test dispatch_on ############################# #
