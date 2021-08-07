@@ -10,7 +10,7 @@ cython = "*"
 pyparsing = "*"
 mypy = "*"
 pytest = "*"
-past = "*"
+future = "*"
 
 [dev-packages]
 pytest = "*"
