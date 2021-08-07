@@ -1,6 +1,6 @@
 # Aspidites
 
-Aspidites is the reference implementation of the Woma programming language compiler.
+Aspidites is the reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler.
 
 ### Core Dependencies
 
@@ -43,13 +43,14 @@ Aspidites is the reference implementation of the Woma programming language compi
 |:--------------|:--------------|:--------------------|:---------------------------------------------------------------|
 | ✅            | `->`          |respects             | `identifier` `->` `constraining clauses`                       |
 | ✅            | `<-`          |imposes              | `identifier` `<-` `imposed clauses`                            |
-| ❌`           | `<@> `        |loops                | `identifier` `<@>` `iterable container`<br>`indent` `...`      |
+| ❌            | `<@> `        |loops                | `identifier` `<@>` `iterable container`<br>`indent` `...`      |
 | ✅            | `<*>`         |return               | `<*>` `statement `                                             |
 | ✅            |  `#`          |pragma               | `#` `compiler directive`                                       |
 
 # Examples
 
 ```
-(Greeter(name -> str)) str!=name
+(Greeter(name -> str)) procedure
     <*>print('Greetings,', name)
+
 ```
