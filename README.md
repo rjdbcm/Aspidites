@@ -8,11 +8,11 @@ Aspidites is the reference implementation of the [Woma programming language](htt
 - Pyrsistent
 - PyParsing
 - MyPy
-- Optional(NumPy)
+- NumPy
 
 ## Paradigms
 
-- `negotiably-typed`
+- `refinement-type system`
 - `pragmatic`
 - `declarative`
 - `functional`
