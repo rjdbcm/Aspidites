@@ -87,7 +87,6 @@ def compile_module(
             f.write(
                 setup.substitute(
                     app_name=module_name,
-                    ext_name=app_name,
                     src_file=fname,
                     inc_dirs=[],
                     libs=[],

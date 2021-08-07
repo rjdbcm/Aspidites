@@ -67,7 +67,7 @@ Options.gcc_branch_hints = $gcc_branch_hints
 Options.lookup_module_cpdef = $lookup_module_cpdef
 Options.embed = $embed
 
-exts = [Extension('$ext_name', ['$src_file'], include_dirs=$inc_dirs, libraries=$libs, extra_compile_args=['-Wall'], library_dirs=$lib_dirs)]
+exts = [Extension('$app_name', ['$src_file'], include_dirs=$inc_dirs, libraries=$libs, extra_compile_args=['-Wall'], library_dirs=$lib_dirs)]
 
 setup(
     name='$app_name',
