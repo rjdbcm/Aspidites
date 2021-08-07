@@ -30,7 +30,7 @@ test-all:
 	pytest tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
 
 coverage:
-	pytest tests --cov Aspidites
+	pytest tests --cov-report=xml --cov=Aspidites
 
 patch:
 	bump2version patch
