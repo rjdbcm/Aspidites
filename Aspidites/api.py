@@ -4,7 +4,7 @@
 import contextlib
 import os
 import typing
-from hashlib import md5
+from hashlib import sha256
 from inspect import isfunction, signature
 from os import get_terminal_size
 from textwrap import wrap as _wrap
@@ -97,7 +97,7 @@ def create_warning(func, args, kwargs, stack, exc=Exception()):
     )
 
 
-MD5 = ".md5"
+MD5 = ".sha256"
 code = new_contract("code", lambda x: isinstance(x, ParseResults))
 
 
@@ -123,10 +123,10 @@ def working_directory(path):
 
 def checksum(fname, write=True, check=False):
     base, name = os.path.split(fname)
-    fname_md5 = os.path.join(base, "." + name) + ".md5"
+    fname_sha256 = os.path.join(base, "." + name) + ".sha256"
 
-    def read_md5(data):
-        curr_hash = md5()
+    def read_sha256(data):
+        curr_hash = sha256()
         chunk = data.read(8192)
         while chunk:
             curr_hash.update(chunk)
@@ -135,25 +135,25 @@ def checksum(fname, write=True, check=False):
 
     if write:
         with open(fname, "rb") as data:
-            curr_hash = read_md5(data)
-            with open(fname_md5, "wb") as digest:
+            curr_hash = read_sha256(data)
+            with open(fname_sha256, "wb") as digest:
                 digest.write(curr_hash.digest())
             return pmap({curr_hash.digest(): fname}).items()[0]  # immutable
     if check:
-        with open(fname_md5, "rb") as digest:
+        with open(fname_sha256, "rb") as digest:
             with open(fname, "rb") as data:
-                curr_hash = read_md5(data)
+                curr_hash = read_sha256(data)
                 old = digest.read()
                 new = curr_hash.digest()
                 if new == old:
                     print(
-                        "md5 digest check successful: %s, %s == %s"
+                        "sha256 digest check successful: %s, %s == %s"
                         % (fname, new.hex(), old.hex())
                     )
                     return new
                 else:
                     print(
-                        "md5 digest failure: %s, %s != %s"
+                        "sha256 digest failure: %s, %s != %s"
                         % (fname, new.hex(), old.hex())
                     )
                     return ""

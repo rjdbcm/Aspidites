@@ -2,7 +2,7 @@
 # See LICENSE.txt for more info.
 from string import Template
 
-makefile = Template("""clean: clean-build clean-pyc clean-md5 ## remove all build, test, coverage and Python artifacts
+makefile = Template("""clean: clean-build clean-pyc clean-sha256 ## remove all build, test, coverage and Python artifacts
 
 project = $project
 
@@ -13,7 +13,7 @@ uninstall: distclean
 	rm -fr pyproject.toml
 	find . -name '$$(project)*' -not -name '*.wom' -exec rm -fr {} +
 
-distclean: clean-build clean-pyc clean-md5
+distclean: clean-build clean-pyc clean-sha256
 	rm -fr Makefile
 
 clean-build: ## remove build artifacts
@@ -23,8 +23,8 @@ clean-build: ## remove build artifacts
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
 
-clean-md5:
-	find . -name '*.md5' -exec rm -f {} +
+clean-sha256:
+	find . -name '*.sha256' -exec rm -f {} +
 
 clean-pyc: ## remove Python file artifacts
 	find . -name '*.pyc' -exec rm -f {} +
