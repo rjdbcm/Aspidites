@@ -12,7 +12,7 @@ Aspidites is the reference implementation of the [Woma programming language](htt
 
 ## Paradigms
 
-- `refinement-type system`
+- [`refinement-type system`](http://goto.ucsd.edu/~rjhala/liquid/liquid_types.pdf)
 - `pragmatic`
 - `declarative`
 - `functional`
