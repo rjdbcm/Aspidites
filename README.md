@@ -3,11 +3,12 @@
 Aspidites is the reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler.
 
 ### Core Dependencies
-
+Aspidites has 6 core dependencies. In general, dependencies are vendored unless they contain Python Extensions.
 - Cython
 - Pyrsistent
 - PyParsing
 - MyPy
+- PyTest
 - NumPy
 
 ## Paradigms
