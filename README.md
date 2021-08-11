@@ -12,11 +12,11 @@ Aspidites is the reference implementation of the [Woma programming language](htt
 
 ## Paradigms
 
-- [`refinement-type system`](http://goto.ucsd.edu/~rjhala/liquid/liquid_types.pdf)
-- `pragmatic`
+- [`refinement-type system`](https://arxiv.org/pdf/2010.07763.pdf)
+- [`pragmatic`](https://www.adaic.org/resources/add_content/standards/05rm/html/RM-2-8.html)
 - `declarative`
-- `functional`
-- `constrained logic`
+- [`functional`](https://towardsdatascience.com/why-developers-are-falling-in-love-with-functional-programming-13514df4048e?gi=3361de79dc98)
+- [`constrained logic`](https://www.cse.unsw.edu.au/~tw/brwhkr08.pdf)
 
 ## Inspirations
 
@@ -32,7 +32,7 @@ Aspidites is the reference implementation of the [Woma programming language](htt
 ## Goals
 
 - Ultra-smooth runtime exception handling with useful warnings.
-- Demonic non-determinism, favors non-termination and type-negotiation.
+- Demonic non-determinism, favors non-termination and type-negotiation (constraint satisfaction).
 - Terseness that mixes keywords and symbolic operations in order to make code both concise ___and___ readable.
 - Great for writing high-integrity code that works natively with CPython.
 - Usable for general purpose ___or___ scientific computing.
