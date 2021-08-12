@@ -1,4 +1,4 @@
-clean: clean-build clean-pyc clean-test clean-md5 ## remove all build, test, coverage and Python artifacts
+clean: clean-build clean-pyc clean-test clean-md5 clean-woma## remove all build, test, coverage and Python artifacts
 
 clean-build: ## remove build artifacts
 	rm -fr build/
@@ -24,7 +24,10 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .coverage_html/
 	rm -fr .pytest_cache
 	rm -fr .mypy_cache
-	cd examples && $(MAKE) uninstall
+	-cd examples && $(MAKE) uninstall
+
+clean-woma: ## remove compiled woma files
+	-cd Aspidites/woma && $(MAKE) uninstall
 
 test-all:
 	pytest tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys

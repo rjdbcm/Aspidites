@@ -8,6 +8,7 @@ from contextlib import suppress
 
 from Cython import __version__ as cy_version
 from Cython.Compiler import Options
+from pyrsistent import pmap, v, PMap
 
 with suppress(ImportError):
     import pytest
@@ -15,40 +16,43 @@ with suppress(ImportError):
     import pytest_mock
     import pytest_pylint
 
-from Aspidites._vendor.semantic_version import Version
-from Aspidites.compiler import compile_module
-from Aspidites.parser import parse_module
+from ._vendor.semantic_version import Version
+from .compiler import compile_module
+from .parser import parse_module
 
 cy_version = Version.coerce(cy_version)
-cy_opt = [
-    "annotate",
-    "annotate_coverage_xml",
-    "buffer_max_dims",
-    "cache_builtins",
-    "cimport_from_pyx",
-    "clear_to_none",
-    "closure_freelist_size",
-    "convert_range",
-    "docstrings",
-    "embed_pos_in_docstring",
-    "generate_cleanup_code",
-    "fast_fail",
-    "warning_errors",
-    "error_on_unknown_names",
-    "error_on_uninitialized",
-    "gcc_branch_hints",
-    "lookup_module_cpdef",
-    "embed",
-]
-cy_kwargs = dict(
-    zip(cy_opt,
-        map(lambda x: getattr(Options, x), cy_opt)))
 
+def get_cy_kwargs():
+    cy_opt = v(
+        "annotate",
+        "annotate_coverage_xml",
+        "buffer_max_dims",
+        "cache_builtins",
+        "cimport_from_pyx",
+        "clear_to_none",
+        "closure_freelist_size",
+        "convert_range",
+        "docstrings",
+        "embed_pos_in_docstring",
+        "generate_cleanup_code",
+        "fast_fail",
+        "warning_errors",
+        "error_on_unknown_names",
+        "error_on_uninitialized",
+        "gcc_branch_hints",
+        "lookup_module_cpdef",
+        "embed",
+    )
+    cy_kwargs = dict(
+        zip(cy_opt,
+            map(lambda x: getattr(Options, x), cy_opt)))
+    return cy_kwargs
 
 def main(argv):
     # any failure results in falling back to the `Cython.Compiler.Options` API
     cy3_fallback_mode: bool = False
     dummy = ap.ArgumentParser(add_help=False)
+    cy_kwargs = get_cy_kwargs()
     if cy_version.major == 3: # pragma: no cover
         try:
             from Cython.Compiler.CmdLine import create_cython_argparser

@@ -1,10 +1,7 @@
-import glob
-import os
-
 from Aspidites._vendor.contracts import ContractNotRespected
 from hypothesis import given, assume, strategies as st
 import pytest as pt
-from Aspidites.__main__ import cy_kwargs
+from Aspidites.__main__ import get_cy_kwargs
 from Aspidites.parser import parse_module
 from Aspidites.templates import lib, setup
 from Aspidites.monads import Maybe, Undefined, Surely
@@ -55,7 +52,7 @@ def test_integer_monad(x):
 
 def test_compile_to_shared_object():
 
-    compile_module(code_, 'examples/compiled.py', bytecode=True, **cy_kwargs)
+    compile_module(code_, 'examples/compiled.py', bytecode=True, **get_cy_kwargs())
 
     from examples.compiled import Add, x, y, z, scala, val, div_by_zero, Yield123, Hello, Hello2
 

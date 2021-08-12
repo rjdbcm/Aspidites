@@ -71,7 +71,20 @@ def compile_module(
         print("mypy type report: ", type_report) if type_report else None
         print("mypy error report: ", error_report) if error_report else None
         print("mypy returned with exit code:", return_code) if return_code else None
-        exit(return_code) if return_code != 0 else print("running compile")
+        # exit(return_code) if return_code != 0 else print("running compile")
+
+    fname_pyi = app_name + '.pyi'
+    stubgen_runner = 'stubgen %s -o .' % (fname)
+    print("running %s" % stubgen_runner)
+    with os.popen(stubgen_runner) as p:
+        print(p.read())
+    try:
+        stack.register(fname_pyi)
+    except FileNotFoundError as e:
+        warn(str(e))
+        print("running rename __main__.pyi to %s" % fname_pyi)
+        os.rename('__main__.pyi', fname_pyi)
+        stack.register(fname_pyi)
 
     if bytecode:
         fname_pyc = app_name + ".pyc"
@@ -90,6 +103,7 @@ def compile_module(
                     src_file=fname,
                     inc_dirs=[],
                     libs=[],
+                    exe_name=app_name,
                     lib_dirs=[],
                     **kwargs
                 )

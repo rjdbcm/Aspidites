@@ -44,7 +44,8 @@ Complaint Information:
 $tb
 """)
 
-setup = Template("""# THIS FILE IS GENERATED - DO NOT EDIT #
+setup = Template("""
+# THIS FILE IS GENERATED - DO NOT EDIT #
 from setuptools import setup, Extension
 from Cython.Build import cythonize
 from Cython.Compiler import Options
@@ -67,7 +68,16 @@ Options.gcc_branch_hints = $gcc_branch_hints
 Options.lookup_module_cpdef = $lookup_module_cpdef
 Options.embed = $embed
 
-exts = [Extension('$app_name', ['$src_file'], include_dirs=$inc_dirs, libraries=$libs, extra_compile_args=['-Wall'], library_dirs=$lib_dirs)]
+exts = [
+Extension(
+         '$app_name', 
+         ['$src_file'],
+         include_dirs=$inc_dirs,
+         libraries=$libs, 
+         extra_compile_args=['-Wall'],
+         library_dirs=$lib_dirs
+    ),
+]
 
 setup(
     name='$app_name',
@@ -99,6 +109,7 @@ globals().update(dict(__builtins__=safe_builtins))  # add all imports to globals
 
 
 $code
+
 """)
 
 pyproject = Template("""[build-system]

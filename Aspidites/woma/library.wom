@@ -1,11 +1,15 @@
+#cython.binding(True)
 (Add(x = 0 -> number; y = 0 -> number)) number
 	<*> x + y
 
+#cython.binding(True)
 (Sub(x = 0 -> number; y = 0 -> number)) number
 	<*> x - y
 
+#cython.binding(True)
 (Div(x = 0 -> number; y = 0 -> number)) number
 	<*> x / y
 
+#cython.binding(True)
 (Exp(x = 0 -> number; y = 0 -> number)) number
 	<*> x ** y

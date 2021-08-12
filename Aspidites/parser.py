@@ -296,11 +296,16 @@ def_args = Group("(" + def_args + args_end).setParseAction(lambda t: "".join(*t)
 
 std_decor = "@contract()\n"
 
+
+def cvt_pragma(tks):
+    t: list = tks.asList()
+    return '\n'.join(t) + '\n'
+
 pragmas = Combine(
     Literal("#").setParseAction(replaceWith('@'))
     + oneOf(' '.join(available_pragmas))
     + '(' + oneOf('True False') + ')'
-).setParseAction(lambda t: t[0] + '\n')
+).setParseAction(cvt_pragma)
 func_decl = Group(Optional(OneOrMore(pragmas)) +
     private_def_decl + identifier + def_args + _contract_expression
 ).setParseAction(lambda t: std_decor + "".join(*t) + ":")
