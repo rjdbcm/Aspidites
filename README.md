@@ -55,3 +55,10 @@ Aspidites has 6 core dependencies. In general, dependencies are vendored unless 
     <*>print('Greetings,', name)
 
 ```
+
+# Contributing
+
+If you'd like to help with the Aspidites project as a developer check out the Issues page or fork and make a pull request.
+Now, for early woma adopters that do not wish to write any Python, reporting issues is always appreciated.
+If you'd like to help out financially, Aspidites' maintainer accepts [Liberapay](https://liberapay.com/rjdbcm/).
+
