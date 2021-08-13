@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import os
-from setuptools import setup, find_packages, command
+from setuptools import setup, find_packages
+from setuptools.command.install import install
 from Aspidites import __version__
 
 
@@ -14,7 +15,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-class InstallWrapper(command.install):
+class InstallWrapper(install):
     """Provides a install wrapper for native woma
     extensions. These don't really belong in the
     Python package."""
@@ -25,7 +26,7 @@ class InstallWrapper(command.install):
         # successfully installed
         self.do_thing()
         # Run the standard PyPi copy
-        command.install.run(self)
+        install.run(self)
 
     def do_thing(self):
         pass
@@ -41,7 +42,7 @@ setup(
     keywords="language",
     url="https://github.com/rjdbcm/Aspidites",
     packages=find_packages(),
-    entry_points={'console_scripts': ['aspidites = Aspidites.__main__:main']},
+    entry_points={'console_scripts': ['aspidites = Aspidites.py']},
     package_data={'': ["*.wom"]},  # add any native *.wom files
     long_description=read('README.md'),
     cmdclass={'install': InstallWrapper},
