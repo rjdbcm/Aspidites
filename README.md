@@ -1,4 +1,5 @@
-# Aspidites [![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
+# Aspidites 
+![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/rjdbcm/Aspidites?include_prereleases) ![PyPI](https://img.shields.io/pypi/v/Aspidites?color=lightblue) [![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
 
 Aspidites is the reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler.
 
