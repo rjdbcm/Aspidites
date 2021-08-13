@@ -24,12 +24,18 @@ class InstallWrapper(install):
         # Run this first so the install stops in case
         # these fail otherwise the Python package is
         # successfully installed
-        self.do_thing()
+        self.preinstall()
         # Run the standard PyPi copy
         install.run(self)
+        self.postinstall()
 
-    def do_thing(self):
-        pass
+    def preinstall(self):
+        """preinstall hook"""
+        ...
+
+    def postinstall(self):
+        """postinstall hook"""
+        ...
 
 
 setup(

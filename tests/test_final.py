@@ -1,5 +1,5 @@
 import pytest as pt
-from Aspidites import final, heritable
+from Aspidites.final import final, heritable
 from Aspidites._vendor.contracts import ContractNotRespected
 
 
