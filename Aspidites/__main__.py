@@ -102,11 +102,9 @@ def main(argv=sys.argv):
         asp_parser.add_argument("-p", "--compile-pyc", action="store_true",
                                 help="compile to python bytecode")
         asp_parser.add_argument('-c', '--compile-c', action="store_true",
-                                help="compile to C and execute setup")
-        asp_parser.add_argument('--embed-python', action='store_true',
-                                help='')
+                                help="compile to C and run setup")
         asp_parser.add_argument('--build-requires', default='', metavar='',
-                                help='additional requirements needed to execute setup (default: %(default)s)')
+                                help='additional requirements needed to run setup (default: %(default)s)')
         asp_parser.add_argument('-v', "--verbose",
                                 default=0,
                                 action='count',
@@ -127,7 +125,6 @@ def main(argv=sys.argv):
         compile_module(code,
                        fname=args.output,
                        force=args.force,
-                       embed_python=args.embed_python,
                        bytecode=args.compile_pyc,
                        c=args.compile_c,
                        build_requires=args.build_requires,
