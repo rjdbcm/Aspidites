@@ -48,7 +48,7 @@ def get_cy_kwargs():
             map(lambda x: getattr(Options, x), cy_opt)))
     return cy_kwargs
 
-def main(argv):
+def main(argv=sys.argv):
     # any failure results in falling back to the `Cython.Compiler.Options` API
     cy3_fallback_mode: bool = False
     dummy = ap.ArgumentParser(add_help=False)
