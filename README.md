@@ -4,7 +4,7 @@ Aspidites is the reference implementation of the [Woma programming language](htt
 
 ### Core Dependencies
 Aspidites has 6 core dependencies. In general, dependencies are vendored unless they contain Python Extensions.
-- Cython
+- Cython ![PyPI - License](https://img.shields.io/pypi/l/Cython?style=plastic)
 - Pyrsistent
 - PyParsing
 - MyPy
