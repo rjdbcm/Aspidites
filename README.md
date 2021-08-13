@@ -67,4 +67,4 @@ If you'd like to help out financially, Aspidites' maintainer accepts [Liberapay]
 ![GitHub](https://img.shields.io/github/license/rjdbcm/Aspidites)
 
 # Information for Developers
-![https://libraries.io/github/rjdbcm/Aspidites](https://img.shields.io/badge/Libraries.io--inactive)
+![https://libraries.io/github/rjdbcm/Aspidites](https://img.shields.io/badge/Libraries.io--inactive?link=https://libraries.io/github/rjdbcm/Aspidites)
