@@ -1,5 +1,7 @@
 **unreleased**
-**v0.4.5**\n
+
+**v0.4.5**
+- Code Cleanup
 
 **v0.4.4**
 - Initial PyPI Release
