@@ -42,7 +42,7 @@ setup(
     keywords="language",
     url="https://github.com/rjdbcm/Aspidites",
     packages=find_packages(),
-    entry_points={'console_scripts': ['aspidites = Aspidites.py']},
+    entry_points={'console_scripts': ['aspidites = Aspidites']},
     package_data={'': ["*.wom"]},  # add any native *.wom files
     long_description=read('README.md'),
     cmdclass={'install': InstallWrapper},
