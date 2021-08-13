@@ -1,5 +1,7 @@
 **unreleased**
+
 **v0.5.1**
+- minor CLI fix for unused --embed-python just use --embed
 
 **v0.5.0**
 - PyPI Package installs dependencies
