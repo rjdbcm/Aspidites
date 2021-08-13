@@ -47,6 +47,15 @@ setup(
     license="GPL",
     keywords="language",
     url="https://github.com/rjdbcm/Aspidites",
+    install_requires=[
+        'pyrsistent',
+        'numpy',
+        'cython>0.28,<3',
+        'pyparsing',
+        'mypy',
+        'pytest',
+        'future'
+        ],
     packages=find_packages(),
     entry_points={'console_scripts': ['aspidites = Aspidites.__main__:main']},
     package_data={'': ["*.wom"]},  # add any native *.wom files
