@@ -18,6 +18,19 @@ Aspidites has 7 core dependencies. In general, dependencies are vendored unless 
 - NumPy
 - future
 
+### Installing
+Using [pip](https://pip.pypa.io/en/stable/getting-started/):
+```
+$ pip install Aspidites
+```
+
+Using [docker](https://docs.docker.com/docker-hub/) image:
+
+```
+$ docker pull rjdbcm/aspidites
+```
+
+
 ## Paradigms
 
 - [`refinement-type system`](https://arxiv.org/pdf/2010.07763.pdf)
