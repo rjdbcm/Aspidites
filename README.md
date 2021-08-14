@@ -1,8 +1,8 @@
 # Aspidites 🛡🐍  
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rjdbcm/Aspidites) 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/rjdbcm/Aspidites) 
-[![PyPI](https://img.shields.io/pypi/v/aspidites?color=green&label=PyPI&logo=pypi)](https://pypi.org/project/Aspidites/)
-[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/rjdbcm/aspidites?color=blue&logo=docker)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)
+[![PyPI](https://img.shields.io/pypi/v/aspidites?color=pink&label=&logo=pypi)](https://pypi.org/project/Aspidites/)
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/rjdbcm/aspidites?color=pink&label=&logo=docker)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)
 [![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml) 
 [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
 
