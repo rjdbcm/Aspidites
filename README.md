@@ -1,5 +1,10 @@
 # Aspidites 🛡🐍  
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rjdbcm/Aspidites) ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/rjdbcm/Aspidites) ![PyPI](https://img.shields.io/pypi/v/Aspidites?color=lightblue) ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/rjdbcm/aspidites?color=blue&logo=docker) [![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rjdbcm/Aspidites) 
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/rjdbcm/Aspidites) 
+[![PyPI](https://img.shields.io/pypi/v/Aspidites?color=lightblue)](https://pypi.org/project/Aspidites/)
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/rjdbcm/aspidites?color=blue&logo=docker)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)
+[![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml) 
+[![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
 
 Aspidites is the reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler.
 
