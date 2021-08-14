@@ -1,27 +1,26 @@
 # Aspidites [![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rjdbcm/Aspidites) 
-![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/rjdbcm/Aspidites)
-![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/rjdbcm/Aspidites/latest/main)
-[![PyPI](https://img.shields.io/pypi/v/aspidites?color=pink&label=&logo=pypi)](https://pypi.org/project/Aspidites/)
-[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)
-[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/rjdbcm/aspidites?color=pink&label=&logo=docker)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)
-[![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/rjdbcm/aspidites?logo=docker)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)
-
 
 The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. There is also a genus of Python called _Aspidites_, latin for shield-bearer, that is this project's namesake.<p align="center">![logo](aspidites_logo.png)</p>
 
 ### Installing
-Using [pip](https://pip.pypa.io/en/stable/getting-started/):
+#### PyPI
+[![PyPI](https://img.shields.io/pypi/v/aspidites?color=pink&label=&logo=pypi)](https://pypi.org/project/Aspidites/)[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)
 ```
 $ pip install Aspidites
 ```
 
-Using [docker](https://docs.docker.com/docker-hub/) image:
-
+#### Docker
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/rjdbcm/aspidites?color=pink&label=&logo=docker)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)[![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/rjdbcm/aspidites?logo=docker)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)
 ```
 $ docker pull rjdbcm/aspidites
 ```
 
+#### Github
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rjdbcm/Aspidites?color=pink&label=%20&logo=github&logoColor=black)
+![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/rjdbcm/Aspidites/latest/main)
+```
+$ gh repo clone rjdbcm/Aspidites
+```
 
 ## Paradigms
 
