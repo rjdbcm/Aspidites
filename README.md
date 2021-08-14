@@ -16,8 +16,7 @@ $ docker pull rjdbcm/aspidites
 ```
 
 #### Github
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rjdbcm/Aspidites?color=pink&label=%20&logo=github&logoColor=black)
-![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/rjdbcm/Aspidites/latest/main)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rjdbcm/Aspidites?color=pink&label=%20&logo=github&logoColor=black)![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/rjdbcm/Aspidites/latest/main)
 ```
 $ gh repo clone rjdbcm/Aspidites
 ```
