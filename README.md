@@ -5,8 +5,7 @@
 [![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)
 [![Docker Image Version (latest semver)](https://img.shields.io/docker/v/rjdbcm/aspidites?color=pink&label=&logo=docker)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)
 
-The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. There is also a genus of Python called _Aspidites_, latin for shield-bearer, that is this project's namesake.
-<!-- --><p align="center">![logo](aspidites_logo.png)</p>
+The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. There is also a genus of Python called _Aspidites_, latin for shield-bearer, that is this project's namesake.<p align="center">![logo](aspidites_logo.png)</p>
 
 ### Installing
 Using [pip](https://pip.pypa.io/en/stable/getting-started/):
