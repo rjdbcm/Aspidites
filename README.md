@@ -50,6 +50,8 @@ $ gh repo clone rjdbcm/Aspidites
 
 # Syntax
 
+## Lexicon
+
 | Working?      | Symbol        | Verbage             |  Example                                                       |
 |:--------------|:--------------|:--------------------|:---------------------------------------------------------------|
 | ✅            | `->`          |respects             | `identifier` `->` `constraining clauses`                       |
@@ -58,7 +60,9 @@ $ gh repo clone rjdbcm/Aspidites
 | ✅            | `<*>`         |return               | `<*>` `statement `                                             |
 | ✅            |  `#`          |pragma               | `#` `compiler directive`                                       |
 
-# Examples
+
+
+## Examples
 
 ```
 (Greeter(name -> str)) procedure

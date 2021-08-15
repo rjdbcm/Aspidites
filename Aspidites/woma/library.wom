@@ -13,3 +13,7 @@
 #cython.binding(True)
 (Exp(x = 0 -> number; y = 0 -> number)) number
 	<*> x ** y
+
+#cython.binding(True)
+(Mod(x = 0 -> number; y = 0 -> number)) number
+    <*> x % y

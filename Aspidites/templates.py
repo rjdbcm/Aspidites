@@ -97,6 +97,7 @@ from pyrsistent import (
     PRecord,
     PClass
 )
+from Aspidites.woma import *
 from Aspidites._vendor import F, _
 from Aspidites.monads import Maybe, Surely, Undefined, SafeDiv, SafeMod, SafeExp
 from Aspidites._vendor.contracts import contract, new_contract

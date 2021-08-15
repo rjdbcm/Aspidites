@@ -24,25 +24,29 @@ class InstallWrapper(install):
         # Run this first so the install stops in case
         # these fail otherwise the Python package is
         # successfully installed
+        print("running preinstall hooks")
         self.preinstall()
-        # Run the standard PyPi copy
-        install.run(self)
+        install.run(self)  # pip install
+        print("running postinstall hooks")
         self.postinstall()
 
     def preinstall(self):
         """preinstall hook"""
-        ...
+        pass
 
     def postinstall(self):
         """postinstall hook"""
-        ...
+        c = "Aspidites build/lib/Aspidites/woma/library.wom -c -o build/lib/Aspidites/woma/library.pyx --embed=True"
+        os.popen(c)
+        print(c)
+        pass
 
 
 setup(
     name="Aspidites",
     version=__version__,
     author="Ross J. Duff",
-    author_email="",
+    author_email="rjdbcm@mail.umkc.edu",
     description="Aspidites is the reference implementation of the Woma Language",
     license="GPL",
     keywords="language",

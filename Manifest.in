@@ -1,0 +1,4 @@
+include Aspidites/woma/*.wom
+include Aspidites/woma/*.pyx
+include Aspidites/woma/*.so
+include Aspidites/woma/*.pyi
