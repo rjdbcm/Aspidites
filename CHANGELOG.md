@@ -1,4 +1,5 @@
 **unreleased**
+**v0.5.2**
 
 **v0.5.1**
 - minor CLI fix for unused --embed-python just use --embed
