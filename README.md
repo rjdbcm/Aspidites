@@ -1,6 +1,6 @@
 # Aspidites [![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
 
-The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. There is also a genus of Python called _Aspidites_, latin for shield-bearer, that is this project's namesake.<p align="center">![logo](aspidites_logo.png)</p>
+The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. There is also a genus of Python called _Aspidites_, latin for shield-bearer, that is this project's namesake.<p align="center">![logo](docs/_static/aspidites_logo.png)</p>
 
 ### Installing
 #### PyPI

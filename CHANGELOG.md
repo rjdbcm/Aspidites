@@ -5,7 +5,7 @@
 **v0.6.0**
 - This release was pulled. This is a (slightly) fixed version of the wheel and source distribution pulled from PyPI.
 
-- **v0.5.2**
+**v0.5.2**
 
 **v0.5.1**
 - minor CLI fix for unused --embed-python just use --embed

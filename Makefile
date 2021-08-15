@@ -1,5 +1,11 @@
-.PHONY: docker
-VERSION=$(shell python -c "import sys;from Aspidites import __version__;sys.stdout.write(__version__)");
+.PHONY: docker docs
+# You can set these variables from the command line, and also
+# from the environment for the first two.
+SPHINXOPTS    ?=
+SPHINXBUILD   ?= sphinx-build
+SOURCEDIR     = docs
+BUILDDIR      = build
+VERSION       = $(shell python -c "import sys;from Aspidites import __version__;sys.stdout.write(__version__)");
 clean: clean-build clean-pyc clean-test clean-md5 clean-woma## remove all build, test, coverage and Python artifacts
 
 clean-build: ## remove build artifacts
@@ -51,3 +57,6 @@ major:
 
 build: docker
 	python setup.py sdist bdist_wheel
+
+%: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
