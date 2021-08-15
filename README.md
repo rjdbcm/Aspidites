@@ -21,6 +21,17 @@ $ docker pull rjdbcm/aspidites
 $ gh repo clone rjdbcm/Aspidites
 ```
 
+### Running
+Pretty straightforward just use:
+```shell
+$ aspidites -h
+```
+
+Or with docker:
+```shell
+$ docker run -v $PWD:/usr/src/app rjdbcm/aspidites:v0.6.1 -h
+```
+
 ## Paradigms
 
 - [`refinement-type system`](https://arxiv.org/pdf/2010.07763.pdf)

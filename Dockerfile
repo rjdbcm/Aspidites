@@ -6,4 +6,5 @@ RUN apk add build-base
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir Aspidites
 
-ENTRYPOINT ["aspidites", "-h"]
+ENTRYPOINT ["aspidites"]
+CMD ["-h"]

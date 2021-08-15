@@ -21,7 +21,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-# Tested with wheel v0.29.0
+# Tested with wheel v0.29.0, 0.36.2
 class BinaryDistribution(Distribution):
     """Distribution which always forces a binary package with platform name"""
     def has_ext_modules(foo):
