@@ -1,3 +1,5 @@
+.PHONY: docker
+VERSION=$(shell python -c "import sys;from Aspidites import __version__;sys.stdout.write(__version__)");
 clean: clean-build clean-pyc clean-test clean-md5 clean-woma## remove all build, test, coverage and Python artifacts
 
 clean-build: ## remove build artifacts
@@ -29,6 +31,9 @@ clean-test: ## remove test and coverage artifacts
 clean-woma: ## remove compiled woma files
 	-cd Aspidites/woma && $(MAKE) uninstall
 
+docker:
+	docker -v build . -t rjdbcm/aspidites:$(VERSION)
+
 test-all:
 	pytest tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
 
@@ -43,3 +48,6 @@ minor:
 
 major:
 	bump2version major
+
+build: docker
+	python setup.py sdist bdist_wheel
