@@ -1,18 +1,31 @@
 #!/usr/bin/python3
 import os
 from setuptools import setup, find_packages
+from setuptools.dist import Distribution
 from setuptools.command.install import install
-from Aspidites import __version__
+from Aspidites import __version__, compiler, parser
+from Aspidites.__main__ import get_cy_kwargs
 
-
-# Utility function to read the README file.
-# Used for the long_description.  It's nice, because now 1) we have a top level
-# README file and 2) it's easier to type in the README file than to put a raw
-# string in below ...
+cy_kwargs = get_cy_kwargs()
+cy_kwargs.update({'embed': True})
+code = open('Aspidites/woma/library.wom', 'r').read()
+compiler.compile_module(
+    parser.parse_module(code),
+    'Aspidites/woma/library.pyx',
+    bytecode=True,
+    **cy_kwargs
+)
 
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
+
+# Tested with wheel v0.29.0
+class BinaryDistribution(Distribution):
+    """Distribution which always forces a binary package with platform name"""
+    def has_ext_modules(foo):
+        return True
 
 
 class InstallWrapper(install):
@@ -32,13 +45,13 @@ class InstallWrapper(install):
 
     def preinstall(self):
         """preinstall hook"""
+        c = "Aspidites build/lib/Aspidites/woma/library.wom -c -o build/lib/Aspidites/woma/library.pyx --embed=True"
+        os.popen(c)
+        print(c)
         pass
 
     def postinstall(self):
         """postinstall hook"""
-        c = "Aspidites build/lib/Aspidites/woma/library.wom -c -o build/lib/Aspidites/woma/library.pyx --embed=True"
-        os.popen(c)
-        print(c)
         pass
 
 
@@ -61,8 +74,9 @@ setup(
         'future'
         ],
     packages=find_packages(),
+    distclass=BinaryDistribution,
     entry_points={'console_scripts': ['aspidites = Aspidites.__main__:main']},
-    package_data={'': ["*.wom"]},  # add any native *.wom files
+    package_data={'': ["*.wom", "*.pyx", "*.pyi"]},  # add any native *.wom files
     long_description=read('README.md'),
     cmdclass={'install': InstallWrapper},
     long_description_content_type='text/markdown',
