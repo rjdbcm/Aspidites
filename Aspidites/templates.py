@@ -8,7 +8,6 @@ project = $project
 
 uninstall: distclean
 	rm -fr py.typed
-	rm -fr __init__.py
 	rm -fr setup.py
 	rm -fr pyproject.toml
 	find . -name '$$(project)*' -not -name '*.wom' -exec rm -fr {} +
