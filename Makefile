@@ -38,13 +38,13 @@ clean-woma: ## remove compiled woma files
 	-cd Aspidites/woma && $(MAKE) uninstall
 
 docker:
-	docker -v build . -t rjdbcm/aspidites:$(VERSION)
+	docker -v build . --no-cache -t rjdbcm/aspidites:$(VERSION)
 
 test-all:
-	pytest tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
+	pytest Aspidites/tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
 
 coverage:
-	pytest tests --cov-report=xml --cov=Aspidites
+	pytest Aspidites/tests --cov-report=xml --cov=Aspidites
 
 patch:
 	bump2version patch
@@ -55,7 +55,7 @@ minor:
 major:
 	bump2version major
 
-build: docker
+build: clean test-all clean
 	python setup.py sdist bdist_wheel
 
 %: Makefile

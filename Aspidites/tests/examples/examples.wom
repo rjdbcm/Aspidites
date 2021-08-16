@@ -1,0 +1,61 @@
+`first-class functions`
+#cython.binding(True)
+(Add(x = 3 -> int; y = 3 -> int)) int
+	<*>x+y
+
+`generators`
+(Yield123()) coroutine
+	<^>Add(0, 1)
+	<^>Add(0, 2)
+	<^>Add(0, 3)
+
+`procedures`
+(Hello()) procedure
+	<*>print("Hello, World!")
+
+`coroutines`
+(Hello2()) coroutine
+	<^>Hello()
+
+`persistent vectors`
+D = [2, 4, 6, 8, 10]
+
+`persistent sets`
+G = {'a', 'b', 'c'}
+
+`persistent mappings`
+C = {'a': (3+5),
+     'b': 8,
+     'c': True,
+       4: None,
+     'd': 6**2*5+3}
+
+`new contracts can impose more complex contractual clauses`
+colors <- list[3](int, <256)
+
+`any woma function can be closed in place to become an instance that complies with the`
+`type specification or Undefined for instances that breach the type specification contract`
+x = Add(3, 3)...
+
+`seamless exception handling allows tracing of undefined code branches`
+y = Add(4, 3.5)...
+
+`mixed usage of closure and regular function calls`
+z = Add(x(), 3)
+
+`Scala-style closure functions`
+scala = (_ * 2)
+val = scala(_ + _)
+val = val(scala)...
+
+`modulus and division by 0 handled by returning Undefined()`
+denom = 0
+div_by_zero = 1 / denom
+mod_zero = 1 % denom
+div_by_zero2 = 1 / 0
+mod_zero2 = 1 % 0
+
+`main: structure for executable actions when run as a binary`
+main:
+Hello()
+print("I'm a binary.")

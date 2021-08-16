@@ -19,8 +19,10 @@ with suppress(ImportError):
 from ._vendor.semantic_version import Version
 from .compiler import compile_module
 from .parser import parse_module
+from . import __version__
 
 cy_version = Version.coerce(cy_version)
+
 
 def get_cy_kwargs():
     cy_opt = v(
@@ -48,6 +50,7 @@ def get_cy_kwargs():
             map(lambda x: getattr(Options, x), cy_opt)))
     return cy_kwargs
 
+
 def main(argv=sys.argv):
     # any failure results in falling back to the `Cython.Compiler.Options` API
     cy3_fallback_mode: bool = False
@@ -69,11 +72,9 @@ def main(argv=sys.argv):
         print("%s called without arguments. Next time try --help or -h." % sys.argv[0])
         sys.exit(1)
     if len(argv) > 1 and argv[1] == "--pytest" or argv[1] == '-pt':
-        with suppress(ImportError):
-            sys.exit(
-                pytest.main(argv[2:], plugins=[pytest_pylint, pytest_mock, pytest_cov]))
+        sys.exit(pytest.main(argv[2:]))
 
-    def add_pre_cy3_args(parser: ap.ArgumentParser) -> None: # pragma: no cover
+    def add_pre_cy3_args(parser: ap.ArgumentParser) -> None:  # pragma: no cover
         cy_arg_group = parser.add_argument_group("optional Cython arguments")
         for k, v in cy_kwargs.items():
             cy_arg_group.add_argument(
@@ -82,7 +83,7 @@ def main(argv=sys.argv):
                 action='store_true' if isinstance(v, (bool,)) else 'store'
             )
 
-    asp_parser = ap.ArgumentParser(description=__doc__,
+    asp_parser = ap.ArgumentParser(description="Aspidites %s" % __version__,
                                    parents=[cy_parser],
                                    add_help=not bool(cy_version.major)
                                    )
@@ -96,7 +97,7 @@ def main(argv=sys.argv):
     # 3.0 switched to using the argparse module
     if cy_version.major == 0 or cy3_fallback_mode:
         asp_parser.add_argument('-o', '--output', metavar='PATH/TO/FILE',
-                                help='filename to compile to')
+                                help='filename to compile to'),
         asp_parser.add_argument('-f', '--force', action='store_true',
                                 help='forcibly overwrite existing files')
         asp_parser.add_argument("-p", "--compile-pyc", action="store_true",
