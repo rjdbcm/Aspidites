@@ -1,4 +1,5 @@
 **unreleased**
+**v0.7.0**
 **v0.6.1**
 - First release with a compiled woma standard library.
 
