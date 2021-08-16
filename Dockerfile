@@ -18,8 +18,8 @@ RUN pip uninstall -y pip
 CMD rm -rf /root/.cache/pip
 
 FROM base AS runtime
-
-WORKDIR /usr/src/app
+## so the test-suite can be run
+WORKDIR /opt/venv/lib/site-packages/aspidites
 
 ENV VIRTUAL_ENV=/opt/venv
 COPY --from=pyenv $VIRTUAL_ENV $VIRTUAL_ENV
