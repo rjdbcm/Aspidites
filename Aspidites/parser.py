@@ -370,9 +370,11 @@ rvalue << (clos_call | func_call | list_item | lambda_def)
 simple_assign << Group(identifier + "=" + rvalue).setParseAction(
     lambda t: " ".join(t[0])
 )
-stmt << (func_def | contract_define | simple_assign | comment_line)
+stmt << (func_def | contract_define | func_call | simple_assign | comment_line)
 
-module_body = OneOrMore(stmt)
+_main = Keyword("main:").setParseAction(replaceWith('if __name__ == "__main__":')) + OneOrMore(stmt).setParseAction(lambda t: '    ' + '\n    '.join(t))
+
+module_body = OneOrMore(stmt) + Optional(_main)
 
 @new_contract
 def woma_module(text: 'str'):

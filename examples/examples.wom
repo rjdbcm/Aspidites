@@ -55,4 +55,6 @@ mod_zero = 1 % denom
 div_by_zero2 = 1 / 0
 mod_zero2 = 1 % 0
 
-
+main:
+Hello()
+print("I'm a binary.")
