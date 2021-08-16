@@ -10,16 +10,12 @@ from Cython import __version__ as cy_version
 from Cython.Compiler import Options
 from pyrsistent import pmap, v, PMap
 
-with suppress(ImportError):
-    import pytest
-    import pytest_cov
-    import pytest_mock
-    import pytest_pylint
+import pytest
 
 from ._vendor.semantic_version import Version
 from .compiler import compile_module
 from .parser import parse_module
-from . import __version__
+from . import __description__
 
 cy_version = Version.coerce(cy_version)
 
@@ -75,7 +71,7 @@ def main(argv=sys.argv):
         sys.exit(pytest.main(argv[2:]))
 
     def add_pre_cy3_args(parser: ap.ArgumentParser) -> None:  # pragma: no cover
-        cy_arg_group = parser.add_argument_group("optional Cython arguments")
+        cy_arg_group = parser.add_argument_group("optional cython arguments")
         for k, v in cy_kwargs.items():
             cy_arg_group.add_argument(
                 f'--{k.replace("_", "-")}',
@@ -83,7 +79,7 @@ def main(argv=sys.argv):
                 action='store_true' if isinstance(v, (bool,)) else 'store'
             )
 
-    asp_parser = ap.ArgumentParser(description="Aspidites %s" % __version__,
+    asp_parser = ap.ArgumentParser(description=__description__,
                                    parents=[cy_parser],
                                    add_help=not bool(cy_version.major)
                                    )

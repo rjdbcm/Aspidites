@@ -7,7 +7,7 @@ from Aspidites.templates import lib, setup
 from Aspidites.monads import Maybe, Undefined, Surely
 from Aspidites.compiler import compile_module
 
-with open('examples/examples.wom', 'r') as f:
+with open('Aspidites/tests/examples/examples.wom', 'r') as f:
     code_ = parse_module(f.read())
 
 
@@ -52,9 +52,9 @@ def test_integer_monad(x):
 
 def test_compile_to_shared_object():
 
-    compile_module(code_, 'examples/compiled.py', bytecode=True, **get_cy_kwargs())
+    compile_module(code_, 'Aspidites/tests/examples/compiled.py', bytecode=True, **get_cy_kwargs())
 
-    from examples.compiled import Add, x, y, z, scala, val, div_by_zero, Yield123, Hello, Hello2
+    from Aspidites.tests.examples.compiled import Add, x, y, z, scala, val, div_by_zero, Yield123, Hello, Hello2
 
     with pt.raises(ContractNotRespected):
         Add(x=6.5, y=12)

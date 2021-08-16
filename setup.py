@@ -3,7 +3,7 @@ import os
 from setuptools import setup, find_packages
 from setuptools.dist import Distribution
 from setuptools.command.install import install
-from Aspidites import __version__, compiler, parser
+from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
 from Aspidites.__main__ import get_cy_kwargs
 
 cy_kwargs = get_cy_kwargs()
@@ -56,12 +56,12 @@ class InstallWrapper(install):
 
 
 setup(
-    name="Aspidites",
+    name=__title__,
     version=__version__,
-    author="Ross J. Duff",
+    author=__author__,
     author_email="rjdbcm@mail.umkc.edu",
     description="Aspidites is the reference implementation of the Woma Language",
-    license="GPL",
+    license=__license__,
     keywords="language",
     url="https://github.com/rjdbcm/Aspidites",
     install_requires=[
