@@ -1,4 +1,4 @@
-# Aspidites [![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
+# Aspidites [![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Frjdbcm%2FAspidites.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Frjdbcm%2FAspidites?ref=badge_shield) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
 
 The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. There is also a genus of Python called _Aspidites_, latin for shield-bearer, that is this project's namesake.<p align="center">![logo](docs/_static/aspidites_logo.png)</p>
 
