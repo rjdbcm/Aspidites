@@ -1,5 +1,8 @@
 **unreleased**
+
 **v0.8.6**
+- Added todo for docker setup_runner
+- proper build directory selection in compiler.py setup_runner.
 
 **v0.8.5**
 - revert of v0.8.4
