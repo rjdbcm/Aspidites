@@ -113,7 +113,7 @@ def compile_module(
                 )
             )
         stack.register(setup_py)
-        setup_runner = "%s %s build_ext -b ." % (sys.executable, setup_py)
+        setup_runner = "%s %s build_ext -b %s" % (sys.executable, setup_py, dir)
         print("running", setup_runner)
         with os.popen(setup_runner) as p:
             print(p.read())
