@@ -29,7 +29,7 @@ $ aspidites -h
 
 Or with docker:
 ```shell
-$ docker run -v $PWD:/usr/src/app rjdbcm/aspidites:v0.6.1 -h
+$ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
 ```
 
 ## Paradigms
