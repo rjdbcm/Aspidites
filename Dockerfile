@@ -18,9 +18,7 @@ RUN pip uninstall -y pip
 CMD rm -rf /root/.cache/pip
 
 FROM base AS runtime
-## so the test-suite can be run
-
-
+## so the test-suite can be run simply using -pt or --pytest
 ENV ASPIDITES_DOCKER_BUILD=True
 ENV VIRTUAL_ENV=/opt/venv
 WORKDIR $VIRTUAL_ENV/lib/python3.9/site-packages/Aspidites/tests
