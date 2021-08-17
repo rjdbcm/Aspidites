@@ -55,6 +55,7 @@ def compile_module(
         "--show-error-codes",
         "--allow-incomplete-defs",
         "--disable-error-code=valid-type",
+        "--exclude=builtins"
         # '--disallow-untyped-defs',
         # '--disallow-untyped-calls',
     ]
@@ -82,9 +83,12 @@ def compile_module(
         stack.register(fname_pyi)
     except FileNotFoundError as e:
         warn(str(e))
-        print("running rename __main__.pyi to %s" % fname_pyi)
-        os.rename('__main__.pyi', fname_pyi)
-        stack.register(fname_pyi)
+        try:
+            print("trying rename __main__.pyi to %s" % fname_pyi)
+            os.rename(os.path.join(os.getcwd(), '__main__.pyi'), fname_pyi)
+            stack.register(fname_pyi)
+        except FileNotFoundError:
+            warn("failed to create stubs")
 
     if bytecode:
         fname_pyc = app_name + ".pyc"

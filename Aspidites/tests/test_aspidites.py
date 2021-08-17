@@ -1,3 +1,5 @@
+import os
+
 from Aspidites._vendor.contracts import ContractNotRespected
 from hypothesis import given, assume, strategies as st
 import pytest as pt
@@ -6,8 +8,12 @@ from Aspidites.parser import parse_module
 from Aspidites.templates import lib, setup
 from Aspidites.monads import Maybe, Undefined, Surely
 from Aspidites.compiler import compile_module
+docker = os.getenv("ASPIDITES_DOCKER_BUILD")
 
-with open('Aspidites/tests/examples/examples.wom', 'r') as f:
+wfile = ('examples' if docker else 'Aspidites/tests/examples') + '/examples.wom'
+pfile = ('examples' if docker else 'Aspidites/tests/examples') + '/compiled.py'
+
+with open(wfile, 'r') as f:
     code_ = parse_module(f.read())
 
 
@@ -52,7 +58,7 @@ def test_integer_monad(x):
 
 def test_compile_to_shared_object():
 
-    compile_module(code_, 'Aspidites/tests/examples/compiled.py', bytecode=True, **get_cy_kwargs())
+    compile_module(code_, pfile, bytecode=True, **get_cy_kwargs())
 
     from Aspidites.tests.examples.compiled import Add, x, y, z, scala, val, div_by_zero, Yield123, Hello, Hello2
 
