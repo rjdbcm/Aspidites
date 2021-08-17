@@ -12,7 +12,6 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 COPY . .
 
 RUN pip install -U pip && pip install .
-RUN pip install hypothesis && pip install pytest-mock && pip install pytest-xdist
 RUN pip uninstall -y pip
 
 CMD rm -rf /root/.cache/pip

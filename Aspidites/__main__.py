@@ -68,7 +68,11 @@ def main(argv=sys.argv):
         print("%s called without arguments. Next time try --help or -h." % sys.argv[0])
         sys.exit(1)
     if len(argv) > 1 and argv[1] == "--pytest" or argv[1] == '-pt':
-        sys.exit(pytest.main(argv[2:]))
+        if not os.getenv("ASPIDITES_DOCKER_BUILD"):
+            argv = [os.path.dirname(os.path.realpath(__file__)) + '/tests'] + argv[2:]
+        else:
+            argv = argv[2:]
+        sys.exit(pytest.main(argv))
 
     def add_pre_cy3_args(parser: ap.ArgumentParser) -> None:  # pragma: no cover
         cy_arg_group = parser.add_argument_group("optional cython arguments")

@@ -71,6 +71,9 @@ setup(
         'pyparsing',
         'mypy',
         'pytest',
+        'pytest-xdist',
+        'pytest-mock',
+        'hypothesis',
         'future'
         ],
     packages=find_packages(),
