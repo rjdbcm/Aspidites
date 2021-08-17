@@ -1,12 +1,30 @@
 **unreleased**
 **v0.8.6**
+
 **v0.8.5**
+- revert of v0.8.4
+
 **v0.8.4**
+- removed context managers from compiler.py
+
 **v0.8.3**
-**v0.8.2**
-**v0.8.1**
+- Pipfile.lock added to .dockerignore
+- added workdir symlink to dockerfile
+
+**v0.8.1** & **v0.8.2**
+- test suite works on docker build
+- test suite simplified
+
+
 **v0.8.0**
+- make uninstall template no longer deletes __init__.py
+
 **v0.7.0**
+- add coverage configuration file
+- add dockerignore
+- move tests into package
+- print version info on CLI run
+
 **v0.6.1**
 - First release with a compiled woma standard library.
 
