@@ -74,6 +74,7 @@ setup(
         'future'
         ],
     packages=find_packages(),
+    test_suite='Aspidites/tests',
     distclass=BinaryDistribution,
     entry_points={'console_scripts': ['aspidites = Aspidites.__main__:main']},
     package_data={'': ["*.wom", "*.pyx", "*.pyi"]},  # add any native *.wom files

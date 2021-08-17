@@ -32,7 +32,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .coverage_html/
 	rm -fr .pytest_cache
 	rm -fr .mypy_cache
-	-cd examples && $(MAKE) uninstall
+	-cd Aspidites/tests/examples && $(MAKE) uninstall
 
 clean-woma: ## remove compiled woma files
 	-cd Aspidites/woma && $(MAKE) uninstall

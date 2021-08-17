@@ -19,9 +19,11 @@ CMD rm -rf /root/.cache/pip
 
 FROM base AS runtime
 ## so the test-suite can be run
-WORKDIR /opt/venv/lib/site-packages/aspidites
 
+
+ENV ASPIDITES_DOCKER_BUILD=True
 ENV VIRTUAL_ENV=/opt/venv
+WORKDIR $VIRTUAL_ENV/lib/python3.9/site-packages/Aspidites/tests
 COPY --from=pyenv $VIRTUAL_ENV $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 

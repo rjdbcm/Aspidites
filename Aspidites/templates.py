@@ -101,6 +101,7 @@ from Aspidites._vendor import F, _
 from Aspidites.monads import Maybe, Surely, Undefined, SafeDiv, SafeMod, SafeExp
 from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.RestrictedPython import safe_builtins
+safe_builtins['print'] = print
 # DECLARATIONS TO ALLOW CONTRACTS TO TYPE CHECK #
 procedure: None
 coroutine: Generator
