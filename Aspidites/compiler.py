@@ -100,7 +100,8 @@ def compile_module(
         os.popen("cython %s %s %s" % (fname, "--force" * force, "--verbose" * verb))
         setup_py = os.path.join(dir, "setup.py")
         pyproject_toml = os.path.join(dir, "pyproject.toml")
-        open(setup_py, mode).write(
+        with open(setup_py, mode) as f:
+            f.write(
                 setup.substitute(
                     app_name=module_name,
                     src_file=fname,
@@ -110,16 +111,17 @@ def compile_module(
                     lib_dirs=[],
                     **kwargs
                 )
-        )
+            )
         stack.register(setup_py)
         setup_runner = "%s %s build_ext -b ." % (sys.executable, setup_py)
         print("running", setup_runner)
-        setup_out = os.popen(setup_runner).read()
-        print(setup_out)
+        with os.popen(setup_runner) as p:
+            print(p.read())
         stack.register(file_c)
         for i in glob(glob_so):
             stack.register(i)
-        open(pyproject_toml, mode).write(pyproject.substitute(build_requires=build_requires))
+        with open(pyproject_toml, mode) as f:
+            f.write(pyproject.substitute(build_requires=build_requires))
         stack.register(pyproject_toml)
     all_file_checksums = stack.finalize()
     print("running checksums")
