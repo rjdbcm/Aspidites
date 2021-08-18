@@ -1,4 +1,5 @@
 **unreleased**
+**v0.9.1**
 
 **v0.9.0**
 - Massive increase in test coverage (>90%)
