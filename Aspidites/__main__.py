@@ -75,16 +75,12 @@ def parse_from_dummy(argv: list,
         if not __test:  # pragma: no cover
             print("%s called without arguments. Next time try --help or -h." % argv[0])
         sys.exit(1)
-    if len(argv) > 1 and argv[1] == "--pytest" or argv[1] == '-pt':
+    if len(argv) > 1 and argv[1] == "--pytest" or argv[1] == '-pt':  # pragma: no cover
         if not os.getenv("ASPIDITES_DOCKER_BUILD"):
             argv = [os.path.dirname(os.path.realpath(__file__)) + '/tests'] + argv[2:]
         else:
             argv = argv[2:]
-        if not __test:  # pragma: no cover
-            sys.exit(pytest.main(argv))
-        else:
-            # test expects you to raise SystemExit
-            sys.exit(1)
+        sys.exit(pytest.main(argv))
 
     def add_pre_cy3_args(parser: ap.ArgumentParser) -> None:  # pragma: no cover
         cy_arg_group = parser.add_argument_group("optional cython arguments")

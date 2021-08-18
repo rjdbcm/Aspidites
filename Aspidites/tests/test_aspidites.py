@@ -140,10 +140,6 @@ def test_cli_dummy_parser():
     with pt.raises(SystemExit):
         parse_from_dummy(['aspidites'], ap.ArgumentParser(add_help=False), __test=True)
 
-    with pt.raises(SystemExit):
-        parse_from_dummy(['aspidites', '-pt'], ap.ArgumentParser(add_help=False),
-                         __test=True)
-
 
 def test_compile_to_shared_object(inject_config):
     pfile_ = 'examples/compiled.py'
