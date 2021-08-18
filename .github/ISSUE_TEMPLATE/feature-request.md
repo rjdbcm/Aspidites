@@ -6,6 +6,8 @@ labels: ''
 assignees: ''
 
 ---
+**Please check that you are making a feature request for Aspidites and not the Woma language:**
+- [ ] I understand that this is **not** a [feature request for the Woma programming language](https://github.com/rjdbcm/woma/issues/new/choose).
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
