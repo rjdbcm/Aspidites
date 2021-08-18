@@ -1,4 +1,5 @@
 **unreleased**
+**v0.9.2**
 
 **v0.9.1**
 - SafeExp now goes to Undefined in case of inf**inf
