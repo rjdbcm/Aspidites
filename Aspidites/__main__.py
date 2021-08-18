@@ -91,7 +91,7 @@ def parse_from_dummy(argv: list,
                 action='store_true' if isinstance(v, (bool,)) else 'store'
             )
 
-    asp_parser = ap.ArgumentParser(prog='aspidites',
+    asp_parser = ap.ArgumentParser(prog='_aspidites',
                                    description=__description__,
                                    parents=[cy_parser],
                                    add_help=not bool(cy_version.major)
