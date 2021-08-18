@@ -1,4 +1,5 @@
 **unreleased**
+**v0.9.0**
 
 **v0.8.6**
 - Added todo for docker setup_runner
