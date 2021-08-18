@@ -10,9 +10,9 @@ from Aspidites.templates import lib, setup
 from Aspidites.monads import Maybe, Undefined, Surely, SafeMod, SafeDiv, SafeExp
 from Aspidites.compiler import compile_module
 try:
-    from numpy import inf, nan, isinf
+    from numpy import inf, nan, isinf, isnan
 except ImportError:
-    from math import inf, nan, isinf
+    from math import inf, nan, isinf, isnan
 
 docker = os.getenv("ASPIDITES_DOCKER_BUILD")
 
@@ -68,7 +68,7 @@ def test_safe_math_(x, y):
     else:
         assert SafeExp(x, y) == x ** y
 
-    if x / y == nan:
+    if isnan(x / y):
         assert SafeDiv(x, y) == Undefined()
     else:
         assert SafeDiv(x, y) == x / y
