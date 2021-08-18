@@ -1,5 +1,6 @@
 # Aspidites is Copyright 2021, Ross J. Duff.
 # See LICENSE.txt for more info.
+import sys
 import inspect
 import operator as op
 import shutil
@@ -39,7 +40,7 @@ def SafeDiv(a, b):
 # noinspection PyPep8Naming
 def SafeMod(a, b):
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
-    if b == 0:
+    if a == inf or b == 0:
         stack = inspect.stack()
         w = create_warning(
             stack[0][3],
@@ -55,7 +56,7 @@ def SafeMod(a, b):
 
 # noinspection PyPep8Naming
 def SafeExp(a, b):
-    if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # 0**0, inf**0, 0**inf
+    if (a == 0 and b == 0) or (a == inf and b == 0) or (b == inf and a == 0):  # 0**0, inf**0, 0**inf
         stack = inspect.stack()
         w = create_warning(
             stack[0][3], [a, b], {}, stack,
@@ -63,7 +64,10 @@ def SafeExp(a, b):
         )
         warn(w, category=RuntimeWarning)
         return Undefined(SafeExp, a=a, b=b)
-    return a**b
+    try:
+        return a**b
+    except OverflowError:
+        return inf  # just a really big number on most systems
 
 
 class Maybe:
@@ -150,7 +154,7 @@ class Undefined:
     __instance = None
 
     def __hash__(self):
-        return hash(self.__instance__)
+        return self
 
     def __eq__(self, other):
         return self.__hash__ == other.__hash__
@@ -220,53 +224,53 @@ class Surely:
         "__weakref__", "__instance__" "__str__", "__int__", "__float__", "__complex__"
     )
 
-    def __try_except_undefined__(self, other=None, call=None):
-        if call:
-            # noinspection PyComparisonWithNone
-            return (
-                call(self.__instance__)
-                if other == None
-                else call(self.__instance__, other)
-            )
-        else:
-            return self.__instance__
-
-    def __hash__(self):
-        return self.__try_except_undefined__(call=hash)
-
-    def __eq__(self, other):
-        return self.__try_except_undefined__(other, op.eq)
-
-    def __add__(self, other):
-        return self.__try_except_undefined__(other, op.add)
-
-    def __sub__(self, other):
-        return self.__try_except_undefined__(other, op.sub)
-
-    def __neg__(self):
-        return self.__try_except_undefined__(call=op.neg)
-
-    def __invert__(self):
-        return self.__try_except_undefined__(call=op.invert)
-
-    def __mul__(self, other):
-        return self.__try_except_undefined__(other, op.mul)
-
-    def __truediv__(self, other):
-        return self.__try_except_undefined__(other, op.truediv)
-
-    def __floordiv__(self, other):
-        return self.__try_except_undefined__(other, op.floordiv)
-
-    def __oct__(self):
-        return self.__try_except_undefined__(call=oct)
-
-    def __nonzero__(self):
-        return self.__try_except_undefined__(call=bool)
-
-    @classmethod
-    def __call__(cls, *args, **kwargs):
-        return cls.__instance__
+    # def __try_except_undefined__(self, other=None, call=None):
+    #     if call:
+    #         # noinspection PyComparisonWithNone
+    #         return (
+    #             call(self.__instance__)
+    #             if other == None
+    #             else call(self.__instance__, other)
+    #         )
+    #     else:
+    #         return self.__instance__
+    #
+    # def __hash__(self):
+    #     return self.__try_except_undefined__(call=hash)
+    #
+    # def __eq__(self, other):
+    #     return self.__try_except_undefined__(other, op.eq)
+    #
+    # def __add__(self, other):
+    #     return self.__try_except_undefined__(other, op.add)
+    #
+    # def __sub__(self, other):
+    #     return self.__try_except_undefined__(other, op.sub)
+    #
+    # def __neg__(self):
+    #     return self.__try_except_undefined__(call=op.neg)
+    #
+    # def __invert__(self):
+    #     return self.__try_except_undefined__(call=op.invert)
+    #
+    # def __mul__(self, other):
+    #     return self.__try_except_undefined__(other, op.mul)
+    #
+    # def __truediv__(self, other):
+    #     return self.__try_except_undefined__(other, op.truediv)
+    #
+    # def __floordiv__(self, other):
+    #     return self.__try_except_undefined__(other, op.floordiv)
+    #
+    # def __oct__(self):
+    #     return self.__try_except_undefined__(call=oct)
+    #
+    # def __nonzero__(self):
+    #     return self.__try_except_undefined__(call=bool)
+    #
+    # @classmethod
+    # def __call__(cls, *args, **kwargs):
+    #     return cls.__instance__
 
     def __new__(cls, instance__=Undefined(), *args, **kwargs):
         cls.__instance__ = instance__

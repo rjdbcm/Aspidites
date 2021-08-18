@@ -7,8 +7,12 @@ import pytest as pt
 from Aspidites.__main__ import get_cy_kwargs
 from Aspidites.parser import parse_module
 from Aspidites.templates import lib, setup
-from Aspidites.monads import Maybe, Undefined, Surely
+from Aspidites.monads import Maybe, Undefined, Surely, SafeMod, SafeDiv, SafeExp
 from Aspidites.compiler import compile_module
+try:
+    from numpy import inf, nan, isinf
+except ImportError:
+    from math import inf, nan, isinf
 
 docker = os.getenv("ASPIDITES_DOCKER_BUILD")
 
@@ -40,6 +44,36 @@ def test_compile_module(inject_config):
                 'exec')
 
 
+@given(x=st.integers(min_value=-10000,
+                     max_value=10000) | st.floats(allow_nan=False),
+       y=st.integers(min_value=-10000,
+                     max_value=10000) | st.floats(allow_nan=False))
+@pt.mark.filterwarnings('ignore::RuntimeWarning')
+def test_safe_math_(x, y):
+    assert SafeExp(0, 0) == Undefined()
+    assert SafeExp(0, inf) == Undefined()
+    assert SafeExp(inf, 0) == Undefined()
+    assert SafeMod(x, 0) == Undefined()
+    assert SafeDiv(x, 0) == Undefined()
+    assert SafeMod(inf, x) == Undefined()
+    assume(
+        x != 0
+        and
+        y != 0
+    )
+    try:
+        x ** y
+        assert SafeExp(x, y) == x ** y
+    except OverflowError:  # really big number
+        assert SafeExp(x, y) == inf
+
+    assert SafeDiv(x, y) == x / y
+    assume(
+        not isinf(x)
+    )
+    assert SafeMod(x, y) == x % y
+    
+
 @given(x=st.integers())
 def test_integer_monad(x):
     assert Undefined() == Undefined()
@@ -51,6 +85,13 @@ def test_integer_monad(x):
     assert Undefined() * Undefined() == Undefined()
     assert Undefined() / x == Undefined()
     assert Undefined() / Undefined() == Undefined()
+    assert Undefined() // x == Undefined()
+    assert Undefined().__hash__() == Undefined()
+    assert Undefined().__nonzero__() is False
+    assert Undefined().__index__() == 0
+    assert oct(Undefined()) == oct(0)
+    assert complex(Undefined()) == complex()
+    assert float(Undefined()) == float()
     assert Surely() == Surely()
     assert Surely() + Surely() == Surely()
     assert Surely() + x == x
@@ -73,6 +114,16 @@ def test_integer_monad(x):
     assert -Maybe(x) != -x
     assert ~Surely() == Undefined()
     assert oct(Surely(x)) == oct(x)
+    assert bool(Surely(x)) == bool(x)
+    assert Surely(x) // 1 == x // 1
+    assert Surely(x) / 1 == x / 1
+    assert Surely(x) * 1 == x * 1
+    assert ~Surely(x) == ~x
+    assert -Surely(x) == -x
+    assert Surely(x) - 1 == x - 1
+    assert Surely(x) + 1 == x + 1
+    assert (Surely(x) == 1) == (x == 1)
+    assert hash(Surely(x)) == hash(x)
 
 
 def test_compile_to_shared_object(inject_config):
