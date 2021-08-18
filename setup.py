@@ -86,6 +86,11 @@ setup(
     long_description_content_type='text/markdown',
     classifiers=[
         "Development Status :: 3 - Alpha",
+        "Environment :: Console",
+        "Programming Language :: Other"
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: Implementation :: CPython",
+        "Topic :: Software Development :: Compilers"
         "Topic :: Utilities",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "License :: OSI Approved :: MIT License",
