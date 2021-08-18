@@ -4,6 +4,7 @@ import os
 import sys
 import traceback
 import warnings
+import typing as t
 from contextlib import suppress
 
 from Cython import __version__ as cy_version
@@ -20,7 +21,7 @@ from . import __description__
 cy_version = Version.coerce(cy_version)
 
 
-def get_cy_kwargs():
+def get_cy_kwargs() -> dict:
     cy_opt = v(
         "annotate",
         "annotate_coverage_xml",
@@ -47,32 +48,43 @@ def get_cy_kwargs():
     return cy_kwargs
 
 
-def main(argv=sys.argv):
-    # any failure results in falling back to the `Cython.Compiler.Options` API
+def get_cython_parser(dummy: ap.ArgumentParser) -> t.Tuple[ap.ArgumentParser, dict, ap.ArgumentParser, bool]:
     cy3_fallback_mode: bool = False
-    dummy = ap.ArgumentParser(add_help=False)
     cy_kwargs = get_cy_kwargs()
-    if cy_version.major == 3: # pragma: no cover
+    if cy_version.major == 3:  # pragma: no cover
         try:
             from Cython.Compiler.CmdLine import create_cython_argparser
             cy_parser = create_cython_argparser()
         except Exception as e:
             warnings.warn(
-                '\n' + ''.join(traceback.format_tb(e.__traceback__)) + 'Falling back to Cython 0.X Options API',
+                '\n' + ''.join(traceback.format_tb(
+                    e.__traceback__)) + 'Falling back to Cython 0.X Options API',
                 ImportWarning)
             cy3_fallback_mode = True
             cy_parser = dummy
     else:
         cy_parser = dummy
+    return dummy, cy_kwargs, cy_parser, cy3_fallback_mode
+
+
+def parse_from_dummy(argv: list,
+                     dummy: ap.ArgumentParser,
+                     __test: bool = False) -> t.Tuple[ap.Namespace, list, dict]:
+    dummy, cy_kwargs, cy_parser, cy3_fallback_mode = get_cython_parser(dummy)
     if len(argv) == 1:
-        print("%s called without arguments. Next time try --help or -h." % sys.argv[0])
+        if not __test:  # pragma: no cover
+            print("%s called without arguments. Next time try --help or -h." % argv[0])
         sys.exit(1)
     if len(argv) > 1 and argv[1] == "--pytest" or argv[1] == '-pt':
         if not os.getenv("ASPIDITES_DOCKER_BUILD"):
             argv = [os.path.dirname(os.path.realpath(__file__)) + '/tests'] + argv[2:]
         else:
             argv = argv[2:]
-        sys.exit(pytest.main(argv))
+        if not __test:  # pragma: no cover
+            sys.exit(pytest.main(argv))
+        else:
+            # test expects you to raise SystemExit
+            sys.exit(1)
 
     def add_pre_cy3_args(parser: ap.ArgumentParser) -> None:  # pragma: no cover
         cy_arg_group = parser.add_argument_group("optional cython arguments")
@@ -116,20 +128,22 @@ def main(argv=sys.argv):
             cy_kwargs[k] = args.__getattribute__(k)
     else:
         args, other_args = asp_parser.parse_known_args()
+    return args, other_args, cy_kwargs
 
-    if args.verbose >= 2:
-        print(asp_parser.__repr__())
-    with open(args.target, 'r') as source:
-        code = parse_module(source.read())
-        if args.output is None:
-            args.output = os.path.join(os.path.dirname(args.target), 'compiled.py')
-        compile_module(code,
-                       fname=args.output,
-                       force=args.force,
-                       bytecode=args.compile_pyc,
-                       c=args.compile_c,
-                       build_requires=args.build_requires,
-                       verbose=args.verbose,
-                       *other_args,
-                       **cy_kwargs)
 
+def main(argv=sys.argv) -> None:
+    # any failure results in falling back to the `Cython.Compiler.Options` API
+    args, other_args, cy_kwargs = parse_from_dummy(argv,
+                                                   ap.ArgumentParser(add_help=False))
+    code = parse_module(open(args.target, 'r').read())
+    if args.output is None:
+        args.output = os.path.join(os.path.dirname(args.target), 'compiled.py')
+    compile_module(code,
+                   fname=args.output,
+                   force=args.force,
+                   bytecode=args.compile_pyc,
+                   c=args.compile_c,
+                   build_requires=args.build_requires,
+                   verbose=args.verbose,
+                   *other_args,
+                   **cy_kwargs)
