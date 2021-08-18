@@ -1084,7 +1084,7 @@ below.
 = = = = =
 
 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
---------------------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
 
 1. This LICENSE AGREEMENT is between the Python Software Foundation
 ("PSF"), and the Individual or Organization ("Licensee") accessing and
@@ -1133,7 +1133,8 @@ Agreement.
 
 
 BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0
--------------------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
 BEOPEN PYTHON OPEN SOURCE LICENSE AGREEMENT VERSION 1
 
@@ -1183,7 +1184,8 @@ Agreement.
 
 
 CNRI LICENSE AGREEMENT FOR PYTHON 1.6.1
----------------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
 1. This LICENSE AGREEMENT is between the Corporation for National
 Research Initiatives, having an office at 1895 Preston White Drive,
@@ -1254,7 +1256,8 @@ bound by the terms and conditions of this License Agreement.
 
 
 CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2
---------------------------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
 Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam,
 The Netherlands.  All rights reserved.
@@ -1319,7 +1322,8 @@ below.
 = = = = =
 
 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
---------------------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
 1. This LICENSE AGREEMENT is between the Python Software Foundation
 (&quot;PSF&quot;), and the Individual or Organization (&quot;Licensee&quot;) accessing and
@@ -1368,7 +1372,8 @@ Agreement.
 
 
 BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0
--------------------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
 BEOPEN PYTHON OPEN SOURCE LICENSE AGREEMENT VERSION 1
 
@@ -1418,7 +1423,9 @@ Agreement.
 
 
 CNRI LICENSE AGREEMENT FOR PYTHON 1.6.1
----------------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
 1. This LICENSE AGREEMENT is between the Corporation for National
 Research Initiatives, having an office at 1895 Preston White Drive,
@@ -1489,7 +1496,8 @@ bound by the terms and conditions of this License Agreement.
 
 
 CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2
---------------------------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
 Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam,
 The Netherlands.  All rights reserved.
