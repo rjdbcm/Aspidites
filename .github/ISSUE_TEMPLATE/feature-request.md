@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for this project, not the Woma language.
+about: Suggest an idea for this project, not the Woma language, suggest a feature for Woma use https://github.com/rjdbcm/woma/issues/new/choose.
 title: "[FEATURE]"
 labels: ''
 assignees: ''
