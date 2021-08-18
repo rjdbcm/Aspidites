@@ -63,9 +63,11 @@ def test_safe_math_(x, y):
     )
     try:
         x ** y
-        assert SafeExp(x, y) == x ** y
     except OverflowError:  # really big number
         assert SafeExp(x, y) == inf
+    else:
+        assert SafeExp(x, y) == x ** y
+
     if x / y == nan:
         assert SafeDiv(x, y) == Undefined()
     else:
