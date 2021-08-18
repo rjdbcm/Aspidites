@@ -1,5 +1,8 @@
 **unreleased**
+
 **v0.9.1**
+- SafeExp now goes to Undefined in case of inf**inf
+- fixed test-fail for inf**inf
 
 **v0.9.0**
 - Massive increase in test coverage (>90%)
