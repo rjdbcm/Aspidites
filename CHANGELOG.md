@@ -1,5 +1,7 @@
 **unreleased**
+
 **v0.9.3**
+- All Safe math either end up at Undefined, a number, or inf
 
 **v0.9.2**
 - SafeExp+tests fully working. 
