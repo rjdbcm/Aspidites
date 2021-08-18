@@ -1,5 +1,7 @@
 **unreleased**
+
 **v0.9.2**
+- SafeExp+tests fully working.
 
 **v0.9.1**
 - SafeExp now goes to Undefined in case of inf**inf
