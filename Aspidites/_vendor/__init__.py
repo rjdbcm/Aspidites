@@ -1,6 +1,6 @@
 from pyrsistent import v
 from .fn import *
-from .pampy import *
+from .pampy import *  # TODO: may cause an issue importing monads
 
 __all__ = v("F",  # BEGIN func.py
             "curried",  # END func.py
