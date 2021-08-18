@@ -1,5 +1,8 @@
 **unreleased**
+
 **v0.9.0**
+- Massive increase in test coverage (>90%)
+- SafeExp now goes straight to inf in case of OverflowError
 
 **v0.8.6**
 - Added todo for docker setup_runner
