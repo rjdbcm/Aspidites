@@ -568,10 +568,10 @@ original copyright and license are noted and any modifications made are released
 dual licensed with the original license.
 
 Mozilla Public License Version 2.0
-==================================
+\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
 
 1. Definitions
---------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
 
 1.1. &quot;Contributor&quot;
     means each individual or legal entity that creates, contributes to
@@ -653,7 +653,7 @@ Mozilla Public License Version 2.0
     ownership of such entity.
 
 2. License Grants and Conditions
---------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
 
 2.1. Grants
 
@@ -724,7 +724,7 @@ Sections 3.1, 3.2, 3.3, and 3.4 are conditions of the licenses granted
 in Section 2.1.
 
 3. Responsibilities
--------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
 
 3.1. Distribution of Source Form
 
@@ -786,7 +786,8 @@ disclaimers of warranty and limitations of liability specific to any
 jurisdiction.
 
 4. Inability to Comply Due to Statute or Regulation
----------------------------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
 If it is impossible for You to comply with any of the terms of this
 License with respect to some or all of the Covered Software due to
@@ -799,7 +800,7 @@ or regulation, such description must be sufficiently detailed for a
 recipient of ordinary skill to be able to understand it.
 
 5. Termination
---------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
 
 5.1. The rights granted under this License will terminate automatically
 if You fail to comply with any of its terms. However, if You become
@@ -870,7 +871,8 @@ prior to termination shall survive termination.
 ************************************************************************
 
 8. Litigation
--------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
 Any litigation relating to this License may be brought only in the
 courts of a jurisdiction where the defendant maintains its principal
@@ -880,7 +882,8 @@ Nothing in this Section shall prevent a party&#39;s ability to bring
 cross-claims or counter-claims.
 
 9. Miscellaneous
-----------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
 This License represents the complete agreement concerning the subject
 matter hereof. If any provision of this License is held to be
@@ -890,7 +893,8 @@ that the language of a contract shall be construed against the drafter
 shall not be used to construe this License against a Contributor.
 
 10. Versions of the License
----------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
 10.1. New Versions
 
@@ -922,7 +926,8 @@ Secondary Licenses under the terms of this version of the License, the
 notice described in Exhibit B of this License must be attached.
 
 Exhibit A - Source Code Form License Notice
--------------------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -936,7 +941,8 @@ for such a notice.
 You may add additional accurate notices of copyright ownership.
 
 Exhibit B - &quot;Incompatible With Secondary Licenses&quot; Notice
----------------------------------------------------------
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 
   This Source Code Form is &quot;Incompatible With Secondary Licenses&quot;, as
   defined by the Mozilla Public License, v. 2.0.
