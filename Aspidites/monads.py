@@ -56,7 +56,10 @@ def SafeMod(a, b):
 
 # noinspection PyPep8Naming
 def SafeExp(a, b):
-    if (a == 0 and b == 0) or (a == inf and b == 0) or (b == inf and a == 0):  # 0**0, inf**0, 0**inf
+    if ((a == 0 and b == 0)
+            or (a == inf and b == 0)
+            or (b == inf and a == 0)
+            or (a == inf and b == inf)):  # 0**0, inf**0, 0**inf, inf**inf
         stack = inspect.stack()
         w = create_warning(
             stack[0][3], [a, b], {}, stack,
