@@ -100,7 +100,7 @@ def test_compile__compile_restricted_exec__5():
     assert result.code is None
     assert result.warnings == []
     assert result.used_names == {}
-    if IS_PY2:  # pragma: PY2
+    if IS_PY2:  # pragma: no cover
         assert result.errors == (
             'compile() expected string without null bytes',)
     else:  # pragma: PY3
@@ -172,7 +172,7 @@ def a():
     IS_PY3,
     reason="Print statement is gone in Python 3."
            "Test Deprecation Warming in Python 2")
-def test_compile_restricted():  # pragma: PY2
+def test_compile_restricted():  # pragma: no cover
     """This test checks compile_restricted itself if that emit Python warnings.
     For actual tests for print statement see: test_print_stmt.py
     """

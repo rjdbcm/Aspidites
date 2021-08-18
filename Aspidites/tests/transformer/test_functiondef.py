@@ -44,7 +44,7 @@ def test_RestrictingNodeTransformer__visit_FunctionDef__4():
 @pytest.mark.skipif(
     IS_PY3,
     reason="tuple parameter unpacking is gone in Python 3")
-def test_RestrictingNodeTransformer__visit_FunctionDef__5():  # pragma: PY2
+def test_RestrictingNodeTransformer__visit_FunctionDef__5():  # pragma: no cover
     """It prevents function arguments starting with `_` in tuples."""
     result = compile_restricted_exec("def foo((a, _bad)): pass")
     # Aspidites.libraries.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
@@ -56,7 +56,7 @@ def test_RestrictingNodeTransformer__visit_FunctionDef__5():  # pragma: PY2
 @pytest.mark.skipif(
     IS_PY3,
     reason="tuple parameter unpacking is gone in Python 3")
-def test_RestrictingNodeTransformer__visit_FunctionDef__6():  # pragma: PY2
+def test_RestrictingNodeTransformer__visit_FunctionDef__6():  # pragma: no cover
     """It prevents function arguments starting with `_` in tuples."""
     result = compile_restricted_exec("def foo(a, (c, (_bad, c))): pass")
     # Aspidites.libraries.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
@@ -87,7 +87,7 @@ def nested_with_order((a, b), (c, d)):
     IS_PY3,
     reason="tuple parameter unpacking is gone in python 3")
 def test_RestrictingNodeTransformer__visit_FunctionDef__8(
-        mocker):  # pragma: PY2
+        mocker):  # pragma: no cover
     _getiter_ = mocker.stub()
     _getiter_.side_effect = lambda it: it
 

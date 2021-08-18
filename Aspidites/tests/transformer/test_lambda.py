@@ -45,7 +45,7 @@ def test_RestrictingNodeTransformer__visit_Lambda__4():
 @pytest.mark.skipif(
     IS_PY3,
     reason="tuple parameter unpacking is gone in Python 3")
-def test_RestrictingNodeTransformer__visit_Lambda__5():  # pragma: PY2
+def test_RestrictingNodeTransformer__visit_Lambda__5():  # pragma: no cover
     """It prevents arguments starting with `_` in tuple unpacking."""
     result = compile_restricted_exec("lambda (a, _bad): None")
     # Aspidites.libraries.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
@@ -57,7 +57,7 @@ def test_RestrictingNodeTransformer__visit_Lambda__5():  # pragma: PY2
 @pytest.mark.skipif(
     IS_PY3,
     reason="tuple parameter unpacking is gone in Python 3")
-def test_RestrictingNodeTransformer__visit_Lambda__6():  # pragma: PY2
+def test_RestrictingNodeTransformer__visit_Lambda__6():  # pragma: no cover
     """It prevents arguments starting with `_` in nested tuple unpacking."""
     result = compile_restricted_exec("lambda (a, (c, (_bad, c))): None")
     # Aspidites.libraries.RestrictedPython.compile.compile_restricted_exec on Python 2 renders
@@ -92,7 +92,7 @@ def test_RestrictingNodeTransformer__visit_Lambda__8():
     IS_PY3,
     reason="tuple parameter unpacking is gone in python 3")
 def test_RestrictingNodeTransformer__visit_Lambda__9(
-        mocker):  # pragma: PY2
+        mocker):  # pragma: no cover
     _getiter_ = mocker.stub()
     _getiter_.side_effect = lambda it: it
 
@@ -135,7 +135,7 @@ g = lambda (x, y) : (x ** 2, x + y)
 @pytest.mark.skipif(
     IS_PY3,
     reason="tuple parameter unpacking is gone in python 3")
-def test_RestrictingNodeTransformer__visit_Lambda__11():  # pragma: PY2
+def test_RestrictingNodeTransformer__visit_Lambda__11():  # pragma: no cover
     """Lambda functions with tuple unpacking are allowed."""
     restricted_globals = dict(
         g=None,
@@ -154,7 +154,7 @@ g = lambda (x, y), z : (x ** y, x + z)
 @pytest.mark.skipif(
     IS_PY3,
     reason="tuple parameter unpacking is gone in python 3")
-def test_RestrictingNodeTransformer__visit_Lambda__12():  # pragma: PY2
+def test_RestrictingNodeTransformer__visit_Lambda__12():  # pragma: no cover
     """Lambda functions with tuple unpacking and simple params are allowed."""
     restricted_globals = dict(
         g=None,

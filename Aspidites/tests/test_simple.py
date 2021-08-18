@@ -1,11 +1,13 @@
 import traceback
 
+import pytest
+
 from Aspidites._vendor.contracts.main import parse_contract_string
 from Aspidites._vendor.contracts.test_registrar import (
     good_examples, semantic_fail_examples,
     syntax_fail_examples, contract_fail_examples
 )
-from .utils import check_contracts_ok, check_syntax_fail, check_contracts_fail
+from .utils import contract_strings
 
 # Import the other tests
 from . import test_multiple  # @UnusedImport
@@ -68,7 +70,8 @@ from Aspidites._vendor.contracts.library import *  # @UnusedWildImport @Unresolv
 #             yield check_recoversion, contract, exact
 
 
-def check_good_repr(c):
+@pytest.mark.parametrize('c', contract_strings)
+def test_good_repr(c):
     """ Checks that we can eval() the __repr__() value and we get
         an equivalent object. """
     parsed = parse_contract_string(c)
@@ -87,7 +90,8 @@ def check_good_repr(c):
             'Repr gives different object:\n  %r !=\n  %r' % (parsed, reeval)
 
 
-def check_recoversion(s, exact):
+@pytest.mark.parametrize('s', contract_strings)
+def test_recoversion(s):
     """ Checks that we can eval() the __repr__() value and we get
         an equivalent object. """
     parsed = parse_contract_string(s)
@@ -103,15 +107,15 @@ def check_recoversion(s, exact):
 
     assert reconv == parsed, msg
 
-    if exact:
-        # Warn if the string is not exactly the same.
-        if s2 != s:
-            msg = ('Slight different regenerated strings:\n')
-            msg += ('   original: %s\n' % s)
-            msg += ('  generated: %s\n' % s2)
-            msg += ('   parsed the first time as: %r\n' % parsed)
-            msg += ('                and then as: %r' % reconv)
-            assert s2 == s, msg
+    # if exact:
+    #     # Warn if the string is not exactly the same.
+    #     if s2 != s:
+    #         msg = ('Slight different regenerated strings:\n')
+    #         msg += ('   original: %s\n' % s)
+    #         msg += ('  generated: %s\n' % s2)
+    #         msg += ('   parsed the first time as: %r\n' % parsed)
+    #         msg += ('                and then as: %r' % reconv)
+    #         assert s2 == s, msg
 
 
 

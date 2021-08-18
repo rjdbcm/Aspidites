@@ -17,7 +17,7 @@ from . import seq_tc
 from . import collection_tc
 from . import attr_tc
 from . import files_tc
-
+from . import miscellaneous_aliases_tc
 from . import isinstance_tc
 
 from . import extensions_tc

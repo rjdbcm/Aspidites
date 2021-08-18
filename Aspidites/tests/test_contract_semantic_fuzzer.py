@@ -1,7 +1,6 @@
 import pytest
 
-from Aspidites._vendor.contracts.test_registrar import (good_examples, semantic_fail_examples,
-                                                        contract_fail_examples)
+from .utils import contract_strings
 from Aspidites._vendor.contracts import parse, ContractSyntaxError
 
 import hypothesis
@@ -36,18 +35,7 @@ def test_replace_one(c):
         assert s == s3, 'i=%d  %r -> %r -> %r' % (i, s, s2, s3)
 
 
-all_strings = (good_examples + semantic_fail_examples + contract_fail_examples)
-pre = (contract for contract, _, _ in all_strings)
-strings = []
-for i in pre:
-    if isinstance(i, list):
-        for j in i:
-            strings += [j]
-    else:
-        strings += [i]
-
-
-@pytest.mark.parametrize('s', strings)
+@pytest.mark.parametrize('s', contract_strings)
 def test_joke(s):
     parse(s)
     # now alter one letter

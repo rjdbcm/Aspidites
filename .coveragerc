@@ -1,3 +1,4 @@
 [report]
 omit =
-    Aspidites/tests
+    */examples/*
+    */tests/*

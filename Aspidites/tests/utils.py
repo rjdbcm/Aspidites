@@ -4,6 +4,37 @@ from Aspidites._vendor.contracts.interface import (ContractSyntaxError, describe
                                                    ContractNotRespected)
 from Aspidites._vendor.contracts.main import parse_contract_string, check_contracts
 
+from Aspidites._vendor.contracts.test_registrar import good_examples, semantic_fail_examples, contract_fail_examples
+
+all_strings = (good_examples + semantic_fail_examples + contract_fail_examples)
+pre = (contract for contract, _, _ in all_strings)
+contract_strings = []
+for i in pre:
+    if isinstance(i, list):
+        for j in i:
+            contract_strings += [j]
+    else:
+        contract_strings += [i]
+
+pre = (contract for contract, _, _ in contract_fail_examples)
+contract_fails = []
+for i in pre:
+    if isinstance(i, list):
+        for j in i:
+            contract_fails += [j]
+    else:
+        contract_fails += [i]
+
+pre = ((contract, value) for contract, value, _ in contract_fail_examples)
+contract_fails_val = []
+for i, v in pre:
+    if isinstance(i, list):
+        for j in i:
+            contract_fails_val += [(j, v)]
+    else:
+        contract_fails_val += [(i, v)]
+
+
 
 def check_contracts_ok(contract, value):
     if isinstance(contract, basestring):

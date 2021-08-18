@@ -18,7 +18,7 @@ from .compile import compile_restricted_eval
 import ast
 
 
-if IS_PY2:  # pragma: PY2
+if IS_PY2:  # pragma: no cover
     from string import maketrans
 else:  # pragma: PY3
     maketrans = str.maketrans

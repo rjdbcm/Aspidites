@@ -44,7 +44,7 @@ mygetattr = __builtins__['getattr']
     IS_PY3,
     reason="__builtins__ has been renamed in Python3 to builtins, "
     "so no __builtins__ in Python3.")
-def test_import_py2_builtins():  # pragma: PY2
+def test_import_py2_builtins():  # pragma: no cover
     """It should not be allowed to access global __builtins__ in Python2."""
     result = compile_restricted_exec(__BUILTINS_EXAMPLE)
     assert result.code is None
@@ -65,7 +65,7 @@ mygetattr = builtins['getattr']
     IS_PY3,
     reason="__builtins__ has been renamed in Python3 to builtins, "
     "so no __builtins__ in Python3.")
-def test_import_py2_as_builtins():  # pragma: PY2
+def test_import_py2_as_builtins():  # pragma: no cover
     """It should not be allowed to access global __builtins__ in Python2."""
     result = compile_restricted_exec(__BUILTINS_EXAMPLE)
     assert result.code is None

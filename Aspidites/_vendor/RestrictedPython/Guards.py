@@ -18,7 +18,7 @@
 from Aspidites._vendor import _compat
 
 
-if _compat.IS_PY2:  # pragma: PY2
+if _compat.IS_PY2:  # pragma: no cover
     import __builtin__ as builtins
 else:  # pragma: PY3
     # Do not attempt to use this package on Python2.7 as there
@@ -109,7 +109,7 @@ _safe_exceptions = [
     'ZeroDivisionError',
 ]
 
-if _compat.IS_PY2:  # pragma: PY2
+if _compat.IS_PY2:  # pragma: no cover
     _safe_names.extend([
         'basestring',
         'cmp',

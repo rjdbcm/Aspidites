@@ -49,7 +49,7 @@ IOPERATOR_TO_STR = {
     ast.FloorDiv: '//='
 }
 
-if IS_PY2:  # pragma: PY2
+if IS_PY2:  # pragma: no cover
     pass  # trick branch coverage
 else:  # pragma: PY3
     IOPERATOR_TO_STR[ast.MatMult] = '@='
@@ -181,7 +181,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
     def is_starred(self, ob):
         if IS_PY3:  # pragma: PY3
             return isinstance(ob, ast.Starred)
-        else:  # pragma: PY2
+        else:  # pragma: no cover
             return False
 
     def gen_unpack_spec(self, tpl):
@@ -307,7 +307,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
         try_body = [ast.Assign(targets=[target], value=converter)]
         finalbody = [self.gen_del_stmt(tmp_name)]
 
-        if IS_PY2:  # pragma: PY2
+        if IS_PY2:  # pragma: no cover
             cleanup = ast.TryFinally(body=try_body, finalbody=finalbody)
         else:  # pragma: PY3
             cleanup = ast.Try(
@@ -334,10 +334,10 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
     def gen_none_node(self):
         if IS_PY34_OR_GREATER:  # pragma: PY3
             return ast.NameConstant(value=None)
-        else:  # pragma: PY2
+        else:  # pragma: no cover
             return ast.Name(id='None', ctx=ast.Load())
 
-    def gen_lambda(self, args, body):  # pragma: PY2
+    def gen_lambda(self, args, body):  # pragma: no cover
         return ast.Lambda(
             args=ast.arguments(
                 args=args, vararg=None, kwarg=None, defaults=[]),
@@ -428,7 +428,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
         # which is gone in python3.
         # See https://www.python.org/dev/peps/pep-3113/
 
-        if IS_PY2:  # pragma: PY2
+        if IS_PY2:  # pragma: no cover
             # Needed to handle nested 'tuple parameter unpacking'.
             # For example 'def foo((a, b, (c, (d, e)))): pass'
             to_check = list(node.args.args)
@@ -500,7 +500,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
             elif not print_used:
                 self.warn(node, "Doesn't print, but reads 'printed' variable.")
 
-    def gen_attr_check(self, node, attr_name):  # pragma: PY2
+    def gen_attr_check(self, node, attr_name):  # pragma: no cover
         """Check if 'attr_name' is allowed on the object in node.
 
         It generates (_getattr_(node, attr_name) and node).
@@ -871,7 +871,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
             for keyword_arg in node.keywords:
                 if keyword_arg.arg is None:
                     needs_wrap = True
-        else:  # pragma: PY2
+        else:  # pragma: no cover
             if (node.starargs is not None) or (node.kwargs is not None):
                 needs_wrap = True
 
@@ -1141,7 +1141,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
             raise NotImplementedError(
                 "Unknown target type: {0}".format(type(node.target)))
 
-    def visit_Print(self, node):  # pragma: PY2
+    def visit_Print(self, node):  # pragma: no cover
         """Checks and mutates a print statement.
 
         Adds a target to all print statements.  'print foo' becomes
@@ -1199,7 +1199,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
         """Allow `as` statements in import and import from statements."""
         return self.node_contents_visit(node)
 
-    def visit_Exec(self, node):  # pragma: PY2
+    def visit_Exec(self, node):  # pragma: no cover
         """Deny the usage of the exec statement.
 
         Exists only in Python 2.
@@ -1235,11 +1235,11 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
         """
         return self.node_contents_visit(node)
 
-    def visit_TryFinally(self, node):  # pragma: PY2
+    def visit_TryFinally(self, node):  # pragma: no cover
         """Allow `try ... finally` without restrictions."""
         return self.node_contents_visit(node)
 
-    def visit_TryExcept(self, node):  # pragma: PY2
+    def visit_TryExcept(self, node):  # pragma: no cover
         """Allow `try ... except` without restrictions."""
         return self.node_contents_visit(node)
 
@@ -1265,7 +1265,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
 
         if IS_PY3:  # pragma: PY3
             self.check_name(node, node.name)
-        else:   # pragma: PY2
+        else:   # pragma: no cover
             if not isinstance(node.name, ast.Tuple):
                 return node
 
@@ -1283,7 +1283,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
         """Protect tuple unpacking on with statements."""
         node = self.node_contents_visit(node)
 
-        if IS_PY2:  # pragma: PY2
+        if IS_PY2:  # pragma: no cover
             items = [node]
         else:  # pragma: PY3
             items = node.items
@@ -1314,7 +1314,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
             node = self.node_contents_visit(node)
             self.inject_print_collector(node)
 
-        if IS_PY2:  # pragma: PY2
+        if IS_PY2:  # pragma: no cover
             # Protect 'tuple parameter unpacking' with '_getiter_'.
 
             unpacks = []
@@ -1341,7 +1341,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
         if IS_PY3:  # pragma: PY3
             # Implicit Tuple unpacking is not anymore available in Python3
             return node
-        else:  # pragma: PY2
+        else:  # pragma: no cover
             # Check for tuple parameters which need _getiter_ protection
             if not any(isinstance(arg, ast.Tuple) for arg in node.args.args):
                 return node
@@ -1418,7 +1418,7 @@ class RestrictingNodeTransformer(ast.NodeTransformer):
         """Check the name of a class definition."""
         self.check_name(node, node.name)
         node = self.node_contents_visit(node)
-        if IS_PY2:  # pragma: PY2
+        if IS_PY2:  # pragma: no cover
             new_class_node = node
         else:  # pragma: PY3
             if any(keyword.arg == 'metaclass' for keyword in node.keywords):
