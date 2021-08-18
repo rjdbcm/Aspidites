@@ -1,4 +1,5 @@
 **unreleased**
+**v0.9.3**
 
 **v0.9.2**
 - SafeExp+tests fully working. 
