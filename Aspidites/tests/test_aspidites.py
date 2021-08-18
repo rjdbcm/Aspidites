@@ -1,10 +1,12 @@
 import os
+import sys
 import warnings
 
 from Aspidites._vendor.contracts import ContractNotRespected
 from hypothesis import given, assume, strategies as st
 import pytest as pt
-from Aspidites.__main__ import get_cy_kwargs
+from Aspidites.__main__ import get_cy_kwargs, parse_from_dummy
+import argparse as ap
 from Aspidites.parser import parse_module
 from Aspidites.templates import lib, setup
 from Aspidites.monads import Maybe, Undefined, Surely, SafeMod, SafeDiv, SafeExp
@@ -128,6 +130,19 @@ def test_integer_monad(x):
     assert Surely(x) + 1 == x + 1
     assert (Surely(x) == 1) == (x == 1)
     assert hash(Surely(x)) == hash(x)
+
+
+def test_cli_dummy_parser():
+    namespace, other_args, kwargs = parse_from_dummy(['aspidites', '-h'],
+                                                     ap.ArgumentParser(add_help=False),
+                                                     __test=True)
+    assert any(x in other_args for x in sys.argv)
+    with pt.raises(SystemExit):
+        parse_from_dummy(['aspidites'], ap.ArgumentParser(add_help=False), __test=True)
+
+    with pt.raises(SystemExit):
+        parse_from_dummy(['aspidites', '-pt'], ap.ArgumentParser(add_help=False),
+                         __test=True)
 
 
 def test_compile_to_shared_object(inject_config):
