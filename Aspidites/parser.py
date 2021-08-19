@@ -190,12 +190,10 @@ dict_str = Forward()
 tuple_str = Forward()
 simple_assign = Forward()
 # for_stmt = Forward()
-pass_stmt = Forward()
 suite = Forward()
 rvalue = Forward()
 stmt = Forward()
 underscore = Literal("_")
-func_call = Forward()
 identifier = Word(alphas + "-_", alphanums + "-_").setName("VAR_ID")
 operand = complex_ | real | integer | identifier | underscore
 
@@ -329,17 +327,6 @@ func_def = Group(func_decl + suite).setParseAction(
     lambda t: "\n    ".join(t[0]) + "\n\n"
 )
 pass_stmt = Keyword("pass").setParseAction(lambda t: str(*t))
-suite << IndentedBlock(
-    (
-        comment_line
-        | pass_stmt
-        | ret_stmt
-        | yield_stmt
-        | func_call
-        | func_def
-        | contract_assign
-    )
-).setParseAction(lambda t: ("\n    ".join(t.asList())))
 sep = ", "
 lambda_def = Combine(Group("(" + arith_expr | comp_expr + ")"))
 func_call = Group(
@@ -354,6 +341,18 @@ clos_call = Group(
 ) + Suppress(
     Literal("...")
 )
+
+suite << IndentedBlock(
+    (
+        comment_line
+        | pass_stmt
+        | ret_stmt
+        | yield_stmt
+        | func_call
+        | func_def
+        | contract_assign
+    )
+).setParseAction(lambda t: ("\n    ".join(t.asList())))
 
 
 def cvt_for_stmt(toks):

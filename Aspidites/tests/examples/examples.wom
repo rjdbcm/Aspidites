@@ -11,7 +11,7 @@
 
 `procedures`
 (Hello()) procedure
-	<*>print("Hello, World!")
+	print("Hello, World!")
 
 `coroutines`
 (Hello2()) coroutine
