@@ -79,6 +79,9 @@ $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
 (Greeter(name -> str)) procedure
     <*>print('Greetings,', name)
 
+main:
+Greeter("Aspidites user")
+
 ```
 
 # Contributing
@@ -87,24 +90,24 @@ If you'd like to help with the Aspidites project as a developer check out the Is
 Now, for early woma adopters that do not wish to write any Python, reporting issues is always appreciated.
 If you'd like to help out financially, Aspidites' maintainer accepts [Liberapay](https://liberapay.com/rjdbcm/).
 
-# Copying
-![GitHub](https://img.shields.io/github/license/rjdbcm/Aspidites)
-
 # Information for Developers
 [![libraries.io](https://img.shields.io/badge/Libraries.io--inactive)](https://libraries.io/github/rjdbcm/Aspidites)
 
 ## Core Dependencies
 Aspidites has 10 core dependencies, all licensed under a compatible OSI approved license. In general, dependencies are vendored unless they contain Python Extensions.
-- Cython
-- Pyrsistent
-- PyParsing
-- MyPy
-- PyTest
+- cython
+- pyrsistent
+- pyparsing
+- mypy
+- pytest
 - pytest-xdist
 - pytest-mock
-- NumPy
+- numpy
 - future
 - hypothesis
+
+## Copying
+![GitHub](https://img.shields.io/github/license/rjdbcm/Aspidites)
 
 ## Additional License Info
 The following 3rd-party software packages may be used by or distributed with <b>Aspidites</b>.  
