@@ -133,12 +133,14 @@ def test_integer_monad(x):
 
 
 def test_cli_dummy_parser():
-    namespace, other_args, kwargs = parse_from_dummy(['aspidites', '-h'],
-                                                     ap.ArgumentParser(prog='_aspidites', add_help=False),
-                                                     __test=True)
-    assert any(x in other_args for x in sys.argv)
     with pt.raises(SystemExit):
-        parse_from_dummy(['aspidites'], ap.ArgumentParser(prog='_aspidites', add_help=False), __test=True)
+        parse_from_dummy(['aspidites', '-h'],
+                         ap.ArgumentParser(prog='aspidites', add_help=False),
+                         __test=True)
+    with pt.raises(SystemExit):
+        parse_from_dummy(['aspidites'],
+                         ap.ArgumentParser(prog='aspidites', add_help=False),
+                         __test=True)
 
 
 def test_compile_to_shared_object(inject_config):

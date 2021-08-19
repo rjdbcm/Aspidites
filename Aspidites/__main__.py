@@ -75,7 +75,7 @@ def parse_from_dummy(argv: list,
         if not __test:  # pragma: no cover
             print("%s called without arguments. Next time try --help or -h." % argv[0])
         sys.exit(1)
-    if len(argv) > 1 and argv[1] == "--pytest" or argv[1] == '-pt':  # pragma: no cover
+    if len(argv) >= 2 and argv[1] == "--pytest" or argv[1] == '-pt':  # pragma: no cover
         if not os.getenv("ASPIDITES_DOCKER_BUILD"):
             argv = [os.path.dirname(os.path.realpath(__file__)) + '/tests'] + argv[2:]
         else:
@@ -91,7 +91,7 @@ def parse_from_dummy(argv: list,
                 action='store_true' if isinstance(v, (bool,)) else 'store'
             )
 
-    asp_parser = ap.ArgumentParser(prog='_aspidites',
+    asp_parser = ap.ArgumentParser(prog='aspidites',
                                    description=__description__,
                                    parents=[cy_parser],
                                    add_help=not bool(cy_version.major)
