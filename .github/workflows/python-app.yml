@@ -32,4 +32,10 @@ jobs:
       uses: codecov/codecov-action@v2
       with:
         files: ./coverage.xml
+    - name: Upload Coverage to codeclimate.com
+      uses: paambaati/codeclimate-action@v2.2.4
+      env:
+        CC_TEST_REPORTER_ID: 5bcc9d60bb439f75e102507e595434a393e9be017010223f6f3bc61cce2f5802
+      with:
+        coverageCommand: coverage ./coverage.xml
 
