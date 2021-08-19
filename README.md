@@ -12,7 +12,7 @@ $ pip install Aspidites
 #### Docker
 ![Docker Image Version (latest by date)](https://img.shields.io/docker/v/rjdbcm/aspidites?color=pink&label=%20&logo=docker)[![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/rjdbcm/aspidites)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)
 ```
-$ docker pull rjdbcm/aspidites
+$ docker pull ghcr.io/rjdbcm/aspidites:latest
 ```
 
 #### Github
