@@ -41,11 +41,12 @@ jobs:
           pipenv sync -d
 
       - name: Install PyPI distribution to Pipenv ⌛
+        working-directory: /.venv
         run: |
           pipenv run pip install -i https://test.pypi.org/simple/ --upgrade Aspidites>0.9.10
 
       - name: Test PyPI distribution in Pipenv ⌛
-        working-directory: /
+        working-directory: /.venv
         run: |
           pipenv run Aspidites --pytest
 
