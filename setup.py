@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 import os
+import sys
+
 from setuptools import setup, find_packages
 from setuptools.dist import Distribution
 from setuptools.command.install import install
@@ -78,7 +80,7 @@ setup(
         ],
     packages=find_packages(),
     test_suite='Aspidites/tests',
-    distclass=BinaryDistribution,
+    distclass=Distribution if sys.platform != 'darwin' else BinaryDistribution,
     entry_points={'console_scripts': ['aspidites = Aspidites.__main__:main']},
     package_data={'': ["*.wom", "*.pyx", "*.pyi"]},  # add any native *.wom files
     long_description=read('README.md'),
