@@ -1,4 +1,5 @@
 **unreleased**
+**v0.9.29**
 
 **v0.9.28**
 - direct function calls within function definitions now work!
