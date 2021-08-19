@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Aspidites's documentation!
+Welcome to Aspidites' documentation!
 =====================================
 
 .. toctree::
@@ -15,9 +15,10 @@ Welcome to Aspidites's documentation!
 
    ` backticks are used to denote comments `
    (Hello()) procedure
-      <*>Print("Hello World!")
-
-
+      print("Hello World!")
+   ` structured entrypoint `
+   main:
+      Hello()
 
 
 Indices and tables

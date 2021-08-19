@@ -1,4 +1,5 @@
 from Aspidites.parser import comparisonop, identifier, quoted_str
+from Aspidites import __version__
 from pygments.lexer import RegexLexer, bygroups, combined, include
 from pygments import token
 from sphinx.highlighting import lexers
@@ -27,7 +28,7 @@ copyright = '2021, Ross J. Duff'
 author = 'Ross J. Duff'
 
 # The full version, including alpha/beta/rc tags
-release = 'v0.6.1'
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -36,6 +37,7 @@ release = 'v0.6.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx_rtd_theme"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -52,12 +54,18 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = "sphinx_rtd_theme"
+html_theme_options = {}
+html_theme_options.update(display_version=True,
+                          style_external_links=True,
+                          )
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+html_favicon = '_static/aspidites_logo_96_96.png'
+html_logo = '_static/aspidites_logo_96_96.png'
 
 
 class WomaLexer(RegexLexer):
@@ -101,7 +109,8 @@ class WomaLexer(RegexLexer):
         'root': [
             (r'\*|\*\*|\+|\-|!|%|\/', token.Operator),
             (comparisonop.reString, token.Operator),
-            (r'Print', token.Name.Builtin),
+            (r'print', token.Name.Builtin),
+            (r"\bmain:", token.Name.Label),
             (
             r'procedure|finite|number|np_scalar_uint|np_uint8|np_uint16|np_uint32|np_uint64|np_scalar_int|np_int8|np_int16|np_int32|np_int64',
             token.Keyword.Type),
@@ -151,7 +160,15 @@ class WomaLexer(RegexLexer):
             (r"'", token.String.Single, '#pop'),
             (r"\\\\|\\'|\\\n", token.String.Escape),  # included here for raw strings
             include('strings-single')
-        ]
+        ],
     }
 
+
 lexers['woma'] = WomaLexer(startinline=True)
+
+
+def setup(app):
+    app.add_js_file("js/script.js")
+    app.add_css_file("css/styles.css")
+    app.add_css_file("css/dark.css")
+    app.add_css_file("css/light.css")

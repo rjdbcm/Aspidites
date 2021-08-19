@@ -54,3 +54,15 @@ jobs:
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+
+      -
+        name: Send a Tweet
+        uses: ethomson/send-tweet-action@v1
+        with:
+          status:
+            "🐳 A new #Aspidites container is here and ready for delivery. 🚚
+             Check it out now at https://github.com/rjdbcm/Aspidites/pkgs/container/aspidites"
+          consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
+          consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
+          access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
