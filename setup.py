@@ -87,15 +87,15 @@ setup(
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
-        "Programming Language :: Other"
+        "Programming Language :: Other",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: Implementation :: CPython",
-        "Topic :: Software Development :: Compilers"
+        "Topic :: Software Development :: Compilers",
         "Topic :: Utilities",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "License :: OSI Approved :: MIT License",
         "License :: OSI Approved :: BSD License",
         "License :: OSI Approved :: Zope Public License (ZPL)",
-        "License :: OSI Approved :: Apache Software License"
+        "License :: OSI Approved :: Apache Software License",
     ],
 )
