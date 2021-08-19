@@ -15,7 +15,7 @@ Welcome to Aspidites' documentation!
 
    ` backticks are used to denote comments `
    (Hello()) procedure
-      print("Hello World!")
+      <*>print("Hello World!")
    ` structured entrypoint `
    main:
       Hello()

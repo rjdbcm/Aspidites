@@ -2,10 +2,12 @@ import os
 import sys
 import warnings
 
+import hypothesis
+
 from Aspidites._vendor.contracts import ContractNotRespected
 from hypothesis import given, assume, strategies as st
 import pytest as pt
-from Aspidites.__main__ import get_cy_kwargs, parse_from_dummy
+from Aspidites.__main__ import get_cy_kwargs, parse_from_dummy, main
 import argparse as ap
 from Aspidites.parser import parse_module
 from Aspidites.templates import lib, setup
@@ -50,6 +52,7 @@ def test_compile_module(inject_config):
                      max_value=10000) | st.floats(allow_nan=False),
        y=st.integers(min_value=-10000,
                      max_value=10000) | st.floats(allow_nan=False))
+@hypothesis.settings(deadline=None)  # TODO: the specific edge case x=1 y=1 is slow
 @pt.mark.filterwarnings('ignore::RuntimeWarning')
 def test_safe_math_(x, y):
     assert SafeExp(0, 0) == Undefined()
@@ -132,16 +135,14 @@ def test_integer_monad(x):
     assert hash(Surely(x)) == hash(x)
 
 
-@pt.mark.xfail(reason='This test will sometimes fail to raise SystemExit')
-def test_cli_dummy_parser():
+def test_cli_help_exit():
     with pt.raises(SystemExit):
-        parse_from_dummy(['aspidites', '-h'],
-                         ap.ArgumentParser(prog='aspidites', add_help=False),
-                         __test=True)
+        main(['-h'])
+
+
+def test_cli_no_arg_exit():
     with pt.raises(SystemExit):
-        parse_from_dummy(['aspidites'],
-                         ap.ArgumentParser(prog='aspidites', add_help=False),
-                         __test=True)
+        main([''])
 
 
 def test_compile_to_shared_object(inject_config):
