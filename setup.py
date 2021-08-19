@@ -95,7 +95,7 @@ setup(
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "License :: OSI Approved :: MIT License",
         "License :: OSI Approved :: BSD License",
-        "License :: OSI Approved :: Zope Public License (ZPL)",
+        # "License :: OSI Approved :: Zope Public License (ZPL)", ??? Invalid
         "License :: OSI Approved :: Apache Software License",
     ],
 )
