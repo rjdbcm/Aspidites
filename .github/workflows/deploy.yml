@@ -8,8 +8,8 @@ jobs:
       name: Build and publish Python 🐍 distributions 📦 to PyPI and TestPyPI
       runs-on: ubuntu-18.04
       steps:
-        - id: get_version
-          uses: battila7/get-version-action@v2
+      - id: get_version
+        uses: battila7/get-version-action@v2
       - uses: actions/checkout@master
       - name: Set up Python 3.9
         uses: actions/setup-python@v1
