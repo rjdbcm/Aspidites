@@ -49,12 +49,16 @@ coverage:
 
 patch:
 	bump2version patch
+	python ./scripts/bumpversion_hook.py
 
 minor:
 	bump2version minor
+	python ./scripts/bumpversion_hook.py
 
 major:
 	bump2version major
+	python ./scripts/bumpversion_hook.py
+
 
 build: clean test-all clean
 	python setup.py sdist bdist_wheel
