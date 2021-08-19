@@ -121,7 +121,7 @@ class Maybe:
     def kwargs(self):
         return self._kwargs
 
-    def __call__(self, debug=False, warn_undefined=True):
+    def __call__(self, warn_undefined=True):
         try:
             with suppress(ValueError):
                 val = apply(self.func, self.args, self.kwargs)
@@ -132,16 +132,14 @@ class Maybe:
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
         except (ContractNotRespected, ArityError, ZeroDivisionError) as e:
             if warn_undefined:
-                scope = len(inspect.trace()) if debug else 1
-                for i in range(scope):
-                    stack = inspect.stack(scope)
-                    w = create_warning(self.func, self.args, self.kwargs, stack, e)
-                    warn(
-                        w,
-                        category=ContractBreachWarning
-                        if isinstance(e, ContractNotRespected)
-                        else RuntimeWarning,
-                    )
+                stack = inspect.stack(1)
+                w = create_warning(self.func, self.args, self.kwargs, stack, e)
+                warn(
+                    w,
+                    category=ContractBreachWarning
+                    if isinstance(e, ContractNotRespected)
+                    else RuntimeWarning,
+                )
             # UNDEFINED #
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
             return self.__instance__
