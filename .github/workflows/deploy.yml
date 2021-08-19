@@ -36,9 +36,9 @@ jobs:
 
       - name: Install & Lock Pipenv 🔒
         run: |
-        python -m pip install --upgrade pip pipenv wheel cython
-        pipenv lock
-        pipenv sync -d
+          python -m pip install --upgrade pip pipenv wheel cython
+          pipenv lock
+          pipenv sync -d
 
       - name: Install PyPI distribution to Pipenv ⌛
         run: |
