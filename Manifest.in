@@ -3,3 +3,4 @@ include Aspidites/woma/*.pyx
 include Aspidites/woma/*.c
 include Aspidites/woma/*.pyi
 exclude Aspidites/woma/*.so
+prune scripts

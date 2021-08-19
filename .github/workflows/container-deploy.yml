@@ -57,11 +57,12 @@ jobs:
 
       -
         name: Send a Tweet
+        continue-on-error: true
         uses: ethomson/send-tweet-action@v1
         with:
           status:
             "🐳 A new #Aspidites container is here and ready for delivery. 🚚
-             Check it out now at https://github.com/rjdbcm/Aspidites/pkgs/container/aspidites"
+             Check it out: https://github.com/rjdbcm/Aspidites/pkgs/container/aspidites"
           consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
           consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
           access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}

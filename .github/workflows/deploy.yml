@@ -42,10 +42,11 @@ jobs:
           password: ${{ secrets.PYPI_API_TOKEN }}
 
       - name: Send a Tweet
+        continue-on-error: true
         uses: ethomson/send-tweet-action@v1
         with:
-            status: "📦 New PyPI package just dropped! 🎉🎉🎉
-            Check it out now at https://pypi.org/project/Aspidites"
+            status: "📦 New PyPI package version just dropped! 🎉🎉🎉
+            Check it out: https://pypi.org/project/Aspidites"
             consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
             consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
             access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
