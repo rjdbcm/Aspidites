@@ -111,14 +111,21 @@ Lexicon
 +------------+-----------+---------------------+-------------------------------------------------------------------------------------------------------------------+
 
 Examples
---------
+~~~~~~~~
+
+First Class Functions
+^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: woma
 
-    `first-class functions`
     #cython.binding(True)
     (Add(x = 3 -> int; y = 3 -> int)) int
         <*>x+y
+
+Generators, Procedures, and Coroutines
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: woma
 
     `generators`
     (Yield123()) coroutine
@@ -134,6 +141,11 @@ Examples
     (Hello2()) coroutine
         <^>Hello()
 
+Persistent Evolvable Iterables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: woma
+
     `persistent vectors`
     D = [2, 4, 6, 8, 10]
 
@@ -147,8 +159,18 @@ Examples
            4: None,
          'd': 6**2*5+3}
 
+Refinement Types use Contract Clauses
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: woma
+
     `new contracts can impose more complex contractual clauses`
-    colors <- list[3](int, <256)
+    colors <- list[3](int, <256, >=0)
+
+Closures and Lambdas
+^^^^^^^^^^^^^^^^^^^^
+
+.. code:: woma
 
     `any woma function can be closed in place to become an instance that complies with the`
     `type specification or Undefined for instances that breach the type specification contract`
@@ -165,6 +187,11 @@ Examples
     val = scala(_ + _)
     val = val(scala)...
 
+Undefined() as the Nullity Element
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: woma
+
     `modulus and division by 0 handled by returning Undefined()`
     denom = 0
     div_by_zero = 1 / denom
@@ -172,7 +199,15 @@ Examples
     div_by_zero2 = 1 / 0
     mod_zero2 = 1 % 0
 
+Optional Structured Entrypoint
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: woma
+
     `main: structure for executable actions when run as a binary`
+    (Hello()) procedure
+        print("Hello, World!")
+
     main:
     Hello()
     print("I'm a binary.")
