@@ -1,4 +1,3 @@
-
 from pygments.lexer import RegexLexer, bygroups, combined, include
 from pygments import token
 from sphinx.highlighting import lexers
@@ -19,7 +18,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 from Aspidites.parser import comparisonop, identifier, quoted_str
-from Aspidites import __version__
+from Aspidites import __version__, __mimetype__
 
 
 # -- Project information -----------------------------------------------------
@@ -71,6 +70,7 @@ html_logo = '_static/aspidites_logo_wheelie_96_96.png'
 
 class WomaLexer(RegexLexer):
     name = 'woma'
+    mimetype = [__mimetype__]
 
     def innerstring_rules(ttype):
         return [
