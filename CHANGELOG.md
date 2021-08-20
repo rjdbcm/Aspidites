@@ -2,6 +2,9 @@
 **v0.9.31**
 
 **v0.9.30**
+509a146 (HEAD -> main, tag: v0.9.31) Bump version: 0.9.30 → 0.9.31
+c2aa35d changelog updated
+fe655c7 fixed that pesky bumpversion_hook.py
 
 **v0.9.29**
 - 7e45564 (HEAD -> main, tag: v0.9.30) Bump version: 0.9.29 → 0.9.30
