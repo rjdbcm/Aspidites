@@ -48,19 +48,19 @@ coverage:
 	pytest Aspidites/tests --cov-report=xml --cov=Aspidites
 
 patch:
-	python ./scripts/bumpversion_hook.py
+	python -m Aspidites.scripts.bumpversion_hook.py patch
 	git add CHANGELOG.md
 	git commit -m 'changelog updated'
 	bump2version patch
 
 minor:
-	python ./scripts/bumpversion_hook.py
+	python -m Aspidites.scripts.bumpversion_hook.py minor
 	git add CHANGELOG.md
 	git commit -m 'changelog updated'
 	bump2version minor
 
 major:
-	python ./scripts/bumpversion_hook.py
+	python -m Aspidites.scripts.bumpversion_hook.py major
 	git add CHANGELOG.md
 	git commit -m 'changelog updated'
 	bump2version major
