@@ -11,7 +11,7 @@ def main():
 
     # Replace the target string
     commit_log = '\n- '.join(
-        os.popen(f'git log --abbrev-commit --pretty=oneline {vstring}..HEAD').readlines()
+        os.popen(f'git log --abbrev-commit --pretty=oneline {vstring}...HEAD').readlines()
     )
     changes = '\n'.join(
         [vstring, commit_log, '\n']

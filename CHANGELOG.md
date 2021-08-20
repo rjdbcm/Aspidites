@@ -90,6 +90,9 @@
 
 
 
+
+
+
 - make uninstall template no longer deletes __init__.py
 
 **v0.7.0**

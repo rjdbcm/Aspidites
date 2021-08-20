@@ -49,16 +49,19 @@ coverage:
 
 patch:
 	python ./scripts/bumpversion_hook.py
+	git add CHANGELOG.md
 	git commit -m 'changelog updated'
 	bump2version patch
 
 minor:
 	python ./scripts/bumpversion_hook.py
+	git add CHANGELOG.md
 	git commit -m 'changelog updated'
 	bump2version minor
 
 major:
 	python ./scripts/bumpversion_hook.py
+	git add CHANGELOG.md
 	git commit -m 'changelog updated'
 	bump2version major
 
