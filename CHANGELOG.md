@@ -1,5 +1,9 @@
 **unreleased**
 **v0.9.33**
+
+-3912e63 fixed main() call in test_aspidites.py
+
+
 **v0.9.32**
 
 -fa9d60d CLI test to fix coverage missing for __main__.py
