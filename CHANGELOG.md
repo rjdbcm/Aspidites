@@ -2,6 +2,13 @@
 **v0.9.31**
 
 **v0.9.30**
+49ea6b1 finally got bumps to work!
+- c3db2a1 maybe fixed version changelogging
+- 509a146 Bump version: 0.9.30 → 0.9.31
+- c2aa35d changelog updated
+- fe655c7 fixed that pesky bumpversion_hook.py
+
+
 - 509a146 Bump version: 0.9.30 → 0.9.31
 - c2aa35d changelog updated
 - fe655c7 fixed that pesky bumpversion_hook.py
