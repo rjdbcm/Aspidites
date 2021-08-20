@@ -11,7 +11,7 @@ def main(*arg):  # 'major', 'minor', or 'patch'
     open('CHANGELOG.bak', 'w').write(data)
 
     # Replace the target string
-    commit_log = '\n-' + f'\n- '.join(
+    commit_log = '\n- ' + f'\n- '.join(
         [i.strip() for i in
          os.popen(
              f'git log --abbrev-commit --pretty=oneline v{last_version}...HEAD'
