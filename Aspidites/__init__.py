@@ -11,3 +11,4 @@ __description__ = (
     under the conditions of the {__license__}v3 found in the LICENSE file.
     """
 )
+__mimetype__ = 'text/woma'
