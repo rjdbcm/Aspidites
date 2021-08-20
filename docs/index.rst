@@ -8,8 +8,7 @@ Welcome to the Woma Programming Language!
 
 .. toctree::
    :numbered:
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 3
 
    README
 
