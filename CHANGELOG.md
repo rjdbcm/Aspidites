@@ -1,6 +1,14 @@
 **unreleased**
 **v0.9.31**
 
+7aa21f1 quick update to version changelogger and it is finally working
+- 6bbc8c1 minor makefile cleanup
+- 8263ce4 changelog updated
+- 49ea6b1 finally got bumps to work!
+- c3db2a1 maybe fixed version changelogging
+
+
+
 **v0.9.30**
 - 509a146 Bump version: 0.9.30 → 0.9.31
 - c2aa35d changelog updated
