@@ -1,6 +1,12 @@
 **unreleased**
+
 **v0.9.30**
+
 **v0.9.29**
+- 7e45564 (HEAD -> main, tag: v0.9.30) Bump version: 0.9.29 → 0.9.30
+- 010647c changelog updated
+- 3856180 bumpversion_hook should be in order.
+- 4423a00 changelog building hook executes and commits before any version bump.
 
 **v0.9.28**
 - direct function calls within function definitions now work!
