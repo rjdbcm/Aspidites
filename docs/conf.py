@@ -23,7 +23,7 @@ from Aspidites import __version__, __mimetype__
 
 # -- Project information -----------------------------------------------------
 
-project = 'Aspidites'
+project = 'Woma'
 copyright = '2021, Ross J. Duff'
 author = 'Ross J. Duff'
 

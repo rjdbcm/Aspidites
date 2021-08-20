@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Aspidites' documentation!
-=====================================
+Welcome to the Woma Programming Language!
+=========================================
 
 .. toctree::
    :numbered:
@@ -18,10 +18,11 @@ Welcome to Aspidites' documentation!
 
    ` backticks are used to denote comments `
    (Hello()) procedure
-      <*>print("Hello World!")
+      print("Hello World!")
+
    ` structured entrypoint `
    main:
-      Hello()
+   Hello()
 
 
 Indices and tables
