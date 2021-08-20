@@ -1,4 +1,5 @@
 **unreleased**
+**v0.9.34**
 **v0.9.33**
 
 -3912e63 fixed main() call in test_aspidites.py
