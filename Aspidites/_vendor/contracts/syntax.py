@@ -33,8 +33,8 @@ from .interface import Where
 
 class ParsingTmp:
     # TODO: FIXME: decide on an order, if we do the opposite it doesn't work.
-    contract_types: list[Any] = []
-    keywords: list[Any] = []
+    contract_types: List[Any] = []
+    keywords: List[Any] = []
 
 
 def add_contract(x):
