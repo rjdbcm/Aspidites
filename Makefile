@@ -68,5 +68,5 @@ major:
 build: clean test-all clean
 	python setup.py sdist bdist_wheel
 
-%: Makefile
+%:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
