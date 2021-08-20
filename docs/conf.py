@@ -108,16 +108,17 @@ class WomaLexer(RegexLexer):
 
     tokens = {
         'root': [
-            (r'\*|\*\*|\+|\-|!|%|\/', token.Operator),
+            (r'\*|\*\*|\+|\-|!|%|\/|=', token.Operator),
             (comparisonop.reString, token.Operator),
             (r'print', token.Name.Builtin),
             (r"\bmain:", token.Name.Label),
             (
-            r'procedure|finite|number|np_scalar_uint|np_uint8|np_uint16|np_uint32|np_uint64|np_scalar_int|np_int8|np_int16|np_int32|np_int64',
+            r'procedure|int|list|float|finite|number|np_scalar_uint|np_uint8|np_uint16|np_uint32|np_uint64|np_scalar_int|np_int8|np_int16|np_int32|np_int64',
             token.Keyword.Type),
             (identifier.reString, token.Name.Decorator),
             (r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*`", token.Comment),
-            (r'<\*>|<\^>|<@>|->|<-|\)\)', token.Keyword),
+            (r'[<\^>]|[<\*>]|<@>|->|[<-]|\)\)|#|(?<=\))\.{3,}', token.Keyword),
+            (r'(?<=\w)\.(?=\w)', token.Punctuation),
             (r'[]{}:(),;[]', token.Punctuation),
             (r'(\d(?:_?\d)*\.(?:\d(?:_?\d)*)?|(?:\d(?:_?\d)*)?\.\d(?:_?\d)*)([eE][+-]?\d(?:_?\d)*)?', token.Number.Float),
             (r'\d(?:_?\d)*[eE][+-]?\d(?:_?\d)*j?', token.Number.Float),

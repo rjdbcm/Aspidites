@@ -7,8 +7,11 @@ Welcome to Aspidites' documentation!
 =====================================
 
 .. toctree::
+   :numbered:
    :maxdepth: 2
    :caption: Contents:
+
+   README
 
 
 .. code-block:: woma
