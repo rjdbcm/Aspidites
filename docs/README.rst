@@ -181,9 +181,10 @@ Examples
 Logo/Mascot
 ===========
 
-| Wheelie the Woma™ is an unregistered trademark of Ross J. Duff.
-| The logos are copyright © Ross J. Duff but may be transferred to an
-appropriate trust at a later date.
+| Wheelie the Woma™ and Woma Programming Language™ are unregistered trademarks of Ross J. Duff.
+| The logos/mascots (stored in docs/_static as .png files)
+| are copyright © Ross J. Duff but may be transferred to an
+| appropriate trust at a later date.
 | This is to prevent confusing/malicious use.
 
 Contributing
