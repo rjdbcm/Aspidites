@@ -1,4 +1,5 @@
 **unreleased**
+**v0.9.32**
 **v0.9.31**
 
 7aa21f1 quick update to version changelogger and it is finally working
