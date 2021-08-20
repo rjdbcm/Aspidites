@@ -14,6 +14,7 @@ from Aspidites.api import CheckedFileStack, checksum
 from Aspidites.templates import lib, makefile, pyproject, setup
 
 
+
 @contract()
 def compile_module(
     code: "code",
@@ -26,27 +27,12 @@ def compile_module(
     *args,
     **kwargs
 ):
-
     app_name = os.path.splitext(fname)[0]
     project = os.path.basename(app_name)
     module_name = app_name.replace("/", ".")
     file_c = app_name + ".c"
-    dir = os.path.dirname(file_c)
     glob_so = app_name + ".*.so"
-    init_py = os.path.join(dir, "__init__.py")
-    make_ = os.path.join(dir, "Makefile")
-    py_typed = os.path.join(dir, "py.typed")
-    stack = CheckedFileStack()
-    mode = "x" if force else "w"
-    open(fname, mode).write(lib.substitute(code="\n".join(code)))
-    stack.register(fname)
-    open(py_typed, "w").write("# THIS FILE IS GENERATED - DO NOT EDIT #")
-    stack.register(py_typed)
-    open(init_py, "w").write("# THIS FILE IS GENERATED - DO NOT EDIT #")
-    stack.register(init_py)
-    open(make_, mode).write(makefile.substitute(project=project))
-    stack.register(make_)
-    verb = int(bool(verbose))
+
     mypy_args = [
         "-m",
         module_name,
@@ -59,6 +45,26 @@ def compile_module(
         # '--disallow-untyped-defs',
         # '--disallow-untyped-calls',
     ]
+
+    stack = CheckedFileStack()
+    root = os.path.dirname(fname)
+    mode = "x" if force else "w"
+
+    open(fname, mode).write(lib.substitute(code="\n".join(code)))
+    stack.register(fname)
+
+    py_typed = os.path.join(root, "py.typed")
+    open(py_typed, mode).write("# THIS FILE IS GENERATED - DO NOT EDIT #")
+    stack.register(py_typed)
+
+    init_py = os.path.join(root, "__init__.py")
+    open(init_py, mode).write("# THIS FILE IS GENERATED - DO NOT EDIT #")
+    stack.register(init_py)
+
+    make_ = os.path.join(root, "Makefile")
+    open(make_, mode).write(makefile.substitute(project=project))
+    stack.register(make_)
+
     print("running mypy", " ".join(mypy_args))
     type_report = None
     error_report = None
@@ -84,7 +90,7 @@ def compile_module(
     except FileNotFoundError as e:
         warn(str(e))
         try:
-            print("trying rename __main__.pyi to %s" % fname_pyi)
+            print("trying rename %s/__main__.pyi to %s" % (os.getcwd(), fname_pyi))
             os.rename(os.path.join(os.getcwd(), '__main__.pyi'), fname_pyi)
             stack.register(fname_pyi)
         except FileNotFoundError:
@@ -97,9 +103,10 @@ def compile_module(
         stack.register(fname_pyc)
 
     if c:
+        verb = int(bool(verbose))
         os.popen("cython %s %s %s" % (fname, "--force" * force, "--verbose" * verb))
-        setup_py = os.path.join(dir, "setup.py")
-        pyproject_toml = os.path.join(dir, "pyproject.toml")
+        setup_py = os.path.join(root, "setup.py")
+        pyproject_toml = os.path.join(root, "pyproject.toml")
         with open(setup_py, mode) as f:
             f.write(
                 setup.substitute(
