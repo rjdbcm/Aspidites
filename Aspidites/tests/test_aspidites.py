@@ -137,17 +137,17 @@ def test_integer_monad(x):
 
 def test_cli_help_exit():
     with pt.raises(SystemExit):
-        main(['-h'])
+        main(['Aspidites', '-h'])
 
 
 def test_cli_no_arg_exit():
     with pt.raises(SystemExit):
-        main([''])
+        main(['Aspidites' , ''])
 
 
 def test_cli_no_target_exit():
     with pt.raises(SystemExit):
-        main(['-fpc'])
+        main(['Aspidites' ,'-fpc'])
 
 @pt.mark.filterwarnings('ignore::RuntimeWarning')
 def test_compile_to_shared_object(inject_config):
