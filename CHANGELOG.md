@@ -1,4 +1,5 @@
 **unreleased**
+**v0.9.33**
 **v0.9.32**
 
 -fa9d60d CLI test to fix coverage missing for __main__.py
