@@ -2,12 +2,12 @@
 **v0.9.34**
 **v0.9.33**
 
--3912e63 fixed main() call in test_aspidites.py
+- 3912e63 fixed main() call in test_aspidites.py
 
 
 **v0.9.32**
 
--fa9d60d CLI test to fix coverage missing for __main__.py
+- fa9d60d CLI test to fix coverage missing for __main__.py
 - af52c56 Make sure to raise a SystemExit when running our tests from a different thread.
 - 39ec7ce Makefile doesn't complain about circular deps
 - 3f7a8b6 fix minor bumpversion_hook formatting issue
