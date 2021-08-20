@@ -7,7 +7,7 @@ th p {
     margin-bottom: 0;
 }
 
-img.logo {
+a img.logo {
   animation-duration: 1.5s;
   animation-name: slidein;
 }
