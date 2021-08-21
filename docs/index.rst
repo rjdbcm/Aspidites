@@ -14,6 +14,3 @@ Welcome to the Woma Programming Language!
    syntax
    devinfo
 
-
-* :ref:`search`
-
