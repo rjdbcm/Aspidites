@@ -23,6 +23,11 @@ a img.logo {
     border-color:#181a1b
 }
 
+button.copybtn {
+    opacity: 1;
+}
+
+
 .wy-side-nav-search {
     text-align: -moz-center;
 }
