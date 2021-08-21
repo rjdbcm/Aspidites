@@ -19,7 +19,7 @@ from . import attr_tc
 from . import files_tc
 from . import miscellaneous_aliases_tc
 from . import isinstance_tc
-
+from . import sets_tc
 from . import extensions_tc
 
 try:
