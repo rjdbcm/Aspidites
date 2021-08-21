@@ -8,8 +8,25 @@ th p {
 }
 
 a img.logo {
-  animation-duration: 1.5s;
+  animation-duration: 0.75s;
   animation-name: slidein;
+  position: absolute;
+  break-inside: avoid;
+  padding-left: 20%;
+  pointer-events: none;
+}
+
+.toggle .header {
+    display: inline;
+    cursor: pointer;
+}
+
+.toggle .header:after {
+    animation-name: slidein;
+}
+
+.toggle .header.open:after {
+    animation-name: slideout;
 }
 
 @keyframes slidein {
@@ -19,7 +36,7 @@ a img.logo {
   }
 
   75% {
-    font-size: 300%;
+    font-size: 150%;
     margin-left: 25%;
     width: 150%;
   }

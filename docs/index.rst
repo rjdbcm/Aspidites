@@ -8,20 +8,9 @@ Welcome to the Woma Programming Language!
 
 .. toctree::
    :numbered:
-   :maxdepth: 3
+   :maxdepth: 4
 
    README
-
-
-.. code-block:: woma
-
-   ` backticks are used to denote comments `
-   (Hello()) procedure
-      print("Hello World!")
-
-   ` structured entrypoint `
-   main:
-   Hello()
 
 
 Indices and tables
