@@ -16,6 +16,28 @@ a img.logo {
   pointer-events: none;
 }
 
+.wy-side-nav-search input[type=text] {
+    width:90%;
+    border-radius:20px;
+    padding:6px 12px;
+    border-color:#181a1b
+}
+
+.wy-side-nav-search {
+    text-align: -moz-center;
+}
+
+#rtd-search-form:hover {
+    border: 1.5px solid #b2aba1;
+}
+
+#rtd-search-form {
+    width: 80% !important;
+    border-radius: 20px;
+    background-color: #181a1b;
+    background-radius : 20px;
+}
+
 .toggle .header {
     display: inline;
     cursor: pointer;
