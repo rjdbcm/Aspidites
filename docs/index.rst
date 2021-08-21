@@ -11,11 +11,9 @@ Welcome to the Woma Programming Language!
    :maxdepth: 4
 
    README
+   syntax
+   devinfo
 
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
+

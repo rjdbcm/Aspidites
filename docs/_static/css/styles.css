@@ -12,6 +12,7 @@ a img.logo {
   animation-name: slidein;
   position: absolute;
   break-inside: avoid;
+  padding-top: 20%;
   padding-left: 20%;
   pointer-events: none;
 }
