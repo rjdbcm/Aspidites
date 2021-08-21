@@ -1,7 +1,7 @@
 import sys
 import inspect
 from .backported import getcallargs, getfullargspec
-
+from ..fn.underscore import ArityError
 
 inPy2 = sys.version_info[0] == 2
 if inPy2:  # pragma: no cover
@@ -39,12 +39,11 @@ def can_accept_exactly_one_argument(callable_thing):
 
     try:
         getcallargs(f, *args)
-    except (TypeError, ValueError) as e:  # @UnusedVariable
+    except (TypeError, ValueError, ArityError) as e:  # @UnusedVariable
         # print 'Get call args exception (f=%r,args=%r): %s ' % (f, args, e)
         return False, str(e)
     else:
         return True, None
-
 
 
 def get_f_from_callable(callable_thing):
@@ -59,10 +58,12 @@ def get_f_from_callable(callable_thing):
             # args = ('test',)
     return f
 
+
 def get_callable_fullargspec(callable_thing):
     f = get_f_from_callable(callable_thing)
     spec = getfullargspec(f)
     return spec
+
 
 def can_accept_at_least_one_argument(callable_thing):
     """ 
@@ -99,7 +100,7 @@ def can_accept_self_plus_one_argument(callable_thing):
     f = get_f_from_callable(callable_thing)
     try:
         getcallargs(f, 'self', 'value')
-    except (TypeError, ValueError) as e:  # @UnusedVariable
+    except (TypeError, ValueError, ArityError) as e:  # @UnusedVariable
         return False
     else:
         return True
