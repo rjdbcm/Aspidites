@@ -1,6 +1,11 @@
 **unreleased**
 **v0.10.0**
 
+- 598f86a patch setup.py woma compile
+- c39ac21 changelog updated
+
+
+
 - 
 
 
