@@ -1,5 +1,43 @@
 **unreleased**
 **v0.9.34**
+
+- a11958b refactor compiler.py for better decoupling of various writes
+- 839cc92 Enables sets tests
+- e0e5af8 Merge remote-tracking branch 'Aspidites/main' into main
+- 09ef124 Remove link to blank search page from docs index.rst
+- 048f0a6 Added more temp folders to .gitignore
+- dca63cd Added docs to .coveragerc and .dockerignore
+- c1fdb8c removed no covers from contracts utils.py functions that are still in use
+- 63aae94 add testcases for sets.
+- 5c3e33f prune docs from Manifest.in
+- ef611fc added sanity tests for contract function inspection
+- 7c72b3f Update README.md
+- 979c1cb fix GNU license in doc
+- 542bb0c adjust sections and pages of docs
+- 6bc98f1 add copybutton for shell commands to docs
+- d913dd4 Adjusted doc stylesheets for a responsive experience
+- fbc2fe6 very nice reactive but unobtrusive doc website
+- 2d7e5ef docs now have a nice examples section
+- c105f64 fix animation
+- 122da38 mild README.rst reformatting
+- 6feadb4 toctree now goes 3 deep.
+- 7daeb79 fixed so docs talk about the language not the reference implementation.
+- b3fa422 Full sized Wheelie in docs
+- b98ec6a logo update
+- 77aa6f4 Prep compiler.py for refactor
+- 7f65eb7 Add __mimetype__
+- 7a41b9f Add updated docs logo
+- c868389 Nice looking docs.
+- 79440ba update docs logo
+- 7209649 fix Programmable Error in rtd build
+- 6780de9 Add numpy to docs/requirements.txt
+- 61ceba6 Add readthedocs config and requirements.txt
+- 300b23d Merge remote-tracking branch 'Aspidites/main' into main
+- 9a3786d Add path insert to docs conf.py
+- a2adcaa typo fixed in change logger
+- 0116645 Update CHANGELOG.md
+
+
 **v0.9.33**
 
 - 3912e63 fixed main() call in test_aspidites.py
