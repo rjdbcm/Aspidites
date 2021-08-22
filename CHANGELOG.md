@@ -1,6 +1,14 @@
 **unreleased**
 **v0.10.1**
 
+- 63d0548 refactor CheckedFileStack class and compiler.py functions to used pathlib
+- 19ff71b inset search border
+- ddb57de add some transparency and gradients
+- 01c8e23 Added tabbed interfaces to docs/homepage
+- 54121d2 remove duplicated code
+
+
+
 **v0.10.0**
 
 - 598f86a patch setup.py woma compile
