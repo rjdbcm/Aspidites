@@ -1129,14 +1129,16 @@
     .wy-menu-vertical li.current > a {
         color: rgb(192, 186, 178);
         background-image: initial;
-        background-color: rgb(26, 28, 29);
+        background: rgb(26,28,29);
+        background: linear-gradient(90deg, rgba(26,28,29,1) 0%, rgba(26,28,29,0.75) 100%);
         border-color: initial;
     }
 
     .wy-menu-vertical li.on a:hover,
     .wy-menu-vertical li.current > a:hover {
         background-image: initial;
-        background-color: rgb(26, 28, 29);
+        background: rgb(26,28,29);
+        background: linear-gradient(90deg, rgba(26,28,29,1) 0%, rgba(26,28,29,0.75) 100%);
     }
 
     .wy-menu-vertical li.on a:hover span.toctree-expand,
@@ -1210,7 +1212,8 @@
     }
 
     .wy-menu-vertical a:hover {
-        background-color: rgb(57, 62, 64);
+        background: rgb(57,62,64);
+        background: linear-gradient(90deg, rgba(57,62,64,1) 0%, rgba(57,62,64,0.75) 100%);
     }
 
     .wy-menu-vertical a:hover span.toctree-expand {
