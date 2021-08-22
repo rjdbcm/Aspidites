@@ -60,7 +60,7 @@ button.copybtn {
 }
 
 #rtd-search-form:hover {
-    border: 1.5px solid #b2aba1;
+    border: 1.5px inset #b2aba1;
 }
 
 #rtd-search-form {
