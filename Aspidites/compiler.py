@@ -22,7 +22,7 @@ class CheckedFileStack:
 
     __metaclass__ = final
 
-    def __init__(self, initial=None, pre_size=8192):
+    def __init__(self, initial=None, pre_size=128):
         if initial is None:
             initial = {}
         self._files = pmap(initial, pre_size)
