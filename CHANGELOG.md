@@ -2,6 +2,12 @@
 
 **v0.11.0**
 
+- 82b9ec9 buffer size for CheckedFileStack now defaults to a more reasonable 128 bytes
+- 1085506 changelog updated
+- 4200f78 changelog reformatted
+
+
+
 - 4200f78 changelog reformatted
 
 
