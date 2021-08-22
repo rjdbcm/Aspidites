@@ -11,12 +11,16 @@ from Aspidites.__main__ import get_cy_kwargs
 cy_kwargs = get_cy_kwargs()
 cy_kwargs.update({'embed': True})
 code = open('Aspidites/woma/library.wom', 'r').read()
-compiler.compile_module(
-    parser.parse_module(code),
-    'Aspidites/woma/library.pyx',
+cy_kwargs.update(
+    code=parser.parse_module(code),
+    force=True,
+    fname='Aspidites/woma/library.pyx',
     bytecode=True,
-    **cy_kwargs
+    c=True,
+    verbose=0,
+    build_requires=''
 )
+compiler.compile_module(**cy_kwargs)
 
 
 def read(fname):
