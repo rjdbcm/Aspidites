@@ -1,5 +1,7 @@
 **unreleased**
+
 **v0.11.0**
+
 **v0.10.1**
 
 - 63d0548 refactor CheckedFileStack class and compiler.py functions to used pathlib
@@ -7,8 +9,6 @@
 - ddb57de add some transparency and gradients
 - 01c8e23 Added tabbed interfaces to docs/homepage
 - 54121d2 remove duplicated code
-
-
 
 **v0.10.0**
 
