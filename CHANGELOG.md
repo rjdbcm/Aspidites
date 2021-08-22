@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.0**
 **v0.10.1**
 
 - 63d0548 refactor CheckedFileStack class and compiler.py functions to used pathlib
