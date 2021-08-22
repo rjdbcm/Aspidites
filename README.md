@@ -84,7 +84,7 @@ Greeter("Aspidites user")
 
 ```
 # Logo/Mascot
-Wheelie the Woma™ is an unregistered trademark of Ross J. Duff. 
+Wheelie the Woma™ and Woma Programming Language™ are unregistered trademarks of Ross J. Duff. 
 The logos are copyright © Ross J. Duff but may be transferred to an appropriate trust at a later date.
 This is to prevent confusing/malicious use.
 
