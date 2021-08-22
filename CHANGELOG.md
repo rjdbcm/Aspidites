@@ -1,4 +1,5 @@
 **unreleased**
+**v0.10.0**
 **v0.9.34**
 
 - a11958b refactor compiler.py for better decoupling of various writes
