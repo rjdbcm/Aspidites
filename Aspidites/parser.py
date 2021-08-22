@@ -31,8 +31,8 @@ from pyparsing import (
     unicodeString,
 )
 
-from Aspidites._vendor.contracts import contract, new_contract
-from Aspidites._vendor.contracts.syntax import contract_expression
+from ._vendor.contracts import contract, new_contract
+from ._vendor.contracts.syntax import contract_expression
 
 _contract_expression = contract_expression.copy()
 _contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")

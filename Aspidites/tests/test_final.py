@@ -3,7 +3,8 @@ from Aspidites.final import final, heritable
 from Aspidites._vendor.contracts import ContractNotRespected
 
 
-class A(metaclass=final):
+@final()
+class A:
     pass
 
 

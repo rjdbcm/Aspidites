@@ -16,11 +16,10 @@ from .final import final
 from pyparsing import ParseResults
 
 
+@final()
 class CheckedFileStack:
 
     """A convenience class for reading file data streams to stdout or to checksum"""
-
-    __metaclass__ = final
 
     def __init__(self, initial=None, pre_size=128):
         if initial is None:

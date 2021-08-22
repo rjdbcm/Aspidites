@@ -149,7 +149,9 @@ def test_cli_no_target_exit():
     with pt.raises(SystemExit):
         main(['Aspidites' ,'-fpc'])
 
+
 @pt.mark.filterwarnings('ignore::RuntimeWarning')
+@pt.mark.uses_stdout
 def test_compile_to_shared_object(inject_config):
     pfile_ = 'examples/compiled.py'
     pfile = pfile_ if os.path.exists(wfile) else 'Aspidites/tests/' + pfile_

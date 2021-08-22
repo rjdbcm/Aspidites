@@ -12,12 +12,12 @@ from contextlib import suppress
 
 from _warnings import warn
 from pyrsistent import v
-from Aspidites import final
-from Aspidites._vendor.contracts import ContractNotRespected, contract
-from Aspidites._vendor.fn import apply
-from Aspidites._vendor.fn.underscore import ArityError
+from .final import final
+from ._vendor.contracts import ContractNotRespected, contract
+from ._vendor.fn import apply
+from ._vendor.fn.underscore import ArityError
 
-from Aspidites.api import ContractBreachWarning, create_warning
+from .api import ContractBreachWarning, create_warning
 
 
 # noinspection PyPep8Naming
@@ -72,10 +72,10 @@ def SafeExp(a, b):
         return inf  # just a really big number on most systems
 
 
+@final()
 class Maybe:
     """Sandboxes a Surely call and handles ContractNotRespected by returning Undefined"""
 
-    __metaclass__ = final
     __slots__ = v("_func", "_args", "_kwargs", "__instance__")
 
     def __init__(self, func, *args, **kwargs):
@@ -145,11 +145,11 @@ class Maybe:
             return self.__instance__
 
 
+@final()
 class Undefined:
     """A monad for a failed programmatic unit; like NoneType but hashable.
     Falsy singleton"""
 
-    __metaclass__ = final
     __slots__ = v("__weakref__", "__instance__")
     __instance = None
 
@@ -215,11 +215,11 @@ class Undefined:
         return mcs.__instance__  # instance descriptor from __slots__ -> actual instance
 
 
+@final()
 class Surely:
     """A monad for a successful programmatic unit
     Truthy, defers to an instance of a successful computation"""
 
-    __metaclass__ = final
     __slots__ = v(
         "__weakref__", "__instance__" "__str__", "__int__", "__float__", "__complex__"
     )
