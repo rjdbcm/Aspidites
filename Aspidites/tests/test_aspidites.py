@@ -153,11 +153,16 @@ def test_cli_no_target_exit():
 def test_compile_to_shared_object(inject_config):
     pfile_ = 'examples/compiled.py'
     pfile = pfile_ if os.path.exists(wfile) else 'Aspidites/tests/' + pfile_
+    kwargs = get_cy_kwargs()
+    kwargs.update(code=setup_code(inject_config),
+                  fname=pfile, bytecode=True, force=True,
+                  c=True, build_requires='', verbose=False)
     try:
-        compile_module(setup_code(inject_config), pfile, bytecode=True, **get_cy_kwargs())
+        compile_module(**kwargs)
     except FileNotFoundError:
-        compile_module(setup_code(inject_config), os.path.join(inject_config, pfile_),
-                       bytecode=True, **get_cy_kwargs())
+        kwargs.update(code=setup_code(inject_config),
+                      fname=os.path.join(inject_config, pfile_), bytecode=True)
+        compile_module(**kwargs)
 
     from Aspidites.tests.examples.compiled import Add, x, y, z, scala, val, div_by_zero, \
         Yield123, Hello, Hello2

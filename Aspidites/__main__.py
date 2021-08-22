@@ -137,12 +137,14 @@ def main(argv=sys.argv) -> None:
     code = parse_module(open(args.target, 'r').read())
     if args.output is None:
         args.output = os.path.join(os.path.dirname(args.target), 'compiled.py')
-    compile_module(code,
-                   fname=args.output,
-                   force=args.force,
-                   bytecode=args.compile_pyc,
-                   c=args.compile_c,
-                   build_requires=args.build_requires,
-                   verbose=args.verbose,
-                   *other_args,
-                   **cy_kwargs)
+
+    cy_kwargs.update({
+        'code': code,
+        'fname': args.output or "compiled.py",
+        'force': args.force or False,
+        'bytecode': args.compile_pyc,
+        'c': args.compile_c,
+        'build_requires': args.build_requires,
+        'verbose': args.verbose
+    })
+    compile_module(**cy_kwargs)
