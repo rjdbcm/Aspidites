@@ -9,34 +9,32 @@ this project's namesake.
 Installing
 ~~~~~~~~~~
 
-PyPI
-^^^^
 
-|PyPI|\ |PyPI - Wheel|
+.. tabs::
 
-.. code:: shell
+    .. tab:: PyPI
 
-    $ pip install Aspidites
+        |PyPI|\ |PyPI - Wheel|
 
-Docker
-^^^^^^
+        .. code:: shell
 
-|Docker Image Version (latest by date)|\ |Docker Image Size (latest
-semver)|
+            $ pip install Aspidites
 
-.. code:: shell
+    .. tab:: Docker
 
-    $ docker pull ghcr.io/rjdbcm/aspidites:latest
+        |Docker Image Version (latest by date)|\ |Docker Image Size (latest semver)|
 
-Github
-^^^^^^
+        .. code:: shell
 
-|GitHub release (latest SemVer)|\ |GitHub commits since tagged version
-(branch)|
+            $ docker pull ghcr.io/rjdbcm/aspidites:latest
 
-.. code:: shell
+    .. tab:: Github
 
-    $ gh repo clone rjdbcm/Aspidites
+        |GitHub commits since tagged version (branch)|
+
+        .. code:: shell
+
+            $ gh repo clone rjdbcm/Aspidites
 
 Running
 ~~~~~~~
@@ -86,15 +84,12 @@ Goals
    CPython.
 -  Usable for general purpose ***or*** scientific computing.
 
-.. |GitHub release (latest SemVer)| image:: https://img.shields.io/github/v/release/rjdbcm/Aspidites?color=pink&label=&logo=github&logoColor=black
-.. |GitHub commits since tagged version (branch)| image:: https://img.shields.io/github/commits-since/rjdbcm/Aspidites/latest/main
-.. |PyPI| image:: https://img.shields.io/pypi/v/aspidites?color=pink&label=&logo=pypi
-   :target: https://pypi.org/project/Aspidites/
-.. |PyPI - Wheel| image:: https://img.shields.io/pypi/wheel/Aspidites
-   :target: https://pypi.org/project/Aspidites/#files
-.. |Docker Image Version (latest by date)| image:: https://img.shields.io/docker/v/rjdbcm/aspidites?color=pink&label=%20&logo=docker
-.. |Docker Image Size (latest semver)| image:: https://img.shields.io/docker/image-size/rjdbcm/aspidites
-    :target: https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated
+.. |GitHub release (latest SemVer)| image:: https://img.shields.io/github/v/release/rjdbcm/Aspidites?color=grey&label=%20&logo=github&style=for-the-badge
+.. |GitHub commits since tagged version (branch)| image:: https://img.shields.io/github/commits-since/rjdbcm/Aspidites/latest/main?style=for-the-badge
+.. |PyPI| image:: https://img.shields.io/pypi/v/aspidites?color=grey&label=%20&style=for-the-badge&logo=python
+.. |PyPI - Wheel| image:: https://img.shields.io/pypi/wheel/Aspidites?logo=python&logoColor=lightblue&style=for-the-badge
+.. |Docker Image Version (latest by date)| image:: https://img.shields.io/docker/v/rjdbcm/aspidites?color=grey&label=%20&logo=docker&style=for-the-badge
+.. |Docker Image Size (latest semver)| image:: https://img.shields.io/docker/image-size/rjdbcm/aspidites?style=for-the-badge
 .. |Continuous Integration| image:: https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml/badge.svg
    :target: https://github.com/rjdbcm/Aspidites/actions/workflows/python-app.yml
 .. |Maintainability| image:: https://api.codeclimate.com/v1/badges/8d03ef8667df59d55380/maintainability
