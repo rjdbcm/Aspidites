@@ -123,7 +123,7 @@ def test_integer_monad(x):
     assert -Maybe(x) != -x
     assert ~Surely() == Undefined()
     assert oct(Surely(x)) == oct(x)
-    assert bool(Surely(x)) == bool(x)
+    assert (not not Surely(x)) == bool(x)
     assert Surely(x) // 1 == x // 1
     assert Surely(x) / 1 == x / 1
     assert Surely(x) * 1 == x * 1
