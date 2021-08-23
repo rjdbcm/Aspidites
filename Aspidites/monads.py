@@ -12,7 +12,7 @@ from contextlib import suppress
 
 from _warnings import warn
 from pyrsistent import v
-from .final import final
+from final import final
 from ._vendor.contracts import ContractNotRespected, contract
 from ._vendor.fn import apply
 from ._vendor.fn.underscore import ArityError
