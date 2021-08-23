@@ -4,13 +4,13 @@ The reference implementation of the [Woma programming language](https://www.gith
 
 ### Installing
 #### PyPI
-[![PyPI](https://img.shields.io/pypi/v/aspidites?color=pink&label=&logo=pypi)](https://pypi.org/project/Aspidites/)[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)
+[![PyPI](https://img.shields.io/pypi/v/aspidites?color=pink&label=&logo=pypi)](https://pypi.org/project/Aspidites/)[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)![PyPI - Downloads](https://img.shields.io/pypi/dd/Aspidites)
 ```
 $ pip install Aspidites
 ```
 
 #### Docker
-![Docker Image Version (latest by date)](https://img.shields.io/docker/v/rjdbcm/aspidites?color=pink&label=%20&logo=docker)[![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/rjdbcm/aspidites)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)
+![Docker Image Version (latest by date)](https://img.shields.io/docker/v/rjdbcm/aspidites?color=pink&label=%20&logo=docker)[![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/rjdbcm/aspidites)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)![Docker Pulls](https://img.shields.io/docker/pulls/rjdbcm/aspidites)
 ```
 $ docker pull ghcr.io/rjdbcm/aspidites:latest
 ```
