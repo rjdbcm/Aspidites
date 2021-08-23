@@ -1,5 +1,10 @@
 **unreleased**
 **v0.11.5**
+
+- 62d6a06 revert testconfig sort, it wasn't that my tests were running 2x
+- 3be0154 update codeclimate and coverage exclude patterns
+
+
 **v0.11.4**
 
 - 6eb2d29 deployment changes so twitter works
