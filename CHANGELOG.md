@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.3**
 **v0.11.2**
 
 - dad6dd3 BUGFIX: 0.11.2 had a buggy final import
