@@ -12,7 +12,6 @@ from contextlib import suppress
 
 from _warnings import warn
 from pyrsistent import v
-from final import final
 from ._vendor.contracts import ContractNotRespected, contract
 from ._vendor.fn import apply
 from ._vendor.fn.underscore import ArityError
@@ -72,7 +71,6 @@ def SafeExp(a, b):
         return inf  # just a really big number on most systems
 
 
-@final()
 class Maybe:
     """Sandboxes a Surely call and handles ContractNotRespected by returning Undefined"""
 
@@ -145,7 +143,6 @@ class Maybe:
             return self.__instance__
 
 
-@final()
 class Undefined:
     """A monad for a failed programmatic unit; like NoneType but hashable.
     Falsy singleton"""
@@ -215,7 +212,6 @@ class Undefined:
         return mcs.__instance__  # instance descriptor from __slots__ -> actual instance
 
 
-@final()
 class Surely:
     """A monad for a successful programmatic unit
     Truthy, defers to an instance of a successful computation"""
