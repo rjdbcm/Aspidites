@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.5**
 **v0.11.4**
 
 - 6eb2d29 deployment changes so twitter works
