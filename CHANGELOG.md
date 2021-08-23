@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.6**
 **v0.11.5**
 
 - 62d6a06 revert testconfig sort, it wasn't that my tests were running 2x
