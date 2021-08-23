@@ -45,7 +45,7 @@ jobs:
         continue-on-error: true
         uses: ethomson/send-tweet-action@v1
         with:
-            status: "📦 New PyPI package version just dropped! 🎉🎉🎉
+            status: "📦 New PyPI package: Aspidites ${{ github.event.head_commit.message }}! 🎉🎉🎉
             Check it out: https://pypi.org/project/Aspidites"
             consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
             consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}

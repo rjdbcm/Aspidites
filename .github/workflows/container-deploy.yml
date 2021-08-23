@@ -61,7 +61,7 @@ jobs:
         uses: ethomson/send-tweet-action@v1
         with:
           status:
-            "🐳 A new #Aspidites container is here and ready for delivery. 🚚
+            "🐳 A new #Aspidites ${{ github.event.head_commit.message }} container is here and ready for delivery. 🚚
              Check it out: https://github.com/rjdbcm/Aspidites/pkgs/container/aspidites"
           consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
           consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
