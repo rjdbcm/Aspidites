@@ -1,6 +1,15 @@
 **unreleased**
 **v0.11.1**
 
+- 1d62e60 BUGFIX: testsuite formerly ran every unittest 2x
+- 2d9baa6 adjust cognitive complexity threshold to 6 for codeclimate
+- 8df122c Merge remote-tracking branch 'Aspidites/main' into main
+- a90b3a8 added final class decorator and adjusted a few import statements to be relative
+- b3f5017 parametrized tests and pytest.mark.uses_stdout tests are moved to the end
+- ca2af84 Update README.md
+
+
+
 **v0.11.0**
 
 - 82b9ec9 buffer size for CheckedFileStack now defaults to a more reasonable 128 bytes
