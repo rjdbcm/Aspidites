@@ -1,5 +1,9 @@
 **unreleased**
 **v0.11.2**
+
+- dad6dd3 BUGFIX: 0.11.2 had a buggy final import
+
+
 **v0.11.1**
 
 - 1d62e60 BUGFIX: testsuite formerly ran every unittest 2x
