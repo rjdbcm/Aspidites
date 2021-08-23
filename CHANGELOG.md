@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.4**
 **v0.11.3**
 
 - 0d899d2 BUGFIX: 0.11.3 still had a buggy import of final so it's gone for now
