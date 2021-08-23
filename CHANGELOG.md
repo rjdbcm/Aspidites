@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.2**
 **v0.11.1**
 
 - 1d62e60 BUGFIX: testsuite formerly ran every unittest 2x
