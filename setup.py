@@ -94,7 +94,7 @@ setup(
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
         "Programming Language :: Other",
-        "Programming Language :: Python :: 3.6",
+        # "Programming Language :: Python :: 3.6", EOL in December 2021 and don't want to vendor dataclasses
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
