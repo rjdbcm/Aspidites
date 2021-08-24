@@ -165,8 +165,7 @@ def test_compile_to_shared_object(inject_config):
                       fname=os.path.join(inject_config, pfile_), bytecode=True)
         compile_module(**kwargs)
 
-    from Aspidites.tests.examples.compiled import Add, x, y, z, scala, val, div_by_zero, \
-        Yield123, Hello, Hello2
+    from .examples.compiled import Add, x, y, z, scala, val, div_by_zero, Yield123, Hello, Hello2
 
     with pt.raises(ContractNotRespected):
         Add(x=6.5, y=12)
