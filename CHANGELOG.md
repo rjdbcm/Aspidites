@@ -1,6 +1,40 @@
 **unreleased**
 **v0.11.6**
 
+- c0bbfc2 changelog updated
+- 5707afc fix social message on container-deploy.yml
+- 945cc72 Update python-app.yml
+- fc1f72f absolute import of test examples
+- 11ec1d0 fix build action
+- ffee7cb fix build action
+- 852897a PyPy not supported. Maybe and F now inherit from symtable.Function. This is the plan for future classes used as the basis of the functional interface.
+- 29e1d22 compiler.py compatible with Python 3.7
+- f6cbdc0 compiler.py compatible with Python 3.7
+- d708ff8 compiler.py compatible with Python 3.7
+- 189fa3d drop Python 3.6 support
+- fde2df4 fix test to be a quick source install
+- cbf29d3 Update Package to show tested python versions/implementations
+- 1b17ab6 Update python-app.yml
+- 10a93f2 Update python-app.yml
+- 61dcabd Update python-app.yml
+- 3e775e0 Update python-app.yml
+- f23d236 Update python-app.yml
+- 7174b0e Update python-app.yml
+- 4f24fc5 Update python-app.yml
+- d5aeed5 Update python-app.yml
+- 20cd069 Update python-app.yml
+- 151ec1f Update python-app.yml
+- a224da0 Update python-app.yml
+- ad8fa09 Update python-app.yml
+- 9e2a44b Update python-app.yml
+- ca11af3 CI workflow for CPython v3.9.6 and v3.8.11
+- 6731f2a Update README.md
+- 0beaa2c Update README.md
+- 7717cd7 Update README.md
+- 20cbb78 Update README.md
+
+
+
 - 5707afc fix social message on container-deploy.yml
 - 945cc72 Update python-app.yml
 - fc1f72f absolute import of test examples
