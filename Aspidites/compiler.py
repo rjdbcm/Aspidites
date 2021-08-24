@@ -140,7 +140,7 @@ def compile_module(**kwargs):
     if bytecode:
         fname_pyc = str(app_name) + ".pyc"
         quiet = tuple(reversed(range(3))).index(verbose if verbose < 2 else 2)
-        if Version(sys.version) < Version('3.8.0'):
+        if Version(sys.version_info) < Version('3.8.0'):
             py_compile.compile(str(fname), fname_pyc)
         else:
             py_compile.compile(str(fname), fname_pyc, quiet=quiet)
