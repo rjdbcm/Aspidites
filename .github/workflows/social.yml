@@ -1,0 +1,29 @@
+name: "Greet With A Random Joke"
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    name: setup environment
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Sunday Fun Day Joke
+        id: msg
+        uses: deep5050/MastJokeMara@main
+        with:
+          joke: {{joke}}
+      -
+        name: Send a Tweet
+        continue-on-error: true
+        uses: ethomson/send-tweet-action@v1
+        with:
+          status:
+            msg.joke
+          consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
+          consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
+          access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+
+
