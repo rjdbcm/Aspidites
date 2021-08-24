@@ -23,13 +23,11 @@ jobs:
       - name: Get Source Directory 
         uses: actions/checkout@v2
 
-      - name: Test Python Versions
+      - name: Test Python Builds
         uses: actions/setup-python@v2
         with:
            python-version: "${{ matrix.python }}"
-      - run: |
-             pip install .;
-             Aspidites -pt;
+      - run: pip install . && aspidites -pt
 
       - name: Upload Coverage to codecov.io
         uses: codecov/codecov-action@v2
