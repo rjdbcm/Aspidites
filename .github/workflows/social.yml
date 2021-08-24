@@ -14,16 +14,13 @@ jobs:
         uses: deep5050/MastJokeMara@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          issue_msg: |
-            Hi, {{author}} here is a joke for you
-            {{joke}}
+          issue_msg: {{author}}: {{joke}}
       -
         name: Send a Tweet
         continue-on-error: true
         uses: ethomson/send-tweet-action@v1
         with:
-          status:
-           ${{ steps.msg.issue_msg.joke }}
+          status: ${{ steps.msg.issue_msg }}
           consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
           consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
           access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
