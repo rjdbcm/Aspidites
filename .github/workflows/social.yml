@@ -14,7 +14,8 @@ jobs:
         uses: deep5050/MastJokeMara@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          issue_msg: {{author}}: {{joke}}
+          issue_msg: |
+            {{author}}: {{joke}}
       -
         name: Send a Tweet
         continue-on-error: true
