@@ -12,8 +12,6 @@ jobs:
         name: Sunday Fun Day Joke
         id: msg
         uses: deep5050/MastJokeMara@main
-        with:
-          joke: ${{joke}}
       -
         name: Send a Tweet
         continue-on-error: true
