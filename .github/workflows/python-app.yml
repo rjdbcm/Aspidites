@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         python:
-          - 3.10.0b4
+          - 3.10.0-rc.1
           - 3.9.6
           - 3.8.11
 
