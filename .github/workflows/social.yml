@@ -13,7 +13,10 @@ jobs:
         id: msg
         uses: deep5050/MastJokeMara@main
         with:
-          joke: {{joke}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          issue_msg: |
+            Hi, {{author}} here is a joke for you
+            {{joke}}
       -
         name: Send a Tweet
         continue-on-error: true
