@@ -20,12 +20,14 @@ jobs:
           - 3.8.11
 
     steps:
+      - name: Get Source Directory 
+        uses: actions/checkout@v2
+
       - name: Test Python Versions
-      - uses: actions/checkout@v2
-      - uses: actions/python-setup@v2
+        uses: actions/python-setup@v2
         with:
          python-version: "${{ matrix.python }}"
-      - run: |
+         run: |
                 pip install -U pip pipenv wheel cython
                 pipenv lock
                 pipenv sync -d
