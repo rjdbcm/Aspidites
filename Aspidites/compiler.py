@@ -13,6 +13,7 @@ from pyrsistent import pmap
 from hashlib import sha256
 from pathlib import Path
 from .final import final
+from ._vendor.semantic_version import Version
 from pyparsing import ParseResults
 
 
@@ -139,7 +140,10 @@ def compile_module(**kwargs):
     if bytecode:
         fname_pyc = str(app_name) + ".pyc"
         quiet = tuple(reversed(range(3))).index(verbose if verbose < 2 else 2)
-        py_compile.compile(str(fname), fname_pyc, quiet=quiet)
+        if Version(sys.version) < Version('3.8.0'):
+            py_compile.compile(str(fname), fname_pyc)
+        else:
+            py_compile.compile(str(fname), fname_pyc, quiet=quiet)
         file_stack.register(fname_pyc)
 
     if c:
