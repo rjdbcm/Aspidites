@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.7**
 **v0.11.6**
 
 - c0bbfc2 changelog updated
