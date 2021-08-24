@@ -13,7 +13,7 @@ jobs:
         id: msg
         uses: deep5050/MastJokeMara@main
         with:
-          joke: {{joke}}
+          joke: ${{joke}}
       -
         name: Send a Tweet
         continue-on-error: true
