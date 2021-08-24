@@ -4,7 +4,7 @@ The reference implementation of the [Woma programming language](https://www.gith
 
 ### Installing
 #### PyPI
-[![PyPI](https://img.shields.io/pypi/v/aspidites?color=pink&label=&logo=pypi)](https://pypi.org/project/Aspidites/)[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)![PyPI - Downloads](https://img.shields.io/pypi/dd/Aspidites)
+[![PyPI](https://img.shields.io/pypi/v/aspidites?color=pink&label=&logo=pypi)](https://pypi.org/project/Aspidites/)[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Aspidites?label=CPython)![PyPI - Downloads](https://img.shields.io/pypi/dd/Aspidites)
 ```
 $ pip install Aspidites
 ```
