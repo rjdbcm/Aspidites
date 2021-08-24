@@ -98,7 +98,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: Implementation :: PyPy",
+        # "Programming Language :: Python :: Implementation :: PyPy", looks like a no go
         "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Software Development :: Compilers",
         "Topic :: Utilities",

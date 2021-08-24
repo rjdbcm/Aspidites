@@ -9,6 +9,7 @@ import traceback
 import typing
 from math import inf, isinf
 from contextlib import suppress
+from symtable import Function
 
 from _warnings import warn
 from pyrsistent import v
@@ -55,9 +56,7 @@ def SafeMod(a, b):
 
 # noinspection PyPep8Naming
 def SafeExp(a, b):
-    if ((a == 0 and b == 0)
-            or (isinf(a) and b == 0)
-            or (isinf(b) and a == 0)):  # 0**0, inf**0, 0**inf
+    if ((a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0)):  # 0**0, inf**0, 0**inf
         stack = inspect.stack()
         w = create_warning(
             stack[0][3], [a, b], {}, stack,
@@ -71,7 +70,7 @@ def SafeExp(a, b):
         return inf  # just a really big number on most systems
 
 
-class Maybe:
+class Maybe:  # this should allow us to avoid passing around stacks and frames
     """Sandboxes a Surely call and handles ContractNotRespected by returning Undefined"""
 
     __slots__ = v("_func", "_args", "_kwargs", "__instance__")

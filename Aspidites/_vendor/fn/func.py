@@ -1,6 +1,6 @@
 from functools import partial, update_wrapper, wraps
 from sys import version_info
-
+from symtable import Function
 
 _has_type_hint_support = version_info[:2] >= (3, 5)
 
@@ -9,7 +9,7 @@ def identity(arg):
     return arg
 
 
-class F(object):
+class F(Function):
     """Provide simple syntax for functions composition
     (through << and >> operators) and partial function
     application (through simple tuple syntax).
@@ -27,11 +27,12 @@ class F(object):
     __slots__ = "f",
 
     def __init__(self, f=identity, *args, **kwargs):
+        super(F, self).__init__(self, 'F')
         self.f = partial(f, *args, **kwargs) if any([args, kwargs]) else f
 
     @classmethod
     def __compose(cls, f, g):
-        """Produces new class intance that will
+        """Produces new class instance that will
         execute given functions one by one. Internal
         method that was added to avoid code duplication
         in other methods.
