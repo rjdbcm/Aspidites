@@ -25,7 +25,7 @@ jobs:
       - name: Test Python Versions
         with:
          python-version: "${{ matrix.python }}"
-         run: |
+         runs: |
                 pip install -U pip pipenv wheel cython
                 pipenv lock
                 pipenv sync -d
