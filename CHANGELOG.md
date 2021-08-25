@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.25**
 **v0.11.24**
 
 - 467bb83 fix gh action
