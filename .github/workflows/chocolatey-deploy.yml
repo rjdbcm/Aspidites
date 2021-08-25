@@ -11,12 +11,6 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
-        name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      -
         name: Choco Pack
         uses: crazy-max/ghaction-chocolatey@v1
         with:
@@ -30,6 +24,6 @@ jobs:
         name: Choco Push
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: push MyPackage.${{ env.RELEASE_VERSION }}.nupkg --source https://push.chocolatey.org/
+          args: push MyPackage.${GITHUB_REF##*/}.nupkg --source https://push.chocolatey.org/
 
 
