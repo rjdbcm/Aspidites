@@ -14,7 +14,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance> <!-- or true if you require the user to accept the License before installing -->
     <iconUrl>https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie.png</iconUrl>
     <dependencies>
-        <dependency id="python" version="[3.7,4)" />
+        <dependency id="python3"/>
     </dependencies>
   </metadata>
 </package>
