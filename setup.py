@@ -95,7 +95,7 @@ setup(
     classifiers=[
         "Operating System :: POSIX :: Linux",
         "Operating System :: MacOS :: MacOS X",
-        "Operation System :: Microsoft :: Windows",
+        "Operating System :: Microsoft :: Windows",
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
         "Programming Language :: Other",
