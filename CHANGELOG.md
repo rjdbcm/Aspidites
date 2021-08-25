@@ -1,5 +1,39 @@
 **unreleased**
 **v0.11.7**
+
+- 9c83996 update supported OSes
+- 2e5e9f4 Update ci.yml add macos
+- 48dc267 Update README.md
+- 68215f2 Merge pull request #7 from rjdbcm/rjdbcm-patch-1
+- 40973bd fix for windows unicode support
+- 681e9c6 Update ci.yml
+- 9cdc310 Update and rename python-app.yml to ci.yml
+- 547ed18 convert.py: pep8
+- 28bdc61 templates.py lib template add compile(restricted) and other builtins
+- 9c7522f Makefile: test-all depends on clean-test
+- a637984 Use pathlib.Path for path representations
+- a0888d2 refactor monads.py for readability
+- d7f1423 Added stubs for RestrictedPython
+- 8c6c8d4 Merge remote-tracking branch 'origin/main'
+- 6cb6219 refactor of the parser to make it a bit less brittle when modified
+- 650419c Update README.md
+- 6f24118 Update README.md
+- 11413e5 Update README.md
+- a72e1fa Merge remote-tracking branch 'origin/main'
+- bc8fb5a remove joker
+- ebf4ea6 Update social.yml
+- a3f1eb7 test joke api
+- f67eded test joke api
+- 3a0638c test joke api
+- c5817fb Merge remote-tracking branch 'origin/main'
+- fcf13ea test joke api
+- d362649 Update social.yml
+- 9b786a1 Update social.yml
+- 7243005 Merge remote-tracking branch 'origin/main'
+- 994bf03 test joke api
+- fdf800a Update README.md
+
+
 **v0.11.6**
 
 - c0bbfc2 changelog updated
