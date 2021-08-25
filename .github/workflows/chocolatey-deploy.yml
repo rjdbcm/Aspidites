@@ -24,6 +24,6 @@ jobs:
         name: Choco Push
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: push MyPackage.${GITHUB_REF##*/}.nupkg --source https://push.chocolatey.org/
+          args: push MyPackage.${{ GITHUB_REF##*/ }}.nupkg --source https://push.chocolatey.org/
 
 
