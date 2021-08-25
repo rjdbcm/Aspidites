@@ -93,6 +93,9 @@ setup(
     cmdclass={'install': InstallWrapper},
     long_description_content_type='text/markdown',
     classifiers=[
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: MacOS :: MacOS X",
+        "Operation System :: Microsoft :: Windows",
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
         "Programming Language :: Other",
