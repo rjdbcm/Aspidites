@@ -1,5 +1,19 @@
-# Aspidites is Copyright 2021, Ross J. Duff.
-# See LICENSE.txt for more info.
+
+# Aspidites
+# Copyright (C) 2021 Ross J. Duff
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import py_compile
@@ -8,7 +22,7 @@ from glob import glob
 from warnings import warn
 import typing as t
 from mypy import api
-from Aspidites.templates import lib, makefile, pyproject, setup
+from .templates import lib, makefile, pyproject, setup
 from pyrsistent import pmap
 from hashlib import sha256
 from pathlib import Path
