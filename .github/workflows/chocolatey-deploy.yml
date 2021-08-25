@@ -23,7 +23,8 @@ jobs:
       -
         name: Choco Push
         uses: crazy-max/ghaction-chocolatey@v1
+        run: echo "VERSION = ${GITHUB_REF##*/}" >> GITHUB_ENV
         with:
-          args: push MyPackage.${{ GITHUB_REF##*/ }}.nupkg --source https://push.chocolatey.org/
+          args: push MyPackage.${{ env.VERSION }}.nupkg --source https://push.chocolatey.org/
 
 
