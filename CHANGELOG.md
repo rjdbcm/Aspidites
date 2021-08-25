@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.11**
 **v0.11.10**
 
 - 0dae705 add chocolatey package
