@@ -3,7 +3,7 @@
   <metadata>
     <id>Aspidites</id>
     <title>Aspidites</title>
-    <version>0.11.14</version>
+    <version>0.11.13</version>
     <authors>Ross J. Duff</authors>
     <owners>Myself</owners>
     <summary>Woma Programming Language Compiler</summary>
@@ -14,7 +14,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance> <!-- or true if you require the user to accept the License before installing -->
     <iconUrl>https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie.png</iconUrl>
     <dependencies>
-        <dependency id="python3"/>
+        <dependency id="python" version="[3.7,4)" />
     </dependencies>
   </metadata>
 </package>

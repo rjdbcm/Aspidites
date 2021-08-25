@@ -22,11 +22,6 @@ jobs:
         with:
           args: pack
       -
-        name: Choco Install
-        uses: crazy-max/ghaction-chocolatey@v1
-        with:
-          args: install Aspidites -dv -s .
-      -
         name: Choco Logon
         uses: crazy-max/ghaction-chocolatey@v1
         with:
