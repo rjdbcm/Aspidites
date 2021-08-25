@@ -27,6 +27,6 @@ jobs:
         name: Choco Push
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: push MyPackage.$RELEASE_VERSION.nupkg --source https://push.chocolatey.org/
+          args: push MyPackage.${{ env.RELEASE_VERSION }}.nupkg --source https://push.chocolatey.org/
 
 
