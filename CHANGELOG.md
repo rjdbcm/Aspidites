@@ -1,5 +1,9 @@
 **unreleased**
 **v0.11.11**
+
+- 032c0dd fix gh action
+
+
 **v0.11.10**
 
 - 0dae705 add chocolatey package
