@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata>
+    <id>Aspidites</id>
+    <title>Aspidites</title>
+    <version>0.11.8</version>
+    <authors>Ross J. Duff</authors>
+    <owners>Myself</owners>
+    <summary>Woma Programming Language Compiler</summary>
+    <description>The reference implementation of the Woma Programming Language compiler.</description>
+    <projectUrl>https://woma.rtfd.io</projectUrl>
+    <tags>compiler woma</tags>
+    <licenseUrl>https://raw.githubusercontent.com/rjdbcm/Aspidites/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance> <!-- or true if you require the user to accept the License before installing -->
+    <iconUrl>https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie.png</iconUrl>
+    <dependencies>
+        <dependency id="Python" version="[3.7,4)" />
+    </dependencies>
+  </metadata>
+</package>
