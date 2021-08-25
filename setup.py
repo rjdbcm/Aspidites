@@ -24,7 +24,7 @@ compiler.compile_module(**cy_kwargs)
 
 
 def read(fname):
-    return open(Path(__file__) / fname).read()
+    return open(Path(fname).absolute()).read()
 
 
 # Tested with wheel v0.29.0, 0.36.2
