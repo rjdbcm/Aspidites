@@ -27,6 +27,6 @@ jobs:
         env:
           RELEASE_VERSION : ${GITHUB_REF#refs/*/}
         with:
-          args: push MyPackage.$RELEASE_VERSION.nupkg --source https://push.chocolatey.org/
+          args: push "Aspidites.${{ RELEASE_VERSION }}.nupkg" --source https://push.chocolatey.org/
 
 
