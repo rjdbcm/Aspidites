@@ -41,7 +41,7 @@ clean-woma: ## remove compiled woma files
 docker:
 	docker -v build . --no-cache -t rjdbcm/aspidites:$(VERSION)
 
-test-all:
+test-all: clean-test
 	pytest Aspidites/tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
 
 coverage:
