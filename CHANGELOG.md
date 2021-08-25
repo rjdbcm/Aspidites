@@ -1,5 +1,9 @@
 **unreleased**
 **v0.11.10**
+
+- 304deb8 add chocolatey package
+
+
 **v0.11.9**
 
 - 9eea2b9 setup.py: fix typo
