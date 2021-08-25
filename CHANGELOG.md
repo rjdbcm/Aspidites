@@ -1,6 +1,16 @@
 **unreleased**
 **v0.11.10**
 
+- 94589bd add chocolatey package
+- 02a3674 changelog updated
+- a971a26 changelog updated
+- 4531c37 add chocolatey package
+- 23a5029 changelog updated
+- 9e06bd4 changelog updated
+- 304deb8 add chocolatey package
+
+
+
 - a971a26 changelog updated
 - 4531c37 add chocolatey package
 - 23a5029 changelog updated
