@@ -1,5 +1,9 @@
 **unreleased**
 **v0.11.9**
+
+- 9eea2b9 setup.py: fix typo
+
+
 **v0.11.8**
 
 - 06adba0 fix path
