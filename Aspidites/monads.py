@@ -96,23 +96,14 @@ class Maybe:  # this should allow us to avoid passing around stacks and frames
         self.__instance__ = Undefined()
 
     def __repr__(self):
-        return (
-            self.__class__.__name__
-            + "("
-            + ", ".join(
-                [
-                    str(self._func.__name__),
-                    str(self._args).strip("()"),
-                    *[str(k) + " = " + str(v) for k, v in self._kwargs.items()],
-                ]
-            )
-            + ")"
-            + (
-                " -> %s" % Undefined()
-                if self.__instance__ == Undefined()
-                else " -> %s" % str(self.__instance__)
-            )
-        )
+        maybe = self.__class__.__name__
+        inst = self.__instance__
+        inst_undef = inst == Undefined()
+        debug = (" -> %s" % Undefined() if inst_undef else " -> %s" % str(inst))
+        fname = str(self._func.__name__)
+        args = str(self._args).strip("()")
+        kwargs = [str(k) + " = " + str(v) for k, v in self._kwargs.items()]
+        return maybe + "(" + ", ".join([fname, args, *kwargs]) + ")" + debug
 
     def __invert__(self):
         return ~self.__instance__
@@ -141,16 +132,11 @@ class Maybe:  # this should allow us to avoid passing around stacks and frames
                 # SURELY #
                 return self.__instance__
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
-        except (ContractNotRespected, ArityError, ZeroDivisionError) as e:
+        except (ContractNotRespected, ArityError, ZeroDivisionError, Exception) as e:
             if warn_undefined:
                 stack = inspect.stack(1)
                 w = create_warning(self.func, self.args, self.kwargs, stack, e)
-                warn(
-                    w,
-                    category=ContractBreachWarning
-                    if isinstance(e, ContractNotRespected)
-                    else RuntimeWarning,
-                )
+                warn(w, category=ContractBreachWarning if isinstance(e, ContractNotRespected) else RuntimeWarning)
             # UNDEFINED #
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
             return self.__instance__
