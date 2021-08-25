@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.10**
 **v0.11.9**
 
 - 9eea2b9 setup.py: fix typo
