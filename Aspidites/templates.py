@@ -111,11 +111,23 @@ from pyrsistent import (
     PClass
 )
 from Aspidites.woma import *
-from Aspidites._vendor import _
+from Aspidites._vendor import (
+    reduce,
+    filterfalse,
+    zip_longest,
+    accumulate,
+    take,
+    drop,
+    takelast,
+    droplast,
+    _,
+)
 from Aspidites.monads import Maybe, Surely, Undefined, SafeDiv, SafeMod, SafeExp
 from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.RestrictedPython import safe_builtins
 safe_builtins['print'] = print
+from Aspidites._vendor.RestrictedPython import compile_restricted as compile
+safe_builtins['compile'] = compile
 # DECLARATIONS TO ALLOW CONTRACTS TO TYPE CHECK #
 procedure: None
 coroutine: Generator
