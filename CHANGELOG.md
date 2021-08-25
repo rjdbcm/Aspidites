@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.22**
 **v0.11.21**
 
 - 08cc826 fix gh action
