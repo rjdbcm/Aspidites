@@ -10,16 +10,16 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python:
-          - 3.9.6
-          - 3.8.11
-          - 3.7.11
+  linux-build:
+      runs-on: ubuntu-latest
+      strategy:
+          matrix:
+           python:
+            - 3.9.6
+            - 3.8.11
+            - 3.7.11
 
-    steps:
+      steps:
       - name: Get Source Directory 
         uses: actions/checkout@v2
 
@@ -42,4 +42,20 @@ jobs:
         uses: paambaati/codeclimate-action@v2.7.5
         env:
           CC_TEST_REPORTER_ID: 5bcc9d60bb439f75e102507e595434a393e9be017010223f6f3bc61cce2f5802
+  
+  windows-build:
+        runs-on: windows-latest
+        steps:
+        - 
+          name: Get Source Directory 
+          uses: actions/checkout@v2
+        -
+          name: Build Aspidites
+        - 
+          run: | 
+              pip install -U pip pipenv wheel cython
+              pipenv lock
+              pipenv sync -d
+              pipenv run pytest
 
+          
