@@ -34,7 +34,6 @@ $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
 
 - [`refinement-type system`](https://arxiv.org/pdf/2010.07763.pdf)
 - [`pragmatic`](https://www.adaic.org/resources/add_content/standards/05rm/html/RM-2-8.html)
-- `declarative`
 - [`functional`](https://towardsdatascience.com/why-developers-are-falling-in-love-with-functional-programming-13514df4048e?gi=3361de79dc98)
 - [`constrained logic`](https://www.cse.unsw.edu.au/~tw/brwhkr08.pdf)
 
