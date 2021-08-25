@@ -1,4 +1,5 @@
 **unreleased**
+**v0.11.24**
 **v0.11.23**
 
 - 34ae2f9 fix gh action: last try
