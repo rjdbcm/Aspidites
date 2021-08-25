@@ -54,9 +54,9 @@ class CheckedFileStack:
         return curr_hash if hash_func else None
 
     def __checksum(self, fname, write=True, check=False):
-        base, name = os.path.split(fname)
-        base = Path(base)
         fname = Path(fname)
+        base, name = fname.parent, fname.name
+        base = Path(base)
         fname_sha256 = base/("." + name + ".sha256")
 
         if write:

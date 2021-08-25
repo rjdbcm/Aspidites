@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 import sys
-
+from pathlib import Path
 from setuptools import setup, find_packages
 from setuptools.dist import Distribution
 from setuptools.command.install import install
@@ -10,7 +10,7 @@ from Aspidites.__main__ import get_cy_kwargs
 
 cy_kwargs = get_cy_kwargs()
 cy_kwargs.update({'embed': True})
-code = open('Aspidites/woma/library.wom', 'r').read()
+code = open(Path('Aspidites/woma/library.wom'), 'r').read()
 cy_kwargs.update(
     code=parser.parse_module(code),
     force=True,
@@ -24,7 +24,7 @@ compiler.compile_module(**cy_kwargs)
 
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    return open(Path(__file__) / fname).read()
 
 
 # Tested with wheel v0.29.0, 0.36.2
@@ -51,7 +51,9 @@ class InstallWrapper(install):
 
     def preinstall(self):
         """preinstall hook"""
-        c = "Aspidites build/lib/Aspidites/woma/library.wom -c -o build/lib/Aspidites/woma/library.pyx --embed=True"
+        target = Path('build/lib/Aspidites/woma/library.wom')
+        output = Path('build/lib/Aspidites/woma/library.pyx')
+        c = "Aspidites %s -c -o %s --embed=True" % (target, output)
         os.popen(c)
         print(c)
         pass

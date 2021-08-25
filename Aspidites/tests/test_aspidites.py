@@ -9,6 +9,7 @@ from hypothesis import given, assume, strategies as st
 import pytest as pt
 from Aspidites.__main__ import get_cy_kwargs, parse_from_dummy, main
 import argparse as ap
+from pathlib import Path
 from Aspidites.parser import parse_module
 from Aspidites.templates import lib, setup
 from Aspidites.monads import Maybe, Undefined, Surely, SafeMod, SafeDiv, SafeExp
@@ -20,7 +21,7 @@ except ImportError:
 
 docker = os.getenv("ASPIDITES_DOCKER_BUILD")
 
-wfile = 'examples/examples.wom'
+wfile = Path('examples/examples.wom')
 
 
 @pt.fixture(autouse=True)
@@ -29,21 +30,21 @@ def inject_config(request):
 
 
 def setup_code(inject_config):
-    if os.path.exists(wfile):
+    if Path(wfile).exists():
         code_ = parse_module(open(wfile, 'r').read())
     else:
         try:
-            code_ = parse_module(open("Aspidites/tests/" + wfile, 'r').read())
+            code_ = parse_module(open(Path("Aspidites/tests") / wfile, 'r').read())
             warnings.warn("Aspidites is being tested in source mode")
         except FileNotFoundError:
-            code_ = parse_module(open(os.path.join(inject_config, wfile), 'r').read())
+            code_ = parse_module(open(Path(inject_config) / wfile, 'r').read())
     return code_
 
 
 def test_compile_module(inject_config):
     try:
         compile(lib.substitute(code='\n'.join(setup_code(inject_config))), '', 'exec')
-    except FileNotFoundError:
+    except FileNotFoundError:  # ????
         compile(lib.substitute(code='\n'.join(os.path.join(inject_config(), wfile))), '',
                 'exec')
 
@@ -152,17 +153,15 @@ def test_cli_no_target_exit():
 
 # @pt.mark.filterwarnings('ignore::RuntimeWarning')
 def test_compile_to_shared_object(inject_config):
-    pfile_ = 'examples/compiled.py'
-    pfile = pfile_ if os.path.exists(wfile) else 'Aspidites/tests/' + pfile_
+    pfile_ = Path('examples/compiled.py')
+    pfile = pfile_ if Path(wfile).exists() else Path('Aspidites/tests') / pfile_
     kwargs = get_cy_kwargs()
-    kwargs.update(code=setup_code(inject_config),
-                  fname=pfile, bytecode=True, force=True,
-                  c=True, build_requires='', verbose=False)
+    code = setup_code(inject_config)
+    kwargs.update(code=code, fname=pfile, bytecode=True, force=True, c=True, build_requires='', verbose=False)
     try:
         compile_module(**kwargs)
     except FileNotFoundError:
-        kwargs.update(code=setup_code(inject_config),
-                      fname=os.path.join(inject_config, pfile_), bytecode=True)
+        kwargs.update(code=code, fname=Path(inject_config) / pfile_, bytecode=True)
         compile_module(**kwargs)
 
     from .examples.compiled import Add, x, y, z, scala, val, div_by_zero, Yield123, Hello, Hello2
