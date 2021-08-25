@@ -1,5 +1,6 @@
 from .reserved import *
 
+
 def cvt_arith_expr(tks):
     expr = "".join((str(t) for t in tks))
     if "/" in expr:
@@ -86,6 +87,7 @@ def cvt_contract_define(t):
     args = f"({', '.join(t[1:])})"
     t = t[0] + args
     return "".join(t)
+
 
 def swap_val_to_idx(lst: list, val, idx: int) -> list:
     val_idx = lst.index(val)
