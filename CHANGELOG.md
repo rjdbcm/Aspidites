@@ -1,6 +1,11 @@
 **unreleased**
 **v0.11.10**
 
+- 9e06bd4 changelog updated
+- 304deb8 add chocolatey package
+
+
+
 - 304deb8 add chocolatey package
 
 
