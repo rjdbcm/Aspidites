@@ -1,20 +1,22 @@
-# Aspidites [![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/ci.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/ci.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/8d03ef8667df59d55380/maintainability)](https://codeclimate.com/github/rjdbcm/Aspidites/maintainability) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
-
+# Aspidites 
+[![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/ci.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/ci.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/8d03ef8667df59d55380/maintainability)](https://codeclimate.com/github/rjdbcm/Aspidites/maintainability) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
+![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)
+----------------
 The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. There is also a genus of Python called _Aspidites_, latin for shield-bearer, that is this project's namesake.<p align="center">[![logo](https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie_96_96.png)](https://mobile.twitter.com/WheelieTheWoma)</p><p align="center">[![Twitter Follow](https://img.shields.io/twitter/follow/WheelieTheWoma?style=social)](https://mobile.twitter.com/WheelieTheWoma )</p>
 
 ### Installing
 ---------
-[![PyPI](https://img.shields.io/pypi/v/aspidites?color=pink&label=PyPI&logo=pypi)](https://pypi.org/project/Aspidites/)[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Aspidites?label=CPython)![PyPI - Downloads](https://img.shields.io/pypi/dd/Aspidites)
+[![PyPI](https://img.shields.io/pypi/v/aspidites?label=PyPI&logo=pypi)](https://pypi.org/project/Aspidites/)[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Aspidites?label=CPython)![PyPI - Downloads](https://img.shields.io/pypi/dd/Aspidites)
 ```
 $ pip install Aspidites
 ```
 -----------
-![Docker Image Version (latest by date)](https://img.shields.io/docker/v/rjdbcm/aspidites?color=pink&label=Docker&logo=docker)[![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/rjdbcm/aspidites)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)![Docker Pulls](https://img.shields.io/docker/pulls/rjdbcm/aspidites)
+![Docker Image Version (latest by date)](https://img.shields.io/docker/v/rjdbcm/aspidites?label=Docker&logo=docker)[![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/rjdbcm/aspidites)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)![Docker Pulls](https://img.shields.io/docker/pulls/rjdbcm/aspidites)
 ```
 $ docker pull ghcr.io/rjdbcm/aspidites:latest
 ```
 -----------
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rjdbcm/Aspidites?color=pink&label=Github&logo=github&logoColor=black)![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/rjdbcm/Aspidites/latest/main)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rjdbcm/Aspidites?label=Github&logo=github&logoColor=black)![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/rjdbcm/Aspidites/latest/main)
 ```
 $ gh repo clone rjdbcm/Aspidites
 ```
@@ -64,10 +66,10 @@ $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
 |:--------------|:--------------|:--------------------|:---------------------------------------------------------------|
 | ✅            | `->`          |respects             | `identifier` `->` `constraining clauses`                       |
 | ✅            | `<-`          |imposes              | `identifier` `<-` `imposed clauses`                            |
-| ❌            | `<@> `        |loops                | `identifier` `<@>` `iterable container`<br>`indent` `...`      |
 | ✅            | `<*>`         |return               | `<*>` `statement `                                             |
 | ✅            |  `#`          |pragma               | `#` `compiler directive`                                       |
-
+| ✅            | ``))``        |return respects      | ``))`` ``return constraints``                                  |                                           
+| ✅            | ``(G(``       |define G as function | ``(`` ``FuncName`` ``(`` ``identifier`` ``->`` ``constraining clauses`` ``;`` ``...`` ``))`` ``return constraints`` |
 
 
 ## Examples
