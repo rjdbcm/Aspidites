@@ -14,23 +14,16 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import sys
 import inspect
-import operator as op
-import shutil
-import sys
-import traceback
-import typing
 from math import inf, isinf
 from contextlib import suppress
-from symtable import Function
-
 from _warnings import warn
+
 from pyrsistent import v
+
 from ._vendor.contracts import ContractNotRespected, contract
 from ._vendor.fn import apply
 from ._vendor.fn.underscore import ArityError
-
 from .api import ContractBreachWarning, create_warning
 
 

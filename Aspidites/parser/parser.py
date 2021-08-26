@@ -18,7 +18,6 @@ from pyparsing import (
     Empty,
     FollowedBy,
     Forward,
-    Group,
     OneOrMore,
     Optional,
     ParseElementEnhance,
@@ -41,6 +40,7 @@ from pyparsing import (
 from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.contracts.syntax import contract_expression
 from Aspidites.parser.convert import *
+
 _contract_expression = contract_expression.copy()
 _contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")
 
