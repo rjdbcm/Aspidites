@@ -100,17 +100,18 @@ Closures and Lambdas
     val = scala(_ + _)
     val = val(scala)...
 
-Undefined() as the Nullity Element
+nullit as the Nullity Element
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: woma
 
-    `modulus and division by 0 handled by returning Undefined()`
+    `modulus and division by 0 handled by returning nullit/Undefined()`
     denom = 0
     div_by_zero = 1 / denom
     mod_zero = 1 % denom
     div_by_zero2 = 1 / 0
     mod_zero2 = 1 % 0
+    a_truth = div_by_zero2 == nullit
 
 Optional Structured Entrypoint
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
