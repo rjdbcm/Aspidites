@@ -53,9 +53,7 @@ assign_eq = Literal("=")
 noclosure = Literal("...")
 return_none = Literal("<*>").setParseAction(replaceWith("return "))
 yield_none = Literal("<^>").setParseAction(replaceWith("yield "))
-for_loop = Literal("<@>").setParseAction(replaceWith(" for "))
 respects = Keyword("->").setParseAction(lambda t: ":")
 imposes = Keyword("<-").setParseAction(lambda t: "new_contract")
 struct_main = Keyword("main:").setParseAction(replaceWith('if __name__ == "__main__":'))
-
 

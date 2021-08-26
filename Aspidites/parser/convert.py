@@ -10,15 +10,6 @@ def cvt_arith_expr(tks):
     elif "**" in expr:
         return "Maybe(SafeExp, " + expr.replace("**", ", ") + ")"
 
-# def cvt_for_stmt(toks):
-#     for t in toks:
-#         t[0], t[1] = t[1], t[0]
-#         t.insert(2, " in ")
-#         t.append(":")
-#     return "".join(*toks)
-# for_stmt = Group(delimitedList(identifier) + for_loop + tuple_str | list_str |
-#                  funcCall).setParseAction(cvt_for_stmt)
-
 
 def cvt_pragma(tks):
     t: list = tks.asList()
