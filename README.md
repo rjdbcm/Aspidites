@@ -1,9 +1,9 @@
 # Aspidites 
-[![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/ci.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/ci.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/8d03ef8667df59d55380/maintainability)](https://codeclimate.com/github/rjdbcm/Aspidites/maintainability) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
+[![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/ci.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/ci.yml) [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/rjdbcm/Aspidites)](https://codeclimate.com/github/rjdbcm/Aspidites/maintainability) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
+![GitHub top language](https://img.shields.io/github/languages/top/rjdbcm/Aspidites)
 ![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)
 ----------------
-The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. There is also a genus of Python called _Aspidites_, latin for shield-bearer, that is this project's namesake.<p align="center">[![logo](https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie_96_96.png)](https://mobile.twitter.com/WheelieTheWoma)</p><p align="center">[![Twitter Follow](https://img.shields.io/twitter/follow/WheelieTheWoma?style=social)](https://mobile.twitter.com/WheelieTheWoma )</p>
-
+The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. There is also a genus of Python called _Aspidites_, latin for shield-bearer, that is this project's namesake.
 ### Installing
 ---------
 [![PyPI](https://img.shields.io/pypi/v/aspidites?label=PyPI&logo=pypi)](https://pypi.org/project/Aspidites/)[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Aspidites?label=CPython)![PyPI - Downloads](https://img.shields.io/pypi/dd/Aspidites)
@@ -85,7 +85,8 @@ Greeter("Aspidites user")
 # Logo/Mascot
 Wheelie the Woma™ and Woma Programming Language™ are unregistered trademarks of Ross J. Duff. 
 The logos are copyright © Ross J. Duff but may be transferred to an appropriate trust at a later date.
-This is to prevent confusing/malicious use.
+This is to prevent confusing/malicious use.<p align="center">[![logo](https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie_96_96.png)](https://mobile.twitter.com/WheelieTheWoma)</p><p align="center">[![Twitter Follow](https://img.shields.io/twitter/follow/WheelieTheWoma?style=social)](https://mobile.twitter.com/WheelieTheWoma )</p>
+
 
 # Contributing
 
