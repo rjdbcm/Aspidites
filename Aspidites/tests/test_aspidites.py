@@ -1,23 +1,24 @@
 import os
-import sys
 import warnings
+from pathlib import Path
+
 
 import hypothesis
-
-from Aspidites._vendor.contracts import ContractNotRespected
 from hypothesis import given, assume, strategies as st
 import pytest as pt
-from Aspidites.__main__ import get_cy_kwargs, parse_from_dummy, main
-import argparse as ap
-from pathlib import Path
-from Aspidites.parser import parse_module
-from Aspidites.templates import lib, setup
-from Aspidites.monads import Maybe, Undefined, Surely, SafeMod, SafeDiv, SafeExp
-from Aspidites.compiler import compile_module
 try:
     from numpy import inf, nan, isinf, isnan
 except ImportError:
     from math import inf, nan, isinf, isnan
+
+
+from .._vendor.contracts import ContractNotRespected
+from ..__main__ import get_cy_kwargs, parse_from_dummy, main
+from ..parser import parse_module
+from ..templates import lib, setup
+from ..monads import Maybe, Undefined, Surely, SafeMod, SafeDiv, SafeExp
+from ..compiler import compile_module
+
 
 docker = os.getenv("ASPIDITES_DOCKER_BUILD")
 
