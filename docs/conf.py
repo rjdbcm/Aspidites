@@ -17,7 +17,7 @@ from sphinx.highlighting import lexers
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-from Aspidites.parser import comparisonop, identifier, quoted_str
+from Aspidites.parser.parser import comparisonop, identifier
 from Aspidites import __version__, __mimetype__
 
 
@@ -123,7 +123,7 @@ class WomaLexer(RegexLexer):
             token.Keyword.Type),
             (identifier.reString, token.Name.Decorator),
             (r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*`", token.Comment),
-            (r'[<\^>]|[<\*>]|<@>|->|[<-]|\)\)|#|(?<=\))\.{3,}', token.Keyword),
+            (r'[<\^>]|[<\*>]|<@>|->|[<-]|\)\)|#|(?<=\))\.{3,}|nullit', token.Keyword),
             (r'(?<=\w)\.(?=\w)', token.Punctuation),
             (r'[]{}:(),;[]', token.Punctuation),
             (r'(\d(?:_?\d)*\.(?:\d(?:_?\d)*)?|(?:\d(?:_?\d)*)?\.\d(?:_?\d)*)([eE][+-]?\d(?:_?\d)*)?', token.Number.Float),
