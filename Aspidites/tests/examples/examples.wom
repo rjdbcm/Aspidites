@@ -54,7 +54,7 @@ div_by_zero = 1 / denom
 mod_zero = 1 % denom
 div_by_zero2 = 1 / 0
 mod_zero2 = 1 % 0
-`a_truth = nullit == div_by_zero not working?!`
+`a_truth = 1 + 2 == 2 + 1`
 
 `main: structure for executable actions when run as a binary`
 main:
