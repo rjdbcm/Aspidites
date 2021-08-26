@@ -69,7 +69,7 @@ $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
 | ✅            | `<*>`         |return               | `<*>` `statement `                                             |
 | ✅            |  `#`          |pragma               | `#` `compiler directive`                                       |
 | ✅            | ``))``        |return respects      | ``))`` ``return constraints``                                  |                                           
-| ✅            | ``(G(``       |define G as function | ``(`` ``FuncName`` ``(`` ``identifier`` ``->`` ``constraining clauses`` ``))`` ``return constraints`` |
+| ✅            | ``(G(``       |define G as function | ``(`` ``FuncName`` ``(`` ``identifier`` ``->`` ``constraining clauses`` ``;`` ``...`` ``))`` ``return constraints`` |
 
 
 ## Examples
