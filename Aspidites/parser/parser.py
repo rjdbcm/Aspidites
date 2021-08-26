@@ -37,9 +37,9 @@ from pyparsing import (
     unicodeString,
 )
 
-from Aspidites._vendor.contracts import contract, new_contract
-from Aspidites._vendor.contracts.syntax import contract_expression
-from Aspidites.parser.convert import *
+from .._vendor.contracts import contract, new_contract
+from .._vendor.contracts.syntax import contract_expression
+from ..parser.convert import *
 
 _contract_expression = contract_expression.copy()
 _contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")
@@ -90,8 +90,8 @@ simple_assign = Forward()
 suite = Forward()
 rvalue = Forward()
 stmt = Forward()
-identifier = Word(alphas + "_", alphanums + "_").setName("VAR_ID")
-operand = complex_ | real | integer | identifier | underscore
+identifier = Word(alphas + "_", alphanums + "_")
+operand = nullit | complex_ | real | bool_literal | integer | identifier | underscore
 arith_expr = Combine(
     infixNotation(
         operand,
@@ -106,29 +106,29 @@ arith_expr = Combine(
         rpar=lit_rparen,
     )
 ).setParseAction(cvt_arith_expr)
-comp_expr = infixNotation(
+comp_expr = infixNotation( # This does not work dear god
     arith_expr,
     [
         (comparisonop, 2, opAssoc.LEFT),
     ],
 )
-list_item = (
-    real
+
+list_item = (  # Precedence important!!!
+    comp_expr  # Expressions
     | arith_expr
-    | integer
     | identifier
+    | integer  # Literals
     | complex_
+    | real
     | quoted_str
     | unistr
     | bool_literal
     | nullit
-    | list_str
+    | list_str  # Collections
     | set_str
     | tuple_str
     | dict_str
-    | comp_expr
 )
-identifier = Word(alphas + "_", alphanums + "_")
 contract_define = identifier + imposes + _contract_expression  #  ^ funcCall
 contract_define.setParseAction(cvt_contract_define)
 contract_respect = respects + _contract_expression
@@ -160,12 +160,12 @@ func_def = Group(func_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]
 lambda_def = Combine(Group(lit_lparen + arith_expr | comp_expr + lit_rparen))
 func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_func_call)  # if len(t[0]) != 3 else t[0][0] + '()')
 clos_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_clos_call) + Suppress(noclosure)
-suite << IndentedBlock(
+suite <<= IndentedBlock(
     (comment_line | pass_stmt | ret_stmt | yield_stmt | func_call | func_def | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
-rvalue << (clos_call | func_call | list_item | lambda_def)
+rvalue <<= clos_call | func_call | list_item | lambda_def
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
-stmt << (func_def | contract_define | func_call | simple_assign | comment_line)
+stmt <<= func_def | contract_define | func_call | simple_assign | comment_line
 module_body = OneOrMore(stmt) + Optional(struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
 
 
