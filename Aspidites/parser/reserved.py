@@ -1,4 +1,4 @@
-from pyparsing import oneOf, Keyword, replaceWith, Literal, Suppress, Group
+from pyparsing import oneOf, Keyword, replaceWith, Literal, Suppress, Group, Regex
 
 available_bool_pragmas = [
     'cython.binding',
@@ -42,15 +42,15 @@ underscore = Literal("_")
 lparen, rparen, lbrack, rbrack, lbrace, rbrace, colon, comma = map(Suppress, "()[]{}:,")
 lit_lparen, lit_rparen, lit_lbrack, lit_rbrack, lit_lbrace, lit_rbrace, lit_colon, lit_comma = map(str, "()[]{}:,")
 bool_literal = oneOf("True False", asKeyword=True).setParseAction(lambda t: t[0] == "True")
-nullit = Keyword("nullit").setParseAction(replaceWith("Undefined()"))
+nullit = Literal("nullit").setParseAction(replaceWith("Undefined()"))
 signop = oneOf("+ -")
 multop = oneOf("* / %")
 plusop = oneOf("+ -")
 exponp = Literal("**")
 factop = Literal("!")
-comparisonop = oneOf("< <= > >= != ==")
+comparisonop = Regex(">=|<=|!=|>|<|==").setName("operator")
 assign_eq = Literal("=")
-noclosure = Literal("...")
+noclosure = Literal("...")  # That's no closure
 return_none = Literal("<*>").setParseAction(replaceWith("return "))
 yield_none = Literal("<^>").setParseAction(replaceWith("yield "))
 respects = Keyword("->").setParseAction(lambda t: ":")
