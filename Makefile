@@ -1,4 +1,18 @@
-.PHONY: docker docs
+.PHONY:
+    docker
+    docs
+    clean-md5
+    clean-build
+    clean-pyc
+    clean-woma
+    clean-test
+    clean
+    test-all
+    coverage
+    patch
+    minor
+    major
+    build
 # You can set these variables from the command line, and also
 # from the environment for the first two.
 SPHINXOPTS    ?=
@@ -6,7 +20,7 @@ SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = docs
 BUILDDIR      = build
 VERSION       = $(shell python -c "import sys;from Aspidites import __version__;sys.stdout.write(__version__)");
-clean: clean-build clean-pyc clean-test clean-md5 clean-woma## remove all build, test, coverage and Python artifacts
+clean: clean-build clean-pyc clean-test clean-sha clean-woma## remove all build, test, coverage and Python artifacts
 
 clean-build: ## remove build artifacts
 	rm -fr build/
@@ -16,8 +30,8 @@ clean-build: ## remove build artifacts
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
 
-clean-md5:
-	find . -name '*.md5' -exec rm -f {} +
+clean-sha:
+	find . -name '*.sha256' -exec rm -f {} +
 
 clean-pyc: ## remove Python file artifacts
 	find . -name '*.pyc' -exec rm -f {} +
