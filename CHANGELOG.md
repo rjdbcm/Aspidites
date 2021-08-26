@@ -1,5 +1,22 @@
 **unreleased**
 **v0.11.28**
+
+- 5dee3f1 reserved.py: made nullit Literal and operators use a regex
+- b645d1a parser.py: fixed some imports, fixed list_item precedence
+- 51955d6 conf.py rewrote lexer in preparation to move to its own package
+- ecd259d examples.wom: comp op comment out
+- e39b931 examples.wom: commented out nullit
+- 1d481ba test_aspidites.py: imports
+- e4c955b Merge remote-tracking branch 'origin/main'
+- 7112ad6 add nullit to examples.wom
+- bf3770b add cache to ci.yml
+- c8c6cb7 source tree cleanup
+- 3b62aec Update README.md
+- e04474a Update README.md
+- f73454b Update README.md
+- 504b659 source tree cleanup
+
+
 **v0.11.27**
 
 - 9612bad fix gh action
