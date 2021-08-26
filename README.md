@@ -66,10 +66,10 @@ $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
 |:--------------|:--------------|:--------------------|:---------------------------------------------------------------|
 | ✅            | `->`          |respects             | `identifier` `->` `constraining clauses`                       |
 | ✅            | `<-`          |imposes              | `identifier` `<-` `imposed clauses`                            |
-| ❌            | `<@> `        |loops                | `identifier` `<@>` `iterable container`<br>`indent` `...`      |
 | ✅            | `<*>`         |return               | `<*>` `statement `                                             |
 | ✅            |  `#`          |pragma               | `#` `compiler directive`                                       |
-
+| ✅            | ``))``        |return respects      | ``))`` ``return constraints``                                  |                                           
+| ✅            | ``(G(``       |define G as function | ``(`` ``FuncName`` ``(`` ``identifier`` ``->`` ``constraining clauses`` ``))`` ``return constraints`` |
 
 
 ## Examples
