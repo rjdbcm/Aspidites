@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 import sys
-
+from pathlib import Path
 from setuptools import setup, find_packages
 from setuptools.dist import Distribution
 from setuptools.command.install import install
@@ -10,17 +10,21 @@ from Aspidites.__main__ import get_cy_kwargs
 
 cy_kwargs = get_cy_kwargs()
 cy_kwargs.update({'embed': True})
-code = open('Aspidites/woma/library.wom', 'r').read()
-compiler.compile_module(
-    parser.parse_module(code),
-    'Aspidites/woma/library.pyx',
+code = open(Path('Aspidites/woma/library.wom'), 'r').read()
+cy_kwargs.update(
+    code=parser.parse_module(code),
+    force=True,
+    fname='Aspidites/woma/library.pyx',
     bytecode=True,
-    **cy_kwargs
+    c=True,
+    verbose=0,
+    build_requires=''
 )
+compiler.compile_module(**cy_kwargs)
 
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    return open(Path(fname).absolute()).read()
 
 
 # Tested with wheel v0.29.0, 0.36.2
@@ -47,7 +51,9 @@ class InstallWrapper(install):
 
     def preinstall(self):
         """preinstall hook"""
-        c = "Aspidites build/lib/Aspidites/woma/library.wom -c -o build/lib/Aspidites/woma/library.pyx --embed=True"
+        target = Path('build/lib/Aspidites/woma/library.wom')
+        output = Path('build/lib/Aspidites/woma/library.pyx')
+        c = "Aspidites %s -c -o %s --embed=True" % (target, output)
         os.popen(c)
         print(c)
         pass
@@ -87,10 +93,17 @@ setup(
     cmdclass={'install': InstallWrapper},
     long_description_content_type='text/markdown',
     classifiers=[
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: MacOS :: MacOS X",
+        "Operating System :: Microsoft :: Windows",
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
         "Programming Language :: Other",
+        # "Programming Language :: Python :: 3.6", EOL in December 2021 and don't want to vendor dataclasses
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        # "Programming Language :: Python :: Implementation :: PyPy", looks like a no go
         "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Software Development :: Compilers",
         "Topic :: Utilities",

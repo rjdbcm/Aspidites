@@ -1,0 +1,92 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  linux-build:
+      runs-on: ubuntu-latest
+      strategy:
+          matrix:
+           python:
+            - 3.9.6
+            - 3.8.11
+            - 3.7.11
+
+      steps:
+      - name: Get Source Directory 
+        uses: actions/checkout@v2
+
+      - name: Test Python Versions
+        uses: actions/setup-python@v2
+        with:
+           python-version: "${{ matrix.python }}"
+      - run: |
+              pip install -U pip pipenv wheel cython
+              pipenv lock
+              pipenv sync -d
+              pipenv run pytest --cov=Aspidites --cov-report=xml
+              rm -rf Pipfile.lock
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
+
+      - name: Upload Coverage to codecov.io
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage.xml
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.7.5
+        env:
+          CC_TEST_REPORTER_ID: 5bcc9d60bb439f75e102507e595434a393e9be017010223f6f3bc61cce2f5802
+  
+  
+  macosx-build:
+      runs-on: macos-11
+      strategy:
+          matrix:
+           python:
+            - 3.9.6
+            - 3.8.11
+            - 3.7.11
+
+      steps:
+      - name: Get Source Directory 
+        uses: actions/checkout@v2
+
+      - name: Test Python Versions
+        uses: actions/setup-python@v2
+        with:
+           python-version: "${{ matrix.python }}"
+      - run: |
+              pip install -U pip pipenv wheel cython
+              pipenv lock
+              pipenv sync -d
+              pipenv run pytest
+              rm -rf Pipfile.lock
+  
+  windows-build:
+        runs-on: windows-latest
+        env:
+          PYTHONIOENCODING: "utf-8"
+        steps:
+        - 
+          name: Get Source Directory 
+          uses: actions/checkout@v2
+        -
+          name: Build Aspidites
+          run: | 
+              pip install -U pip pipenv wheel cython
+              pipenv lock
+              pipenv sync -d
+              pipenv run pytest
+
+          

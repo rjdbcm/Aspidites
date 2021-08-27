@@ -1,52 +1,175 @@
-# Aspidites is Copyright 2021, Ross J. Duff.
-# See LICENSE.txt for more info.
+
+# Aspidites
+# Copyright (C) 2021 Ross J. Duff
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import py_compile
 import sys
 from glob import glob
 from warnings import warn
-
+import typing as t
 from mypy import api
+from .templates import lib, makefile, pyproject, setup
+from pyrsistent import pmap
+from hashlib import sha256
+from pathlib import Path
+from .final import final
+from ._vendor.semantic_version import Version
+from pyparsing import ParseResults
 
-from Aspidites._vendor.contracts import contract
-from Aspidites.api import CheckedFileStack, checksum
-from Aspidites.templates import lib, makefile, pyproject, setup
+
+@final()
+class CheckedFileStack:
+
+    """A convenience class for reading file data streams to stdout or to checksum"""
+
+    def __init__(self, initial=None, pre_size=128):
+        if initial is None:
+            initial = {}
+        self._files = pmap(initial, pre_size)
+        self.all_files = self._files.evolver()
+        self.pre_size = pre_size
+
+    def read(self, data, print__=False, hash_func=None):
+        curr_hash = hash_func() if hash_func else {}
+        chunk = data.read(self.pre_size)
+        while chunk:
+            curr_hash.update(chunk) if hash_func else {}
+            chunk = data.read(self.pre_size)
+            if print__:
+                print(chunk, '')
+        return curr_hash if hash_func else None
+
+    def __checksum(self, fname, write=True, check=False):
+        fname = Path(fname)
+        base, name = fname.parent, fname.name
+        base = Path(base)
+        fname_sha256 = base/("." + name + ".sha256")
+
+        if write:
+            with open(fname, "rb") as data:
+                curr_hash = self.read(data, hash_func=sha256)
+                with open(fname_sha256, "wb") as digest:
+                    digest.write(curr_hash.digest())
+                return pmap({curr_hash.digest(): fname}).items()[0]  # immutable
+        if check:
+            with open(fname_sha256, "rb") as digest:
+                with open(fname, "rb") as data:
+                    curr_hash = self.read(data, hash_func=sha256)
+                    old = digest.read()
+                    new = curr_hash.digest()
+                    if new == old:
+                        print(
+                            "sha256 digest check successful: %s, %s == %s"
+                            % (fname, new.hex(), old.hex())
+                        )
+                        return new
+                    else:
+                        print(
+                            "sha256 digest failure: %s, %s != %s"
+                            % (fname, new.hex(), old.hex())
+                        )
+                        return ""
+
+    def register(self, fname):
+        self.all_files.set(*self.__checksum(fname))
+
+    def commit(self):
+        return self.all_files.persistent()
+
+    def create_file(self, fname, mode, root='',
+                    text="# THIS FILE IS GENERATED - DO NOT EDIT #") -> None:
+
+        if len(str(root)) > 0:
+            root = Path(root)
+            file = root/fname
+        else:
+            file = fname
+        try:
+            open(file, mode).write(text)
+        except FileExistsError:
+            self.register(file)
+
+    def finalize(self):
+        all_file_checksums = self.commit()
+        print("running checksums")
+        for k, v in all_file_checksums.items():
+            digest = self.__checksum(v, write=False, check=True)
+            try:
+                all_file_checksums.get(digest)
+            except AttributeError:
+                raise RuntimeError("\nfor file %s\n%s\n  did not match cached digest\n%s")
 
 
-@contract()
-def compile_module(
-    code: "code",
-    fname: "str" = "compiled.py",
-    force: "bool" = False,
-    bytecode: "bool" = False,
-    c: "bool" = True,
-    build_requires: "list|str" = "",
-    verbose: "int" = 0,
-    *args,
-    **kwargs
-):
+file_stack = CheckedFileStack()
 
-    app_name = os.path.splitext(fname)[0]
-    project = os.path.basename(app_name)
-    module_name = app_name.replace("/", ".")
-    file_c = app_name + ".c"
-    dir = os.path.dirname(file_c)
-    glob_so = app_name + ".*.so"
-    init_py = os.path.join(dir, "__init__.py")
-    make_ = os.path.join(dir, "Makefile")
-    py_typed = os.path.join(dir, "py.typed")
-    stack = CheckedFileStack()
+
+def compile_module(**kwargs):
+    code          : ParseResults         = kwargs['code']
+    fname         : Path                 = kwargs['fname']
+    force         : bool                 = kwargs['force']
+    bytecode      : bool                 = kwargs['bytecode']
+    c             : bool                 = kwargs['c']
+    build_requires: t.Union[t.List, str] = kwargs['build_requires']
+    verbose       : int                  = kwargs['verbose']
+
+    fname = Path(fname)
+    app_name = fname.parent / fname.stem
+    project = app_name.stem
+    module_name = str(app_name).replace("/", ".")
+    file_c = str(app_name) + ".c"
+    root = fname.parent
     mode = "x" if force else "w"
-    open(fname, mode).write(lib.substitute(code="\n".join(code)))
-    stack.register(fname)
-    open(py_typed, "w").write("# THIS FILE IS GENERATED - DO NOT EDIT #")
-    stack.register(py_typed)
-    open(init_py, "w").write("# THIS FILE IS GENERATED - DO NOT EDIT #")
-    stack.register(init_py)
-    open(make_, mode).write(makefile.substitute(project=project))
-    stack.register(make_)
-    verb = int(bool(verbose))
+
+    files = {
+        fname           : (mode, {'root': '', 'text': lib.substitute(code="\n".join(code))}),
+        '__init__.py'   : (mode, {'root': root}),
+        'py.typed'      : (mode, {'root': root}),
+        'pyproject.toml': (mode,
+            {'root': root, 'text': pyproject.substitute(build_requires=build_requires)}
+                           ),
+        'Makefile'      : (mode, {'root': root, 'text': makefile.substitute(project=project)}),
+    }
+
+    for k, v in files.items():
+        args_, kwargs_ = v
+        file_stack.create_file(k, args_, **kwargs_)
+
+    typecheck(module_name)
+    create_stubs(fname, app_name)
+
+    if bytecode:
+        fname_pyc = str(app_name) + ".pyc"
+        quiet = tuple(reversed(range(3))).index(verbose if verbose < 2 else 2)
+        major, minor, patch, *_ = sys.version_info
+        if Version(major=major, minor=minor, patch=patch) < Version('3.8.0'):
+            py_compile.compile(str(fname), fname_pyc)
+        else:
+            py_compile.compile(str(fname), fname_pyc, quiet=quiet)
+        file_stack.register(fname_pyc)
+
+    if c:
+        compile_c(fname, force, verbose)
+        create_setup(root, app_name, **kwargs)
+        compile_object(str(app_name), file_c, root)
+
+    file_stack.finalize()
+
+
+def typecheck(module_name: str):
     mypy_args = [
         "-m",
         module_name,
@@ -74,62 +197,55 @@ def compile_module(
         print("mypy returned with exit code:", return_code) if return_code else None
         # exit(return_code) if return_code != 0 else print("running compile")
 
-    fname_pyi = app_name + '.pyi'
-    stubgen_runner = 'stubgen %s -o .' % (fname)
-    print("running %s" % stubgen_runner)
-    with os.popen(stubgen_runner) as p:
-        print(p.read())
+
+def create_stubs(fname, app_name):
+    fname_pyi = str(app_name) + '.pyi'
+    stubgen = 'stubgen %s -o .' % fname
+    print("running %s" % stubgen)
+    with os.popen(stubgen) as p:
+        file_stack.read(p, print__=True)
     try:
-        stack.register(fname_pyi)
+        file_stack.register(fname_pyi)
     except FileNotFoundError as e:
         warn(str(e))
         try:
-            print("trying rename __main__.pyi to %s" % fname_pyi)
-            os.rename(os.path.join(os.getcwd(), '__main__.pyi'), fname_pyi)
-            stack.register(fname_pyi)
+            cwd = Path.cwd()
+            path = cwd / Path('__main__.py')
+            print("trying rename %s/__main__.pyi to %s" % (str(cwd), fname_pyi))
+            path.rename(fname_pyi)
+            file_stack.register(fname_pyi)
         except FileNotFoundError:
             warn("failed to create stubs")
 
-    if bytecode:
-        fname_pyc = app_name + ".pyc"
-        quiet = tuple(reversed(range(3))).index(verbose if verbose < 2 else 2)
-        py_compile.compile(fname, fname_pyc, quiet=quiet)
-        stack.register(fname_pyc)
 
-    if c:
-        os.popen("cython %s %s %s" % (fname, "--force" * force, "--verbose" * verb))
-        setup_py = os.path.join(dir, "setup.py")
-        pyproject_toml = os.path.join(dir, "pyproject.toml")
-        with open(setup_py, mode) as f:
-            f.write(
-                setup.substitute(
+def compile_c(fname, force, verbose) -> None:
+    verb = int(bool(verbose))
+    os.popen("cython %s %s %s" % (fname, "--force" * force, "--verbose" * verb))
+
+
+def create_setup(root, app_name, **kwargs) -> None:
+    module_name = str(app_name).replace("/", ".")
+    file_stack.create_file('setup.py',
+                "x" if kwargs['force'] else "w",
+                root=root,
+                text=setup.substitute(
                     app_name=module_name,
-                    src_file=fname,
+                    src_file=kwargs['fname'],
                     inc_dirs=[],
                     libs=[],
                     exe_name=app_name,
                     lib_dirs=[],
-                    **kwargs
-                )
-            )
-        stack.register(setup_py)
-        # TODO: get this working for docker builds
-        #  (maybe executable param with os.path.relpath?)
-        setup_runner = "%s %s build_ext -b ." % (sys.executable, setup_py)
-        print("running", setup_runner)
-        with os.popen(setup_runner) as p:
-            print(p.read())
-        stack.register(file_c)
-        for i in glob(glob_so):
-            stack.register(i)
-        with open(pyproject_toml, mode) as f:
-            f.write(pyproject.substitute(build_requires=build_requires))
-        stack.register(pyproject_toml)
-    all_file_checksums = stack.finalize()
-    print("running checksums")
-    for k, v in all_file_checksums.items():
-        digest = checksum(v, write=False, check=True)
-        try:
-            all_file_checksums.get(digest)
-        except AttributeError:  # 449779cbdc60682faf8b1327d1d315ca
-            raise RuntimeError("\nfor file %s\n%s\n  did not match cached digest\n%s")
+                    **kwargs))
+
+
+def compile_object(app_name, file_c, root) -> None:
+    glob_so = app_name + ".*.so"
+    # TODO: get this working for docker builds
+    #  (maybe executable param with os.path.relpath?)
+    setup_runner = "%s %s build_ext -b ." % (sys.executable, str(Path(root)/'setup.py'))
+    print("running", setup_runner)
+    with os.popen(setup_runner) as p:
+        file_stack.read(p, print__=True)
+    file_stack.register(file_c)
+    for i in glob(glob_so):
+        file_stack.register(i)

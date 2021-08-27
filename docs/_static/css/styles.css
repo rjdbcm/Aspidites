@@ -1,0 +1,102 @@
+th p {
+    margin-bottom: 0;
+}
+
+.rst-content tr .line-block {
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+.sphinx-tabs-panel {
+    background: rgba(54, 59, 61, 0) !important;
+}
+
+.sphinx-tabs-tab [aria-selected="true"] {
+    background-color: #1a1c1d;
+    margin: 0
+}
+
+.sphinx-tabs-tab {
+	position: relative;
+	font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+	color: #c0bab2 !important;
+	line-height: 24px;
+	margin: 0;
+	font-size: 16px;
+	font-weight: 400;
+	background: #363b3d !important;
+	border-radius: 0px 0px 0px 0px;
+	border: 0px;
+	padding: 1rem 1.5rem;
+	margin-bottom: 0px;
+	margin-left: 2px !important;
+}
+
+
+a img.logo {
+  animation-duration: 0.75s;
+  animation-name: slidein;
+  position: absolute;
+  break-inside: avoid;
+  padding-top: 20%;
+  padding-left: 20%;
+  pointer-events: none;
+}
+
+.wy-side-nav-search input[type=text] {
+    width:90%;
+    border-radius:20px;
+    padding:6px 12px;
+    border-color:#181a1b
+}
+
+button.copybtn {
+    opacity: 1;
+}
+
+
+.wy-side-nav-search {
+    text-align: -moz-center;
+}
+
+#rtd-search-form:hover {
+    border: 1.5px inset #b2aba1;
+}
+
+#rtd-search-form {
+    width: 80% !important;
+    border-radius: 20px;
+    background-color: #181a1b;
+    background-radius : 20px;
+}
+
+.toggle .header {
+    display: inline;
+    cursor: pointer;
+}
+
+.toggle .header:after {
+    animation-name: slidein;
+}
+
+.toggle .header.open:after {
+    animation-name: slideout;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 300%;
+  }
+
+  75% {
+    font-size: 150%;
+    margin-left: 25%;
+    width: 150%;
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+}

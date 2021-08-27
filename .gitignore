@@ -1,3 +1,10 @@
 /build/
 /dist/
 /.idea/
+/.hypothesis/
+/.mypy_cache/
+/.pytest_cache/
+/.coverage_html/
+/venv/
+.pycrunch-config.yaml
+.coverage*

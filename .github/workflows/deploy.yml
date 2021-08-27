@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - v*
+    branches:
+      - main
 jobs:
   build-n-publish:
       name: Build and publish Python 🐍 distributions 📦 to PyPI and TestPyPI
@@ -40,3 +42,14 @@ jobs:
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Send a Tweet
+        continue-on-error: true
+        uses: ethomson/send-tweet-action@v1
+        with:
+            status: "📦 New PyPI package: Aspidites ${{ github.event.head_commit.message }}! 🎉🎉🎉
+            Check it out: https://pypi.org/project/Aspidites"
+            consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
+            consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
+            access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+            access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}

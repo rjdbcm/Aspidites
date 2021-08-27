@@ -1,0 +1,31 @@
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+  test:
+    continue-on-error: true
+    runs-on: windows-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Choco Pack
+        uses: crazy-max/ghaction-chocolatey@v1
+        with:
+          args: pack
+      -
+        name: Choco Logon
+        uses: crazy-max/ghaction-chocolatey@v1
+        with:
+          args: apikey --key ${{ secrets.CHOCOLATEY_TOKEN }} --source https://push.chocolatey.org/
+      -
+        name: Choco Push
+        id: push
+        uses: crazy-max/ghaction-chocolatey@v1
+        with:
+          args: push "Aspidites.${GITHUB_REF#refs/*/}.nupkg" --source https://push.chocolatey.org/
+
+

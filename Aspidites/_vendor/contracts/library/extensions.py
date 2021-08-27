@@ -24,8 +24,7 @@ class Extension(Contract):
         if self.kwargs:
             ks = sorted(self.kwargs)
             inside.extend(["%s=%s" % (k, self.kwargs[k]) for k in ks])
-        
-        
+
         s = self.identifier
     
         if inside:
@@ -45,6 +44,7 @@ class Extension(Contract):
         context['kwargs'] = dict((k, v.eval(context)) for
                                  k, v in self.kwargs.items())
 
+        # noinspection PyProtectedMember
         self.contract._check_contract(context, value, silent)
 
     @staticmethod
@@ -135,22 +135,26 @@ class CheckCallable(Contract):
             used by Extension, which serializes using the identifier. """
         return get_callable_name(callable)
 
+
 def get_callable_name(c):
     """ Get a displayable name for the callable even if __name__
         is not available. """
     try:
         return c.__name__ + '()'
-    except:
+    except AttributeError:
         return str(c)
+
 
 def get_callable_module(c):
     try:
         return c.__module__
-    except:
+    except AttributeError:
         return '(No __module__ attr)'
-    
+
+
 def describe_callable(c):
     return get_callable_name(c) + ' module: %s' % get_callable_module(c)
+
 
 class CheckCallableWithSelf(Contract):
 
@@ -198,7 +202,6 @@ class CheckCallableWithSelf(Contract):
         return 'function %s()' % get_callable_name(self.callable)
 
 
-
 w = Word('_' + alphanums)
 arg = rvalue.copy()
 
@@ -210,6 +213,7 @@ def build_args_kwargs(s, loc, tokens):
     return (tuple(t for t in tokens if not isinstance(t, dict)),
             dict((k, v) for t in tokens if isinstance(t, dict)
                  for k, v in t.items()))
+
 
 arglist = delimitedList(kwarg | arg)
 arglist.setParseAction(build_args_kwargs)

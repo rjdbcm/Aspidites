@@ -3,26 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Aspidites's documentation!
-=====================================
+Welcome to the Woma Programming Language!
+=========================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :numbered:
+   :maxdepth: 4
 
+   README
+   syntax
+   devinfo
 
-.. code-block:: woma
-
-   ` backticks are used to denote comments `
-   (Hello()) procedure
-      <*>Print("Hello World!")
-
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
