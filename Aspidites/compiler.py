@@ -53,39 +53,44 @@ class CheckedFileStack:
                 print(chunk, '')
         return curr_hash if hash_func else None
 
-    def __checksum(self, fname, write=True, check=False):
+    def _write_checksum(self, fname) -> tuple:
         fname = Path(fname)
         base, name = fname.parent, fname.name
         base = Path(base)
-        fname_sha256 = base/("." + name + ".sha256")
+        fname_sha256 = base / ("." + name + ".sha256")
+        with open(fname, "rb") as data:
+            curr_hash = self.read(data, hash_func=sha256)
+            with open(fname_sha256, "wb") as digest:
 
-        if write:
-            with open(fname, "rb") as data:
-                curr_hash = self.read(data, hash_func=sha256)
-                with open(fname_sha256, "wb") as digest:
-                    digest.write(curr_hash.digest())
-                return pmap({curr_hash.digest(): fname}).items()[0]  # immutable
-        if check:
-            with open(fname_sha256, "rb") as digest:
-                with open(fname, "rb") as data:
-                    curr_hash = self.read(data, hash_func=sha256)
-                    old = digest.read()
-                    new = curr_hash.digest()
-                    if new == old:
-                        print(
-                            "sha256 digest check successful: %s, %s == %s"
-                            % (fname, new.hex(), old.hex())
-                        )
-                        return new
-                    else:
-                        print(
-                            "sha256 digest failure: %s, %s != %s"
-                            % (fname, new.hex(), old.hex())
-                        )
-                        return ""
+                self._cache.set(curr_hash.digest(), fname)
+                digest.write(curr_hash.digest())
+
+            return pmap({curr_hash.digest(): fname}).items()[0]  # immutable
+
+    def _read_checksum(self, fname, write=True, check=False):
+        fname = Path(fname)
+        base, name = fname.parent, fname.name
+        base = Path(base)
+        fname_sha256 = base / ("." + name + ".sha256")
+        old = open(fname_sha256, "rb").read()
+        with open(fname, "rb") as data:
+            curr_hash = self.read(data, hash_func=sha256)
+            new = curr_hash.digest()
+            if new == old:
+                print(
+                    "sha256 digest check successful: %s %s"
+                    % (name, new.hex())
+                )
+                return new
+            else:
+                print(
+                    "sha256 digest failure: %s %s"
+                    % (name, new.hex())
+                )
+                return ""
 
     def register(self, fname):
-        self.all_files.set(*self.__checksum(fname))
+        self.all_files.set(*self._write_checksum(fname))
 
     def commit(self):
         return self.all_files.persistent()
@@ -107,7 +112,7 @@ class CheckedFileStack:
         all_file_checksums = self.commit()
         print("running checksums")
         for k, v in all_file_checksums.items():
-            digest = self.__checksum(v, write=False, check=True)
+            digest = self._read_checksum(v)
             try:
                 all_file_checksums.get(digest)
             except AttributeError:

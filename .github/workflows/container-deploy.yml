@@ -2,10 +2,8 @@ name: Deploy to Dockerhub 🐳
 
 on:
   push:
-    branches:
-      - 'dev*'
     tags:
-      - 'v*.*.*'
+      - v*.*.*
 
 jobs:
   docker:
