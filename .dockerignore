@@ -1,2 +1,9 @@
+docs/**
+.github/**
 Pipfile.lock
-docs
+Makefile
+makedocs.bat
+.bumpversion.cfg
+.coveragerc
+.readthedocs.yaml
+aspidites.nuspec
