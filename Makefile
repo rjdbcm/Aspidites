@@ -1,18 +1,18 @@
 .PHONY:
-    docker
-    docs
-    clean-md5
-    clean-build
-    clean-pyc
-    clean-woma
-    clean-test
-    clean
-    test-all
-    coverage
-    patch
-    minor
-    major
-    build
+	docker
+	docs
+	clean-md5
+	clean-build
+	clean-pyc
+	clean-woma
+	clean-test
+	clean
+	test-all
+	coverage
+	patch
+	minor
+	major
+	build
 # You can set these variables from the command line, and also
 # from the environment for the first two.
 SPHINXOPTS    ?=
