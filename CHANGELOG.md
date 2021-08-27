@@ -1,6 +1,22 @@
 **unreleased**
 **v0.12.0**
 
+- ceafa58 clean up imports
+- 01f394f monads.py: stack is inspected during __init__
+- 29a8699 final.py: clean imports and add docstrings
+- 99dcd66 fix tab typo
+- c30dae3 add gitignores
+- a0719ab add smol logo
+- 53a87f8 Makefile: added all phonies and changed clean-md5 to clean-sha
+- cd3ccc7 Merge remote-tracking branch 'origin/main'
+- db0056e move WomaLexer into a separate repo pygments-woma-lexer
+- c66fc8e changelog updated
+- 47f6bbd Update README.md
+- 4a92f4f Update README.md
+- 94f09dc Update README.md
+
+
+
 - 
 
 
