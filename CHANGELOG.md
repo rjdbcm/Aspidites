@@ -1,4 +1,5 @@
 **unreleased**
+**v0.12.1**
 **v0.12.0**
 
 - ceafa58 clean up imports
