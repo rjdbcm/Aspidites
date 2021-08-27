@@ -1,4 +1,5 @@
 **unreleased**
+**v0.12.2**
 **v0.12.1**
 
 - f7d39de Pulled a Warn class from SafeMath, Maybe etc.
