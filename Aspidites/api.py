@@ -15,18 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from inspect import isfunction, signature
 from textwrap import wrap as _wrap
 
 from pyparsing import ParseResults
 
 from ._vendor.contracts import new_contract
 from ._vendor.fn.underscore import ArityError, _Callable
-from .templates import _warning
-
-
-class ContractBreachWarning(RuntimeWarning):
-    pass
 
 
 def wrap(text, width=160, pad=True, padchar=" "):
@@ -59,49 +53,6 @@ def bordered(text: str, width: int = 160):
         res.append("┊" + s + "┊")
     res.append("╰" + "┉" * width + "╯")
     return "\n".join(res)
-
-
-def format_kwargs(sep: str = ", ", **kwargs):
-    return sep + str(kwargs).strip("{} ").replace(":", "=") if len(kwargs) else ""
-
-
-def format_locals(locals, exc: Exception):
-    locals_ = dict(filter(lambda x: x[1] != str(exc), locals))
-    str_locals = str()
-    for k, v_ in locals_.items():
-        if str(k).startswith("@"):  # skip @py_assert
-            continue
-        if isfunction(v_):
-            str_locals += k + ": " + str(signature(v_)).replace("'", "") + "\n"
-        else:
-            str_locals += k + ": " + str(v_) + "\n"
-    return str_locals.rstrip("\n")
-
-
-def create_warning(func, args, kwargs, stack, exc=Exception()):
-    _locals = stack[1][0].f_locals.items()
-    str_locals = format_locals(_locals, exc)
-    func_name = stack[1][0].f_code.co_name
-    fname = stack[1][0].f_code.co_filename
-    lineno = stack[1][0].f_code.co_firstlineno
-    fkwargs = format_kwargs(kwargs)
-    if hasattr(func, "__name__"):
-        name = func.__name__
-    else:
-        name = str(func)
-    atfault = (
-        name
-        if isinstance(exc, ArityError)
-        else name + "(" + str(args).strip("()") + fkwargs + ")"
-    )
-    return _warning.safe_substitute(
-        file=fname,
-        lineno=lineno,
-        func=bordered(func_name),
-        atfault=bordered(atfault),
-        bound=bordered(str_locals),
-        tb=bordered(str(exc)),
-    )
 
 
 code = new_contract("code", lambda x: isinstance(x, ParseResults))
