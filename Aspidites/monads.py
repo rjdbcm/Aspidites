@@ -19,7 +19,7 @@ from math import inf, isinf
 from contextlib import suppress
 from _warnings import warn
 
-from pyrsistent import v
+from pyrsistent import v, pvector
 
 from ._vendor.contracts import ContractNotRespected, contract
 from ._vendor.fn import apply
@@ -77,15 +77,16 @@ def SafeExp(a, b):
         return inf  # just a really big number on most systems
 
 
-class Maybe:  # this should allow us to avoid passing around stacks and frames
+class Maybe:
     """Sandboxes a Surely call and handles ContractNotRespected by returning Undefined"""
 
-    __slots__ = v("_func", "_args", "_kwargs", "__instance__")
+    __slots__ = v("_func", "_args", "_kwargs", "_stack", "__instance__")
 
     def __init__(self, func, *args, **kwargs):
         self._func = func
         self._args = args
         self._kwargs = kwargs
+        self._stack = pvector(inspect.stack(1))
         self.__instance__ = Undefined()
 
     def __repr__(self):
@@ -127,8 +128,7 @@ class Maybe:  # this should allow us to avoid passing around stacks and frames
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
         except (ContractNotRespected, ArityError, ZeroDivisionError, Exception) as e:
             if warn_undefined:
-                stack = inspect.stack(1)
-                w = create_warning(self.func, self.args, self.kwargs, stack, e)
+                w = create_warning(self.func, self.args, self.kwargs, self._stack, e)
                 warn(w, category=ContractBreachWarning if isinstance(e, ContractNotRespected) else RuntimeWarning)
             # UNDEFINED #
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
