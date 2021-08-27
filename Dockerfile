@@ -1,6 +1,6 @@
 FROM python:3.9.5-slim-buster AS base
 
-RUN apt-get update && apt-get install -y gcc --no-install-recommends
+RUN apt-get update && apt-get install -y gcc --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 FROM base AS pyenv
 WORKDIR /usr/src/app
@@ -11,10 +11,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 COPY . .
 
-RUN pip install -U pip && pip install .
-RUN pip uninstall -y pip
-
-CMD rm -rf /root/.cache/pip
+RUN pip install -U pip && pip install . && pip uninstall -y pip && rm -rf /root/.cache/pip && rm -rf /var/log/*
 
 FROM base AS runtime
 ## so the test-suite can be run simply using -pt or --pytest
