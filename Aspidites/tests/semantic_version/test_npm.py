@@ -8,7 +8,7 @@
 import sys
 import unittest
 
-from Aspidites._vendor.semantic_version import NpmSpec, Version
+from ..._vendor.semantic_version import NpmSpec, Version
 
 
 class NpmSpecTests(unittest.TestCase):

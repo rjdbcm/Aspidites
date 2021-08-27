@@ -1,5 +1,19 @@
-# Aspidites is Copyright 2021, Ross J. Duff.
-# See LICENSE.txt for more info.
+
+# Aspidites
+# Copyright (C) 2021 Ross J. Duff
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from string import Template
 
 makefile = Template("""clean: clean-build clean-pyc clean-sha256 ## remove all build, test, coverage and Python artifacts
@@ -97,11 +111,23 @@ from pyrsistent import (
     PClass
 )
 from Aspidites.woma import *
-from Aspidites._vendor import F, _
+from Aspidites._vendor import (
+    reduce,
+    filterfalse,
+    zip_longest,
+    accumulate,
+    take,
+    drop,
+    takelast,
+    droplast,
+    _,
+)
 from Aspidites.monads import Maybe, Surely, Undefined, SafeDiv, SafeMod, SafeExp
 from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.RestrictedPython import safe_builtins
 safe_builtins['print'] = print
+from Aspidites._vendor.RestrictedPython import compile_restricted as compile
+safe_builtins['compile'] = compile
 # DECLARATIONS TO ALLOW CONTRACTS TO TYPE CHECK #
 procedure: None
 coroutine: Generator

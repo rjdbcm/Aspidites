@@ -60,7 +60,7 @@ def deprecated(func): # pragma: no cover
     return new_func
 
 
-def check_isinstance(ob, expected, **kwargs): # pragma: no cover
+def check_isinstance(ob, expected, **kwargs):
     if not isinstance(ob, expected):
         kwargs['object'] = ob
         raise_type_mismatch(ob, expected, **kwargs)

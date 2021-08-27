@@ -16,7 +16,7 @@ class Collection(Contract):
         try:
             # latest python 3.6+
             self.__collection_types = collections.abc.Collection
-        except:
+        except:  # pragma: no cover
             try:
                 # older python 3
                 self.__collection_types = collections.Collection

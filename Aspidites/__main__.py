@@ -5,11 +5,11 @@ import sys
 import traceback
 import warnings
 import typing as t
-from contextlib import suppress
+from pathlib import Path
 
 from Cython import __version__ as cy_version
 from Cython.Compiler import Options
-from pyrsistent import pmap, v, PMap
+from pyrsistent import v
 
 import pytest
 
@@ -77,7 +77,7 @@ def parse_from_dummy(argv: list,
         sys.exit(1)
     if len(argv) >= 2 and argv[1] == "--pytest" or argv[1] == '-pt':  # pragma: no cover
         if not os.getenv("ASPIDITES_DOCKER_BUILD"):
-            argv = [os.path.dirname(os.path.realpath(__file__)) + '/tests'] + argv[2:]
+            argv = [Path(__file__).absolute().parent / 'tests'] + argv[2:]
         else:
             argv = argv[2:]
         sys.exit(pytest.main(argv))
@@ -132,15 +132,19 @@ def main(argv=sys.argv) -> None:
     # any failure results in falling back to the `Cython.Compiler.Options` API
     args, other_args, cy_kwargs = parse_from_dummy(argv,
                                                    ap.ArgumentParser(add_help=False))
+    if args.target == "Aspidites/tests":
+        raise SystemExit()
     code = parse_module(open(args.target, 'r').read())
     if args.output is None:
-        args.output = os.path.join(os.path.dirname(args.target), 'compiled.py')
-    compile_module(code,
-                   fname=args.output,
-                   force=args.force,
-                   bytecode=args.compile_pyc,
-                   c=args.compile_c,
-                   build_requires=args.build_requires,
-                   verbose=args.verbose,
-                   *other_args,
-                   **cy_kwargs)
+        args.output = Path(args.target).parent / 'compiled.py'
+
+    cy_kwargs.update({
+        'code': code,
+        'fname': args.output or "compiled.py",
+        'force': args.force or False,
+        'bytecode': args.compile_pyc,
+        'c': args.compile_c,
+        'build_requires': args.build_requires,
+        'verbose': args.verbose
+    })
+    compile_module(**cy_kwargs)

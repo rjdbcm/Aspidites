@@ -1,9 +1,7 @@
 """Provides decorators to deal with tail calls in recursive functions."""
-import builtins
 import warnings
 from collections import namedtuple
 from Aspidites._vendor.contracts import contract
-from Aspidites.api import create_warning
 
 
 class TailCallWarning(RuntimeWarning):

@@ -1,25 +1,489 @@
 **unreleased**
+**v0.12.3**
+**v0.12.2**
+
+- 0c01045 update pygments-woma-lexer
+
+
+**v0.12.1**
+
+- f7d39de Pulled a Warn class from SafeMath, Maybe etc.
+
+
+**v0.12.0**
+
+- ceafa58 clean up imports
+- 01f394f monads.py: stack is inspected during __init__
+- 29a8699 final.py: clean imports and add docstrings
+- 99dcd66 fix tab typo
+- c30dae3 add gitignores
+- a0719ab add smol logo
+- 53a87f8 Makefile: added all phonies and changed clean-md5 to clean-sha
+- cd3ccc7 Merge remote-tracking branch 'origin/main'
+- db0056e move WomaLexer into a separate repo pygments-woma-lexer
+- c66fc8e changelog updated
+- 47f6bbd Update README.md
+- 4a92f4f Update README.md
+- 94f09dc Update README.md
+
+
+
+- 
+
+
+**v0.11.28**
+
+- 5dee3f1 reserved.py: made nullit Literal and operators use a regex
+- b645d1a parser.py: fixed some imports, fixed list_item precedence
+- 51955d6 conf.py rewrote lexer in preparation to move to its own package
+- ecd259d examples.wom: comp op comment out
+- e39b931 examples.wom: commented out nullit
+- 1d481ba test_aspidites.py: imports
+- e4c955b Merge remote-tracking branch 'origin/main'
+- 7112ad6 add nullit to examples.wom
+- bf3770b add cache to ci.yml
+- c8c6cb7 source tree cleanup
+- 3b62aec Update README.md
+- e04474a Update README.md
+- f73454b Update README.md
+- 504b659 source tree cleanup
+
+
+**v0.11.27**
+
+- 9612bad fix gh action
+
+
+**v0.11.26**
+
+- 9f66792 fix gh action
+
+
+**v0.11.25**
+
+- 6763d53 fix gh action
+
+
+**v0.11.24**
+
+- 467bb83 fix gh action
+
+
+**v0.11.23**
+
+- 34ae2f9 fix gh action: last try
+
+
+**v0.11.22**
+
+- 74ec955 fix gh action: last try
+
+
+**v0.11.21**
+
+- 08cc826 fix gh action
+
+
+**v0.11.20**
+
+- 6266ad8 fix gh action
+
+
+**v0.11.19**
+
+- 3887e2b fix gh action
+
+
+**v0.11.18**
+
+- 312e224 fix gh action
+
+
+**v0.11.17**
+
+- dd2739f fix gh action
+
+
+**v0.11.16**
+
+- 87a4f53 fix gh action
+
+
+**v0.11.15**
+
+- 08b2f9e fix gh action
+
+
+**v0.11.14**
+
+- fd61123 fix gh action
+- b665728 changelog updated
+- a62f227 fix gh action
+
+
+
+- a62f227 fix gh action
+
+
+**v0.11.13**
+
+- a1cb254 fix gh action
+
+
+**v0.11.12**
+
+- aea7577 fix gh action
+
+
+**v0.11.11**
+
+- 032c0dd fix gh action
+
+
+**v0.11.10**
+
+- 0dae705 add chocolatey package
+- 9be4417 changelog updated
+- 94589bd add chocolatey package
+- 02a3674 changelog updated
+- a971a26 changelog updated
+- 4531c37 add chocolatey package
+- 23a5029 changelog updated
+- 9e06bd4 changelog updated
+- 304deb8 add chocolatey package
+
+
+
+- 94589bd add chocolatey package
+- 02a3674 changelog updated
+- a971a26 changelog updated
+- 4531c37 add chocolatey package
+- 23a5029 changelog updated
+- 9e06bd4 changelog updated
+- 304deb8 add chocolatey package
+
+
+
+- a971a26 changelog updated
+- 4531c37 add chocolatey package
+- 23a5029 changelog updated
+- 9e06bd4 changelog updated
+- 304deb8 add chocolatey package
+
+
+
+- 4531c37 add chocolatey package
+- 23a5029 changelog updated
+- 9e06bd4 changelog updated
+- 304deb8 add chocolatey package
+
+
+
+- 9e06bd4 changelog updated
+- 304deb8 add chocolatey package
+
+
+
+- 304deb8 add chocolatey package
+
+
+**v0.11.9**
+
+- 9eea2b9 setup.py: fix typo
+
+
+**v0.11.8**
+
+- 06adba0 fix path
+
+
+**v0.11.7**
+
+- 9c83996 update supported OSes
+- 2e5e9f4 Update ci.yml add macos
+- 48dc267 Update README.md
+- 68215f2 Merge pull request #7 from rjdbcm/rjdbcm-patch-1
+- 40973bd fix for windows unicode support
+- 681e9c6 Update ci.yml
+- 9cdc310 Update and rename python-app.yml to ci.yml
+- 547ed18 convert.py: pep8
+- 28bdc61 templates.py lib template add compile(restricted) and other builtins
+- 9c7522f Makefile: test-all depends on clean-test
+- a637984 Use pathlib.Path for path representations
+- a0888d2 refactor monads.py for readability
+- d7f1423 Added stubs for RestrictedPython
+- 8c6c8d4 Merge remote-tracking branch 'origin/main'
+- 6cb6219 refactor of the parser to make it a bit less brittle when modified
+- 650419c Update README.md
+- 6f24118 Update README.md
+- 11413e5 Update README.md
+- a72e1fa Merge remote-tracking branch 'origin/main'
+- bc8fb5a remove joker
+- ebf4ea6 Update social.yml
+- a3f1eb7 test joke api
+- f67eded test joke api
+- 3a0638c test joke api
+- c5817fb Merge remote-tracking branch 'origin/main'
+- fcf13ea test joke api
+- d362649 Update social.yml
+- 9b786a1 Update social.yml
+- 7243005 Merge remote-tracking branch 'origin/main'
+- 994bf03 test joke api
+- fdf800a Update README.md
+
+
+**v0.11.6**
+
+- c0bbfc2 changelog updated
+- 5707afc fix social message on container-deploy.yml
+- 945cc72 Update python-app.yml
+- fc1f72f absolute import of test examples
+- 11ec1d0 fix build action
+- ffee7cb fix build action
+- 852897a PyPy not supported. Maybe and F now inherit from symtable.Function. This is the plan for future classes used as the basis of the functional interface.
+- 29e1d22 compiler.py compatible with Python 3.7
+- f6cbdc0 compiler.py compatible with Python 3.7
+- d708ff8 compiler.py compatible with Python 3.7
+- 189fa3d drop Python 3.6 support
+- fde2df4 fix test to be a quick source install
+- cbf29d3 Update Package to show tested python versions/implementations
+- 1b17ab6 Update python-app.yml
+- 10a93f2 Update python-app.yml
+- 61dcabd Update python-app.yml
+- 3e775e0 Update python-app.yml
+- f23d236 Update python-app.yml
+- 7174b0e Update python-app.yml
+- 4f24fc5 Update python-app.yml
+- d5aeed5 Update python-app.yml
+- 20cd069 Update python-app.yml
+- 151ec1f Update python-app.yml
+- a224da0 Update python-app.yml
+- ad8fa09 Update python-app.yml
+- 9e2a44b Update python-app.yml
+- ca11af3 CI workflow for CPython v3.9.6 and v3.8.11
+- 6731f2a Update README.md
+- 0beaa2c Update README.md
+- 7717cd7 Update README.md
+- 20cbb78 Update README.md
+
+
+
+- 5707afc fix social message on container-deploy.yml
+- 945cc72 Update python-app.yml
+- fc1f72f absolute import of test examples
+- 11ec1d0 fix build action
+- ffee7cb fix build action
+- 852897a PyPy not supported. Maybe and F now inherit from symtable.Function. This is the plan for future classes used as the basis of the functional interface.
+- 29e1d22 compiler.py compatible with Python 3.7
+- f6cbdc0 compiler.py compatible with Python 3.7
+- d708ff8 compiler.py compatible with Python 3.7
+- 189fa3d drop Python 3.6 support
+- fde2df4 fix test to be a quick source install
+- cbf29d3 Update Package to show tested python versions/implementations
+- 1b17ab6 Update python-app.yml
+- 10a93f2 Update python-app.yml
+- 61dcabd Update python-app.yml
+- 3e775e0 Update python-app.yml
+- f23d236 Update python-app.yml
+- 7174b0e Update python-app.yml
+- 4f24fc5 Update python-app.yml
+- d5aeed5 Update python-app.yml
+- 20cd069 Update python-app.yml
+- 151ec1f Update python-app.yml
+- a224da0 Update python-app.yml
+- ad8fa09 Update python-app.yml
+- 9e2a44b Update python-app.yml
+- ca11af3 CI workflow for CPython v3.9.6 and v3.8.11
+- 6731f2a Update README.md
+- 0beaa2c Update README.md
+- 7717cd7 Update README.md
+- 20cbb78 Update README.md
+
+
+**v0.11.5**
+
+- 62d6a06 revert testconfig sort, it wasn't that my tests were running 2x
+- 3be0154 update codeclimate and coverage exclude patterns
+
+
+**v0.11.4**
+
+- 6eb2d29 deployment changes so twitter works
+
+
+**v0.11.3**
+
+- 0d899d2 BUGFIX: 0.11.3 still had a buggy import of final so it's gone for now
+
+
+**v0.11.2**
+
+- dad6dd3 BUGFIX: 0.11.2 had a buggy final import
+
+
+**v0.11.1**
+
+- 1d62e60 BUGFIX: testsuite formerly ran every unittest 2x
+- 2d9baa6 adjust cognitive complexity threshold to 6 for codeclimate
+- 8df122c Merge remote-tracking branch 'Aspidites/main' into main
+- a90b3a8 added final class decorator and adjusted a few import statements to be relative
+- b3f5017 parametrized tests and pytest.mark.uses_stdout tests are moved to the end
+- ca2af84 Update README.md
+
+
+
+**v0.11.0**
+
+- 82b9ec9 buffer size for CheckedFileStack now defaults to a more reasonable 128 bytes
+- 1085506 changelog updated
+- 4200f78 changelog reformatted
+
+
+
+- 4200f78 changelog reformatted
+
+
+
+**v0.10.1**
+
+- 63d0548 refactor CheckedFileStack class and compiler.py functions to used pathlib
+- 19ff71b inset search border
+- ddb57de add some transparency and gradients
+- 01c8e23 Added tabbed interfaces to docs/homepage
+- 54121d2 remove duplicated code
+
+**v0.10.0**
+
+- 598f86a patch setup.py woma compile
+- c39ac21 changelog updated
+
+**v0.9.34**
+
+- a11958b refactor compiler.py for better decoupling of various writes
+- 839cc92 Enables sets tests
+- e0e5af8 Merge remote-tracking branch 'Aspidites/main' into main
+- 09ef124 Remove link to blank search page from docs index.rst
+- 048f0a6 Added more temp folders to .gitignore
+- dca63cd Added docs to .coveragerc and .dockerignore
+- c1fdb8c removed no covers from contracts utils.py functions that are still in use
+- 63aae94 add testcases for sets.
+- 5c3e33f prune docs from Manifest.in
+- ef611fc added sanity tests for contract function inspection
+- 7c72b3f Update README.md
+- 979c1cb fix GNU license in doc
+- 542bb0c adjust sections and pages of docs
+- 6bc98f1 add copybutton for shell commands to docs
+- d913dd4 Adjusted doc stylesheets for a responsive experience
+- fbc2fe6 very nice reactive but unobtrusive doc website
+- 2d7e5ef docs now have a nice examples section
+- c105f64 fix animation
+- 122da38 mild README.rst reformatting
+- 6feadb4 toctree now goes 3 deep.
+- 7daeb79 fixed so docs talk about the language not the reference implementation.
+- b3fa422 Full sized Wheelie in docs
+- b98ec6a logo update
+- 77aa6f4 Prep compiler.py for refactor
+- 7f65eb7 Add __mimetype__
+- 7a41b9f Add updated docs logo
+- c868389 Nice looking docs.
+- 79440ba update docs logo
+- 7209649 fix Programmable Error in rtd build
+- 6780de9 Add numpy to docs/requirements.txt
+- 61ceba6 Add readthedocs config and requirements.txt
+- 300b23d Merge remote-tracking branch 'Aspidites/main' into main
+- 9a3786d Add path insert to docs conf.py
+- a2adcaa typo fixed in change logger
+- 0116645 Update CHANGELOG.md
+
+
+**v0.9.33**
+
+- 3912e63 fixed main() call in test_aspidites.py
+
+
+**v0.9.32**
+
+- fa9d60d CLI test to fix coverage missing for __main__.py
+- af52c56 Make sure to raise a SystemExit when running our tests from a different thread.
+- 39ec7ce Makefile doesn't complain about circular deps
+- 3f7a8b6 fix minor bumpversion_hook formatting issue
+
+
+
+**v0.9.31**
+
+- 7aa21f1 quick update to version changelogger and it is finally working
+- 6bbc8c1 minor makefile cleanup
+- 8263ce4 changelog updated
+- 49ea6b1 finally got bumps to work!
+- c3db2a1 maybe fixed version changelogging
+
+
+
+**v0.9.30**
+- 509a146 Bump version: 0.9.30 → 0.9.31
+- c2aa35d changelog updated
+- fe655c7 fixed that pesky bumpversion_hook.py
+- 509a146 (HEAD -> main, tag: v0.9.31) Bump version: 0.9.30 → 0.9.31
+- c2aa35d changelog updated
+- fe655c7 fixed that pesky bumpversion_hook.py
+
+**v0.9.29**
+- 7e45564 (HEAD -> main, tag: v0.9.30) Bump version: 0.9.29 → 0.9.30
+- 010647c changelog updated
+- 3856180 bumpversion_hook should be in order.
+- 4423a00 changelog building hook executes and commits before any version bump.
+
+**v0.9.28**
+- direct function calls within function definitions now work!
+
+**v0.9.27**
+- Literally a patch just for a logo?!
+
+**v0.9.26**
+
 **v0.9.25**
+
 **v0.9.24**
+
 **v0.9.23**
+
 **v0.9.22**
+
 **v0.9.21**
+
 **v0.9.20**
+
 **v0.9.19**
+
 **v0.9.18**
+
 **v0.9.17**
+
 **v0.9.16**
+
 **v0.9.15**
+
 **v0.9.14**
+
 **v0.9.13**
+
 **v0.9.12**
+
 **v0.9.11**
+
 **v0.9.10**
+
 **v0.9.9**
+
 **v0.9.8**
+
 **v0.9.7**
+
 **v0.9.6**
+
 **v0.9.5**
+
 **v0.9.4**
 
 **v0.9.3**

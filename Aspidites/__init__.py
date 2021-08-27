@@ -1,4 +1,4 @@
-__version__ = '0.9.25'
+__version__ = '0.12.3'
 __title__ = 'Aspidites'
 __author__ = 'Ross J. Duff'
 __license__ = "GPL"
@@ -11,3 +11,4 @@ __description__ = (
     under the conditions of the {__license__}v3 found in the LICENSE file.
     """
 )
+__mimetype__ = 'text/woma'
