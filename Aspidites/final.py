@@ -15,11 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable, Tuple
-
-from pyrsistent import pmap
-
-from Aspidites._vendor.contracts import check, contract, new_contract
+from ._vendor.contracts import check, contract, new_contract
 
 
 @new_contract
@@ -31,28 +27,35 @@ def heritable(bases: 'tuple') -> 'bool':
 
 # noinspection PyPep8Naming
 class _Final(type):
+    """Non public metaclass implementation for final classes"""
     def __new__(mcs, name, bases, classdict):
         check('heritable', bases)
         return type.__new__(mcs, name, bases, dict(classdict))
 
 
-def final(_=_Final):
+def final(_=_Final):  # This is 100% a hack: but it works.
+    """Decorator to create final classes like:
+    .. code:: python
+
+        @final()
+        class Foo(object):
+            ...
+    """
     if _ != _Final:
         meta = _Final
     else:
         meta = _
 
-    def metaclass_wrapper(cls):
-        __name = str(cls.__name__)
-        __bases = tuple(cls.__bases__)
-        __dict = dict(cls.__dict__)
+    def wrapper(mcs):
+        __name = str(mcs.__name__)
+        __bases = tuple(mcs.__bases__)
+        __dict = dict(mcs.__dict__)
 
         for each_slot in __dict.get("__slots__", tuple()):
             __dict.pop(each_slot, None)
 
         __dict["__metaclass__"] = meta
-
-        __dict["__wrapped__"] = cls
+        __dict["__wrapped__"] = mcs
 
         return meta(__name, __bases, __dict)
-    return metaclass_wrapper
+    return wrapper
