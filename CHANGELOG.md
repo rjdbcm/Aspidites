@@ -1,4 +1,5 @@
 **unreleased**
+**v0.12.3**
 **v0.12.2**
 
 - 0c01045 update pygments-woma-lexer
