@@ -5,3 +5,6 @@
 /.mypy_cache/
 /.pytest_cache/
 /.coverage_html/
+/venv/
+.pycrunch-config.yaml
+.coverage*
