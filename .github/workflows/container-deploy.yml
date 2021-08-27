@@ -58,6 +58,7 @@ jobs:
         name: Update repo description
         uses: peter-evans/dockerhub-description@v2
         with:
+          readme-filepath: /usr/src/app/README.md
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           repository: rjdbcm/aspidites
