@@ -15,19 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import contextlib
-import os
-import typing
-from hashlib import sha256
 from inspect import isfunction, signature
-from os import get_terminal_size
 from textwrap import wrap as _wrap
 
 from pyparsing import ParseResults
-from pyrsistent import PVector, discard, inc, pmap, pvector, rex
 
 from ._vendor.contracts import new_contract
-from ._vendor.fn import F, _
 from ._vendor.fn.underscore import ArityError, _Callable
 from .templates import _warning
 
@@ -56,7 +49,7 @@ def wrap(text, width=160, pad=True, padchar=" "):
     return wrapped_lines
 
 
-def bordered(text, width=160):
+def bordered(text: str, width: int = 160):
     lines = [i for i in wrap(text, width=width)]
     width = max((len(s) for s in lines), default=width) or width
     res = ["╭" + "┉" * width + "╮"]
@@ -68,11 +61,11 @@ def bordered(text, width=160):
     return "\n".join(res)
 
 
-def format_kwargs(kwargs: "dict", sep=", "):
+def format_kwargs(sep: str = ", ", **kwargs):
     return sep + str(kwargs).strip("{} ").replace(":", "=") if len(kwargs) else ""
 
 
-def format_locals(locals, exc: "Exception"):
+def format_locals(locals, exc: Exception):
     locals_ = dict(filter(lambda x: x[1] != str(exc), locals))
     str_locals = str()
     for k, v_ in locals_.items():
