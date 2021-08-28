@@ -15,6 +15,7 @@ RUN pip install -U pip && pip install . && pip uninstall -y pip && rm -rf /root/
 
 FROM base AS runtime
 ## so the test-suite can be run simply using -pt or --pytest
+COPY --from=pyenv README.md /usr/src/app
 ENV ASPIDITES_DOCKER_BUILD=True
 ENV VIRTUAL_ENV=/opt/venv
 WORKDIR $VIRTUAL_ENV/lib/python3.9/site-packages/Aspidites/tests
