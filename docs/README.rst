@@ -12,7 +12,7 @@ Installing
 
 .. tabs::
 
-    .. tab:: PyPI
+    .. group-tab:: PyPI
 
         |PyPI|\ |PyPI - Wheel|
 
@@ -20,7 +20,7 @@ Installing
 
             $ pip install Aspidites
 
-    .. tab:: Docker
+    .. group-tab:: Docker
 
         |Docker Image Version (latest by date)|\ |Docker Image Size (latest semver)|
 
@@ -28,28 +28,39 @@ Installing
 
             $ docker pull ghcr.io/rjdbcm/aspidites:latest
 
-    .. tab:: Github
+    .. group-tab:: Github
 
         |GitHub commits since tagged version (branch)|
 
         .. code:: shell
 
-            $ gh repo clone rjdbcm/Aspidites
+            $ gh repo clone rjdbcm/Aspidites && pip install ./Aspidites
 
 Running
 ~~~~~~~
 
 Pretty straightforward just use:
 
-.. code:: shell
+.. tabs::
 
-    $ aspidites -h
+    .. group-tab:: PyPI
 
-Or with docker:
+        .. code:: shell
 
-.. code:: shell
+            $ aspidites -h
 
-    $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
+    .. group-tab:: Docker
+
+        .. code:: shell
+
+            $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
+            
+    .. group-tab:: Github
+
+        .. code:: shell
+
+            $ aspidites -h
+
 
 Paradigms
 ~~~~~~~~~
