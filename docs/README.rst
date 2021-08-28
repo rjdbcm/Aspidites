@@ -69,8 +69,11 @@ Paradigms
 
     .. tab:: Refinement Type System
         
-        This means Woma uses a simple predicate logic to create well-constrained types. This is currently implemented using `AndreaCensi/contracts <https://github.com/AndreaCensi/contracts>`_
-        `Read More  <https://arxiv.org/pdf/2010.07763.pdf>`__
+        This means Woma uses a simple predicate logic to create well-constrained types. This is currently implemented using `AndreaCensi/contracts <https://github.com/AndreaCensi/contracts>`_. More info on refinement type systems:
+        
+        Refinement types enrich a language's type system with logical predicates that circumscribe the set of values described by the type, thereby providing               software developers a tunable knob with which to inform the type system about what invariants and correctness properties should be checked on their code.           In this article, we distill the ideas developed in the substantial literature on refinement types into a unified tutorial that explains the key ingredients         of modern refinement type systems. In particular, we show how to implement a refinement type checker via a progression of languages that incrementally add         features to the language or type system.
+        Reference: Jhala, R. and Vazou, N., 2020. Refinement Types: A Tutorial. arXiv preprint arXiv:2010.07763.
+        `Read More <https://arxiv.org/pdf/2010.07763.pdf>`__
         
     .. tab:: Pragmatic
      
