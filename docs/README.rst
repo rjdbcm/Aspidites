@@ -72,7 +72,7 @@ Paradigms
         This means Woma uses a simple predicate logic to create well-constrained types. This is currently implemented using `AndreaCensi/contracts <https://github.com/AndreaCensi/contracts>`_
         `Read More  <https://arxiv.org/pdf/2010.07763.pdf>`__
         
-     .. tab:: Pragmatic
+    .. tab:: Pragmatic
      
         Compiler directives as pragmas that are used inline in woma.
         `Read More <https://www.adaic.org/resources/add_content/standards/05rm/html/RM-2-8.html>`__
