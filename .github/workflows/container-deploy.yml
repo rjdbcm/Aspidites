@@ -53,21 +53,12 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
       -
-        name: Update repo description
-        uses: peter-evans/dockerhub-description@v2
-        with:
-          readme-filepath: /usr/src/app/README.md
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: rjdbcm/aspidites
-      -
         name: Send a Tweet
         continue-on-error: true
         uses: ethomson/send-tweet-action@v1
         with:
           status:
-            "#Aspidites ${{ github.event.head_commit.message }}! 🐳  Our docker container is ready to ship! 🚚
-             Check it out: https://github.com/rjdbcm/Aspidites/pkgs/container/aspidites"
+            "#Aspidites ${{ github.event.head_commit.message }}! 🐳  Our docker container is ready to ship! 🚚 Check it out: https://github.com/rjdbcm/Aspidites/pkgs/container/aspidites"
           consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
           consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
           access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
