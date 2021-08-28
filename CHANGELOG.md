@@ -1,6 +1,10 @@
 **unreleased**
 **v0.13.0**
 
+- 6c588be docker build fixed
+
+
+
 **v0.12.4**
 
 - 0a69158 fix bumpversion
