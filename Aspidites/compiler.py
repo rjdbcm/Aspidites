@@ -23,7 +23,7 @@ from warnings import warn
 import typing as t
 from mypy import api
 from .templates import lib, makefile, pyproject, setup
-from pyrsistent import pmap
+from pyrsistent import pmap, v
 from hashlib import sha256
 from pathlib import Path
 from .final import final
@@ -36,22 +36,27 @@ class CheckedFileStack:
 
     """A convenience class for reading file data streams to stdout or to checksum"""
 
+    __slots__ = v('all_files', 'pre_size')
+
     def __init__(self, initial=None, pre_size=128):
         if initial is None:
             initial = {}
-        self._files = pmap(initial, pre_size)
-        self.all_files = self._files.evolver()
+        self.all_files = pmap(initial, pre_size)
+        self.all_files = self.all_files.evolver()
         self.pre_size = pre_size
 
-    def read(self, data, print__=False, hash_func=None):
-        curr_hash = hash_func() if hash_func else {}
+    def _read(self, data, print__=False, hash_func=None):
         chunk = data.read(self.pre_size)
+        if hash_func is None:
+            curr_hash = hash_func
+        else:
+            curr_hash = hash_func()
         while chunk:
-            curr_hash.update(chunk) if hash_func else {}
+            curr_hash and curr_hash.update(chunk)  # Short-circuits if called without hash_func
             chunk = data.read(self.pre_size)
             if print__:
                 print(chunk, '')
-        return curr_hash if hash_func else None
+        return curr_hash
 
     def _write_checksum(self, fname) -> tuple:
         fname = Path(fname)
@@ -59,20 +64,20 @@ class CheckedFileStack:
         base = Path(base)
         fname_sha256 = base / ("." + name + ".sha256")
         with open(fname, "rb") as data:
-            curr_hash = self.read(data, hash_func=sha256)
+            curr_hash = self._read(data, hash_func=sha256)
             with open(fname_sha256, "wb") as digest:
                 digest.write(curr_hash.digest())
 
             return pmap({curr_hash.digest(): fname}).items()[0]  # immutable
 
-    def _read_checksum(self, fname, write=True, check=False):
+    def _read_checksum(self, fname):
         fname = Path(fname)
         base, name = fname.parent, fname.name
         base = Path(base)
         fname_sha256 = base / ("." + name + ".sha256")
         old = open(fname_sha256, "rb").read()
         with open(fname, "rb") as data:
-            curr_hash = self.read(data, hash_func=sha256)
+            curr_hash = self._read(data, hash_func=sha256)
             new = curr_hash.digest()
             if new == old:
                 print(
@@ -87,15 +92,17 @@ class CheckedFileStack:
                 )
                 return ""
 
+    def _commit(self):
+        """Commits all registered files making the all_files attribute immutable.
+        Short-circuits if no files are in the stack."""
+        return not not len(self.all_files) and self.all_files.persistent()
+
     def register(self, fname):
+        """Registers a filename to a checksum of its contents."""
         self.all_files.set(*self._write_checksum(fname))
 
-    def commit(self):
-        return self.all_files.persistent()
-
-    def create_file(self, fname, mode, root='',
-                    text="# THIS FILE IS GENERATED - DO NOT EDIT #") -> None:
-
+    def create_file(self, fname, mode, root='', text="# THIS FILE IS GENERATED - DO NOT EDIT #") -> None:
+        """API for creating and registering checked files"""
         if len(str(root)) > 0:
             root = Path(root)
             file = root/fname
@@ -106,8 +113,12 @@ class CheckedFileStack:
         except FileExistsError:
             self.register(file)
 
-    def finalize(self):
-        all_file_checksums = self.commit()
+    def finalize(self) -> None:
+        """Read and check all files against their stored digests."""
+        all_file_checksums = self._commit()
+        if not all_file_checksums:
+            self.all_files.persistent()
+            return None
         print("running checksums")
         for k, v in all_file_checksums.items():
             digest = self._read_checksum(v)
@@ -206,7 +217,7 @@ def create_stubs(fname, app_name):
     stubgen = 'stubgen %s -o .' % fname
     print("running %s" % stubgen)
     with os.popen(stubgen) as p:
-        file_stack.read(p, print__=True)
+        file_stack._read(p, print__=True)
     try:
         file_stack.register(fname_pyi)
     except FileNotFoundError as e:
@@ -248,7 +259,7 @@ def compile_object(app_name, file_c, root) -> None:
     setup_runner = "%s %s build_ext -b ." % (sys.executable, str(Path(root)/'setup.py'))
     print("running", setup_runner)
     with os.popen(setup_runner) as p:
-        file_stack.read(p, print__=True)
+        file_stack._read(p, print__=True)
     file_stack.register(file_c)
     for i in glob(glob_so):
         file_stack.register(i)
