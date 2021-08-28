@@ -82,9 +82,9 @@ Paradigms
         Functions are first class citizens in woma. More info on functional programming:
         
         In 1989 when functional programming was still considered a niche topic, Hughes wrote a visionary paper arguing convincingly ‘why functional programming             matters’. More than two decades have passed. Has functional programming really mattered? Our answer is a resounding ‘Yes!’. Functional programming is now           at the forefront of a new generation of programming technologies, and enjoying increasing popularity and influence. In this paper, we review the impact of         functional programming, focusing on how it has changed the way we may construct programs, the way we may verify programs, and fundamentally the way we may         think about programs.
-        | Reference:
-        | Zhenjiang Hu, John Hughes, Meng Wang, How functional programming mattered, National Science Review, Volume 2, Issue 3, September 2015, Pages 349–370, 
-        | `Read More<https://doi.org/10.1093/nsr/nwv042>`__
+        Reference:
+        Zhenjiang Hu, John Hughes, Meng Wang, How functional programming mattered, National Science Review, Volume 2, Issue 3, September 2015, Pages 349–370, 
+        `Read More<https://doi.org/10.1093/nsr/nwv042>`__
 
     .. tab:: Constrained Logic
         
