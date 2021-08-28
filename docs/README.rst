@@ -80,7 +80,7 @@ Paradigms
     .. tab:: Functional
     
         Functions are first class citizens in woma.
-        `Read More <https://towardsdatascience.com/why-developers-are-falling-in-love-with-functional-programming-13514df4048e?gi=3361de79dc98>`__
+        `Read More <https://academic.oup.com/nsr/article/2/3/349/1427872>`__
 
     .. tab:: Constrained Logic
         
