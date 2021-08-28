@@ -1,4 +1,5 @@
 **unreleased**
+**v0.13.4**
 **v0.13.3**
 
 - 5123753 docker build fixed maybe
