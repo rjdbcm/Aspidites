@@ -1,5 +1,20 @@
 **unreleased**
 **v0.13.4**
+
+- 9ceffcc added github-deploy.yml
+- 3123dbd dockerhub-description.yml gone
+- 45bc99e update TLDR version of readme for docker
+- 1f321c3 update TLDR version of readme for docker
+- a3e6e97 update TLDR version of readme for docker
+- 06d85cd Merge remote-tracking branch 'origin/main'
+- a7bbd41 update TLDR version of readme for docker
+- dae5e76 Update dockerhub-description.yml
+- e96c3fb Merge remote-tracking branch 'origin/main'
+- bcdd266 add TLDR version of readme for docker
+- b1c917a Update container-deploy.yml
+- bfc9cc9 Create dockerhub-description.yml
+
+
 **v0.13.3**
 
 - 5123753 docker build fixed maybe
