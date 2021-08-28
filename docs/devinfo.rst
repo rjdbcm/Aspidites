@@ -6,12 +6,17 @@ Information for Developers
 Contributing
 ~~~~~~~~~~~~
 
-| If you'd like to help with the Aspidites project as a developer check
-| out the Issues page or fork and make a pull request.
-| Now, for early woma adopters that do not wish to write any Python,
-| reporting issues is always appreciated.
-| If you'd like to help out financially, Aspidites' maintainer accepts
-| `Liberapay <https://liberapay.com/rjdbcm/>`__.
+If you'd like to help with the Aspidites project as a developer check out the Issues page or fork and make a pull request.
+Now, for early woma adopters that do not wish to write any Python,
+reporting issues is always appreciated.
+If you'd like to help out financially, Aspidites' maintainer accepts `Liberapay <https://liberapay.com/rjdbcm/>`__.
+
+Code Style
+^^^^^^^^^^
+
+We are not super picky as long as a contribution does what it says on the box and comes with an appropriately named test suite.
+That said, try to avoid long block comments (maybe create an issue instead) and creating deep namespace hierarchies of either modules or classes.
+
 
 Core Dependencies
 ~~~~~~~~~~~~~~~~~
