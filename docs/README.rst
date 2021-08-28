@@ -65,16 +65,32 @@ Pretty straightforward just use:
 Paradigms
 ~~~~~~~~~
 
--  `refinement-type system <https://arxiv.org/pdf/2010.07763.pdf>`__
--  `pragmatic <https://www.adaic.org/resources/add_content/standards/05rm/html/RM-2-8.html>`__
--  declarative
--  `functional <https://towardsdatascience.com/why-developers-are-falling-in-love-with-functional-programming-13514df4048e?gi=3361de79dc98>`__
--  `constrained logic <https://www.cse.unsw.edu.au/~tw/brwhkr08.pdf>`__
+.. tabs::
+
+    .. tab:: Refinement Type System
+        
+        This means Woma uses a simple predicate logic to create well-constrained types. This is currently implemented using `AndreaCensi/contracts <https://github.com/AndreaCensi/contracts>`_
+        `Read More  <https://arxiv.org/pdf/2010.07763.pdf>`__
+        
+     .. tab:: Pragmatic
+     
+        Compiler directives as pragmas that are used inline in woma.
+        `Read More <https://www.adaic.org/resources/add_content/standards/05rm/html/RM-2-8.html>`__
+
+    .. tab:: Functional
+    
+        Functions are first class citizens in woma.
+        `Read More <https://towardsdatascience.com/why-developers-are-falling-in-love-with-functional-programming-13514df4048e?gi=3361de79dc98>`__
+
+    .. tab:: Constrained Logic
+        
+        Constraint satisfaction is core to woma, should constraints not be satisfied for a given function nullity is returned rather than raising an exception.
+        `Read More <https://www.cse.unsw.edu.au/~tw/brwhkr08.pdf>`__
 
 Inspirations
 ~~~~~~~~~~~~
 
--  `coconut <http://coconut-lang.org/>`__
+-  `coconut <http://coconut-lang.org/>`__ 
 -  `Ada <https://www.adacore.com/get-started>`__
 -  `Scala <https://www.scala-lang.org/>`__
 -  `Prolog <https://www.swi-prolog.org/features.html>`__
