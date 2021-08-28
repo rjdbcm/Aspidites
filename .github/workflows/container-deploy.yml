@@ -1,4 +1,4 @@
-name: Deploy to Dockerhub 🐳
+name: Dockerhub 🐳
 
 on:
   push:
