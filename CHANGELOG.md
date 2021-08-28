@@ -1,14 +1,16 @@
 **unreleased**
+
+**v0.12.4**
+
 **v0.12.3**
+
 **v0.12.2**
 
 - 0c01045 update pygments-woma-lexer
 
-
 **v0.12.1**
 
 - f7d39de Pulled a Warn class from SafeMath, Maybe etc.
-
 
 **v0.12.0**
 
