@@ -93,7 +93,10 @@ Paradigms
     .. tab:: Constrained Logic
         
         Constraint satisfaction is core to woma, should constraints not be satisfied for a given function nullity is returned rather than raising an exception.
-        `Read More <https://www.cse.unsw.edu.au/~tw/brwhkr08.pdf>`__
+        More about constraint programming:
+        
+        Constraint programming is a powerful paradigm for solving combinatorial search problems that draws on a wide range of techniques from artificial                   intelligence, computer science, databases, programming languages, and operations research. Constraint programming is currently applied with success to many         domains, such as scheduling, planning, vehicle routing, configuration, networks, and bioinformatics. The basic idea in constraint programming is that the           user states the constraints and a general purpose constraint solver is used to solve them.
+        `Read More <https://www.elsevier.com/books/handbook-of-constraint-programming/rossi/978-0-444-52726-4>`__
 
 Inspirations
 ~~~~~~~~~~~~
