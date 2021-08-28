@@ -8,6 +8,7 @@
 	clean-test
 	clean
 	test-all
+	xtest
 	coverage
 	patch
 	minor
@@ -57,6 +58,9 @@ docker:
 
 test-all: clean-test
 	pytest Aspidites/tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
+
+xtest:
+	pytest Aspidites/tests -x
 
 coverage:
 	pytest Aspidites/tests --cov-report=xml --cov=Aspidites
