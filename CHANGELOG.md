@@ -1,5 +1,9 @@
 **unreleased**
 **v0.13.1**
+
+- 0beffe6 docker build fixed
+
+
 **v0.13.0**
 
 - 6c588be docker build fixed
