@@ -12,7 +12,7 @@ Installing
 
 .. tabs::
 
-    .. tab:: PyPI
+    .. group-tab:: PyPI
 
         |PyPI|\ |PyPI - Wheel|
 
@@ -20,7 +20,7 @@ Installing
 
             $ pip install Aspidites
 
-    .. tab:: Docker
+    .. group-tab:: Docker
 
         |Docker Image Version (latest by date)|\ |Docker Image Size (latest semver)|
 
@@ -28,42 +28,80 @@ Installing
 
             $ docker pull ghcr.io/rjdbcm/aspidites:latest
 
-    .. tab:: Github
+    .. group-tab:: Github
 
         |GitHub commits since tagged version (branch)|
 
         .. code:: shell
 
-            $ gh repo clone rjdbcm/Aspidites
+            $ gh repo clone rjdbcm/Aspidites && pip install ./Aspidites
 
 Running
 ~~~~~~~
 
 Pretty straightforward just use:
 
-.. code:: shell
+.. tabs::
 
-    $ aspidites -h
+    .. group-tab:: PyPI
 
-Or with docker:
+        .. code:: shell
 
-.. code:: shell
+            $ aspidites -h
 
-    $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
+    .. group-tab:: Docker
+
+        .. code:: shell
+
+            $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
+            
+    .. group-tab:: Github
+
+        .. code:: shell
+
+            $ aspidites -h
+
 
 Paradigms
 ~~~~~~~~~
 
--  `refinement-type system <https://arxiv.org/pdf/2010.07763.pdf>`__
--  `pragmatic <https://www.adaic.org/resources/add_content/standards/05rm/html/RM-2-8.html>`__
--  declarative
--  `functional <https://towardsdatascience.com/why-developers-are-falling-in-love-with-functional-programming-13514df4048e?gi=3361de79dc98>`__
--  `constrained logic <https://www.cse.unsw.edu.au/~tw/brwhkr08.pdf>`__
+.. tabs::
+
+    .. tab:: Refinement Type System
+        
+        This means Woma uses a simple predicate logic to create well-constrained types. This is currently implemented using `AndreaCensi/contracts <https://github.com/AndreaCensi/contracts>`_. More info on refinement type systems:
+        
+        Refinement types enrich a language's type system with logical predicates that circumscribe the set of values described by the type, thereby providing               software developers a tunable knob with which to inform the type system about what invariants and correctness properties should be checked on their code.           In this article, we distill the ideas developed in the substantial literature on refinement types into a unified tutorial that explains the key ingredients         of modern refinement type systems. In particular, we show how to implement a refinement type checker via a progression of languages that incrementally add         features to the language or type system.
+        Reference: Jhala, R. and Vazou, N., 2020. Refinement Types: A Tutorial. arXiv preprint arXiv:2010.07763.
+        `Read More <https://arxiv.org/pdf/2010.07763.pdf>`__
+        
+    .. tab:: Pragmatic
+     
+        Compiler and testing directives as pragmas that are used inline in woma, this is similar to how pragmas are used in Ada.
+        `Read More <https://www.adaic.org/resources/add_content/standards/05rm/html/RM-2-8.html>`__
+
+    .. tab:: Functional
+    
+        Functions are first class citizens in woma. More info on functional programming:
+        
+        In 1989 when functional programming was still considered a niche topic, Hughes wrote a visionary paper arguing convincingly ‘why functional programming             matters’. More than two decades have passed. Has functional programming really mattered? Our answer is a resounding ‘Yes!’. Functional programming is now           at the forefront of a new generation of programming technologies, and enjoying increasing popularity and influence. In this paper, we review the impact of         functional programming, focusing on how it has changed the way we may construct programs, the way we may verify programs, and fundamentally the way we may         think about programs.
+        
+        Reference:
+        Zhenjiang Hu, John Hughes, Meng Wang, How functional programming mattered, National Science Review, Volume 2, Issue 3, September 2015, Pages 349–370, 
+        `Read More <https://doi.org/10.1093/nsr/nwv042>`__
+
+    .. tab:: Constrained Logic
+        
+        Constraint satisfaction is core to woma, should constraints not be satisfied for a given function nullity is returned rather than raising an exception.
+        More about constraint programming:
+        
+        Constraint programming is a powerful paradigm for solving combinatorial search problems that draws on a wide range of techniques from artificial                   intelligence, computer science, databases, programming languages, and operations research. Constraint programming is currently applied with success to many         domains, such as scheduling, planning, vehicle routing, configuration, networks, and bioinformatics. The basic idea in constraint programming is that the           user states the constraints and a general purpose constraint solver is used to solve them.
+        `Read More <https://www.elsevier.com/books/handbook-of-constraint-programming/rossi/978-0-444-52726-4>`__
 
 Inspirations
 ~~~~~~~~~~~~
 
--  `coconut <http://coconut-lang.org/>`__
+-  `coconut <http://coconut-lang.org/>`__ 
 -  `Ada <https://www.adacore.com/get-started>`__
 -  `Scala <https://www.scala-lang.org/>`__
 -  `Prolog <https://www.swi-prolog.org/features.html>`__
