@@ -1,4 +1,5 @@
 **unreleased**
+**v0.14.0**
 **v0.13.5**
 
 - 0ca5c25 .gitignore: added /Aspidites.egg-info/
