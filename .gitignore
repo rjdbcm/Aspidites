@@ -8,3 +8,4 @@
 /venv/
 .pycrunch-config.yaml
 .coverage*
+/Aspidites.egg-info/
