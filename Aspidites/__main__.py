@@ -132,8 +132,9 @@ def main(argv=sys.argv) -> None:
     # any failure results in falling back to the `Cython.Compiler.Options` API
     args, other_args, cy_kwargs = parse_from_dummy(argv,
                                                    ap.ArgumentParser(add_help=False))
-    if args.target == "Aspidites/tests":
+    if args.target == "Aspidites/tests" or args.target == "Aspidites\\tests":
         raise SystemExit()
+
     code = parse_module(open(args.target, 'r').read())
     if args.output is None:
         args.output = Path(args.target).parent / 'compiled.py'
