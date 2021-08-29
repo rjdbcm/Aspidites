@@ -2,10 +2,10 @@ import os
 import warnings
 from pathlib import Path
 
-
 import hypothesis
-from hypothesis import given, assume, strategies as st
 import pytest as pt
+from hypothesis import given, assume, strategies as st
+
 try:
     from numpy import inf, nan, isinf, isnan
 except ImportError:
@@ -13,16 +13,17 @@ except ImportError:
 
 
 from .._vendor.contracts import ContractNotRespected
-from ..__main__ import get_cy_kwargs, parse_from_dummy, main
+from ..__main__ import get_cy_kwargs, main
 from ..parser import parse_module
-from ..templates import lib, setup
-from ..monads import Maybe, Undefined, Surely, SafeMod, SafeDiv, SafeExp
+from ..templates import lib
+from ..monads import Maybe, Surely
+from ..math import SafeFloorDiv, SafeMod, SafeDiv, SafeExp, Undefined
 from ..compiler import compile_module
 
 
 docker = os.getenv("ASPIDITES_DOCKER_BUILD")
 
-wfile = Path('examples/examples.wom')
+woma_file = Path('examples/examples.wom')
 
 
 @pt.fixture(autouse=True)
@@ -31,14 +32,14 @@ def inject_config(request):
 
 
 def setup_code(inject_config):
-    if Path(wfile).exists():
-        code_ = parse_module(open(wfile, 'r').read())
+    if Path(woma_file).exists():
+        code_ = parse_module(open(woma_file, 'r').read())
     else:
         try:
-            code_ = parse_module(open(Path("Aspidites/tests") / wfile, 'r').read())
+            code_ = parse_module(open(Path("Aspidites/tests") / woma_file, 'r').read())
             warnings.warn("Aspidites is being tested in source mode")
         except FileNotFoundError:
-            code_ = parse_module(open(Path(inject_config) / wfile, 'r').read())
+            code_ = parse_module(open(Path(inject_config) / woma_file, 'r').read())
     return code_
 
 
@@ -46,7 +47,7 @@ def test_compile_module(inject_config):
     try:
         compile(lib.substitute(code='\n'.join(setup_code(inject_config))), '', 'exec')
     except FileNotFoundError:  # ????
-        compile(lib.substitute(code='\n'.join(os.path.join(inject_config(), wfile))), '',
+        compile(lib.substitute(code='\n'.join(os.path.join(inject_config(), woma_file))), '',
                 'exec')
 
 
@@ -62,12 +63,9 @@ def test_safe_math_(x, y):
     assert SafeExp(inf, 0) == Undefined()
     assert SafeMod(x, 0) == Undefined()
     assert SafeDiv(x, 0) == Undefined()
+    assert SafeFloorDiv(x, 0) == Undefined()
     assert SafeMod(inf, x) == Undefined()
-    assume(
-        x != 0
-        and
-        y != 0
-    )
+    assume(x != 0 and y != 0)
     try:
         x ** y
     except OverflowError:  # really big number
@@ -75,44 +73,96 @@ def test_safe_math_(x, y):
     else:
         assert SafeExp(x, y) == x ** y
 
-    if isnan(x / y):
+    if isnan(x / y) and isnan(x // y):
         assert SafeDiv(x, y) == Undefined()
+        assert SafeFloorDiv(x, y) == Undefined()
+    elif isinf(x):
+        assert SafeFloorDiv(x, y) == Undefined()
     else:
         assert SafeDiv(x, y) == x / y
-    assume(
-        not isinf(x)
-    )
+        assert SafeFloorDiv(x, y) == x // y
+    assume(not isinf(x))
     assert SafeMod(x, y) == x % y
-    
 
-@given(x=st.integers())
-def test_integer_monad(x):
+
+def test_undefined_sanity():
     assert Undefined() == Undefined()
     assert Undefined() + Undefined() == Undefined()
-    assert Undefined() + x == x
     assert Undefined() - Undefined() == Undefined()
-    assert Undefined() - x == -x
-    assert Undefined() * x == Undefined()
     assert Undefined() * Undefined() == Undefined()
-    assert Undefined() / x == Undefined()
     assert Undefined() / Undefined() == Undefined()
-    assert Undefined() // x == Undefined()
-    assert Undefined().__hash__() == Undefined()
-    assert Undefined().__nonzero__() is False
+    assert Undefined().__hash__() == hash(Undefined())
+    assert Undefined().__nonzero__() is True
     assert Undefined().__index__() == 0
-    assert oct(Undefined()) == oct(0)
-    assert complex(Undefined()) == complex()
-    assert float(Undefined()) == float()
+    assert Undefined().__oct__() == Undefined()
+    # noinspection PyTypeChecker
+    assert isnan(complex(Undefined())) == isnan(complex(nan))
+    assert isnan(float(Undefined())) == isnan(float(nan))
     assert Surely() == Surely()
     assert Surely() + Surely() == Surely()
-    assert Surely() + x == x
     assert Surely() - Surely() == Surely()
-    assert Surely() - x == -x
-    assert Surely() * x == Surely()
     assert Surely() * Surely() == Surely()
-    assert Surely() / x == Surely()
     assert Surely() / Surely() == Surely()
+
+
+@given(x=st.integers() | st.floats() | st.complex_numbers())
+def test_number_undefined_sanity(x):
+    assert Undefined() + x == Undefined()
+    assert Undefined() - x == Undefined()
+    assert Undefined() * x == Undefined()
+    assert Undefined() / x == Undefined()
+    assert Undefined() // x == Undefined()
+    assert Surely() + x == Surely()
+    assert Surely() - x == Surely()
+    assert Surely() * x == Surely()
+    assert Surely() / x == Surely()
     assert Undefined(x) != Surely(x)
+
+
+@given(x=st.text() | st.characters())
+def test_text_undefined_sanity(x):
+    assert Undefined() + x == Undefined()
+    assert Undefined() - x == Undefined()
+    assert Undefined() * x == Undefined()
+    assert Undefined() / x == Undefined()
+    assert Undefined() // x == Undefined()
+    assert Surely() + x == Surely()
+    assert Surely() - x == Surely()
+    assert Surely() * x == Surely()
+    assert Surely() / x == Surely()
+    assert Undefined(x) != Surely(x)
+
+
+@given(x=st.lists(st.randoms()))
+def test_list_undefined_sanity(x):
+    assert Undefined() + x == Undefined()
+    assert Undefined() - x == Undefined()
+    assert Undefined() * x == Undefined()
+    assert Undefined() / x == Undefined()
+    assert Undefined() // x == Undefined()
+    assert Surely() + x == Surely()
+    assert Surely() - x == Surely()
+    assert Surely() * x == Surely()
+    assert Surely() / x == Surely()
+    assert Undefined(x) != Surely(x)
+
+
+@given(x=st.dictionaries(st.randoms(), st.randoms()))
+def test_dict_undefined_sanity(x):
+    assert Undefined() + x == Undefined()
+    assert Undefined() - x == Undefined()
+    assert Undefined() * x == Undefined()
+    assert Undefined() / x == Undefined()
+    assert Undefined() // x == Undefined()
+    assert Surely() + x == Surely()
+    assert Surely() - x == Surely()
+    assert Surely() * x == Surely()
+    assert Surely() / x == Surely()
+    assert Undefined(x) != Surely(x)
+
+
+@given(x=st.integers())
+def test_integer_monad_sanity(x):
     assert Maybe(x) != x
     assert Surely(x) == Surely(x)
     assert Maybe(x) != Surely(x)
@@ -149,25 +199,26 @@ def test_cli_no_arg_exit():
 
 def test_cli_no_target_exit():
     with pt.raises(SystemExit):
-        main(['Aspidites' ,'-fpc'])
+        main(['Aspidites', '-fpc'])
 
 
 # @pt.mark.filterwarnings('ignore::RuntimeWarning')
 def test_compile_to_shared_object(inject_config):
-    pfile_ = Path('examples/compiled.py')
-    pfile = pfile_ if Path(wfile).exists() else Path('Aspidites/tests') / pfile_
+    python_file_ = Path('examples/compiled.py')
+    python_file = python_file_ if Path(woma_file).exists() else Path('Aspidites/tests') / python_file_
     kwargs = get_cy_kwargs()
     code = setup_code(inject_config)
-    kwargs.update(code=code, fname=pfile, bytecode=True, force=True, c=True, build_requires='', verbose=False)
+    kwargs.update(code=code, fname=python_file, bytecode=True, force=True, c=True, build_requires='', verbose=False)
     try:
         compile_module(**kwargs)
     except FileNotFoundError:
-        kwargs.update(code=code, fname=Path(inject_config) / pfile_, bytecode=True)
+        kwargs.update(code=code, fname=Path(inject_config) / python_file_, bytecode=True)
         compile_module(**kwargs)
 
-    from .examples.compiled import Add, x, y, z, scala, val, div_by_zero, Yield123, Hello, Hello2
+    from .examples.compiled import Add, x, y, z, val, div_by_zero, Yield123, Hello
 
     with pt.raises(ContractNotRespected):
+        # noinspection PyTypeChecker
         Add(x=6.5, y=12)
 
     assert [1, 2, 3] == [i for i in Yield123()]

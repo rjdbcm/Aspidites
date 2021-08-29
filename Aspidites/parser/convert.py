@@ -3,12 +3,18 @@ from .reserved import *
 
 def cvt_arith_expr(tks):
     expr = "".join((str(t) for t in tks))
-    if "/" in expr:
-        return "Maybe(SafeDiv, " + expr.replace("/", ", ") + ")"
+    if "//" in expr:
+        return "Maybe(SafeFloorDiv, " + expr.replace("//", sep) + lit_rparen
+    elif "/" in expr:
+        return "Maybe(SafeDiv, " + expr.replace("/", sep) + lit_rparen
     elif "%" in expr:
-        return "Maybe(SafeMod, " + expr.replace("%", ", ") + ")"
+        return "Maybe(SafeMod, " + expr.replace("%", sep) + lit_rparen
     elif "**" in expr:
-        return "Maybe(SafeExp, " + expr.replace("**", ", ") + ")"
+        return "Maybe(SafeExp, " + expr.replace("**", sep) + lit_rparen
+    elif expr.startswith('+'):
+        return "Maybe(SafeUnaryAdd, " + expr.replace("+", sep) + lit_rparen
+    elif expr.startswith('-'):
+        return "Maybe(SafeUnaryAdd, " + expr.replace("-", sep) + lit_rparen
 
 
 def cvt_pragma(tks):
