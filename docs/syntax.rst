@@ -26,103 +26,131 @@ Lexicon
 Examples
 ~~~~~~~~
 
-First Class Functions
-^^^^^^^^^^^^^^^^^^^^^
+.. tabs::
 
-.. code:: woma
+    .. tab::
 
-    #cython.binding(True)
-    (Add(x = 3 -> int; y = 3 -> int)) int
-        <*>x+y
+        First Class Functions
 
-Generators, Procedures, and Coroutines
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        .. code:: woma
 
-.. code:: woma
+            #cython.binding(True)
+            (Add(x = 3 -> int; y = 3 -> int)) int
+                <*>x+y
 
-    `generators`
-    (Yield123()) coroutine
-        <^>Add(0, 1)
-        <^>Add(0, 2)
-        <^>Add(0, 3)
+    .. tab::
 
-    `procedures`
-    (Hello()) procedure
-        print("Hello, World!")
+        Nested Scoping
 
-    `coroutines`
-    (Hello2()) coroutine
-        <^>Hello()
+        .. code:: woma
 
-Persistent Evolvable Iterables
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            (Outer():
+                (Inner()) unicode
+                    Inner.x = 'foo'
+                    return Inner.x
+                m1.x = inner()
+                return 'bar'
 
-.. code:: woma
+            Outer()
+            (Foreign()) unicode
+                y = Outer.x
+                z = y + 'baz'
+                return z
 
-    `persistent vectors`
-    D = [2, 4, 6, 8, 10]
+    .. tab::
 
-    `persistent sets`
-    G = {'a', 'b', 'c'}
+        Generators, Procedures, and Coroutines
 
-    `persistent mappings`
-    C = {'a': (3+5),
-         'b': 8,
-         'c': True,
-           4: None,
-         'd': 6**2*5+3}
+        .. code:: woma
 
-Refinement Types use Contract Clauses
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            `generators`
+            (Yield123()) coroutine
+                <^>Add(0, 1)
+                <^>Add(0, 2)
+                <^>Add(0, 3)
 
-.. code:: woma
+            `procedures`
+            (Hello()) procedure
+                print("Hello, World!")
 
-    `new contracts can impose more complex contractual clauses`
-    colors <- list[3](int, <256, >=0)
+            `coroutines`
+            (Hello2()) coroutine
+                <^>Hello()
 
-Closures and Lambdas
-^^^^^^^^^^^^^^^^^^^^
+    .. tab::
 
-.. code:: woma
+        Persistent Evolvable Iterables
 
-    `any woma function can be closed in place to become an instance that complies with the`
-    `type specification or Undefined for instances that breach the type specification contract`
-    x = Add(3, 3)...
+        .. code:: woma
 
-    `seamless exception handling allows tracing of undefined code branches`
-    y = Add(4, 3.5)...
+            `persistent vectors`
+            D = [2, 4, 6, 8, 10]
 
-    `mixed usage of closure and regular function calls`
-    z = Add(x(), 3)
+            `persistent sets`
+            G = {'a', 'b', 'c'}
 
-    `Scala-style closure functions`
-    scala = (_ * 2)
-    val = scala(_ + _)
-    val = val(scala)...
+            `persistent mappings`
+            C = {'a': (3+5),
+                 'b': 8,
+                 'c': True,
+                   4: None,
+                 'd': 6**2*5+3}
 
-nullit as the Nullity Element
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    .. tab::
 
-.. code:: woma
+        Refinement Types use Contract Clauses
 
-    `modulus and division by 0 handled by returning nullit/Undefined()`
-    denom = 0
-    div_by_zero = 1 / denom
-    mod_zero = 1 % denom
-    div_by_zero2 = 1 / 0
-    mod_zero2 = 1 % 0
-    a_truth = div_by_zero2 == nullit
+        .. code:: woma
 
-Optional Structured Entrypoint
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            `new contracts can impose more complex contractual clauses`
+            colors <- list[3](int, <256, >=0)
 
-.. code:: woma
+    .. tab::
 
-    `main: structure for executable actions when run as a binary`
-    (Hello()) procedure
-        print("Hello, World!")
+        Closures and Lambdas
 
-    main:
-    Hello()
-    print("I'm a binary.")
+        .. code:: woma
+
+            `any woma function can be closed in place to become an instance that complies with the`
+            `type specification or Undefined for instances that breach the type specification contract`
+            x = Add(3, 3)...
+
+            `seamless exception handling allows tracing of undefined code branches`
+            y = Add(4, 3.5)...
+
+            `mixed usage of closure and regular function calls`
+            z = Add(x(), 3)
+
+            `Scala-style closure functions`
+            scala = (_ * 2)
+            val = scala(_ + _)
+            val = val(scala)...
+
+    .. tab::
+
+        nullit as the Nullity Element
+
+        .. code:: woma
+
+            `modulus and division by 0 handled by returning nullit/Undefined()`
+            denom = 0
+            div_by_zero = 1 / denom
+            mod_zero = 1 % denom
+            div_by_zero2 = 1 / 0
+            mod_zero2 = 1 % 0
+            a_truth = div_by_zero2 == nullit
+
+    .. tab::
+
+        Optional Structured Entrypoint
+
+        .. code:: woma
+
+            `main: structure for executable actions when run as a binary`
+            (Hello()) procedure
+                print("Hello, World!")
+
+            main:
+            Hello()
+            print("I'm a binary.")
 
