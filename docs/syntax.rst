@@ -77,6 +77,8 @@ Examples
             (Hello2()) coroutine
                 <^>Hello()
 
+.. tabs::
+
     .. tab::
 
         Persistent Evolvable Iterables
@@ -104,6 +106,8 @@ Examples
 
             `new contracts can impose more complex contractual clauses`
             colors <- list[3](int, <256, >=0)
+
+.. tabs::
 
     .. tab::
 
