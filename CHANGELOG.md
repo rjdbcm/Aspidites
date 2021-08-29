@@ -1,5 +1,10 @@
 **unreleased**
 **v0.14.0**
+
+- 594c95f added isnan check for SafeUnary Ops
+- cf7b488 Adjust range of integers tested
+
+
 **v0.13.5**
 
 - 0ca5c25 .gitignore: added /Aspidites.egg-info/
