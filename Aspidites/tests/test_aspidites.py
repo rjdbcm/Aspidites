@@ -20,7 +20,8 @@ from ..monads import Maybe, Surely
 from ..math import SafeFloorDiv, SafeMod, SafeDiv, SafeExp, Undefined
 from ..compiler import compile_module
 
-
+MAX = 100000
+MIN = -MAX
 docker = os.getenv("ASPIDITES_DOCKER_BUILD")
 
 woma_file = Path('examples/examples.wom')
@@ -51,20 +52,32 @@ def test_compile_module(inject_config):
                 'exec')
 
 
-@given(x=st.integers(min_value=-10000,
-                     max_value=10000) | st.floats(allow_nan=False),
-       y=st.integers(min_value=-10000,
-                     max_value=10000) | st.floats(allow_nan=False))
+@given(x=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
+       y=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False))
 @hypothesis.settings(deadline=None)  # TODO: the specific edge case x=1 y=1 is slow
 @pt.mark.filterwarnings('ignore::RuntimeWarning')
-def test_safe_math_(x, y):
+def test_safe_div(x, y):
+    assert SafeDiv(x, 0) == Undefined()
+    assert SafeFloorDiv(x, 0) == Undefined()
+    assume(x != 0 and y != 0)
+
+    if isnan(x / y) and isnan(x // y):
+        assert SafeDiv(x, y) == Undefined()
+        assert SafeFloorDiv(x, y) == Undefined()
+    else:
+        assume(not isinf(x) and not isinf(y))
+        assert SafeDiv(x, y) == x / y
+        assert SafeFloorDiv(x, y) == x // y
+
+
+@given(x=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
+       y=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False))
+@hypothesis.settings(deadline=None)  # TODO: the specific edge case x=1 y=1 is slow
+@pt.mark.filterwarnings('ignore::RuntimeWarning')
+def test_safe_exp(x, y):
     assert SafeExp(0, 0) == Undefined()
     assert SafeExp(0, inf) == Undefined()
     assert SafeExp(inf, 0) == Undefined()
-    assert SafeMod(x, 0) == Undefined()
-    assert SafeDiv(x, 0) == Undefined()
-    assert SafeFloorDiv(x, 0) == Undefined()
-    assert SafeMod(inf, x) == Undefined()
     assume(x != 0 and y != 0)
     try:
         x ** y
@@ -73,14 +86,15 @@ def test_safe_math_(x, y):
     else:
         assert SafeExp(x, y) == x ** y
 
-    if isnan(x / y) and isnan(x // y):
-        assert SafeDiv(x, y) == Undefined()
-        assert SafeFloorDiv(x, y) == Undefined()
-    elif isinf(x):
-        assert SafeFloorDiv(x, y) == Undefined()
-    else:
-        assert SafeDiv(x, y) == x / y
-        assert SafeFloorDiv(x, y) == x // y
+
+@given(x=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
+       y=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False))
+@hypothesis.settings(deadline=None)  # TODO: the specific edge case x=1 y=1 is slow
+@pt.mark.filterwarnings('ignore::RuntimeWarning')
+def test_safe_mod(x, y):
+    assert SafeMod(x, 0) == Undefined()
+    assert SafeMod(inf, x) == Undefined()
+    assume(x != 0 and y != 0)
     assume(not isinf(x))
     assert SafeMod(x, y) == x % y
 
@@ -105,18 +119,18 @@ def test_undefined_sanity():
     assert Surely() / Surely() == Surely()
 
 
-@given(x=st.integers() | st.floats() | st.complex_numbers())
+@given(x=st.integers(min_value=MIN, max_value=MAX) | st.floats() | st.complex_numbers())
 def test_number_undefined_sanity(x):
-    assert Undefined() + x == Undefined()
-    assert Undefined() - x == Undefined()
-    assert Undefined() * x == Undefined()
-    assert Undefined() / x == Undefined()
+    assert Undefined() + x  == Undefined()
+    assert Undefined() - x  == Undefined()
+    assert Undefined() * x  == Undefined()
+    assert Undefined() / x  == Undefined()
     assert Undefined() // x == Undefined()
-    assert Surely() + x == Surely()
-    assert Surely() - x == Surely()
-    assert Surely() * x == Surely()
-    assert Surely() / x == Surely()
-    assert Undefined(x) != Surely(x)
+    assert Surely() + x     == Surely()
+    assert Surely() - x     == Surely()
+    assert Surely() * x     == Surely()
+    assert Surely() / x     == Surely()
+    assert Undefined(x)     != Surely(x)
 
 
 @given(x=st.text() | st.characters())
@@ -161,7 +175,7 @@ def test_dict_undefined_sanity(x):
     assert Undefined(x) != Surely(x)
 
 
-@given(x=st.integers())
+@given(x=st.integers(min_value=MIN, max_value=MAX))
 def test_integer_monad_sanity(x):
     assert Maybe(x) != x
     assert Surely(x) == Surely(x)
