@@ -88,7 +88,7 @@ setup(
     test_suite='Aspidites/tests',
     distclass=Distribution if sys.platform != 'darwin' else BinaryDistribution,
     entry_points={'console_scripts': ['aspidites = Aspidites.__main__:main']},
-    package_data={'': ["*.wom", "*.pyx", "*.pyi"]},  # add any native *.wom files
+    package_data={'': ["*.wom", "*.pyx", "*.pyi", "*.so"]},  # add any native *.wom files
     long_description=read('README.md'),
     cmdclass={'install': InstallWrapper},
     long_description_content_type='text/markdown',
