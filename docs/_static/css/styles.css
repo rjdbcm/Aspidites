@@ -54,6 +54,9 @@ button.copybtn {
     opacity: 1;
 }
 
+.wy-nav-content {
+    max-width: none;
+}
 
 .wy-side-nav-search {
     text-align: -moz-center;

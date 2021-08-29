@@ -6,7 +6,7 @@ Lexicon
 ~~~~~~~
 
 +------------+-----------+---------------------+-------------------------------------------------------------------------------------------------------------------+
-| Working?   | Symbol    | Verbage             | Example                                                                                                           |
+| Working?   | Symbol    | Approximate Meaning | Example                                                                                                           |
 +============+===========+=====================+===================================================================================================================+
 | ✅         | ``->``    | respects            | ``identifier`` ``->`` ``constraining clauses``                                                                    |
 +------------+-----------+---------------------+-------------------------------------------------------------------------------------------------------------------+
@@ -22,6 +22,7 @@ Lexicon
 +------------+-----------+---------------------+-------------------------------------------------------------------------------------------------------------------+
 | ✅         | ``(G(``   | define G as function| ``(`` ``FuncName`` ``(`` ``identifier`` ``->`` ``constraining clauses`` ``))`` ``return constraints``             |
 +------------+-----------+---------------------+-------------------------------------------------------------------------------------------------------------------+
+
 
 Examples
 ~~~~~~~~
@@ -57,6 +58,21 @@ Examples
             `coroutines`
             (Hello2()) coroutine
                 <^>Hello()
+
+    .. tab::
+
+        Optional Structured Entrypoint
+
+        .. code:: woma
+
+            `main: structure for executable actions when run as a binary`
+            (Hello()) procedure
+                print("Hello, World!")
+
+            main:
+            Hello()
+            print("I'm a binary.")
+
 
 .. tabs::
 
@@ -124,20 +140,3 @@ Examples
             div_by_zero2 = 1 / 0
             mod_zero2 = 1 % 0
             a_truth = div_by_zero2 == nullit
-
-.. tabs::
-
-    .. tab::
-
-        Optional Structured Entrypoint
-
-        .. code:: woma
-
-            `main: structure for executable actions when run as a binary`
-            (Hello()) procedure
-                print("Hello, World!")
-
-            main:
-            Hello()
-            print("I'm a binary.")
-
