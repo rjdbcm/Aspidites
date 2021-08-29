@@ -40,25 +40,6 @@ Examples
 
     .. tab::
 
-        Nested Scoping
-
-        .. code:: woma
-
-            (Outer():
-                (Inner()) unicode
-                    Inner.x = 'foo'
-                    return Inner.x
-                m1.x = inner()
-                return 'bar'
-
-            Outer()
-            (Foreign()) unicode
-                y = Outer.x
-                z = y + 'baz'
-                return z
-
-    .. tab::
-
         Generators, Procedures, and Coroutines
 
         .. code:: woma
