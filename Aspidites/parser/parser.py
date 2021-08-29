@@ -82,8 +82,11 @@ integer = Word(nums).setParseAction(cvt_int)
 real = Combine(Word(nums) + "." + Word(nums))
 complex_ = Combine(real | integer + "+" + real | integer + "j")
 list_str = Forward()
+list_str_evolver = Forward()
 set_str = Forward()
+set_str_evolver = Forward()
 dict_str = Forward()
+dict_str_evolver = Forward()
 tuple_str = Forward()
 simple_assign = Forward()
 # for_stmt = Forward()
@@ -124,6 +127,9 @@ list_item = (  # Precedence important!!!
     | unistr
     | bool_literal
     | nullit
+    | list_str_evolver
+    | set_str_evolver
+    | dict_str_evolver
     | list_str  # Collections
     | set_str
     | tuple_str
@@ -136,9 +142,12 @@ contract_assign = identifier + assign_eq + list_item + contract_respect
 contract_assign.setParseAction(cvt_contract_assign)
 tuple_str <<= (lparen + Optional(delimitedList(list_item)) + Optional(comma) + rparen).setParseAction(cvt_tuple)
 list_str <<= (lbrack + Optional(delimitedList(list_item) + Optional(comma)) + rbrack).setParseAction(cvt_list)
+list_str_evolver <<= (lbrack + Optional(delimitedList(list_item) + Optional(comma)) + rbrack).setParseAction(cvt_list) + noclosure.setParseAction(replaceWith('.evolver()'))
 set_str <<= (lbrace + Optional(delimitedList(list_item) + Optional(comma)) + rbrace).setParseAction(cvt_set)
+set_str_evolver <<= (lbrace + Optional(delimitedList(list_item) + Optional(comma)) + rbrace).setParseAction(cvt_set) + noclosure.setParseAction(replaceWith('.evolver()'))
 dict_entry = Group(list_item + colon + list_item)
 dict_str <<= (lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(cvt_dict)
+dict_str_evolver <<= (lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(cvt_dict) + noclosure.setParseAction(replaceWith('.evolver()'))
 def_args = Optional(delimitedList(contract_assign, delim=";")).setParseAction(lambda t: sep.join(t))
 def_args = Group(lit_lparen + def_args + args_end).setParseAction(lambda t: "".join(*t))
 bool_pragmas = Combine(

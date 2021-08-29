@@ -78,22 +78,26 @@ Examples
 
     .. tab::
 
-        Persistent Evolvable Iterables
+        Persistent or Evolver Iterables
 
         .. code:: woma
 
             `persistent vectors`
             D = [2, 4, 6, 8, 10]
+            `evolver vectors`
+            E = [12, 14, 16, 18]...
 
             `persistent sets`
             G = {'a', 'b', 'c'}
+            `evolver sets`
+            F = {'e', 'f', 'g'}...
 
             `persistent mappings`
-            C = {'a': (3+5),
-                 'b': 8,
-                 'c': True,
-                   4: None,
-                 'd': 6**2*5+3}
+            C = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}
+            `evolver mappings`
+            B = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}...
+
+        This is implemented using the library `pyrsistent <https://github.com/tobgu/pyrsistent>`_.
 
     .. tab::
 
@@ -102,7 +106,7 @@ Examples
         .. code:: woma
 
             `new contracts can impose more complex contractual clauses`
-            colors <- list[3](int, <256, >=0)
+            colors <- list[3](np_uint8, int, <256, >=0)
 
 .. tabs::
 
