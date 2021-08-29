@@ -1,4 +1,5 @@
 **unreleased**
+**v0.14.1**
 **v0.14.0**
 
 - 594c95f added isnan check for SafeUnary Ops
