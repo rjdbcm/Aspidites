@@ -1,7 +1,7 @@
 from warnings import warn
 import inspect
 from inspect import isfunction, signature
-from cmath import inf, isinf, nan
+from cmath import inf, isinf, nan, isnan
 import numbers
 from pyrsistent import v, pvector
 
@@ -12,7 +12,7 @@ from .api import bordered
 
 # noinspection PyPep8Naming
 def SafeUnaryAdd(a):
-    if not isinstance(a, numbers.Number):
+    if isnan(a) or not isinstance(a, numbers.Number):
         stack = pvector(inspect.stack())
         exc = ZeroDivisionError("Unary Add is Undefined for %s" % type(a))
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
@@ -24,7 +24,7 @@ def SafeUnaryAdd(a):
 
 # noinspection PyPep8Naming
 def SafeUnarySub(a):
-    if not isinstance(a, numbers.Number):
+    if isnan(a) or not isinstance(a, numbers.Number):
         stack = pvector(inspect.stack())
         exc = ZeroDivisionError("Unary Sub is Undefined for %s" % type(a))
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
