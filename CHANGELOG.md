@@ -1,5 +1,35 @@
 **unreleased**
 **v0.13.5**
+
+- 0ca5c25 .gitignore: added /Aspidites.egg-info/
+- c2d467c added more safe math and tests
+- 417903b templates.py: moved around imports
+- 65871d8 setup.py: includes *.so files in package data
+- 1359109 removed pampy from vendored packages It's not what I would like for pattern matching
+- fd311d8 moved math to its own module
+- 6961de9 added evolver syntax
+- 5517ca7 Added tabs to code examples and expanded width
+- 141694d Added tabs to code examples
+- 73ac0ca Added tabs to code examples
+- 17590d5 Added tabs to code examples
+- bf0d098 Merge remote-tracking branch 'origin/main'
+- 01f6f62 Added tabs to code examples
+- 277e3c1 Update README.rst
+- 3357e1a Update README.rst
+- df0eab1 Update README.rst
+- c39f6aa Update README.rst
+- ba6949b Update README.rst
+- 68a04b2 Update devinfo.rst
+- 9be3920 Added non-paywalled article
+- 6b332b7 Update README.rst
+- bd9c804 Update README.rst
+- a7b80e1 Update README.rst
+- 571260e Create FUNDING.yml
+- cc59269 added workflow to check urls
+- 44542ab shelved github-deploy.yml and chocolatey-deploy.yml
+- 9495a75 added github-deploy.yml
+
+
 **v0.13.4**
 
 - 9ceffcc added github-deploy.yml
