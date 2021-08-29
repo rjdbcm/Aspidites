@@ -132,14 +132,14 @@ def main(argv=sys.argv) -> None:
     # any failure results in falling back to the `Cython.Compiler.Options` API
     args, other_args, cy_kwargs = parse_from_dummy(argv,
                                                    ap.ArgumentParser(add_help=False))
-    if args.target == "Aspidites/tests" or args.target == "Aspidites\\tests":
+    if args.target == "Aspidites/tests" or args.target == "Aspidites\\tests":  # pragma: no cover
         raise SystemExit()
 
-    code = parse_module(open(args.target, 'r').read())
-    if args.output is None:
+    code = parse_module(open(args.target, 'r').read())  # pragma: no cover
+    if args.output is None:  # pragma: no cover
         args.output = Path(args.target).parent / 'compiled.py'
 
-    cy_kwargs.update({
+    cy_kwargs.update({  # pragma: no cover
         'code': code,
         'fname': args.output or "compiled.py",
         'force': args.force or False,
@@ -148,4 +148,4 @@ def main(argv=sys.argv) -> None:
         'build_requires': args.build_requires,
         'verbose': args.verbose
     })
-    compile_module(**cy_kwargs)
+    compile_module(**cy_kwargs)  # pragma: no cover
