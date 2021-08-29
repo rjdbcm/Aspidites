@@ -1,6 +1,5 @@
 from pyrsistent import v
 from .fn import *
-from .pampy import *  # TODO: may cause an issue importing monads
 
 __all__ = v("F",  # BEGIN func.py
             "curried",  # END func.py
@@ -40,14 +39,5 @@ __all__ = v("F",  # BEGIN func.py
             "_",
             "reduce",
             "filterfalse",
-            "zip_longest",
-            "match",
-            "ANY",
-            "HEAD",
-            "TAIL",
-            "REST",
-            "MatchError",
-            "match_value",
-            "match_iterable",
-            "match_dict"
+            "zip_longest"
             )
