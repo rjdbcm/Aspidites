@@ -122,7 +122,8 @@ from Aspidites._vendor import (
     droplast,
     _,
 )
-from Aspidites.monads import Maybe, Surely, Undefined, SafeDiv, SafeMod, SafeExp
+from Aspidites.monads import Maybe, Surely
+from Aspidites.math import Undefined, SafeDiv, SafeExp, SafeMod
 from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.RestrictedPython import safe_builtins
 safe_builtins['print'] = print
