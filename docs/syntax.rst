@@ -144,6 +144,8 @@ Examples
             mod_zero2 = 1 % 0
             a_truth = div_by_zero2 == nullit
 
+.. tabs::
+
     .. tab::
 
         Optional Structured Entrypoint
