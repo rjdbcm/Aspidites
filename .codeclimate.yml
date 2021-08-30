@@ -3,9 +3,9 @@ plugins:
     radon:
       enabled: true
       exclude-patterns:
-        - "tests/"
-        - "_vendor/"
-        - "docs/"
+        - "**/tests/"
+        - "**/_vendor/"
+        - "**/docs/"
 checks:
   argument-count:
     config:
@@ -39,6 +39,6 @@ checks:
       threshold: # language-specific defaults. an override will affect all languages.
 
 exclude-patterns:
-  - "tests/"
-  - "_vendor/"
-  - "docs/"
+  - "**/tests/"
+  - "**/_vendor/"
+  - "**/docs/"
