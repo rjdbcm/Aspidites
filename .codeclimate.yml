@@ -1,4 +1,7 @@
 version: "2"         # required to adjust maintainability checks
+plugins:
+    radon:
+      enabled: true
 checks:
   argument-count:
     config:
