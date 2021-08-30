@@ -1,5 +1,21 @@
 **unreleased**
 **v0.14.1**
+
+- 3efe0f9 moved tests so there is more organization
+- 0e8b448 adjust codeclimate coverage
+- 20a7c0f adjust codeclimate coverage
+- a120dbf adjust codeclimate coverage
+- c642c5d adjust codeclimate coverage
+- 6ec0411 adjust codeclimate coverage
+- ff01ce7 adjust codeclimate coverage
+- c724255 adjust codeclimate coverage
+- 2667e93 adjust codeclimate coverage
+- fd289d5 adjust coverage
+- 466dbd6 adjust coverage for Sequences
+- fc48ad3 adjust coverage for __main__.py
+- 144a586 fix some Windows compatibility stuff for test suite
+
+
 **v0.14.0**
 
 - 594c95f added isnan check for SafeUnary Ops
