@@ -3,3 +3,6 @@ omit =
     */examples/*
     */tests/*
     */docs/*
+
+include =
+    Aspidites/tests/test_aspidites.py

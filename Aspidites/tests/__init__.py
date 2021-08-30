@@ -1,1 +1,1 @@
-from .library import *
+from ._vendor import *

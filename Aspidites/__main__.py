@@ -77,7 +77,7 @@ def parse_from_dummy(argv: list,
         sys.exit(1)
     if len(argv) >= 2 and argv[1] == "--pytest" or argv[1] == '-pt':  # pragma: no cover
         if not os.getenv("ASPIDITES_DOCKER_BUILD"):
-            argv = [Path(__file__).absolute().parent / 'tests'] + argv[2:]
+            argv = [Path(__file__).absolute().parent / Path('tests/test_aspidites.py')] + argv[2:]
         else:
             argv = argv[2:]
         sys.exit(pytest.main(argv))
