@@ -8,6 +8,7 @@ import pickle
 
 
 @pytest.mark.parametrize('contract, values', contract_fails_val)
+@pytest.mark.filterwarnings('ignore::UserWarning')
 def test_exception_pickable(contract, values):
     exception = check_contracts_fail(contract, values)
     assert isinstance(exception, Exception)
@@ -34,6 +35,7 @@ def test_exception_pickable(contract, values):
 #         yield check_contracts_fail, contract, value, ContractNotRespected
 
 @pytest.mark.parametrize('contract', contract_strings)
+@pytest.mark.filterwarnings('ignore::UserWarning')
 def test_contract_pickable(contract):
     c = parse(contract)
     assert isinstance(c, Contract)
