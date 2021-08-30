@@ -36,7 +36,7 @@ def test_exception_pickable(contract, values):
 
 @pytest.mark.parametrize('contract', contract_strings)
 @pytest.mark.filterwarnings('ignore::UserWarning')
-def test_contract_pickable(contract):
+def test_contract_pickle(contract):
     c = parse(contract)
     assert isinstance(c, Contract)
     try:
