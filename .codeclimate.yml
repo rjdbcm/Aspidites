@@ -32,6 +32,6 @@ checks:
       threshold: # language-specific defaults. an override will affect all languages.
 
 exclude-patterns:
-- "**/tests/"
-- "**/_vendor/"
-- "**/docs/"
+  - "**/tests/"
+  - "**/_vendor/"
+  - "**/docs/"
