@@ -45,10 +45,10 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           files: ./coverage.xml
-      - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v2.7.5
-        env:
-          CC_TEST_REPORTER_ID: 5bcc9d60bb439f75e102507e595434a393e9be017010223f6f3bc61cce2f5802
+#      - name: Test & publish code coverage
+#        uses: paambaati/codeclimate-action@v2.7.5
+#        env:
+#          CC_TEST_REPORTER_ID: 5bcc9d60bb439f75e102507e595434a393e9be017010223f6f3bc61cce2f5802
   
   
   macosx-build:
