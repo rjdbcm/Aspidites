@@ -32,8 +32,6 @@ C = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}
 `evolver mappings`
 B = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}...
 
-
-
 `persistent sets`
 
 `new contracts can impose more complex contractual clauses`

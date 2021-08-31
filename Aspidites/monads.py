@@ -23,7 +23,6 @@ from pyrsistent import v, pvector
 from .math import Undefined, Warn
 from ._vendor.contracts import ContractNotRespected
 from ._vendor.fn import apply
-from ._vendor.fn.underscore import ArityError
 
 
 class ContractBreachWarning(RuntimeWarning):
@@ -80,7 +79,7 @@ class Maybe:
                 # SURELY #
                 return self.__instance__
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
-        except (ContractNotRespected, ArityError, ZeroDivisionError, Exception) as e:
+        except Exception as e:
             if warn_undefined:
                 w = self._warn.create(e)
                 warn(w, category=ContractBreachWarning if isinstance(e, ContractNotRespected) else RuntimeWarning)
