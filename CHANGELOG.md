@@ -2,6 +2,17 @@
 
 **v0.14.2**
 
+- 1495432 prep CHANGELOG.md
+- 8cb61ee prep CHANGELOG.md
+- d1e065a add default_file template
+- 5cfde28 add default_file template
+- 70d9bb3 cython_math
+- 2fd20c8 ci.yml: maybe paambaati/codeclimate-action@v2.7.5 had a token expire?
+- cd29f99 revert
+- a741f80 made deploy depend on CI success.
+
+
+
 **v0.14.1**
 
 - 3efe0f9 moved tests so there is more organization
