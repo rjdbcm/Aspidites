@@ -18,7 +18,6 @@
 - fc48ad3 adjust coverage for __main__.py
 - 144a586 fix some Windows compatibility stuff for test suite
 
-
 **v0.14.0**
 
 - 594c95f added isnan check for SafeUnary Ops
