@@ -22,7 +22,7 @@ from glob import glob
 from warnings import warn
 import typing as t
 from mypy import api
-from .templates import lib, makefile, pyproject, setup
+from .templates import lib, makefile, pyproject, setup, default_file
 from pyrsistent import pmap, v
 from hashlib import sha256
 from pathlib import Path
@@ -101,7 +101,7 @@ class CheckedFileStack:
         """Registers a filename to a checksum of its contents."""
         self.all_files.set(*self._write_checksum(fname))
 
-    def create_file(self, fname, mode, root='', text="# THIS FILE IS GENERATED - DO NOT EDIT #") -> None:
+    def create_file(self, fname, mode, root='', text=default_file) -> None:
         """API for creating and registering checked files"""
         if len(str(root)) > 0:
             root = Path(root)
