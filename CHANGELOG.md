@@ -1,4 +1,5 @@
 **unreleased**
+**v0.14.11**
 **v0.14.10**
 
 - 9d4c96a fix package deploy
