@@ -1,4 +1,4 @@
-__version__ = '0.14.17'
+__version__ = '0.14.18'
 __title__ = 'Aspidites'
 __author__ = 'Ross J. Duff'
 __license__ = "GPL"
