@@ -1,4 +1,5 @@
 **unreleased**
+**v0.14.17**
 **v0.14.16**
 
 - ea87470 fix package deploy
