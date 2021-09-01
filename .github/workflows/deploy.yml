@@ -24,7 +24,7 @@ jobs:
           package-path: '.'
 
       - name: Remove artifacts
-        run: rm -f '*-linux_x86_64.whl'
+        run: rm -f './dist/*-linux_x86_64.whl'
 
       - name: Publish distribution 📦 to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
