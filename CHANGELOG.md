@@ -1,4 +1,5 @@
 **unreleased**
+**v0.14.9**
 **v0.14.8**
 
 - d3a3db1 Merge remote-tracking branch 'origin/main'
