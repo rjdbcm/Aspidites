@@ -7,7 +7,7 @@ from setuptools.dist import Distribution
 from setuptools.command.install import install
 # ~#~ # Build static libs # ~#~ #
 from Cython.Build import cythonize
-ext_modules = cythonize([str(Path('Aspidites/monads.pyx')), str(Path('Aspidites/math.pyx'))])
+ext_modules = cythonize([str(Path('Aspidites/monads.py')), str(Path('Aspidites/math.py'))])
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
 from Aspidites.__main__ import get_cy_kwargs
 cy_kwargs = get_cy_kwargs()
