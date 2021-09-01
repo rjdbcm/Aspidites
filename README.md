@@ -3,9 +3,27 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/rjdbcm/Aspidites)
 ![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)
 ----------------
-The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. Who is the Woma Programming Language for? First and foremost it is for people wanting to write CPython extensions fast, like *really* fast. What if just want to write some standalone programs? Our second priority is to create a simple bundler for applications that can be statically linked to the system interpreter or have a barebones interpreter embedded. Isn't this just Cython with extra steps? Well yes, but with totally different goals. Cython intends to be a syntactic superset of python where Woma syntax has taken inspiration from a variety of sources. You can think of Aspidites as a wrapper for Cython that parses Woma code into Cython's python superset. Cython does much of the "heavy lifting". Where Woma shines is that it is fundamentally different to most programming languages algebraically. No operation is forbidden and unexpected behavior arises in the form of program nullification rather than termination. The wheel keeps on turning.
+The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. 
 
-There is also a genus of Python called _Aspidites_, latin for shield-bearer, that is this project's namesake. We maintain several packages for Aspidites, however, we *recommend* using the PyPI install for the latest stable version. Docker is the place to go for the bleeding edge development versions of Aspidites.
+- Who is the Woma Programming Language for?  
+
+    - First and foremost it is for people wanting to write CPython extensions fast, like *really* fast. 
+
+- What if just want to write some standalone programs?
+
+    - Our second priority is to create a simple bundler for applications that can be statically linked to the system interpreter or have a barebones interpreter embedded. 
+
+- Isn't this just Cython with extra steps? 
+
+    - Well yes, but with totally different goals. Cython intends to be a syntactic superset of python where Woma syntax has taken inspiration from a variety of sources. You can think of Aspidites as a wrapper for Cython that parses Woma code into Cython's python superset. Cython does much of the "heavy lifting". Where Woma shines is that it is fundamentally different to most programming languages algebraically. No operation is forbidden and unexpected behavior arises in the form of program nullification rather than termination. The wheel keeps on turning.
+    
+ - Why use the name _Aspidites_? What's a Woma?
+ 
+    - There is also a genus of Python called _Aspidites_, latin for shield-bearer, that is this project's namesake. They are endemic to mainland Australia and are also known as the Woma Python.
+  
+- How do I get Aspidites?
+    
+    - We maintain several packages for Aspidites, however, we *recommend* using the PyPI install for the latest stable version. Docker is the place to go for the bleeding edge development versions of Aspidites.
 ### Installing
 ---------
 [![PyPI](https://img.shields.io/pypi/v/aspidites?label=PyPI&logo=pypi)](https://pypi.org/project/Aspidites/)[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Aspidites?label=CPython)![PyPI - Downloads](https://img.shields.io/pypi/dd/Aspidites)
