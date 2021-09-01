@@ -1,5 +1,9 @@
 **unreleased**
 **v0.14.17**
+
+- e5b04d0 added macos-11 job to deploy.yml
+
+
 **v0.14.16**
 
 - ea87470 fix package deploy
