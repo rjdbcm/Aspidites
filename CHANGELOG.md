@@ -1,5 +1,9 @@
 **unreleased**
 **v0.14.19**
+
+- fa2e1f1 better ci workflow
+
+
 **v0.14.18**
 
 - 7d0dc50 fix publish wheel
