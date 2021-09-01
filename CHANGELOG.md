@@ -1,5 +1,11 @@
 **unreleased**
 **v0.14.20**
+
+- 11f1a86 better ci workflow
+- fc7c2b9 Update deploy.yml
+- 17c07fd Update deploy.yml
+
+
 **v0.14.19**
 
 - fa2e1f1 better ci workflow
