@@ -2,6 +2,11 @@
 
 **v0.14.3**
 
+- a1f2ad1 trying out static compiled library
+- a9a16e9 prep CHANGELOG.md
+
+
+
 **v0.14.2**
 
 - 1495432 prep CHANGELOG.md
