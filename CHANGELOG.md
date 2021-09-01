@@ -1,5 +1,9 @@
 **unreleased**
 **v0.14.7**
+
+- a23edb0 fix package deploy
+
+
 **v0.14.6**
 
 - ce36b8a fix setup.py
