@@ -1,5 +1,5 @@
 name: 🐍 📦 PyPI
-# Runs after CI
+
 on:
   push:
     tags:
