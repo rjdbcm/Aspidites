@@ -1,5 +1,9 @@
 **unreleased**
 **v0.14.5**
+
+- def0588 fix Dockerfile
+
+
 **v0.14.4**
 
 - 9740058 fix test complaints
