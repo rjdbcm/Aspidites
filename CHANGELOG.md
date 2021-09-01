@@ -1,4 +1,5 @@
 **unreleased**
+**v0.14.7**
 **v0.14.6**
 
 - ce36b8a fix setup.py
