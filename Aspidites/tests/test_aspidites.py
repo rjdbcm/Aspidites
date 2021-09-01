@@ -24,7 +24,7 @@ MAX = 100000
 MIN = -MAX
 docker = os.getenv("ASPIDITES_DOCKER_BUILD")
 
-woma_file = Path('examples/examples.wom')
+woma_file = str(Path('examples/examples.wom'))
 
 
 @pt.fixture(autouse=True)
@@ -37,7 +37,7 @@ def setup_code(inject_config):
         code_ = parse_module(open(woma_file, 'r').read())
     else:
         try:
-            code_ = parse_module(open(Path("Aspidites/tests") / woma_file, 'r').read())
+            code_ = parse_module(open(str(Path("Aspidites/tests") / woma_file), 'r').read())
             warnings.warn("Aspidites is being tested in source mode")
         except FileNotFoundError:
             code_ = parse_module(open(Path(inject_config) / woma_file, 'r').read())
@@ -225,8 +225,8 @@ def test_cli_examples():
 
 # @pt.mark.filterwarnings('ignore::RuntimeWarning')
 def test_compile_to_shared_object(inject_config):
-    python_file_ = Path('examples/compiled.py')
-    python_file = python_file_ if Path(woma_file).exists() else (Path('Aspidites/tests') / python_file_)
+    python_file_ = str(Path('examples/compiled.py'))
+    python_file = python_file_ if Path(woma_file).exists() else str(Path('Aspidites/tests') / python_file_)
     kwargs = get_cy_kwargs()
     code = setup_code(inject_config)
     kwargs.update(code=code, fname=python_file, bytecode=True, force=True, c=True, build_requires='', verbose=False)

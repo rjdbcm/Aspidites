@@ -5,7 +5,6 @@ from cmath import inf, isinf, nan, isnan
 import numbers
 from pyrsistent import v, pvector
 
-from ._vendor.fn.underscore import ArityError
 from .templates import _warning
 from .api import bordered
 
@@ -107,7 +106,7 @@ class Warn:
             name = str(self.func)
         atfault = (
             name
-            if isinstance(exc, ArityError)
+            if isinstance(exc, TypeError)
             else name + "(" + str(self.args).strip("()") + fkwargs + ")"
         )
         return _warning.safe_substitute(

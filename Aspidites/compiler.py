@@ -67,7 +67,6 @@ class CheckedFileStack:
             curr_hash = self._read(data, hash_func=sha256)
             with open(fname_sha256, "wb") as digest:
                 digest.write(curr_hash.digest())
-
             return pmap({curr_hash.digest(): fname}).items()[0]  # immutable
 
     def _read_checksum(self, fname):

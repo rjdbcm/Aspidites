@@ -5,9 +5,11 @@ from pathlib import Path
 from setuptools import setup, find_packages
 from setuptools.dist import Distribution
 from setuptools.command.install import install
+# ~#~ # Build static libs # ~#~ #
+from Cython.Build import cythonize
+ext_modules = cythonize([str(Path('Aspidites/monads.pyx')), str(Path('Aspidites/math.pyx'))])
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
 from Aspidites.__main__ import get_cy_kwargs
-
 cy_kwargs = get_cy_kwargs()
 cy_kwargs.update({'embed': True})
 code = open(Path('Aspidites/woma/library.wom'), 'r').read()
@@ -51,11 +53,11 @@ class InstallWrapper(install):
 
     def preinstall(self):
         """preinstall hook"""
-        target = Path('build/lib/Aspidites/woma/library.wom')
-        output = Path('build/lib/Aspidites/woma/library.pyx')
-        c = "Aspidites %s -c -o %s --embed=True" % (target, output)
-        os.popen(c)
-        print(c)
+        # target = Path('build/lib/Aspidites/woma/library.wom')
+        # output = Path('build/lib/Aspidites/woma/library.pyx')
+        # c = "Aspidites %s -c -o %s --embed=True" % (target, output)
+        # os.popen(c)
+        # print(c)
         pass
 
     def postinstall(self):
@@ -85,10 +87,11 @@ setup(
         'future'
         ],
     packages=find_packages(),
+    ext_modules=ext_modules,
     test_suite='Aspidites/tests',
     distclass=Distribution if sys.platform != 'darwin' else BinaryDistribution,
     entry_points={'console_scripts': ['aspidites = Aspidites.__main__:main']},
-    package_data={'': ["*.wom", "*.pyx", "*.pyi", "*.so"]},  # add any native *.wom files
+    package_data={'': ["*.wom", "*.pyx", "*.pyi", "*.so", "*.c"]},  # add any native *.wom files
     long_description=read('README.md'),
     cmdclass={'install': InstallWrapper},
     long_description_content_type='text/markdown',

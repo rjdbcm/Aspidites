@@ -21,13 +21,9 @@ from _warnings import warn
 from pyrsistent import v, pvector
 
 from .math import Undefined, Warn
-from ._vendor.contracts import ContractNotRespected
-from ._vendor.fn import apply
 
-
-class ContractBreachWarning(RuntimeWarning):
-    pass
-
+def __apply(f, args=None, kwargs=None):
+   return f(*(args or []), **(kwargs or {}))
 
 class Maybe:
     """Sandboxes a Surely call and handles ContractNotRespected by returning Undefined"""
@@ -73,7 +69,7 @@ class Maybe:
     def __call__(self, warn_undefined=True):
         try:
             with suppress(ValueError):
-                val = apply(self.func, self.args, self.kwargs)
+                val = __apply(self.func, self.args, self.kwargs)
             with suppress(UnboundLocalError):
                 self.__instance__ = Surely(val)
                 # SURELY #
@@ -82,7 +78,7 @@ class Maybe:
         except Exception as e:
             if warn_undefined:
                 w = self._warn.create(e)
-                warn(w, category=ContractBreachWarning if isinstance(e, ContractNotRespected) else RuntimeWarning)
+                warn(w, category=RuntimeWarning)
             # UNDEFINED #
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
             return self.__instance__
