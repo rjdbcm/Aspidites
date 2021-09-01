@@ -1,4 +1,5 @@
 **unreleased**
+**v0.14.12**
 **v0.14.11**
 
 - 8a3f508 fix package deploy
