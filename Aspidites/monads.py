@@ -22,8 +22,10 @@ from pyrsistent import v, pvector
 
 from .math import Undefined, Warn
 
-def __apply(f, args=None, kwargs=None):
-   return f(*(args or []), **(kwargs or {}))
+
+def _apply(f, args=None, kwargs=None):
+    return f(*(args or []), **(kwargs or {}))
+
 
 class Maybe:
     """Sandboxes a Surely call and handles ContractNotRespected by returning Undefined"""
@@ -69,7 +71,7 @@ class Maybe:
     def __call__(self, warn_undefined=True):
         try:
             with suppress(ValueError):
-                val = __apply(self.func, self.args, self.kwargs)
+                val = _apply(self.func, self.args, self.kwargs)
             with suppress(UnboundLocalError):
                 self.__instance__ = Surely(val)
                 # SURELY #
