@@ -1,4 +1,5 @@
 **unreleased**
+**v0.14.8**
 **v0.14.7**
 
 - a23edb0 fix package deploy
