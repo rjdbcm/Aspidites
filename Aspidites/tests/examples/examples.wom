@@ -4,19 +4,16 @@
 	<*>x+y
 
 `generators`
-#cython.binding(True)
 (Yield123()) coroutine
 	<^>Add(0, 1)
 	<^>Add(0, 2)
 	<^>Add(0, 3)
 
 `procedures`
-#cython.binding(True)
 (Hello()) procedure
 	print("Hello, World!")
 
 `coroutines`
-#cython.binding(True)
 (Hello2()) coroutine
 	<^>Hello()
 

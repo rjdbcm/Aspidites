@@ -1,6 +1,6 @@
 FROM python:3.9.5-slim-buster AS base
 
-RUN apt-get update && apt-get install -y gcc --no-install-recommends && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y gcc linux-libc-dev python3-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 FROM base AS pyenv
 WORKDIR /usr/src/app
