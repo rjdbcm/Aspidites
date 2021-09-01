@@ -23,6 +23,9 @@ jobs:
           build-requirements: 'cython pyparsing mypy pyrsistent pytest future'
           package-path: '.'
 
+      - name: Remove artifacts
+        run: find . -name '-linux_x86_64.whl' -exec rm -fr {} +
+
       - name: Publish distribution 📦 to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
