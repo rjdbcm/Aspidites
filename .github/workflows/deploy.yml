@@ -108,8 +108,7 @@ jobs:
       uses: ethomson/send-tweet-action@v1
       needs: macos-11-deploy manylinux-deploy
       with:
-        status: "📦 New PyPI package: Aspidites ${{ github.event.head_commit.message }}! 🎉🎉🎉
-          Check it out: https://pypi.org/project/Aspidites"
+        status: "📦 New PyPI package: Aspidites ${{ github.event.head_commit.message }}! 🎉🎉🎉 Check it out: https://pypi.org/project/Aspidites"
         consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
         consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
         access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
