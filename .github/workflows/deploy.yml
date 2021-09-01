@@ -15,14 +15,15 @@ jobs:
         uses: actions/setup-python@v1
         with:
            python-version: 3.9
+           
+      - name: Create manylinux wheel
+        uses: RalfG/python-wheels-manylinux-build@v0.3.4-manylinux2010_x86_64
+        with:
+          python-versions: 'cp37-cp37m cp38-cp38m cp39-cp39m'
+          build-requirements: 'cython pyparsing mypy pyrsistent pytest future'
+          package-path: 'Aspidites'
+          pip-wheel-args: '-w ./dist --no-deps'
 
-      uses: RalfG/python-wheels-manylinux-build@v0.3.4-manylinux2010_x86_64
-      with:
-        python-versions: 'cp37-cp37m cp38-cp38m cp39-cp39m'
-        build-requirements: 'cython pyparsing mypy pyrsistent pytest future'
-        package-path: 'Aspidites'
-        pip-wheel-args: '-w ./dist --no-deps'
-        
       - name: Publish distribution 📦 to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
