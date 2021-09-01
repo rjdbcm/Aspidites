@@ -1,6 +1,13 @@
 **unreleased**
 **v0.14.4**
 
+- 9740058 fix test complaints
+- 206ada4 Merge remote-tracking branch 'origin/main'
+- 3e4b5f9 Update README.md
+- f6e9d87 Update README.md
+
+
+
 **v0.14.3**
 
 - a1f2ad1 trying out static compiled library
