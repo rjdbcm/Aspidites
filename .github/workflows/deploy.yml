@@ -22,7 +22,6 @@ jobs:
           python-versions: 'cp37-cp37m cp38-cp38m cp39-cp39m'
           build-requirements: 'cython pyparsing mypy pyrsistent pytest future'
           package-path: 'Aspidites'
-          pip-wheel-args: '-w ./dist --no-deps'
 
       - name: Publish distribution 📦 to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
