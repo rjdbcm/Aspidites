@@ -7,11 +7,11 @@ The reference implementation of the [Woma programming language](https://www.gith
 
 - Who is the Woma Programming Language for?  
 
-    - First and foremost it is for people wanting to write CPython extensions fast, like *really* fast. 
+    - First and foremost it is for people wanting to write CPython extensions fast, like *really* fast. Traditionally these are written in C++, C. Though with the tool Cython, pure python modules can be statically compiled as well. Woma has the advantage of being shorthand for well constrained and type-checked pure python modules that readily compile using Cython.
 
 - What if just want to write some standalone programs?
 
-    - Our second priority is to create a simple bundler for applications that can be statically linked to the system interpreter or have a barebones interpreter embedded. 
+    - Our second priority is to create a simple bundler for applications that embeds a highly restricted CPython interpreter for portability.
 
 - Isn't this just Cython with extra steps? 
 
