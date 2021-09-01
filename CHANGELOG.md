@@ -1,5 +1,9 @@
 **unreleased**
 **v0.14.6**
+
+- ce36b8a fix setup.py
+
+
 **v0.14.5**
 
 - def0588 fix Dockerfile
