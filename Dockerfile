@@ -11,7 +11,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 COPY . .
 
-RUN pip install -U pip && pip install . && pip uninstall -y pip && rm -rf /root/.cache/pip && rm -rf /var/log/*
+RUN pip install -U pip && pip install . && pip uninstall -y pip
 
 FROM base AS runtime
 ## so the test-suite can be run simply using -pt or --pytest
