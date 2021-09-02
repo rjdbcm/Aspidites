@@ -1,4 +1,5 @@
 **unreleased**
+**v0.14.30**
 **v0.14.29**
 
 - 8d2fdc3 add windows wheels
