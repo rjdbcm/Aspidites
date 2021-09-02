@@ -1,4 +1,5 @@
 **unreleased**
+**v0.14.25**
 **v0.14.24**
 
 - 858a60a build cp37, cp38, & cp39 wheels for manylinux and macos-11
