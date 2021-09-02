@@ -10,14 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
-        name: Wait for tests to succeed
-        uses: lewagon/wait-on-check-action@v1.0.0
-        with:
-          ref: ${{ github.ref }}
-          check-name: 'linux-build (3.9.6)'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 30
-      -
         name: Docker metadata fetch 📊
         id: meta
         uses: docker/metadata-action@v3
