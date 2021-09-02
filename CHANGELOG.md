@@ -1,5 +1,9 @@
 **unreleased**
 **v0.14.31**
+
+- fc1bf2a add workaround for embed not working
+
+
 **v0.14.30**
 
 - 87c4cc6 add windows wheels
