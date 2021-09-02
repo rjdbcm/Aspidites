@@ -1,5 +1,9 @@
 **unreleased**
 **v0.14.24**
+
+- 858a60a build cp37, cp38, & cp39 wheels for manylinux and macos-11
+
+
 **v0.14.23**
 
 - cba8125 got rid of wait for macos-11-deploy, just depends on linux build.
