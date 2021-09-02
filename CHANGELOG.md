@@ -1,5 +1,11 @@
 **unreleased**
 **v0.14.25**
+
+- 7dff089 build cp37, cp38, & cp39 wheels for manylinux and macos-11 with no waiting for CI!
+- 50ae520 Merge remote-tracking branch 'origin/main'
+- 8d5ae17 Update README.md
+
+
 **v0.14.24**
 
 - 858a60a build cp37, cp38, & cp39 wheels for manylinux and macos-11
