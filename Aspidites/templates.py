@@ -16,16 +16,39 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from string import Template
 from . import __version__
+from sys import executable
+from platform import python_version
+from pathlib import Path
 
-makefile = Template("""clean: clean-build clean-pyc clean-sha256 ## remove all build, test, coverage and Python artifacts
+pyversion = python_version()[:3]
+includes = Path(executable).parent.parent / Path(f'include/python{pyversion}')
 
-project = $project
+makefile = Template(f"""
+PYTHON := python
+PYVERSION := $$(shell $$(PYTHON) -c "import sys; print(sys.version[:3])")
+PYPREFIX := $$(shell $$(PYTHON) -c "import sys; print(sys.prefix)")
+
+INCDIR := $$(shell $$(PYTHON) -c "from distutils import sysconfig; print(sysconfig.get_python_inc())")
+PLATINCDIR := $$(shell $$(PYTHON) -c "from distutils import sysconfig; print(sysconfig.get_python_inc(plat_specific=True))")
+LIBDIR1 := $$(shell $$(PYTHON) -c "from distutils import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
+LIBDIR2 := $$(shell $$(PYTHON) -c "from distutils import sysconfig; print(sysconfig.get_config_var('LIBPL'))")
+PYLIB := $$(shell $$(PYTHON) -c "from distutils import sysconfig; print(sysconfig.get_config_var('LIBRARY')[3:-2])")
+
+CC := $$(shell $$(PYTHON) -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('CC'))")
+LINKCC := $$(shell $$(PYTHON) -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LINKCC'))")
+LINKFORSHARED := $$(shell $$(PYTHON) -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LINKFORSHARED'))")
+LIBS := $$(shell $$(PYTHON) -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBS'))")
+SYSLIBS :=  $$(shell $$(PYTHON) -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('SYSLIBS'))")
+project = $$project
+
+clean: clean-build clean-pyc clean-sha256 ## remove all build, test, coverage and Python artifacts
 
 uninstall: distclean
 	rm -fr py.typed
 	rm -fr setup.py
 	rm -fr pyproject.toml
-	find . -name '$$(project)*' -not -name '*.wom' -exec rm -fr {} +
+	@rm -f *~ *.o *.so *.c $project
+	find . -name '$$(project)*' -not -name '*.wom' -exec rm -fr {{}} +
 
 distclean: clean-build clean-pyc clean-sha256
 	rm -fr Makefile
@@ -34,17 +57,26 @@ clean-build: ## remove build artifacts
 	rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
-	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -f {} +
+	rm -fr *.pyx
+	@rm -f *~ *.o *.so core core.* *.c
+	find . -name '*.egg-info' -exec rm -fr {{}} +
+	find . -name '*.egg' -exec rm -f {{}} +
 
 clean-sha256:
-	find . -name '*.sha256' -exec rm -f {} +
+	find . -name '*.sha256' -exec rm -f {{}} +
 
 clean-pyc: ## remove Python file artifacts
-	find . -name '*.pyc' -exec rm -f {} +
-	find . -name '*.pyo' -exec rm -f {} +
-	find . -name '*~' -exec rm -f {} +
-	find . -name '__pycache__' -exec rm -fr {} +
+	find . -name '*.pyc' -exec rm -f {{}} +
+	find . -name '*.pyo' -exec rm -f {{}} +
+	find . -name '*~' -exec rm -f {{}} +
+	find . -name '__pycache__' -exec rm -fr {{}} +
+
+$project: $project.o
+	$$(LINKCC) -o $$@ $$^ -L$$(LIBDIR1) -L$$(LIBDIR2) -l$$(PYLIB) $$(LIBS) $$(SYSLIBS) $$(LINKFORSHARED)
+
+$project.o: $project.c
+	$$(CC) -c $$^ -I$$(INCDIR) -I$$(PLATINCDIR)
+
 """)
 
 _warning = Template("""
@@ -61,7 +93,7 @@ $tb
 setup = Template("""
 # THIS FILE IS GENERATED - DO NOT EDIT #
 from setuptools import setup, Extension
-from Cython.Build import cythonize
+from Cython.Build import cythonize, BuildExecutable
 from Cython.Compiler import Options
 Options.annotate = $annotate
 Options.annotate_coverage_xml = $annotate_coverage_xml
@@ -96,13 +128,18 @@ Extension(
 setup(
     name='$app_name',
     ext_modules=cythonize(exts))
+    
+if Options.embed:
+    BuildExecutable.build('$src_file')
+
 """)
 
 lib = Template("""# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8
 # THIS FILE IS GENERATED - DO NOT EDIT #
-import cython  # type: ignore
+
 from typing import Any
 from collections.abc import Generator
+import cython  # type: ignore
 from pyrsistent import (
     pset, 
     pmap, 
@@ -136,7 +173,6 @@ coroutine: Generator
 number: Any
 globals().update(dict(__builtins__=safe_builtins))  # add all imports to globals
 
-
 $code
 
 """)
@@ -150,9 +186,10 @@ c_wrapper = Template('''
 #include <Python.h>
 
 int main {
-    err = PyImport_AppendInittab("$module", PyInit_grail);
+    err = PyImport_AppendInittab("$module", PyInit_$module);
     Py_Initialize();
     ${module}_module = PyImport_ImportModule("$module");
+    return err;
 }
 '''
 )
