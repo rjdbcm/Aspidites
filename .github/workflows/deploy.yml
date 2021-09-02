@@ -82,15 +82,13 @@ jobs:
         run: |
           twine upload dist/*-manylinux*.whl
   windows-deploy:
-      name: Build and publish MacOS distributions 📦 to PyPI and TestPyPI
+      name: Build and publish Windows distributions 📦 to PyPI and TestPyPI
       runs-on: windows-latest
       needs: manylinux-deploy
       strategy:
         matrix:
           python:
             - 3.9.6
-            - 3.8.11
-            - 3.7.11
       steps:
       - uses: actions/checkout@master
       - name: Set up Python
@@ -100,8 +98,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install twine
+          python -m pip install twine
 
       - name: Install pypa/build
         run: >-
