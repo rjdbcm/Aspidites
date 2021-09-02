@@ -1,4 +1,5 @@
 **unreleased**
+**v0.14.26**
 **v0.14.25**
 
 - 7dff089 build cp37, cp38, & cp39 wheels for manylinux and macos-11 with no waiting for CI!
