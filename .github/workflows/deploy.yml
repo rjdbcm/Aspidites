@@ -43,8 +43,6 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
           twine upload dist/*-manylinux*.whl
-          twine upload -r dist/*.tar.gz
-
 
   macos-11-deploy:
       name: Build and publish MacOS distributions 📦 to PyPI and TestPyPI
@@ -79,6 +77,7 @@ jobs:
           python -m
           build
           --wheel
+          --sdist
           --outdir dist/
           .
 
