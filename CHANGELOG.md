@@ -1,4 +1,5 @@
 **unreleased**
+**v0.15.0**
 **v0.14.31**
 
 - fc1bf2a add workaround for embed not working
