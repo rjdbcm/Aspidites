@@ -1,9 +1,9 @@
+import sys
 from warnings import warn
-import inspect
-from inspect import isfunction, signature
+from inspect import isfunction, signature, getouterframes
 from cmath import inf, isinf, nan, isnan
 import numbers
-from pyrsistent import v, pvector
+from pyrsistent import v, pvector, _pmap
 
 from .templates import _warning
 from .api import bordered
@@ -12,10 +12,10 @@ from .api import bordered
 # noinspection PyPep8Naming
 def SafeUnaryAdd(a):
     if isnan(a) or not isinstance(a, numbers.Number):
-        stack = pvector(inspect.stack())
+        stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Unary Add is Undefined for %s" % type(a))
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
-        warn(w, category=RuntimeWarning)
+        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined()
     # noinspection PyUnresolvedReferences
     return +a
@@ -24,10 +24,10 @@ def SafeUnaryAdd(a):
 # noinspection PyPep8Naming
 def SafeUnarySub(a):
     if isnan(a) or not isinstance(a, numbers.Number):
-        stack = pvector(inspect.stack())
+        stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Unary Sub is Undefined for %s" % type(a))
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
-        warn(w, category=RuntimeWarning)
+        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined()
     # noinspection PyUnresolvedReferences
     return -a
@@ -37,10 +37,10 @@ def SafeUnarySub(a):
 def SafeFloorDiv(a, b):
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
     if isinf(a) or b == 0 or (isinf(a) and isinf(b)):
-        stack = pvector(inspect.stack())
+        stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
-        warn(w, category=RuntimeWarning)
+        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined()
     return a // b
 
@@ -49,10 +49,10 @@ def SafeFloorDiv(a, b):
 def SafeDiv(a, b):
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
     if b == 0 or (isinf(a) and isinf(b)):
-        stack = pvector(inspect.stack())
+        stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
-        warn(w, category=RuntimeWarning)
+        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined()
     return a / b
 
@@ -61,10 +61,10 @@ def SafeDiv(a, b):
 def SafeMod(a, b):
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
     if isinf(a) or b == 0:
-        stack = pvector(inspect.stack())
+        stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Modulus by zero is Undefined; this behavior diverges from IEEE 754-1985.")
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
-        warn(w, category=RuntimeWarning)
+        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined()
     return a % b
 
@@ -72,12 +72,12 @@ def SafeMod(a, b):
 # noinspection PyPep8Naming
 def SafeExp(a, b):
     if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # 0**0, inf**0, 0**inf
-        stack = pvector(inspect.stack())
+        stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ArithmeticError(
             "%s**%s" % (str(a), str(b),) + " == Undefined; this behavior diverges from IEEE 754-1985."
         )
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
-        warn(w, category=RuntimeWarning)
+        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined()
     try:
         return a**b

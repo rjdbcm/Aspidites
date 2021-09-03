@@ -43,6 +43,21 @@ project = $$project
 
 clean: clean-build clean-pyc clean-sha256 ## remove all build, test, coverage and Python artifacts
 
+paths:
+	@echo "PYTHON=$$(PYTHON)"
+	@echo "PYVERSION=$$(PYVERSION)"
+	@echo "PYPREFIX=$$(PYPREFIX)"
+	@echo "INCDIR=$$(INCDIR)"
+	@echo "PLATINCDIR=$$(PLATINCDIR)"
+	@echo "LIBDIR1=$$(LIBDIR1)"
+	@echo "LIBDIR2=$$(LIBDIR2)"
+	@echo "PYLIB=$$(PYLIB)"
+	@echo "CC=$$(CC)"
+	@echo "LINKCC=$$(LINKCC)"
+	@echo "LINKFORSHARED=$$(LINKFORSHARED)"
+	@echo "LIBS=$$(LIBS)"
+	@echo "SYSLIBS=$$(SYSLIBS)"
+
 uninstall: distclean
 	rm -fr py.typed
 	rm -fr setup.py
@@ -70,13 +85,6 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '*.pyo' -exec rm -f {{}} +
 	find . -name '*~' -exec rm -f {{}} +
 	find . -name '__pycache__' -exec rm -fr {{}} +
-
-$project: $project.o
-	$$(LINKCC) -o $$@ $$^ -L$$(LIBDIR1) -L$$(LIBDIR2) -l$$(PYLIB) $$(LIBS) $$(SYSLIBS) $$(LINKFORSHARED)
-
-$project.o: $project.c
-	$$(CC) -c $$^ -I$$(INCDIR) -I$$(PLATINCDIR)
-
 """)
 
 _warning = Template("""
@@ -193,3 +201,48 @@ int main {
 }
 '''
 )
+
+py_wrapper = Template('''
+from . import *
+
+$code
+
+''')
+
+
+# inject after contexts:
+
+# PyObject * modname = PyUnicode_FromString("__main__");
+# m = NULL;
+# if (modname) {
+#   m = PyModule_NewObject(modname);
+#   Py_DECREF(modname);
+#   if (m) PyModule_ExecDef(m, mdef);
+
+# #else
+#   m = PyInit_compiled();
+#
+#
+#
+inject_stack = '''
+PyThreadState *tstate = PyThreadState_GET();
+if (tstate == NULL) {
+ PyErr_Print();
+ exit(1);
+}
+PyObject *main_dict = PyModule_GetDict(m);
+if (main_dict == NULL) {
+PyErr_Print();
+exit(1);
+}
+PyCodeObject *code_object = PyCode_NewEmpty("foo.py", "f", 0);
+if (code_object == NULL) {
+PyErr_Print();
+exit(1);
+}
+PyFrameObject *root_frame = PyFrame_New(tstate, code_object, main_dict, main_dict);
+if (root_frame == NULL) {
+PyErr_Print();
+exit(1);
+}
+'''

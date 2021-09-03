@@ -14,7 +14,8 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import inspect
+import sys
+from inspect import getouterframes
 from contextlib import suppress
 from _warnings import warn
 
@@ -36,7 +37,8 @@ class Maybe:
         self._func = func
         self._args = args
         self._kwargs = kwargs
-        self._stack = pvector(inspect.stack(1))
+        # noinspection PyUnresolvedReferences,PyProtectedMember
+        self._stack = pvector(getouterframes(sys._getframe(0), 1))
         self._warn = Warn(self._stack, self._func, self._args, self._kwargs)
         self.__instance__ = Undefined()
 
@@ -80,7 +82,7 @@ class Maybe:
         except Exception as e:
             if warn_undefined:
                 w = self._warn.create(e)
-                warn(w, category=RuntimeWarning)
+                warn(w, category=RuntimeWarning, stacklevel=0)
             # UNDEFINED #
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
             return self.__instance__

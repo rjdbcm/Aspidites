@@ -37,7 +37,6 @@ from pyparsing import (
     unicodeString,
 )
 
-from .._vendor.contracts import contract, new_contract
 from .._vendor.contracts.syntax import contract_expression
 from ..parser.convert import *
 
@@ -178,18 +177,7 @@ stmt <<= func_def | contract_define | func_call | simple_assign | comment_line
 module_body = OneOrMore(stmt) + Optional(struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
 
 
-@new_contract
-def woma_module(text: 'str'):
-    try:
-        module_body.parseString(text, parseAll=True)
-    except ParseException as e:
-        raise ValueError(str(e))
-    else:
-        return True
-
-
-@contract
-def parse_module(module: 'woma_module'):
+def parse_module(module):
     return module_body.parseString(module, parseAll=True)
 
 
