@@ -1,4 +1,5 @@
 **unreleased**
+**v0.16.0**
 **v0.15.0**
 
 - 475d0e7 Refactor to get standalone binaries to compile
