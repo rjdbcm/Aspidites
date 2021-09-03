@@ -1,5 +1,9 @@
 **unreleased**
 **v0.15.0**
+
+- 475d0e7 Refactor to get standalone binaries to compile
+
+
 **v0.14.31**
 
 - fc1bf2a add workaround for embed not working
