@@ -14,7 +14,7 @@ from pyrsistent import v
 import pytest
 
 from ._vendor.semantic_version import Version
-from .compiler import compile_module
+from .compiler import Compiler
 from .parser import parse_module
 from . import __description__
 
@@ -128,7 +128,8 @@ def parse_from_dummy(argv: list,
     return args, other_args, cy_kwargs
 
 
-def main(argv=sys.argv) -> None:
+def main(argv=None) -> None:
+    argv = sys.argv if not argv else argv
     # any failure results in falling back to the `Cython.Compiler.Options` API
     args, other_args, cy_kwargs = parse_from_dummy(argv,
                                                    ap.ArgumentParser(add_help=False))
@@ -148,4 +149,4 @@ def main(argv=sys.argv) -> None:
         'build_requires': args.build_requires,
         'verbose': args.verbose
     })
-    compile_module(**cy_kwargs)  # pragma: no cover
+    Compiler(**cy_kwargs)  # pragma: no cover

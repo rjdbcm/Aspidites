@@ -17,7 +17,7 @@
 import sys
 from inspect import getouterframes
 from contextlib import suppress
-from _warnings import warn
+from warnings import warn
 
 from pyrsistent import v, pvector
 
@@ -28,6 +28,7 @@ def _apply(f, args=None, kwargs=None):
     return f(*(args or []), **(kwargs or {}))
 
 
+# TODO: Refactor so we're not passing around stack frames that may or may not exist.
 class Maybe:
     """Sandboxes a Surely call and handles ContractNotRespected by returning Undefined"""
 

@@ -3,13 +3,12 @@ from warnings import warn
 from inspect import isfunction, signature, getouterframes
 from cmath import inf, isinf, nan, isnan
 import numbers
-from pyrsistent import v, pvector, _pmap
-
+from pyrsistent import v, pvector
 from .templates import _warning
 from .api import bordered
 
 
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeUnaryAdd(a):
     if isnan(a) or not isinstance(a, numbers.Number):
         stack = pvector(getouterframes(sys._getframe(0), 1))
@@ -17,11 +16,10 @@ def SafeUnaryAdd(a):
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined()
-    # noinspection PyUnresolvedReferences
     return +a
 
 
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeUnarySub(a):
     if isnan(a) or not isinstance(a, numbers.Number):
         stack = pvector(getouterframes(sys._getframe(0), 1))
@@ -29,11 +27,10 @@ def SafeUnarySub(a):
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined()
-    # noinspection PyUnresolvedReferences
     return -a
 
 
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeFloorDiv(a, b):
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
     if isinf(a) or b == 0 or (isinf(a) and isinf(b)):
@@ -45,7 +42,7 @@ def SafeFloorDiv(a, b):
     return a // b
 
 
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeDiv(a, b):
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
     if b == 0 or (isinf(a) and isinf(b)):
@@ -57,7 +54,7 @@ def SafeDiv(a, b):
     return a / b
 
 
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
 def SafeMod(a, b):
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
     if isinf(a) or b == 0:
@@ -69,7 +66,7 @@ def SafeMod(a, b):
     return a % b
 
 
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
 def SafeExp(a, b):
     if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # 0**0, inf**0, 0**inf
         stack = pvector(getouterframes(sys._getframe(0), 1))

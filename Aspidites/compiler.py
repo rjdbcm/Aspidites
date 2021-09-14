@@ -19,10 +19,8 @@ import os
 import py_compile
 import sys
 from glob import glob
-from warnings import warn
 import typing as t
-from mypy import api
-from .templates import lib, makefile, pyproject, setup, default_file
+from .templates import lib, makefile, pyproject, setup, default_file, inject_stack
 from pyrsistent import pmap, v
 from hashlib import sha256
 from pathlib import Path
@@ -127,138 +125,88 @@ class CheckedFileStack:
                 raise RuntimeError("\nfor file %s\n%s\n  did not match cached digest\n%s")
 
 
-file_stack = CheckedFileStack()
+@final()
+class CompilerArgs:
+    def __init__(self, **kwargs):
+        self.code: ParseResults = kwargs['code']
+        self.fname: Path = kwargs['fname']
+        self.force: bool = kwargs['force']
+        self.bytecode: bool = kwargs['bytecode']
+        self.c: bool = kwargs['c']
+        self.build_requires: t.Union[t.List, str] = kwargs['build_requires']
+        self.verbose: int = kwargs['verbose']
+        self.embed: t.Union[str, None] = kwargs['embed']
+        self.__setattr__ = lambda x, y: "Not Supported"
 
 
-def compile_module(**kwargs):
-    code          : ParseResults         = kwargs['code']
-    fname         : Path                 = kwargs['fname']
-    force         : bool                 = kwargs['force']
-    bytecode      : bool                 = kwargs['bytecode']
-    c             : bool                 = kwargs['c']
-    build_requires: t.Union[t.List, str] = kwargs['build_requires']
-    verbose       : int                  = kwargs['verbose']
+class Compiler:
+    def __init__(self, **kwargs):
+        self.args = CompilerArgs(**kwargs)
+        self.file_stack = CheckedFileStack()
+        self.fname = Path(self.args.fname)
+        self.app_name = self.fname.parent / self.fname.stem
+        self.project = self.app_name.stem
+        self.module_name = str(self.app_name).replace("/", ".")
+        self.file_c = str(self.app_name) + ".c"
+        self.root = self.fname.parent
+        self.mode = "x" if self.args.force else "w"
+        files = {
+            self.fname: (self.mode, {'root': '', 'text': lib.substitute(code="\n".join(self.args.code))}),
+            '__init__.py': (self.mode, {'root': self.root}),
+            'py.typed': (self.mode, {'root': self.root}),
+            'pyproject.toml': (self.mode,
+                               {'root': self.root, 'text': pyproject.substitute(build_requires=self.args.build_requires)}
+                               ),
+            'Makefile': (self.mode, {'root': self.root, 'text': makefile.substitute(project=self.project)}),
+        }
 
-    fname = Path(fname)
-    app_name = fname.parent / fname.stem
-    project = app_name.stem
-    module_name = str(app_name).replace("/", ".")
-    file_c = str(app_name) + ".c"
-    root = fname.parent
-    mode = "x" if force else "w"
+        for k, v in files.items():
+            args_, kwargs_ = v
+            self.file_stack.create_file(k, args_, **kwargs_)
 
-    files = {
-        fname           : (mode, {'root': '', 'text': lib.substitute(code="\n".join(code))}),
-        '__init__.py'   : (mode, {'root': root}),
-        'py.typed'      : (mode, {'root': root}),
-        'pyproject.toml': (mode,
-            {'root': root, 'text': pyproject.substitute(build_requires=build_requires)}
-                           ),
-        'Makefile'      : (mode, {'root': root, 'text': makefile.substitute(project=project)}),
-    }
+        if self.args.bytecode:
+            self.bytecode_compile()
 
-    for k, v in files.items():
-        args_, kwargs_ = v
-        file_stack.create_file(k, args_, **kwargs_)
+        if self.args.c:
+            # self.compile_c()
+            if self.args.embed and 'main' in self.args.embed:
+                pass  # maybe write a wrapper or something idk?
+            self.setup(**kwargs)
 
-    typecheck(module_name)
-    create_stubs(fname, app_name)
+        self.file_stack.finalize()
 
-    if bytecode:
-        fname_pyc = str(app_name) + ".pyc"
-        quiet = tuple(reversed(range(3))).index(verbose if verbose < 2 else 2)
+    def bytecode_compile(self):
+        fname_pyc = str(self.app_name) + ".pyc"
+        quiet = tuple(reversed(range(3))).index(self.args.verbose if self.args.verbose < 2 else 2)
         major, minor, patch, *_ = sys.version_info
         if Version(major=major, minor=minor, patch=patch) < Version('3.8.0'):
-            py_compile.compile(str(fname), fname_pyc)
+            py_compile.compile(str(self.fname), fname_pyc)
         else:
-            py_compile.compile(str(fname), fname_pyc, quiet=quiet)
-        file_stack.register(fname_pyc)
+            py_compile.compile(str(self.fname), fname_pyc, quiet=quiet)
+        self.file_stack.register(fname_pyc)
 
-    if c:
-        compile_c(fname, force, verbose)
-        create_setup(root, app_name, **kwargs)
-        compile_object(str(app_name), file_c, root)
+    def setup(self, **kwargs) -> None:
+        module_name = str(self.app_name).replace("/", ".")
+        text = setup.substitute(
+           app_name=module_name,
+           src_file=kwargs['fname'],
+           inc_dirs=[],
+           libs=[],
+           exe_name=self.app_name,
+           lib_dirs=[],
+           **kwargs
+        )
+        self.file_stack.create_file('setup.py', self.mode, root=str(self.root), text=text)
+        self.compile_object()
 
-    file_stack.finalize()
-
-
-def typecheck(module_name: str):
-    mypy_args = [
-        "-m",
-        module_name,
-        "--follow-imports=skip",
-        "--show-error-context",
-        "--show-error-codes",
-        "--allow-incomplete-defs",
-        "--disable-error-code=valid-type",
-        "--exclude=builtins"
-        # '--disallow-untyped-defs',
-        # '--disallow-untyped-calls',
-    ]
-    print("running mypy", " ".join(mypy_args))
-    type_report = None
-    error_report = None
-    return_code = 0
-    try:
-        type_report, error_report, return_code = api.run(mypy_args)
-    except AttributeError:
-        warn("mypy api call failed")
-
-    finally:
-        print("mypy type report: ", type_report) if type_report else None
-        print("mypy error report: ", error_report) if error_report else None
-        print("mypy returned with exit code:", return_code) if return_code else None
-        # exit(return_code) if return_code != 0 else print("running compile")
-
-
-def create_stubs(fname, app_name):
-    fname_pyi = str(app_name) + '.pyi'
-    stubgen = 'stubgen %s -o .' % fname
-    print("running %s" % stubgen)
-    with os.popen(stubgen) as p:
-        file_stack._read(p, print__=True)
-    try:
-        file_stack.register(fname_pyi)
-    except FileNotFoundError as e:
-        warn(str(e))
-        try:
-            cwd = Path.cwd()
-            path = cwd / Path('__main__.py')
-            print("trying rename %s/__main__.pyi to %s" % (str(cwd), fname_pyi))
-            path.rename(fname_pyi)
-            file_stack.register(fname_pyi)
-        except FileNotFoundError:
-            warn("failed to create stubs")
-
-
-def compile_c(fname, force, verbose) -> None:
-    verb = int(bool(verbose))
-    os.popen("cython %s %s %s" % (fname, "--force" * force, "--verbose" * verb))
-
-
-def create_setup(root, app_name, **kwargs) -> None:
-    module_name = str(app_name).replace("/", ".")
-    file_stack.create_file('setup.py',
-                "x" if kwargs['force'] else "w",
-                root=root,
-                text=setup.substitute(
-                    app_name=module_name,
-                    src_file=kwargs['fname'],
-                    inc_dirs=[],
-                    libs=[],
-                    exe_name=app_name,
-                    lib_dirs=[],
-                    **kwargs))
-
-
-def compile_object(app_name, file_c, root) -> None:
-    glob_so = app_name + ".*.so"
-    # TODO: get this working for docker builds
-    #  (maybe executable param with os.path.relpath?)
-    setup_runner = "%s %s build_ext -b ." % (sys.executable, str(Path(root)/'setup.py'))
-    print("running", setup_runner)
-    with os.popen(setup_runner) as p:
-        file_stack._read(p, print__=True)
-    file_stack.register(file_c)
-    for i in glob(glob_so):
-        file_stack.register(i)
+    def compile_object(self) -> None:
+        glob_so = str(self.app_name) + ".*.so"
+        # TODO: get this working for docker builds
+        #  (maybe executable param with os.path.relpath?)
+        setup_runner = "%s %s build_ext -b ." % (sys.executable, str(Path(self.root) / 'setup.py'))
+        print("running", setup_runner)
+        with os.popen(setup_runner) as p:
+            self.file_stack._read(p, print__=True)
+        self.file_stack.register(self.file_c)
+        for i in glob(glob_so):
+            self.file_stack.register(i)

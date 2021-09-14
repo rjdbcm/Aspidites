@@ -1,18 +1,16 @@
 #!/usr/bin/python3
-import os
 import sys
 from pathlib import Path
 from setuptools import setup, find_packages
 from setuptools.dist import Distribution
 from setuptools.command.install import install
-from logging import getLogger
 # ~#~ # Build static libs # ~#~ #
 from Cython.Build import cythonize
 ext_modules = cythonize([str(Path('Aspidites/monads.py')), str(Path('Aspidites/math.py'))])
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
 from Aspidites.__main__ import get_cy_kwargs
 cy_kwargs = get_cy_kwargs()
-cy_kwargs.update({'embed': True})
+cy_kwargs.update(embed="'main'")
 code = open(Path('Aspidites/woma/library.wom'), 'r').read()
 cy_kwargs.update(
     code=parser.parse_module(code),
@@ -23,7 +21,7 @@ cy_kwargs.update(
     verbose=0,
     build_requires=''
 )
-compiler.compile_module(**cy_kwargs)
+compiler.Compiler(**cy_kwargs)
 
 
 def read(fname):

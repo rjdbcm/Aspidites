@@ -18,7 +18,7 @@ from ..parser import parse_module
 from ..templates import lib
 from ..monads import Maybe, Surely
 from ..math import SafeFloorDiv, SafeMod, SafeDiv, SafeExp, Undefined
-from ..compiler import compile_module
+from ..compiler import Compiler
 
 MAX = 100000
 MIN = -MAX
@@ -229,12 +229,12 @@ def test_compile_to_shared_object(inject_config):
     python_file = python_file_ if Path(woma_file).exists() else str(Path('Aspidites/tests') / python_file_)
     kwargs = get_cy_kwargs()
     code = setup_code(inject_config)
-    kwargs.update(code=code, fname=python_file, bytecode=True, force=True, c=True, build_requires='', verbose=False, embed='"main"')
+    kwargs.update(code=code, fname=python_file, bytecode=True, force=True, c=True, build_requires='', verbose=False)
     try:
-        compile_module(**kwargs)
+        Compiler(**kwargs)
     except FileNotFoundError:
         kwargs.update(code=code, fname=Path(inject_config) / python_file_, bytecode=True)
-        compile_module(**kwargs)
+        Compiler(**kwargs)
 
     from .examples.compiled import Add, x, y, z, val, div_by_zero, Yield123, Hello
 

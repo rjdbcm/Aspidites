@@ -22,12 +22,18 @@ SOURCEDIR     = docs
 BUILDDIR      = build
 VERSION       = $(shell python -c "import sys;from Aspidites import __version__;sys.stdout.write(__version__)");
 clean: clean-build clean-pyc clean-test clean-sha clean-woma## remove all build, test, coverage and Python artifacts
+	rm -fr CHANGELOG.bak
 
 clean-build: ## remove build artifacts
 	rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
 	rm -fr __main__.pyi
+	rm -fr main.spec
+	rm -fr Aspidites/monads.c
+	rm -fr Aspidites/math.c
+	rm -fr Aspidites/math.*.so
+	rm -fr Aspidites/monads.*.so
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
 
@@ -57,17 +63,16 @@ docker:
 	docker -v build . --no-cache -t rjdbcm/aspidites:$(VERSION)
 
 test-all:
-	pytest Aspidites/tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
-
+	python -m pytest Aspidites/tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
 
 build-ext: clean-test
 	python setup.py build_ext --inplace
 
 xtest: build-ext
-	pytest Aspidites/tests -x
+	python -m pytest Aspidites/tests -x
 
 coverage:
-	pytest Aspidites/tests --cov-report=xml --cov=Aspidites
+	python -m pytest Aspidites/tests --cov-report=xml --cov=Aspidites
 
 patch:
 	python -m Aspidites.scripts.bumpversion_hook patch
