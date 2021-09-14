@@ -1,4 +1,5 @@
 **unreleased**
+**v0.17.0**
 **v0.16.0**
 
 - 53c8846 Refactor of compiler and simplification of API.
