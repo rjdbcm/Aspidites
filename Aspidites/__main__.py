@@ -139,7 +139,7 @@ def main(argv=None) -> None:
     code = parse_module(open(args.target, 'r').read())  # pragma: no cover
     if args.output is None:  # pragma: no cover
         args.output = Path(args.target).parent / 'compiled.py'
-
+    # TODO: change pyx to pyz on windows
     cy_kwargs.update({  # pragma: no cover
         'code': code,
         'fname': args.output or "compiled.py",

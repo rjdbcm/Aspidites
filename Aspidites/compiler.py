@@ -43,6 +43,9 @@ class CheckedFileStack:
         self.all_files = self.all_files.evolver()
         self.pre_size = pre_size
 
+    def __repr__(self):
+        return self.__class__.__name__
+
     def _read(self, data, print__=False, hash_func=None):
         chunk = data.read(self.pre_size)
         if hash_func is None:
@@ -136,7 +139,10 @@ class CompilerArgs:
         self.build_requires: t.Union[t.List, str] = kwargs['build_requires']
         self.verbose: int = kwargs['verbose']
         self.embed: t.Union[str, None] = kwargs['embed']
-        self.__setattr__ = lambda x, y: "Not Supported"
+        self.__setattr__ = lambda x, y: None
+
+    def __repr__(self):
+        return self.__class__.__name__
 
 
 class Compiler:
@@ -151,13 +157,26 @@ class Compiler:
         self.root = self.fname.parent
         self.mode = "x" if self.args.force else "w"
         files = {
-            self.fname: (self.mode, {'root': '', 'text': lib.substitute(code="\n".join(self.args.code))}),
-            '__init__.py': (self.mode, {'root': self.root}),
-            'py.typed': (self.mode, {'root': self.root}),
-            'pyproject.toml': (self.mode,
-                               {'root': self.root, 'text': pyproject.substitute(build_requires=self.args.build_requires)}
-                               ),
-            'Makefile': (self.mode, {'root': self.root, 'text': makefile.substitute(project=self.project)}),
+            self.fname: (
+                self.mode,
+                dict(root='', text=lib.substitute(code="\n".join(self.args.code)))
+            ),
+            '__init__.py': (
+                self.mode,
+                dict(root=self.root, text=f'__metadata__ = "{self.__dict__}"')
+            ),
+            'py.typed': (
+                self.mode,
+                dict(root=self.root)
+            ),
+            'pyproject.toml': (
+                self.mode,
+                dict(root=self.root, text=pyproject.substitute(build_requires=self.args.build_requires))
+            ),
+            'Makefile': (
+                self.mode,
+                dict(root=self.root, text=makefile.substitute(project=self.project))
+            ),
         }
 
         for k, v in files.items():

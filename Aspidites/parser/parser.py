@@ -154,7 +154,7 @@ bool_pragmas = Combine(
 ).setParseAction(cvt_pragma)
 func_decl = Group(
     Optional(OneOrMore(bool_pragmas)) + private_def_decl + identifier + def_args + _contract_expression
-).setParseAction(lambda t: "@contract()\n" + "".join(*t) + lit_colon)
+).setParseAction(lambda t: "\n@contract()\n" + "".join(*t) + lit_colon)
 comment_line = (
     Combine(Regex(r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`")
     .setParseAction(lambda t: t[0])
@@ -164,16 +164,20 @@ return_value = return_none + rvalue
 yield_value = yield_none + rvalue
 ret_stmt = Group(return_value).setParseAction(lambda t: "".join(*t))
 yield_stmt = Group(yield_value).setParseAction(lambda t: "".join(*t))
-func_def = Group(func_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]) + "\n\n")
+func_def = Group(func_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
 lambda_def = Combine(Group(lit_lparen + arith_expr | comp_expr + lit_rparen))
 func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_func_call)  # if len(t[0]) != 3 else t[0][0] + '()')
 clos_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_clos_call) + Suppress(noclosure)
+elif_stmt = Group(list_item + "?!").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
+else_stmt = Keyword("?!?").setParseAction(replaceWith('else:')) + suite
+if_stmt = Group(list_item + "?").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
+cond_stmt = if_stmt + Optional(elif_stmt) + Optional(else_stmt)
 suite <<= IndentedBlock(
-    (comment_line | pass_stmt | ret_stmt | yield_stmt | func_call | func_def | contract_assign)).setParseAction(
+    OneOrMore(comment_line | pass_stmt | ret_stmt | yield_stmt | cond_stmt | func_call | func_def | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
 rvalue <<= clos_call | func_call | list_item | lambda_def
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
-stmt <<= func_def | contract_define | func_call | simple_assign | comment_line
+stmt <<= func_def | contract_define | cond_stmt | func_call | simple_assign | comment_line
 module_body = OneOrMore(stmt) + Optional(struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
 
 
