@@ -1,5 +1,12 @@
 **unreleased**
 **v0.17.0**
+
+- 3034c5c Multiple statements in function declaration and conditionals added.
+- 468e08b Merge remote-tracking branch 'origin/main'
+- 642a735 Update dependabot.yml
+- fb3c120 dependabot
+
+
 **v0.16.0**
 
 - 53c8846 Refactor of compiler and simplification of API.
