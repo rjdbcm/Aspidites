@@ -233,7 +233,7 @@ def test_compile_to_shared_object(inject_config):
     kwargs.update(code=code, fname=python_file, bytecode=True, force=True, c=True, build_requires='', verbose=False)
     try:
         Compiler(**kwargs)
-    except FileNotFoundError:
+    except (FileNotFoundError, ValueError):
         kwargs.update(code=code, fname=Path(inject_config) / python_file_, bytecode=True)
         Compiler(**kwargs)
 
