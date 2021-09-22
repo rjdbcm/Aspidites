@@ -1,5 +1,9 @@
 **unreleased**
 **v0.18.5**
+
+- 3d522fa fix windows build 6th attempt
+
+
 **v0.18.4**
 
 - 7e417fc fix windows build 5th attempt
