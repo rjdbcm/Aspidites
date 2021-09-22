@@ -1,4 +1,5 @@
 **unreleased**
+**v0.18.5**
 **v0.18.4**
 
 - 7e417fc fix windows build 5th attempt
