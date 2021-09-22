@@ -1,4 +1,5 @@
 **unreleased**
+**v0.18.4**
 **v0.18.3**
 
 - 6497d17 fix windows build 4th attempt
