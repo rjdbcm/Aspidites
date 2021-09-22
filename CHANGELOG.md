@@ -1,5 +1,9 @@
 **unreleased**
 **v0.18.0**
+
+- e8a4e28 fix windows build
+
+
 **v0.17.0**
 
 - 3034c5c Multiple statements in function declaration and conditionals added.
