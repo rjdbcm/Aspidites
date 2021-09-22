@@ -112,8 +112,6 @@ class CheckedFileStack:
             open(file, mode).write(text)
         except FileExistsError:
             self.register(file)
-        except FileNotFoundError: # Windows specific issue
-            file.write_text(text)
 
     def finalize(self) -> None:
         """Read and check all files against their stored digests."""

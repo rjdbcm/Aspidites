@@ -115,6 +115,7 @@ $tb
 
 setup = Template("""
 # THIS FILE IS GENERATED - DO NOT EDIT #
+from pathlib import Path
 from setuptools import setup, Extension
 from Cython.Build import cythonize, BuildExecutable
 from Cython.Compiler import Options
@@ -140,7 +141,7 @@ Options.embed = $embed
 exts = [
 Extension(
          '$app_name', 
-         ['$src_file'],
+         [Path('$src_file')],
          include_dirs=$inc_dirs,
          libraries=$libs, 
          extra_compile_args=['-Wall'],
@@ -153,7 +154,7 @@ setup(
     ext_modules=cythonize(exts))
     
 if Options.embed:
-    BuildExecutable.build('$src_file')
+    BuildExecutable.build(Path('$src_file'))
 
 """)
 
