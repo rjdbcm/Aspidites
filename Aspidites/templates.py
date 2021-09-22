@@ -141,7 +141,7 @@ Options.embed = $embed
 exts = [
 Extension(
          '$app_name', 
-         [str(Path('$src_file'))],
+         ['$src_file'],
          include_dirs=$inc_dirs,
          libraries=$libs, 
          extra_compile_args=['-Wall'],
@@ -154,7 +154,7 @@ setup(
     ext_modules=cythonize(exts))
     
 if Options.embed:
-    BuildExecutable.build(str(Path('$src_file')))
+    BuildExecutable.build('$src_file')
 
 """)
 

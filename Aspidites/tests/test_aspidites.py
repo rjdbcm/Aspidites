@@ -226,7 +226,8 @@ def test_cli_examples():
 # @pt.mark.filterwarnings('ignore::RuntimeWarning')
 def test_compile_to_shared_object(inject_config):
     python_file_ = str(Path('examples/compiled.pyx'))
-    python_file = python_file_ if Path(woma_file).exists() else str(Path('Aspidites/tests') / python_file_)
+    full_path = Path('Aspidites/tests') / python_file_
+    python_file = python_file_ if Path(woma_file).exists() else str(full_path)
     kwargs = get_cy_kwargs()
     code = setup_code(inject_config)
     kwargs.update(code=code, fname=python_file, bytecode=True, force=True, c=True, build_requires='', verbose=False)
