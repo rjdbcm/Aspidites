@@ -1,4 +1,5 @@
 **unreleased**
+**v0.18.6**
 **v0.18.5**
 
 - 3d522fa fix windows build 6th attempt
