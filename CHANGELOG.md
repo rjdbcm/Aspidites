@@ -1,4 +1,5 @@
 **unreleased**
+**v0.18.2**
 **v0.18.1**
 
 - 51382dc fix windows build 2nd attempt
