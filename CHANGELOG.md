@@ -1,5 +1,9 @@
 **unreleased**
 **v0.18.1**
+
+- 51382dc fix windows build 2nd attempt
+
+
 **v0.18.0**
 
 - e8a4e28 fix windows build
