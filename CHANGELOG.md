@@ -1,4 +1,5 @@
 **unreleased**
+**v0.18.7**
 **v0.18.6**
 
 - 1e5fb28 made the parser a statically compiled object
