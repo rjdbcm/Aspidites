@@ -1,5 +1,10 @@
 **unreleased**
 **v0.18.7**
+
+- ea16aa8 major typo fixed
+- 18d3a1d minor cleanup
+
+
 **v0.18.6**
 
 - 1e5fb28 made the parser a statically compiled object
