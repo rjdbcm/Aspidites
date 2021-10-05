@@ -1,3 +1,4 @@
+from typing import TypeVar
 from collections import namedtuple
 from Aspidites._vendor._compat import IS_CPYTHON
 from Aspidites._vendor._compat import IS_PY2
@@ -6,11 +7,9 @@ from Aspidites._vendor.RestrictedPython.transformer import RestrictingNodeTransf
 import ast
 import warnings
 
-
-CompileResult = namedtuple(
-    'CompileResult', 'code, errors, warnings, used_names')
-syntax_error_template = (
-    'Line {lineno}: {type}: {msg} at statement: {statement!r}')
+T = TypeVar('T')
+CompileResult: T = namedtuple('CompileResult', 'code, errors, warnings, used_names')
+syntax_error_template = 'Line {lineno}: {type}: {msg} at statement: {statement!r}'
 
 NOT_CPYTHON_WARNING = (
     'RestrictedPython is only supported on CPython: use on other Python '

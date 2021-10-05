@@ -21,12 +21,11 @@ from pyparsing import (delimitedList, Forward, Literal,
 
 
 # Enable memoization (much faster!)
-if True:
-    ParserElement.enablePackrat(cache_size_limit=None)
-else:
-    # Pyparsing 2.0
-    from pyparsing import infixNotation
-    myOperatorPrecendence = infixNotation
+ParserElement.enablePackrat(cache_size_limit=None)
+# else:
+#     # Pyparsing 2.0
+#     from pyparsing import infixNotation
+#     myOperatorPrecendence = infixNotation
 
 from .interface import Where
 

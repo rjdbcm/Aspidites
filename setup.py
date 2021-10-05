@@ -1,15 +1,26 @@
 #!/usr/bin/python3
 import sys
+from glob import glob
 from pathlib import Path
 from setuptools import setup, find_packages
 from setuptools.dist import Distribution
 from setuptools.command.install import install
 # ~#~ # Build static libs # ~#~ #
 from Cython.Build import cythonize
+str_path = lambda s: str(Path(s))
+Aspidites_vendor_contracts_library = set(map(str_path, glob('Aspidites/_vendor/contracts/library/*.py')))\
+                                     - set('Aspidites/_vendor/contracts/library/__init__.py')
 ext_modules = cythonize([str(Path('Aspidites/_vendor/contracts/metaclass.py')),
+                         str(Path('Aspidites/_vendor/contracts/interface.py')),
+                         str(Path('Aspidites/_vendor/contracts/syntax.py')),
+                         str(Path('Aspidites/_vendor/contracts/inspection.py')),
+                         str(Path('Aspidites/_vendor/contracts/docstring_parsing.py')),
+                         str(Path('Aspidites/_vendor/contracts/main_actual.py')),
+                         *Aspidites_vendor_contracts_library,
                          str(Path('Aspidites/parser/convert.py')),
                          str(Path('Aspidites/parser/reserved.py')),
                          str(Path('Aspidites/parser/parser.py')),
+                         str(Path('Aspidites/templates.py')),
                          str(Path('Aspidites/monads.py')),
                          str(Path('Aspidites/math.py')),
                          ])

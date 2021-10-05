@@ -105,8 +105,8 @@ def format_dict_long(d, informal=False): # pragma: no cover
     return res
 
 
-def _get_str(x, informal): # pragma: no cover
-    from contracts.interface import describe_value_multiline
+def _get_str(x, informal):  # pragma: no cover
+    from ..contracts.interface import describe_value_multiline
     if informal:
         s = x.__str__()
     else:
