@@ -1,4 +1,5 @@
 **unreleased**
+**v0.18.10**
 **v0.18.9**
 
 - c60ef23 removed CI for windows build
