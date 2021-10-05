@@ -1,15 +1,14 @@
 import sys
 from warnings import warn
-from typing import Any, Union, TypeVar
+from typing import Any, Union, TypeVar, ItemsView
 from inspect import isfunction, signature, getouterframes
 from cmath import inf, isinf, nan, isnan
 import numbers
 import numpy as np
-import cython
+from ._vendor.fn.underscore import _Callable
 from pyrsistent import v, pvector
 from .templates import _warning
 from .api import bordered
-
 N = TypeVar('N')
 Numeric: N = Union[int, float, complex, np.number]
 
@@ -92,7 +91,7 @@ def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     if isnan(a) or not isinstance(a, numbers.Number):
         stack = pvector(getouterframes(sys._getframe(0), 1))
-        exc = ZeroDivisionError("Unary Add is Undefined for %s" % type(a))
+        exc = ZeroDivisionError(f"Unary Add is Undefined for {type(a)}")
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined()
@@ -104,7 +103,7 @@ def SafeUnarySub(a: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     if isnan(a) or not isinstance(a, numbers.Number):
         stack = pvector(getouterframes(sys._getframe(0), 1))
-        exc = ZeroDivisionError("Unary Sub is Undefined for %s" % type(a))
+        exc = ZeroDivisionError(f"Unary Sub is Undefined for {type(a)}")
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined()
@@ -160,7 +159,7 @@ def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # 0**0, inf**0, 0**inf
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ArithmeticError(
-            "%s**%s" % (str(a), str(b),) + " == Undefined; this behavior diverges from IEEE 754-1985."
+            f"{str(a)}**{str(b)} == Undefined; this behavior diverges from IEEE 754-1985."
         )
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
@@ -180,44 +179,41 @@ class Warn:
         self.kwargs = kwargs
 
     def create(self, exc=Exception()):
-        _locals = self.stack[1][0].f_locals.items()
-        str_locals = self.format_locals(_locals, exc)
-        func_name = self.stack[1][0].f_code.co_name
-        fname = self.stack[1][0].f_code.co_filename
-        lineno = self.stack[1][0].f_code.co_firstlineno
-        fkwargs = self.format_kwargs()
+        _locals: ItemsView = self.stack[1][0].f_locals.items()
+        str_locals: bytes = self.format_locals(_locals, exc)
+        func_name: str = self.stack[1][0].f_code.co_name
+        fname: str = self.stack[1][0].f_code.co_filename
+        lineno: int = self.stack[1][0].f_code.co_firstlineno
+        fkwargs = str(self.format_kwargs()).lstrip("b'").rstrip("'")
+        name: Union[_Callable, str]
         if hasattr(self.func, "__name__"):
             name = self.func.__name__
         else:
             name = str(self.func)
-        atfault = (
-            name
-            if isinstance(exc, TypeError)
-            else name + "(" + str(self.args).strip("()") + fkwargs + ")"
-        )
-        atfault = str(atfault) if not isinstance(atfault, str) else atfault
+        atfault = str(name).encode('UTF-8') if isinstance(exc, TypeError) else f"{name}({str(self.args).strip('()')}{fkwargs})".encode('UTF-8')
         return _warning.safe_substitute(
             file=fname,
             lineno=lineno,
             func=bordered(func_name),
-            atfault=bordered(atfault),
-            bound=bordered(str_locals),
+            atfault=bordered(atfault.decode('UTF-8')),
+            bound=bordered(str_locals.decode('UTF-8')),
             tb=bordered(str(exc)),
         )
 
     def format_kwargs(self, sep: str = ", "):
-        return sep + str(self.kwargs).strip("{} ").replace(":", "=") if len(self.kwargs) else ""
+        return f'{sep}{str(self.kwargs).strip("{} ").replace(":", "=") if len(self.kwargs) else ""}'.encode('UTF-8')
 
     # noinspection PyMethodMayBeStatic
     def format_locals(self, local_vars, exc: Exception):
-        locals_ = dict(filter(lambda x: x[1] != str(exc), local_vars))
-        str_locals = str()
+        locals_: dict = dict(filter(lambda x: x[1] != str(exc), local_vars))
+        str_locals: bytes = ''.encode('UTF-8')
         for k, v_ in locals_.items():
             if str(k).startswith("@"):  # skip @py_assert
                 continue
             if isfunction(v_):
-                str_locals += k + ": " + str(signature(v_)).replace("'", "") + "\n"
+                s = str(signature(v_)).replace("'", "")
+                str_locals += f"{k}: {s}\n".encode('UTF-8')
             else:
-                str_locals += k + ": " + str(v_) + "\n"
-        return str_locals.rstrip("\n")
+                str_locals += f"{k}: {str(v_)}\n".encode('UTF-8')
+        return str_locals.rstrip("\n".encode('UTF-8'))
 
