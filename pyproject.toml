@@ -1,2 +1,2 @@
 [build-system]
-requires = ["setuptools", "wheel", "Cython", "pyparsing", "mypy", "pyrsistent", "pytest", "future"]
+requires = ["setuptools", "wheel", "Cython", "pyparsing", "numpy", "mypy", "pyrsistent", "pytest", "future"]
