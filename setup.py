@@ -6,7 +6,12 @@ from setuptools.dist import Distribution
 from setuptools.command.install import install
 # ~#~ # Build static libs # ~#~ #
 from Cython.Build import cythonize
-ext_modules = cythonize([str(Path('Aspidites/monads.py')), str(Path('Aspidites/math.py'))])
+ext_modules = cythonize([str(Path('Aspidites/parser/convert.py')),
+                         str(Path('Aspidites/parser/reserved.py')),
+                         str(Path('Aspidites/parser/parser.py')),
+                         str(Path('Aspidites/monads.py')),
+                         str(Path('Aspidites/math.py')),
+                         ])
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
 from Aspidites.__main__ import get_cy_kwargs
 cy_kwargs = get_cy_kwargs()
@@ -90,7 +95,7 @@ setup(
     test_suite='Aspidites/tests',
     distclass=Distribution if sys.platform != 'darwin' else BinaryDistribution,
     entry_points={'console_scripts': ['aspidites = Aspidites.__main__:main']},
-    package_data={'': ["*.wom", "*.pyx", "*.pyi", "*.so", "*.c"]},  # add any native *.wom files
+    package_data={'': ["*.wom", "*.pyx", "*.pyi", "*.so", "*.c", "Aspidites/py.typed"]},  # add any native *.wom files
     long_description=read('README.md'),
     cmdclass={'install': InstallWrapper},
     long_description_content_type='text/markdown',

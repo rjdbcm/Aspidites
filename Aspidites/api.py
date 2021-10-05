@@ -23,7 +23,7 @@ from ._vendor.contracts import new_contract
 from ._vendor.fn.underscore import ArityError, _Callable
 
 
-def wrap(text, width=160, pad=True, padchar=" "):
+def wrap(text, width=160, pad=True, padchar=" ") -> list[str]:
     """
     Do not remove whitespaces in string but still wrap text to max width.
     Instead of passing the entire text to textwrap.wrap, split and pass each
@@ -43,7 +43,7 @@ def wrap(text, width=160, pad=True, padchar=" "):
     return wrapped_lines
 
 
-def bordered(text: str, width: int = 160):
+def bordered(text: str, width: int = 160) -> str:
     lines = [i for i in wrap(text, width=width)]
     width = max((len(s) for s in lines), default=width) or width
     res = ["╭" + "┉" * width + "╮"]

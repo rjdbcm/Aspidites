@@ -15,7 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from ._vendor.contracts import check, contract, new_contract
+from ._vendor.contracts import check, contract, new_contract, ContractsMeta
+from typing import NewType
+
+heritable = NewType('heritable', ContractsMeta)
 
 
 @new_contract
@@ -33,7 +36,10 @@ class _Final(type):
         return type.__new__(mcs, name, bases, dict(classdict))
 
 
-def final(_=_Final):  # This is 100% a hack: but it works.
+Final = NewType('Final', _Final)
+
+
+def final(_final: Final = _Final):  # This is 100% a hack: but it works.
     """Decorator to create final classes like:
     .. code:: python
 
@@ -41,21 +47,19 @@ def final(_=_Final):  # This is 100% a hack: but it works.
         class Foo(object):
             ...
     """
-    if _ != _Final:
-        meta = _Final
-    else:
-        meta = _
+    if _final != _Final:
+        _final = _Final
 
     def wrapper(mcs):
         __name = str(mcs.__name__)
         __bases = tuple(mcs.__bases__)
         __dict = dict(mcs.__dict__)
 
-        for each_slot in __dict.get("__slots__", tuple()):
-            __dict.pop(each_slot, None)
+        for slot in __dict.get("__slots__", tuple()):
+            __dict.pop(slot, None)
 
-        __dict["__metaclass__"] = meta
+        __dict["__metaclass__"] = _final
         __dict["__wrapped__"] = mcs
 
-        return meta(__name, __bases, __dict)
+        return _final(__name, __bases, __dict)
     return wrapper

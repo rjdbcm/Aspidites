@@ -141,7 +141,7 @@ class CompilerArgs:
         self.embed: t.Union[str, None] = kwargs['embed']
         self.__setattr__ = lambda x, y: None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__class__.__name__
 
 
@@ -194,7 +194,7 @@ class Compiler:
 
         self.file_stack.finalize()
 
-    def bytecode_compile(self):
+    def bytecode_compile(self) -> None:
         fname_pyc = str(self.app_name) + ".pyc"
         quiet = tuple(reversed(range(3))).index(self.args.verbose if self.args.verbose < 2 else 2)
         major, minor, patch, *_ = sys.version_info
