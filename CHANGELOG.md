@@ -1,6 +1,13 @@
 **unreleased**
 **v0.18.7**
 
+- 135beb7 contracts metaclass is now statically compiled
+- 8d00d77 changelog updated
+- ea16aa8 major typo fixed
+- 18d3a1d minor cleanup
+
+
+
 - ea16aa8 major typo fixed
 - 18d3a1d minor cleanup
 
