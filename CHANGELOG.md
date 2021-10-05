@@ -1,5 +1,9 @@
 **unreleased**
 **v0.18.8**
+
+- 14164d1 fix typo in api list[str] becomes List[str]
+
+
 **v0.18.7**
 
 - 135beb7 contracts metaclass is now statically compiled
