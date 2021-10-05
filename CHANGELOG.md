@@ -1,5 +1,9 @@
 **unreleased**
 **v0.18.10**
+
+- 97bc989 added numpy to pyproject.toml
+
+
 **v0.18.9**
 
 - c60ef23 removed CI for windows build
