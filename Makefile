@@ -30,10 +30,16 @@ clean-build: ## remove build artifacts
 	rm -fr .eggs/
 	rm -fr __main__.pyi
 	rm -fr main.spec
+	rm -fr Aspidites/parser/convert.c
+	rm -fr Aspidites/parser/parser.c
+	rm -fr Aspidites/parser/reserved.c
 	rm -fr Aspidites/monads.c
 	rm -fr Aspidites/math.c
 	rm -fr Aspidites/math.*.so
 	rm -fr Aspidites/monads.*.so
+	rm -fr Aspidites/parser/convert.*.so
+	rm -fr Aspidites/parser/parser.*.so
+	rm -fr Aspidites/parser/reserved.*.so
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
 

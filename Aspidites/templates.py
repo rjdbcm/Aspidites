@@ -119,6 +119,8 @@ from pathlib import Path
 from setuptools import setup, Extension
 from Cython.Build import cythonize, BuildExecutable
 from Cython.Compiler import Options
+import numpy
+
 Options.annotate = $annotate
 Options.annotate_coverage_xml = $annotate_coverage_xml
 Options.buffer_max_dims = $buffer_max_dims
@@ -144,14 +146,14 @@ Extension(
          ['$src_file'],
          include_dirs=$inc_dirs,
          libraries=$libs, 
-         extra_compile_args=['-Wall'],
+         extra_compile_args=['-Wall', '-O2'],
          library_dirs=$lib_dirs
     ),
 ]
 
 setup(
     name='$app_name',
-    ext_modules=cythonize(exts))
+    ext_modules=cythonize(exts, include_path=[numpy.get_include()]))
     
 if Options.embed:
     BuildExecutable.build('$src_file')

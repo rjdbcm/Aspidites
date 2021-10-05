@@ -1,3 +1,5 @@
+import Cython
+
 from .reserved import *
 
 
@@ -39,43 +41,50 @@ def cvt_comment_line(s, loc, t):
 
 
 def cvt_dict(t):
-    t = t.asList()
+    t: list = t.asList()
+    s: bytes
     for i, v in enumerate(t):
         key, val = v
         if isinstance(key, str):  # string keys only
             t[i] = f"{key}: {val}"
         else:  # integer key
             t[i] = f"{key}: {val}"
-    t = f'{", ".join(t)}'
-    return f"pmap({{{t}}})"
+    s = f'{", ".join(t)}'.encode('UTF-8')
+    return f"pmap({{{s.decode('UTF-8')}}})"
 
 
 def cvt_list(t):
-    t = t.asList()
+    t: list = t.asList()
+    s: bytes
     for i, v in enumerate(t):
         if isinstance(v, str):  # string keys only
             t[i] = v
         else:  # integer key
             t[i] = int(v)
-    t = f'{", ".join(t)}'
-    return f"pvector([{t}])"
+    s = f'{", ".join(t)}'.encode('UTF-8')
+    return f"pvector([{s.decode('UTF-8')}])"
 
 
 def cvt_set(t):
-    t = t.asList()
+    t: list = t.asList()
+    s: bytes
     for i, v in enumerate(t):
         if isinstance(v, str):  # string keys only
             t[i] = v
         else:  # integer key
             t[i] = int(v)
-    t = f'{", ".join(t)}'
-    return f"pset({{{t}}})"
+    s = f'{", ".join(t)}'.encode('UTF-8')
+    return f"pset({{{s.decode('UTF-8')}}})"
 
 
 def cvt_contract_assign(t):
-    t = swap_val_to_idx(list(t), ":", 1)
+    t: list = t.asList()
+    s: str
+    i: str
+    t = swap_val_to_idx(t, ":", 1)
     t[2], t[4] = t[4], t[2]
-    return " ".join((str(t) for t in t))
+    s = " ".join((str(i) for i in t))
+    return s
 
 
 def cvt_contract_define(t):
