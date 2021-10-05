@@ -6,7 +6,8 @@ from setuptools.dist import Distribution
 from setuptools.command.install import install
 # ~#~ # Build static libs # ~#~ #
 from Cython.Build import cythonize
-ext_modules = cythonize([str(Path('Aspidites/parser/convert.py')),
+ext_modules = cythonize([str(Path('Aspidites/_vendor/contracts/metaclass.py')),
+                         str(Path('Aspidites/parser/convert.py')),
                          str(Path('Aspidites/parser/reserved.py')),
                          str(Path('Aspidites/parser/parser.py')),
                          str(Path('Aspidites/monads.py')),

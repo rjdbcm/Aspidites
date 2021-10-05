@@ -30,6 +30,7 @@ clean-build: ## remove build artifacts
 	rm -fr .eggs/
 	rm -fr __main__.pyi
 	rm -fr main.spec
+	rm -fr Aspidites/_vendor/contracts/metaclass.c
 	rm -fr Aspidites/parser/convert.c
 	rm -fr Aspidites/parser/parser.c
 	rm -fr Aspidites/parser/reserved.c
@@ -37,6 +38,7 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/math.c
 	rm -fr Aspidites/math.*.so
 	rm -fr Aspidites/monads.*.so
+	rm -fr Aspidites/_vendor/contracts/metaclass.*.so
 	rm -fr Aspidites/parser/convert.*.so
 	rm -fr Aspidites/parser/parser.*.so
 	rm -fr Aspidites/parser/reserved.*.so

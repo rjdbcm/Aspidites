@@ -7,9 +7,9 @@ __all__ = ['ContractsMeta']
 
 
 def is_function_or_static(f):
-    is_normal_function = isinstance(f, FunctionType)
-    is_staticmethod = isinstance(f, staticmethod)
-    is_classmethod = isinstance(f, classmethod)
+    is_normal_function: bool = isinstance(f, FunctionType)
+    is_staticmethod: bool = isinstance(f, staticmethod)
+    is_classmethod: bool = isinstance(f, classmethod)
     return is_normal_function or is_staticmethod or is_classmethod
 
 
@@ -81,6 +81,7 @@ class ContractsMeta(ABCMeta):
             else:
                 pass
                 # print(' -> No inheritance for %s' % this_function)
+
 
 # This function is taken from six.
 # https://bitbucket.org/gutworth/six
