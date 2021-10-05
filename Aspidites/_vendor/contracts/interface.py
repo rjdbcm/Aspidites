@@ -233,7 +233,7 @@ def add_prefix(s, prefix):
     result = result[:-1]
     return result
 
-RuntimeWarning
+
 class ContractException(Exception):
     """ The base class for the exceptions thrown by this module. """
 
