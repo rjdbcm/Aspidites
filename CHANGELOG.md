@@ -5,8 +5,6 @@
 - fac6eee contracts backend is now a statically compiled extension excluding decorators
 - 20739ee changelog updated
 
-
-
 **v0.18.10**
 
 - 97bc989 added numpy to pyproject.toml
