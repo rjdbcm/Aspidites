@@ -1,5 +1,11 @@
 **unreleased**
 **v0.18.12**
+
+- dd278bf fix windows wheel
+- b0d4141 Merge remote-tracking branch 'origin/main'
+- b87d031 Update README.md
+
+
 **v0.18.11**
 
 - fac6eee contracts backend is now a statically compiled extension excluding decorators
