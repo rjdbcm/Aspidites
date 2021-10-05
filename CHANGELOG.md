@@ -1,5 +1,11 @@
 **unreleased**
 **v0.18.6**
+
+- 1e5fb28 made the parser a statically compiled object
+- adc8589 added type hints and py.typed to package_data
+- b456d1b changed import collections to import collections.abc as collections
+
+
 **v0.18.5**
 
 - 3d522fa fix windows build 6th attempt
