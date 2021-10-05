@@ -1,5 +1,9 @@
 **unreleased**
 **v0.18.13**
+
+- 944bdba fully static compile for the main compiler infrastructure
+
+
 **v0.18.12**
 
 - dd278bf fix windows wheel
