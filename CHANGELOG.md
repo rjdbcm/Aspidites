@@ -1,4 +1,5 @@
 **unreleased**
+**v0.18.8**
 **v0.18.7**
 
 - 135beb7 contracts metaclass is now statically compiled
