@@ -1,15 +1,17 @@
 import sys
 from warnings import warn
-from typing import Any, Union
+from typing import Any, Union, TypeVar
 from inspect import isfunction, signature, getouterframes
 from cmath import inf, isinf, nan, isnan
 import numbers
 import numpy as np
+import cython
 from pyrsistent import v, pvector
 from .templates import _warning
 from .api import bordered
 
-Numeric = Union[int, float, complex, np.number]
+N = TypeVar('N')
+Numeric: N = Union[int, float, complex, np.number]
 
 
 class Undefined:
@@ -87,6 +89,7 @@ class Undefined:
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
+    a: Numeric
     if isnan(a) or not isinstance(a, numbers.Number):
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Unary Add is Undefined for %s" % type(a))
@@ -98,6 +101,7 @@ def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeUnarySub(a: Numeric) -> Union[Numeric, Undefined]:
+    a: Numeric
     if isnan(a) or not isinstance(a, numbers.Number):
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Unary Sub is Undefined for %s" % type(a))
@@ -110,6 +114,8 @@ def SafeUnarySub(a: Numeric) -> Union[Numeric, Undefined]:
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeFloorDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
+    a: Numeric
+    b: Numeric
     if isinf(a) or b == 0 or (isinf(a) and isinf(b)):
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
@@ -122,6 +128,8 @@ def SafeFloorDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
+    a: Numeric
+    b: Numeric
     if b == 0 or (isinf(a) and isinf(b)):
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
@@ -134,6 +142,8 @@ def SafeDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
 def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
+    a: Numeric
+    b: Numeric
     if isinf(a) or b == 0:
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Modulus by zero is Undefined; this behavior diverges from IEEE 754-1985.")
@@ -144,7 +154,9 @@ def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 
 
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
-def SafeExp(a, b):
+def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
+    a: Numeric
+    b: Numeric
     if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # 0**0, inf**0, 0**inf
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ArithmeticError(
@@ -183,6 +195,7 @@ class Warn:
             if isinstance(exc, TypeError)
             else name + "(" + str(self.args).strip("()") + fkwargs + ")"
         )
+        atfault = str(atfault) if not isinstance(atfault, str) else atfault
         return _warning.safe_substitute(
             file=fname,
             lineno=lineno,

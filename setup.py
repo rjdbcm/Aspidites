@@ -7,9 +7,6 @@ from setuptools.dist import Distribution
 from setuptools.command.install import install
 # ~#~ # Build static libs # ~#~ #
 from Cython.Build import cythonize
-str_path = lambda s: str(Path(s))
-Aspidites_vendor_contracts_library = set(map(str_path, glob('Aspidites/_vendor/contracts/library/*.py')))\
-                                     - set('Aspidites/_vendor/contracts/library/__init__.py')
 ext_modules = cythonize([str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                          str(Path('Aspidites/_vendor/contracts/interface.py')),
                          str(Path('Aspidites/_vendor/contracts/syntax.py')),
@@ -48,6 +45,9 @@ ext_modules = cythonize([str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                          str(Path('Aspidites/templates.py')),
                          str(Path('Aspidites/monads.py')),
                          str(Path('Aspidites/math.py')),
+                         str(Path('Aspidites/api.py')),
+                         str(Path('Aspidites/__main__.py')),
+                         str(Path('Aspidites/compiler.py'))
                          ])
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
 from Aspidites.__main__ import get_cy_kwargs

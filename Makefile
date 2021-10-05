@@ -43,6 +43,12 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/templates.c
 	rm -fr Aspidites/monads.c
 	rm -fr Aspidites/math.c
+	rm -fr Aspidites/api.c
+	rm -fr Aspidites/__main__.c
+	rm -fr Aspidites/compiler.c
+	rm -fr Aspidites/compiler.*.so
+	rm -fr Aspidites/__main__.*.so
+	rm -fr Aspidites/api.*.so
 	rm -fr Aspidites/math.*.so
 	rm -fr Aspidites/monads.*.so
 	rm -fr Aspidites/templates.*.so

@@ -27,6 +27,7 @@ from pathlib import Path
 from .final import final
 from ._vendor.semantic_version import Version
 from pyparsing import ParseResults
+import cython
 
 
 @final()
@@ -37,6 +38,7 @@ class CheckedFileStack:
     __slots__ = v('all_files', 'pre_size')
 
     def __init__(self, initial=None, pre_size=128):
+        pre_size: cython.int
         if initial is None:
             initial = {}
         self.all_files = pmap(initial, pre_size)
@@ -47,13 +49,13 @@ class CheckedFileStack:
         return self.__class__.__name__
 
     def _read(self, data, print__=False, hash_func=None):
-        chunk = data.read(self.pre_size)
+        chunk: t.Union[bytes, str] = data.read(self.pre_size)
         if hash_func is None:
             curr_hash = hash_func
         else:
             curr_hash = hash_func()
         while chunk:
-            curr_hash and curr_hash.update(chunk)  # Short-circuits if called without hash_func
+            curr_hash and curr_hash.update(chunk)  # Short-circuits to nop if called without hash_func
             chunk = data.read(self.pre_size)
             if print__:
                 print(chunk, '')
