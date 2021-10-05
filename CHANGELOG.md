@@ -1,5 +1,9 @@
 **unreleased**
 **v0.18.9**
+
+- c60ef23 removed CI for windows build
+
+
 **v0.18.8**
 
 - 14164d1 fix typo in api list[str] becomes List[str]
