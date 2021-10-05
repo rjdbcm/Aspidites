@@ -11,7 +11,7 @@ The reference implementation of the [Woma programming language](https://www.gith
 
 - What if just want to write some standalone programs?
 
-    - Our second priority is to create a simple bundler for applications that embeds a highly restricted CPython interpreter for portability.
+    - Our second priority is to create a simple bundler for applications that embeds a highly restricted CPython interpreter for portability. (currently experimental and not functioning)
 
 - Isn't this just Cython with extra steps? 
 
