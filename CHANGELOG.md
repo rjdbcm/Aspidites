@@ -1,4 +1,5 @@
 **unreleased**
+**v0.18.14**
 **v0.18.13**
 
 - 944bdba fully static compile for the main compiler infrastructure
