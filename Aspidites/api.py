@@ -16,14 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from textwrap import wrap as _wrap
-
+from typing import List
 from pyparsing import ParseResults
 
 from ._vendor.contracts import new_contract
 from ._vendor.fn.underscore import ArityError, _Callable
 
 
-def wrap(text, width=160, pad=True, padchar=" ") -> list[str]:
+def wrap(text, width=160, pad=True, padchar=" ") -> List[str]:
     """
     Do not remove whitespaces in string but still wrap text to max width.
     Instead of passing the entire text to textwrap.wrap, split and pass each
