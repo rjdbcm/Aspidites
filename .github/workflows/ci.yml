@@ -75,20 +75,18 @@ jobs:
               pipenv run pytest
               rm -rf Pipfile.lock
   
-  windows-build:
-        runs-on: windows-latest
-        env:
-          PYTHONIOENCODING: "utf-8"
-        steps:
-        - 
-          name: Get Source Directory 
-          uses: actions/checkout@v2
-        -
-          name: Build Aspidites
-          run: | 
-              pip install -U pip pipenv wheel cython
-              pipenv lock
-              pipenv sync -d
-              pipenv run pytest
-
-          
+#  windows-build:
+#        runs-on: windows-latest
+#        env:
+#          PYTHONIOENCODING: "utf-8"
+#        steps:
+#        -
+#          name: Get Source Directory
+#          uses: actions/checkout@v2
+#        -
+#          name: Build Aspidites
+#          run: |
+#              pip install -U pip pipenv wheel cython
+#              pipenv lock
+#              pipenv sync -d
+#              pipenv run pytest
