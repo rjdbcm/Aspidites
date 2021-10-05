@@ -1,7 +1,7 @@
 from ..interface import Contract, ContractNotRespected
 from ..syntax import (add_contract, W, contract_expression, O, S, add_keyword,
     Keyword)
-import collections
+import collections.abc as collections
 from past.builtins import xrange
 
 try:
