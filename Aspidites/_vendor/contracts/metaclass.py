@@ -12,6 +12,7 @@ def is_function_or_static(f):
     is_classmethod = isinstance(f, classmethod)
     return is_normal_function or is_staticmethod or is_classmethod
 
+
 class ContractsMeta(ABCMeta):
     """
         This metaclass lets the subclasses inherit the specifications.

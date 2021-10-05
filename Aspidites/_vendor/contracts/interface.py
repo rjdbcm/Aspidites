@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
 from abc import ABCMeta, abstractmethod
-
-from Aspidites._vendor._compat import basestring
 from .metaclass import with_metaclass
 
 
