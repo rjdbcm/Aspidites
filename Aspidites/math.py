@@ -4,6 +4,7 @@ from typing import Any, Union, TypeVar, ItemsView, Type
 from inspect import isfunction, signature, getouterframes
 from cmath import inf, isinf, nan, isnan
 import numbers
+import cython
 import numpy as np
 from ._vendor.fn.underscore import _Callable
 from pyrsistent import v, pvector, PVector
@@ -196,23 +197,30 @@ class Warn:
         self.kwargs = kwargs
 
     def create(self, exc=Exception()):
-        _locals: ItemsView = self.stack[1][0].f_locals.items()
-        str_locals: bytes = self.format_locals(_locals, exc)
-        func_name: str = self.stack[1][0].f_code.co_name
-        fname: str = self.stack[1][0].f_code.co_filename
-        lineno: int = self.stack[1][0].f_code.co_firstlineno
-        fkwargs = str(self.format_kwargs()).lstrip("b'").rstrip("'")
+        sig: cython.char_ptr
         name: Union[_Callable, str]
-        if hasattr(self.func, "__name__"):
-            name = self.func.__name__
-        else:
-            name = str(self.func)
-        atfault = str(name).encode('UTF-8') if isinstance(exc, TypeError) else f"{name}({str(self.args).strip('()')}{fkwargs})".encode('UTF-8')
+        local_items: ItemsView
+        str_locals: cython.char_ptr
+        at_fault: cython.char_ptr
+        func_name: str
+        fname: str
+        # noinspection PyUnresolvedReferences
+        lineno: cython.int
+        fkwargs: str
+        local_items = self.stack[1][0].f_locals.items()
+        str_locals = self.format_locals(local_items, exc)
+        func_name = self.stack[1][0].f_code.co_name
+        fname = self.stack[1][0].f_code.co_filename
+        lineno = self.stack[1][0].f_code.co_firstlineno
+        fkwargs = str(self.format_kwargs()).lstrip("b'").rstrip("'")
+        name = self.func.__name__ if hasattr(self.func, "__name__") else str(self.func)
+        sig = f"{name}({str(self.args).strip('()')}{fkwargs})".encode('UTF-8')
+        at_fault = str(name).encode('UTF-8') if isinstance(exc, TypeError) else sig
         return _warning.safe_substitute(
             file=fname,
             lineno=lineno,
             func=bordered(func_name),
-            atfault=bordered(atfault.decode('UTF-8')),
+            atfault=bordered(at_fault.decode('UTF-8')),
             bound=bordered(str_locals.decode('UTF-8')),
             tb=bordered(str(exc)),
         )
