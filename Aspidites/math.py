@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8
 import sys
 from warnings import warn
 from typing import Any, Union, TypeVar, ItemsView, Type
@@ -189,6 +190,16 @@ def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 
 
 class Warn:
+    sig: cython.p_char
+    name: Union[_Callable, cython.p_char]
+    local_items: ItemsView
+    str_locals: bytes
+    at_fault: bytes
+    func_name: cython.p_char
+    fname: cython.p_char
+    # noinspection PyUnresolvedReferences
+    lineno: cython.int
+    fkwargs: cython.p_char
 
     def __init__(self, stack, func, *args, **kwargs):
         self.stack = stack
@@ -197,16 +208,6 @@ class Warn:
         self.kwargs = kwargs
 
     def create(self, exc=Exception()):
-        sig: cython.char_ptr
-        name: Union[_Callable, str]
-        local_items: ItemsView
-        str_locals: cython.char_ptr
-        at_fault: cython.char_ptr
-        func_name: str
-        fname: str
-        # noinspection PyUnresolvedReferences
-        lineno: cython.int
-        fkwargs: str
         local_items = self.stack[1][0].f_locals.items()
         str_locals = self.format_locals(local_items, exc)
         func_name = self.stack[1][0].f_code.co_name
@@ -214,8 +215,8 @@ class Warn:
         lineno = self.stack[1][0].f_code.co_firstlineno
         fkwargs = str(self.format_kwargs()).lstrip("b'").rstrip("'")
         name = self.func.__name__ if hasattr(self.func, "__name__") else str(self.func)
-        sig = f"{name}({str(self.args).strip('()')}{fkwargs})".encode('UTF-8')
-        at_fault = str(name).encode('UTF-8') if isinstance(exc, TypeError) else sig
+        sig = f"{name}({str(self.args).strip('()')}{fkwargs})"
+        at_fault = str(name).encode('UTF-8') if isinstance(exc, TypeError) else sig.encode('UTF-8')
         return _warning.safe_substitute(
             file=fname,
             lineno=lineno,

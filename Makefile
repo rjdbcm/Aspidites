@@ -30,12 +30,15 @@ clean-build: ## remove build artifacts
 	rm -fr .eggs/
 	rm -fr __main__.pyi
 	rm -fr main.spec
+	rm -fr Aspidites/_vendor/contracts/backported.c
 	rm -fr Aspidites/_vendor/contracts/metaclass.c
 	rm -fr Aspidites/_vendor/contracts/interface.c
 	rm -fr Aspidites/_vendor/contracts/syntax.c
 	rm -fr Aspidites/_vendor/contracts/inspection.c
 	rm -fr Aspidites/_vendor/contracts/docstring_parsing.c
 	rm -fr Aspidites/_vendor/contracts/main_actual.c
+	rm -fr Aspidites/_vendor/contracts/useful_contracts/numpy_specific.c
+	rm -fr Aspidites/_vendor/contracts/useful_contracts/numbers.c
 	rm -fr Aspidites/_vendor/contracts/library/*.c
 	rm -fr Aspidites/parser/convert.c
 	rm -fr Aspidites/parser/parser.c
@@ -52,6 +55,7 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/math.*.so
 	rm -fr Aspidites/monads.*.so
 	rm -fr Aspidites/templates.*.so
+	rm -fr Aspidites/_vendor/contracts/backported.*.so
 	rm -fr Aspidites/_vendor/contracts/metaclass.*.so
 	rm -fr Aspidites/_vendor/contracts/interface.*.so
 	rm -fr Aspidites/_vendor/contracts/syntax.*.so
@@ -59,6 +63,8 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/_vendor/contracts/docstring_parsing.*.so
 	rm -fr Aspidites/_vendor/contracts/main_actual.*.so
 	rm -fr Aspidites/_vendor/contracts/library/*.*.so
+	rm -fr Aspidites/_vendor/contracts/useful_contracts/numpy_specific.*.so
+	rm -fr Aspidites/_vendor/contracts/useful_contracts/numbers.*.so
 	rm -fr Aspidites/parser/convert.*.so
 	rm -fr Aspidites/parser/parser.*.so
 	rm -fr Aspidites/parser/reserved.*.so

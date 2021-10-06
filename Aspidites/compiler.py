@@ -1,4 +1,4 @@
-
+#cython: language_level=3
 # Aspidites
 # Copyright (C) 2021 Ross J. Duff
 
@@ -48,7 +48,7 @@ class CheckedFileStack:
     def __repr__(self):
         return self.__class__.__name__
 
-    def _read(self, data, print__=False, hash_func=None):
+    def _read(self, data, hash_func=None):
         chunk: t.Union[bytes, str] = data.read(self.pre_size)
         if hash_func is None:
             curr_hash = hash_func
@@ -57,8 +57,6 @@ class CheckedFileStack:
         while chunk:
             curr_hash and curr_hash.update(chunk)  # Short-circuits to nop if called without hash_func
             chunk = data.read(self.pre_size)
-            if print__:
-                print(chunk, '')
         return curr_hash
 
     def _write_checksum(self, fname) -> tuple:
@@ -227,7 +225,10 @@ class Compiler:
         setup_runner = "%s %s build_ext -b ." % (sys.executable, str(Path(self.root) / 'setup.py'))
         print("running", setup_runner)
         with os.popen(setup_runner) as p:
-            self.file_stack._read(p, print__=True)
+            chunk = p.read(64)
+            while chunk:
+                print(chunk, sep='', end='')
+                chunk = p.read(64)
         self.file_stack.register(self.file_c)
         for i in glob(glob_so):
             self.file_stack.register(i)

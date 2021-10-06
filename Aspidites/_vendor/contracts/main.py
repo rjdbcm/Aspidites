@@ -2,7 +2,7 @@ import sys
 from typing import Callable, cast, TypeVar, Any
 from Aspidites._vendor._compat import IS_PY2, basestring
 
-from .backported import getcallargs, getfullargspec
+from .inspection import getfullargspec, getcallargs
 from .docstring_parsing import Arg, DocStringInfo
 from .enabling import all_disabled
 from .inspection import (can_accept_at_least_one_argument, can_accept_self,
