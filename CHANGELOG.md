@@ -1,5 +1,9 @@
 **unreleased**
 **v0.20.0**
+
+- c0bae3d fixed typo that included backported.py in build list
+
+
 **v0.19.0**
 
 - 7364650 inspection is now essentially a statically compiled version of inspect.py
