@@ -1,5 +1,10 @@
 **unreleased**
 **v0.18.14**
+
+- d07381e slight speedup of warnings generated using early binding
+- 597627b slight speedup of warnings generated using f-strings and explicit encoding/decoding
+
+
 **v0.18.13**
 
 - 944bdba fully static compile for the main compiler infrastructure
