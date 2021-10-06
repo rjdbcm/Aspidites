@@ -1,4 +1,5 @@
 **unreleased**
+**v0.18.16**
 **v0.18.15**
 
 - b3f951d major speedup of the new_contract decorator 30.8ms/call -> 23.05ms/call
