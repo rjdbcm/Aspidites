@@ -1,5 +1,9 @@
 **unreleased**
 **v0.19.0**
+
+- 7364650 inspection is now essentially a statically compiled version of inspect.py
+
+
 **v0.18.16**
 
 - 
