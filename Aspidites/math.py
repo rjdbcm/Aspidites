@@ -1,16 +1,15 @@
 import sys
 from warnings import warn
-from typing import Any, Union, TypeVar, ItemsView
+from typing import Any, Union, TypeVar, ItemsView, Type
 from inspect import isfunction, signature, getouterframes
 from cmath import inf, isinf, nan, isnan
 import numbers
 import numpy as np
 from ._vendor.fn.underscore import _Callable
-from pyrsistent import v, pvector
+from pyrsistent import v, pvector, PVector
 from .templates import _warning
 from .api import bordered
-N = TypeVar('N')
-Numeric: N = Union[int, float, complex, np.number]
+Numeric = Union[int, float, complex, np.number]
 
 
 class Undefined:
@@ -89,6 +88,9 @@ class Undefined:
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
+    w: str
+    stack: PVector
+    exc: Exception
     if isnan(a) or not isinstance(a, numbers.Number):
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError(f"Unary Add is Undefined for {type(a)}")
@@ -101,6 +103,9 @@ def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeUnarySub(a: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
+    w: str
+    stack: PVector
+    exc: Exception
     if isnan(a) or not isinstance(a, numbers.Number):
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError(f"Unary Sub is Undefined for {type(a)}")
@@ -115,6 +120,9 @@ def SafeFloorDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
     a: Numeric
     b: Numeric
+    w: str
+    stack: PVector
+    exc: Exception
     if isinf(a) or b == 0 or (isinf(a) and isinf(b)):
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
@@ -129,6 +137,9 @@ def SafeDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
     a: Numeric
     b: Numeric
+    w: str
+    stack: PVector
+    exc: Exception
     if b == 0 or (isinf(a) and isinf(b)):
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
@@ -143,6 +154,9 @@ def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     """IEEE 754-1985 evaluates an expression and replaces indeterminate forms with Undefined instances"""
     a: Numeric
     b: Numeric
+    w: str
+    stack: PVector
+    exc: Exception
     if isinf(a) or b == 0:
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ZeroDivisionError("Modulus by zero is Undefined; this behavior diverges from IEEE 754-1985.")
@@ -156,6 +170,9 @@ def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     b: Numeric
+    w: str
+    stack: PVector
+    exc: Exception
     if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # 0**0, inf**0, 0**inf
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ArithmeticError(
