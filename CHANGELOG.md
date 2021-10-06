@@ -1,4 +1,5 @@
 **unreleased**
+**v0.18.15**
 **v0.18.14**
 
 - d07381e slight speedup of warnings generated using early binding
