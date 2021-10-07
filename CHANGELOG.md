@@ -1,4 +1,5 @@
 **unreleased**
+**v0.21.1**
 **v0.21.0**
 
 - 16a2a6c add CPython 3.10 to actions
