@@ -1,5 +1,9 @@
 **unreleased**
 **v0.21.0**
+
+- 16a2a6c add CPython 3.10 to actions
+
+
 **v0.20.1**
 
 - eeb97c1 reference internal inspect functions where possible
