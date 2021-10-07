@@ -1,5 +1,11 @@
 **unreleased**
 **v0.20.1**
+
+- eeb97c1 reference internal inspect functions where possible
+- 110de20 clean up unused code
+- 92bf9c3 added C( for declaring c-style functions
+
+
 **v0.20.0**
 
 - c0bae3d fixed typo that included backported.py in build list
