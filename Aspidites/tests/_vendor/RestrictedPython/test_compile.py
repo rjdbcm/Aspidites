@@ -5,7 +5,7 @@ from Aspidites._vendor.RestrictedPython import compile_restricted_single
 from Aspidites._vendor.RestrictedPython import CompileResult
 from Aspidites._vendor._compat import IS_PY2
 from Aspidites._vendor._compat import IS_PY3
-from Aspidites._vendor._compat import IS_PY38_OR_GREATER
+from Aspidites._vendor._compat import IS_PY38_OR_GREATER, IS_PY3A_OR_GREATER
 from Aspidites.tests._vendor.RestrictedPython.helper import restricted_eval
 
 import platform
@@ -40,7 +40,9 @@ INVALID_ASSINGMENT = """
 def test_compile__invalid_syntax():
     with pytest.raises(SyntaxError) as err:
         compile_restricted(INVALID_ASSINGMENT, '<string>', 'exec')
-    if IS_PY38_OR_GREATER:
+    if IS_PY3A_OR_GREATER:
+        assert "cannot assign to literal here." in str(err.value)
+    elif IS_PY38_OR_GREATER:
         assert "cannot assign to literal at statement:" in str(err.value)
     else:
         assert "can't assign to literal at statement:" in str(err.value)
@@ -120,9 +122,13 @@ def no_exec():
 def test_compile__compile_restricted_exec__10():  # pragma: PY3
     """It is a SyntaxError to use the `exec` statement. (Python 3 only)"""
     result = compile_restricted_exec(EXEC_STATEMENT)
-    assert (
-        'Line 2: SyntaxError: Missing parentheses in call to \'exec\' at '
-        'statement: "exec \'q = 1\'"',) == result.errors
+    if IS_PY3A_OR_GREATER:
+        assert (
+                   'Line 2: SyntaxError: Missing parentheses in call to \'exec\'. Did you mean exec(...)? at '
+                   'statement: "exec \'q = 1\'"',) == result.errors
+    else:
+        assert (
+         'Line 2: SyntaxError: Missing parentheses in call to \'exec\' at statement: "exec \'q = 1\'"') == result.errors
 
 
 FUNCTION_DEF = """\

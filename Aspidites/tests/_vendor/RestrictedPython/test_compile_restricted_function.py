@@ -1,7 +1,7 @@
 from Aspidites._vendor.RestrictedPython import compile_restricted_function
 from Aspidites._vendor.RestrictedPython import PrintCollector
 from Aspidites._vendor.RestrictedPython import safe_builtins
-from Aspidites._vendor._compat import IS_PY38_OR_GREATER
+from Aspidites._vendor._compat import IS_PY38_OR_GREATER, IS_PY3A_OR_GREATER
 from types import FunctionType
 
 
@@ -210,9 +210,15 @@ def test_compile_restricted_function_handle_SyntaxError():
     )
 
     assert result.code is None
-    assert result.errors == (
-        "Line 1: SyntaxError: unexpected EOF while parsing at statement: 'a('",
-    )
+
+    if IS_PY3A_OR_GREATER:
+        assert result.errors == (
+            "Line 1: SyntaxError: '(' was never closed at statement: 'a('",
+        )
+    else:
+        assert result.errors == (
+            "Line 1: SyntaxError: unexpected EOF while parsing at statement: 'a('",
+        )
 
 
 def test_compile_restricted_function_invalid_syntax():
@@ -229,8 +235,12 @@ def test_compile_restricted_function_invalid_syntax():
     assert result.code is None
     assert len(result.errors) == 1
     error_msg = result.errors[0]
+    if IS_PY3A_OR_GREATER:
+        assert error_msg.startswith(
+            "Line 1: SyntaxError: cannot assign to literal here. Maybe you meant '==' instead of '='? at statement: '1=1'"
+        )
 
-    if IS_PY38_OR_GREATER:
+    elif IS_PY38_OR_GREATER:
         assert error_msg.startswith(
             "Line 1: SyntaxError: cannot assign to literal at statement:"
         )
