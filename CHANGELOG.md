@@ -1,5 +1,9 @@
 **unreleased**
 **v0.21.1**
+
+- 7475765 fix python-setup action to use v2 and added quotes around 3.10 because YAML
+
+
 **v0.21.0**
 
 - 16a2a6c add CPython 3.10 to actions
