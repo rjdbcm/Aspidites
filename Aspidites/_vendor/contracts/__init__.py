@@ -1,12 +1,5 @@
 __version__ = '2.0.1'
 
-import functools
-import logging
-from typing import Callable, Any
-
-#logging.basicConfig()
-logger = logging.getLogger(__name__)
-
 from .interface import (Contract, ContractNotRespected,
                         CannotDecorateClassmethods,
                         ContractSyntaxError, ContractException)
@@ -31,7 +24,7 @@ def new_contract(*args):
 
 new_contract.__doc__ = new_contract_main.__doc__
 
-from .enabling import disable_all, enable_all, all_disabled
+from .enabling import all_disabled
 
 # A couple of useful functions
 from .interface import describe_value, describe_type, describe_value_multiline
