@@ -933,7 +933,8 @@ def getcomments(object):
     if ismodule(object):
         # Look for a comment block at the top of the file.
         start = 0
-        if lines and lines[0][:2] == '#!': start = 1
+        if lines and lines[0][:2] == '#!':
+            start = 1
         while start < len(lines) and lines[start].strip() in ('', '#'):
             start = start + 1
         if start < len(lines) and lines[start][:1] == '#':
@@ -1147,99 +1148,6 @@ def getargs(co):
         varkw = co.co_varnames[nargs]
     return Arguments(args + kwonlyargs, varargs, varkw)
 
-
-# def getfullargspec(func):
-#     """Get the names and default values of a callable object's parameters.
-#
-#     A tuple of seven things is returned:
-#     (args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, annotations).
-#     'args' is a list of the parameter names.
-#     'varargs' and 'varkw' are the names of the * and ** parameters or None.
-#     'defaults' is an n-tuple of the default values of the last n parameters.
-#     'kwonlyargs' is a list of keyword-only parameter names.
-#     'kwonlydefaults' is a dictionary mapping names from kwonlyargs to defaults.
-#     'annotations' is a dictionary mapping parameter names to annotations.
-#
-#     Notable differences from inspect.signature():
-#       - the "self" parameter is always reported, even for bound methods
-#       - wrapper chains defined by __wrapped__ *not* unwrapped automatically
-#     """
-#     try:
-#         # Re: `skip_bound_arg=False`
-#         #
-#         # There is a notable difference in behaviour between getfullargspec
-#         # and Signature: the former always returns 'self' parameter for bound
-#         # methods, whereas the Signature always shows the actual calling
-#         # signature of the passed object.
-#         #
-#         # To simulate this behaviour, we "unbind" bound methods, to trick
-#         # inspect.signature to always return their first parameter ("self",
-#         # usually)
-#
-#         # Re: `follow_wrapper_chains=False`
-#         #
-#         # getfullargspec() historically ignored __wrapped__ attributes,
-#         # so we ensure that remains the case in 3.3+
-#
-#         sig = _signature_from_callable(func,
-#                                        follow_wrapper_chains=False,
-#                                        skip_bound_arg=False,
-#                                        sigcls=Signature)
-#     except Exception as ex:
-#         # Most of the times 'signature' will raise ValueError.
-#         # But, it can also raise AttributeError, and, maybe something
-#         # else. So to be fully backwards compatible, we catch all
-#         # possible exceptions here, and reraise a TypeError.
-#         raise TypeError('unsupported callable') from ex
-#
-#     args = []
-#     varargs = None
-#     varkw = None
-#     posonlyargs = []
-#     kwonlyargs = []
-#     annotations = {}
-#     defaults = ()
-#     kwdefaults = {}
-#
-#     if sig.return_annotation is not sig.empty:
-#         annotations['return'] = sig.return_annotation
-#
-#     for param in sig.parameters.values():
-#         kind = param.kind
-#         name = param.name
-#
-#         if kind is _POSITIONAL_ONLY:
-#             posonlyargs.append(name)
-#             if param.default is not param.empty:
-#                 defaults += (param.default,)
-#         elif kind is _POSITIONAL_OR_KEYWORD:
-#             args.append(name)
-#             if param.default is not param.empty:
-#                 defaults += (param.default,)
-#         elif kind is _VAR_POSITIONAL:
-#             varargs = name
-#         elif kind is _KEYWORD_ONLY:
-#             kwonlyargs.append(name)
-#             if param.default is not param.empty:
-#                 kwdefaults[name] = param.default
-#         elif kind is _VAR_KEYWORD:
-#             varkw = name
-#
-#         if param.annotation is not param.empty:
-#             annotations[name] = param.annotation
-#
-#     if not kwdefaults:
-#         # compatibility with 'func.__kwdefaults__'
-#         kwdefaults = None
-#
-#     if not defaults:
-#         # compatibility with 'func.__defaults__'
-#         defaults = None
-#
-#     return FullArgSpec(posonlyargs + args, varargs, varkw, defaults,
-#                        kwonlyargs, kwdefaults, annotations)
-
-
 ArgSpec = namedtuple('ArgSpec', 'args varargs keywords defaults')
 
 
@@ -1441,6 +1349,16 @@ def getcallargs(func, *positional, **named):
     assigned_tuple_params: cython.list
     # noinspection PyUnresolvedReferences
     arg2dict: cython.dict
+    # noinspection PyUnresolvedReferences
+    num_args: cython.int
+    # noinspection PyUnresolvedReferences
+    num_pos: cython.int
+    # noinspection PyUnresolvedReferences
+    num_total: cython.int
+    # noinspection PyUnresolvedReferences
+    num_defaults: cython.int
+    # noinspection PyUnresolvedReferences
+    num_required: cython.int
     """Get the mapping of arguments to values.
 
     A dict is returned, with keys the function argument names (including the
@@ -1464,6 +1382,8 @@ def getcallargs(func, *positional, **named):
     def assign(arg, value):
         # noinspection PyUnresolvedReferences
         arg: cython.p_char
+        # noinspection PyUnresolvedReferences
+        i: cython.int
         nonlocal assigned_tuple_params
         if isinstance(arg, str):
             arg2value[arg] = value
@@ -3295,11 +3215,11 @@ def can_accept_exactly_one_argument(callable_thing):
     """ Checks that a callable can accept exactly one argument
         using introspection.
     """
-    if inspect.ismethod(callable_thing):  # bound method
+    if ismethod(callable_thing):  # bound method
         f = callable_thing.__func__
         args = (callable_thing.__self__, 'test',)
     else:
-        if not inspect.isfunction(callable_thing):
+        if not isfunction(callable_thing):
             f = callable_thing.__call__
         else:
             f = callable_thing
@@ -3315,11 +3235,11 @@ def can_accept_exactly_one_argument(callable_thing):
 
 
 def get_f_from_callable(callable_thing):
-    if inspect.ismethod(callable_thing):  # bound method
+    if ismethod(callable_thing):  # bound method
         f = callable_thing.__func__
         # args = (callable_thing.__self__, 'test',)
     else:
-        if not inspect.isfunction(callable_thing):
+        if not isfunction(callable_thing):
             f = callable_thing.__call__
         else:
             f = callable_thing
