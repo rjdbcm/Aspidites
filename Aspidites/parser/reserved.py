@@ -37,6 +37,7 @@ nl_indent = '\n' + indent
 sep = ", "
 pragma = Literal("#").setParseAction(replaceWith('@'))
 private_def_decl = Literal("(").setParseAction(replaceWith("def "))
+c_def_decl = Literal('C(').setParseAction(replaceWith('cdef'))
 args_end = Group(Literal(")") + Literal(")")).setParseAction(replaceWith(") -> "))
 underscore = Literal("_")
 lparen, rparen, lbrack, rbrack, lbrace, rbrace, colon, comma = map(Suppress, "()[]{}:,")
