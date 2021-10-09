@@ -1,13 +1,13 @@
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 import operator
 import random
 import re
 import string
 from itertools import count, repeat
-from sys import version_info
+from typing import Callable, AnyStr
 
 from .func import F
 from .op import apply, flip, identity
-
 
 div = operator.truediv
 
@@ -19,9 +19,8 @@ def _random_name():
 
 
 def fmap(f, format):
-    def applyier(self, other):
+    def applier(self, other):
         fmt = "(%s)" % format.replace("self", self._format)
-
         if isinstance(other, self.__class__):
             return self.__class__(
                 (f, self, other),
@@ -40,7 +39,8 @@ def fmap(f, format):
                 fmt.replace("other", "%%(%s)r" % name),
                 dict(list(self._format_args.items()) + [(name, other)]),
                 self._arity)
-    return applyier
+
+    return applier
 
 
 class ArityError(TypeError):
@@ -49,23 +49,28 @@ class ArityError(TypeError):
 
 
 def unary_fmap(f, format):
-    def applyier(self):
+    def applier(self):
         fmt = "(%s)" % format.replace("self", self._format)
         return self.__class__(
             F(self) << f, fmt, self._format_args, self._arity
         )
-    return applyier
+
+    return applier
+
+
+VAR_X = re.compile(r"x\d+")
 
 
 class _Callable(object):
-
     __slots__ = "_callback", "_format", "_format_args", "_arity"
     # Do not use "flipback" approach for underscore callable,
     # see https://github.com/kachayev/fn.py/issues/23
     __flipback__ = None
 
-    def __init__(self, callback=identity, format="_", format_args=None,
-                 arity=1):
+    def __init__(self, callback: Callable = identity,
+                 format: AnyStr = "_",
+                 format_args: object = None,
+                 arity: int = 1):
         self._callback = callback
         self._format = format
         self._format_args = format_args or {}
@@ -93,6 +98,7 @@ class _Callable(object):
 
     def __getitem__(self, k):
         if isinstance(k, self.__class__):
+            # noinspection PyTypeChecker
             return self.__class__(
                 (operator.getitem, self, k),
                 "%s[%s]" % (self._format, k._format),
@@ -133,7 +139,7 @@ class _Callable(object):
         """
         Return original function notation to ensure that eval(repr(f)) == f
         """
-        return re.sub(r"x\d+", "_", str(self).split("=>", 1)[1].strip())
+        return re.sub(VAR_X, "_", str(self).split("=>", 1)[1].strip())
 
     def __call__(self, *args):
         if len(args) != self._arity:
@@ -146,10 +152,17 @@ class _Callable(object):
         return f(left(*args[:left._arity]), right(*args[left._arity:]))
 
     __add__ = fmap(operator.add, "self + other")
+    __iadd__ = fmap(operator.iadd, "self += other")
     __mul__ = fmap(operator.mul, "self * other")
+    __imul__ = fmap(operator.imul, "self *= other")
+    __matmul__ = fmap(operator.matmul, "self @ other")
+    __imatmul__ = fmap(operator.imatmul, "self @= other")
     __sub__ = fmap(operator.sub, "self - other")
+    __isub__ = fmap(operator.isub, "self -= other")
     __mod__ = fmap(operator.mod, "self %% other")
+    __imod__ = fmap(operator.imod, "self %= other")
     __pow__ = fmap(operator.pow, "self ** other")
+    __ipow__ = fmap(operator.ipow, "self **= other")
 
     __and__ = fmap(operator.and_, "self & other")
     __or__ = fmap(operator.or_, "self | other")
@@ -158,7 +171,9 @@ class _Callable(object):
     __div__ = fmap(div, "self / other")
     __divmod__ = fmap(divmod, "self / other")
     __floordiv__ = fmap(operator.floordiv, "self / other")
+    __ifloordiv__ = fmap(operator.ifloordiv, "self /= other")
     __truediv__ = fmap(operator.truediv, "self / other")
+    __itruediv__ = fmap(operator.itruediv, "self /= other")
 
     __lshift__ = fmap(operator.lshift, "self << other")
     __rshift__ = fmap(operator.rshift, "self >> other")

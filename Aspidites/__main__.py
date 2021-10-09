@@ -1,4 +1,5 @@
-# contents of app_main.py
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+
 import argparse as ap
 import os
 import sys

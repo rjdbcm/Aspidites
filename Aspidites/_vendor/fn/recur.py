@@ -1,3 +1,4 @@
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 """Provides decorators to deal with tail calls in recursive functions."""
 import warnings
 from collections import namedtuple

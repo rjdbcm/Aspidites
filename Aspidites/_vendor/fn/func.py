@@ -1,3 +1,4 @@
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 from functools import partial, update_wrapper, wraps
 from sys import version_info
 from symtable import Function

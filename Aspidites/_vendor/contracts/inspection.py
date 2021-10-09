@@ -1,3 +1,4 @@
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 """Get useful information from live Python objects.
 This is a statically compiled version of the inspect module from the standard library.
 

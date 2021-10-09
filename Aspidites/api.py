@@ -1,4 +1,4 @@
-
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 # Aspidites
 # Copyright (C) 2021 Ross J. Duff
 
@@ -23,29 +23,42 @@ from ._vendor.contracts import new_contract
 from ._vendor.fn.underscore import ArityError, _Callable
 
 
-def wrap(text, width=160, pad=True, padchar=" ") -> List[str]:
+def wrap_lines(text, padchar, width, wrapped_lines, pad):
+    for l in text.splitlines():
+        line = _wrap(l, width, replace_whitespace=False)
+        if pad:
+            for s in line:
+                s += padchar * width
+        wrapped_lines.extend(line)
+    return wrapped_lines
+
+
+def wrap(text, width, pad, padchar):
     """
     Do not remove whitespaces in string but still wrap text to max width.
     Instead of passing the entire text to textwrap.wrap, split and pass each
     line instead. This way list formatting is not mangled by textwrap.wrap.
     """
+    pad = pad or True
+    padchar = padchar or ' '.encode('UTF-8')
+    width = width or 160
+
     wrapped_lines = []
     try:
-        for l in text.splitlines():
-            line = _wrap(l, width, replace_whitespace=False)
-            if pad:
-                for s in line:
-                    s += padchar * width
-            wrapped_lines.extend(line)
+        wrap_lines(text, padchar, width, wrapped_lines, pad)
     except ArityError:
         wrapped_lines.extend([str(text)])
 
     return wrapped_lines
 
 
-def bordered(text: str, width: int = 160) -> str:
-    lines = [i for i in wrap(text, width=width)]
-    width = max((len(s) for s in lines), default=width) or width
+def bordered(text, width=160) -> str:
+    i: str
+    lines: list = [t for t in wrap(text, width=width, pad=True, padchar=" ")]
+    lens: list = []
+    for i in lines:
+        lens.append(len(i))
+    width = max(lens, default=width) or width
     res = ["╭" + "┉" * width + "╮"]
     for s in lines:
         while len(s) < width:

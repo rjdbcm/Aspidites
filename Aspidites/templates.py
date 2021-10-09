@@ -1,4 +1,4 @@
-
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 # Aspidites
 # Copyright (C) 2021 Ross J. Duff
 
@@ -160,7 +160,7 @@ if Options.embed:
 
 """)
 
-lib = Template("""# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8
+lib = Template("""#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8
 # THIS FILE IS GENERATED - DO NOT EDIT #
 
 from typing import Any

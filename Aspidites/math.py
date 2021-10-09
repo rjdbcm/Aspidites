@@ -1,4 +1,4 @@
-# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8
 import sys
 from warnings import warn
 from typing import Any, Union, TypeVar, ItemsView, Type
@@ -242,4 +242,3 @@ class Warn:
             else:
                 str_locals += f"{k}: {str(v_)}\n".encode('UTF-8')
         return str_locals.rstrip("\n".encode('UTF-8'))
-

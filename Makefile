@@ -101,7 +101,7 @@ docker:
 test-all:
 	python -m pytest Aspidites/tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
 
-build-ext: clean-test
+build-ext: clean
 	python setup.py build_ext --inplace
 
 xtest: build-ext

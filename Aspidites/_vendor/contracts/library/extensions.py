@@ -1,3 +1,4 @@
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 from ..interface import Contract, ContractNotRespected, describe_value
 from ..syntax import (Combine, Word, W, alphas, alphanums, oneOf,
                       ParseException, ZeroOrMore, S, rvalue,

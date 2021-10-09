@@ -1,4 +1,4 @@
-
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 # class Extra:
 #     loading = False
 #
@@ -126,7 +126,8 @@ def parse_contract_string_actual(string):
         Where)
     from .main import Storage, _cacheable, check_param_is_string
     from .syntax import ParseException, ParseFatalException, contract_expression
-
+    msg: str
+    where: Where
     check_param_is_string(string)
 
     if string in Storage.string2contract:
