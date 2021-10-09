@@ -24,13 +24,11 @@ from .templates import lib, makefile, pyproject, setup, default_file, inject_sta
 from pyrsistent import pmap, v
 from hashlib import sha256
 from pathlib import Path
-from .final import final
 from ._vendor.semantic_version import Version
 from pyparsing import ParseResults
 import cython
 
 
-@final()
 class CheckedFileStack:
 
     """A convenience class for reading file data streams to stdout or to checksum"""
@@ -128,7 +126,6 @@ class CheckedFileStack:
                 raise RuntimeError("\nfor file %s\n%s\n  did not match cached digest\n%s")
 
 
-@final()
 class CompilerArgs:
     def __init__(self, **kwargs):
         self.code: ParseResults = kwargs['code']

@@ -1,4 +1,3 @@
-
 # Aspidites
 # Copyright (C) 2021 Ross J. Duff
 
