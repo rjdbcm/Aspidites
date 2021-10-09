@@ -123,12 +123,10 @@ def test_compile__compile_restricted_exec__10():  # pragma: PY3
     """It is a SyntaxError to use the `exec` statement. (Python 3 only)"""
     result = compile_restricted_exec(EXEC_STATEMENT)
     if IS_PY3A_OR_GREATER:
-        assert (
-                   'Line 2: SyntaxError: Missing parentheses in call to \'exec\'. Did you mean exec(...)? at '
-                   'statement: "exec \'q = 1\'"',) == result.errors
+        assert ('Line 2: SyntaxError: Missing parentheses in call to \'exec\'. Did you mean exec(...)? at statement: "exec \'q = 1\'"',) == result.errors
     else:
         assert (
-         'Line 2: SyntaxError: Missing parentheses in call to \'exec\' at statement: "exec \'q = 1\'"') == result.errors
+         'Line 2: SyntaxError: Missing parentheses in call to \'exec\' at statement: "exec \'q = 1\'"',) == result.errors
 
 
 FUNCTION_DEF = """\
