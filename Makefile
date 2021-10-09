@@ -39,9 +39,11 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/_vendor/contracts/useful_contracts/numpy_specific.c
 	rm -fr Aspidites/_vendor/contracts/useful_contracts/numbers.c
 	rm -fr Aspidites/_vendor/contracts/library/*.c
+	rm -fr Aspidites/_vendor/fn/*.c
 	rm -fr Aspidites/parser/convert.c
 	rm -fr Aspidites/parser/parser.c
 	rm -fr Aspidites/parser/reserved.c
+	rm -fr Aspidites/_vendor/decorator_extension.c
 	rm -fr Aspidites/templates.c
 	rm -fr Aspidites/monads.c
 	rm -fr Aspidites/math.c
@@ -54,6 +56,8 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/math.*.so
 	rm -fr Aspidites/monads.*.so
 	rm -fr Aspidites/templates.*.so
+	rm -fr Aspidites/_vendor/decorator_extension.*.so
+	rm -fr Aspidites/_vendor/fn/*.*.so
 	rm -fr Aspidites/_vendor/contracts/metaclass.*.so
 	rm -fr Aspidites/_vendor/contracts/interface.*.so
 	rm -fr Aspidites/_vendor/contracts/syntax.*.so

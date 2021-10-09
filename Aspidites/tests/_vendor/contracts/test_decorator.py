@@ -12,7 +12,10 @@ import decimal
 import inspect
 from asyncio import get_event_loop
 from collections import defaultdict, ChainMap, abc as c
-from Aspidites._vendor.decorator import dispatch_on, contextmanager, decorator
+from Aspidites._vendor.decorator import contextmanager, decorator
+from Aspidites._vendor.decorator_extension import dispatch_on
+
+
 # try:
 #     from . import decorator_documentation as doc  # good with pytest
 # except ImportError:
@@ -45,6 +48,7 @@ class CoroutineTestCase(unittest.TestCase):
         @before_after
         async def coro(x):
             return x
+
         self.assertTrue(inspect.iscoroutinefunction(coro))
         out = get_event_loop().run_until_complete(coro('x'))
         self.assertEqual(out, '<before>x<after>')
@@ -53,6 +57,7 @@ class CoroutineTestCase(unittest.TestCase):
         @coro_to_func
         async def coro(x):
             return x
+
         self.assertFalse(inspect.iscoroutinefunction(coro))
         self.assertEqual(coro('x'), 'x')
 
@@ -69,6 +74,7 @@ class GeneratorCallerTestCase(unittest.TestCase):
         def square(func, *args, **kw):
             for x in gen123():
                 yield x * x
+
         new = square(gen123)
         self.assertTrue(inspect.isgeneratorfunction(new))
         self.assertEqual(list(new()), [1, 4, 9])
@@ -258,6 +264,7 @@ class TestSingleDispatch(unittest.TestCase):
         @g.register(int)
         def g_int(i):
             return "int %s" % (i,)
+
         self.assertEqual(g(""), "base")
         self.assertEqual(g(12), "int 12")
 
@@ -277,6 +284,7 @@ class TestSingleDispatch(unittest.TestCase):
         def g(obj):
             "Simple test"
             return "Test"
+
         self.assertEqual(g.__name__, "g")
         if sys.flags.optimize < 2:
             self.assertEqual(g.__doc__, "Simple test")
@@ -289,6 +297,7 @@ class TestSingleDispatch(unittest.TestCase):
         @g.register(decimal.DecimalException)
         def _(obj):
             return obj.args
+
         subn = decimal.Subnormal("Exponent < Emin")
         rnd = decimal.Rounded("Number got rounded")
         self.assertEqual(g(subn), ("Exponent < Emin",))
@@ -297,6 +306,7 @@ class TestSingleDispatch(unittest.TestCase):
         @g.register(decimal.Subnormal)
         def _g(obj):
             return "Too small to care."
+
         self.assertEqual(g(subn), "Too small to care.")
         self.assertEqual(g(rnd), ("Number got rounded",))
 
@@ -417,6 +427,7 @@ class TestSingleDispatch(unittest.TestCase):
         class O(c.Sized):
             def __len__(self):
                 return 0
+
         o = O()
         self.assertEqual(g(o), "base")
         g.register(c.Iterable)(lambda arg: "iterable")
@@ -434,6 +445,7 @@ class TestSingleDispatch(unittest.TestCase):
 
         class P(object):
             pass
+
         p = P()
         self.assertEqual(g(p), "base")
         c.Iterable.register(P)
@@ -446,12 +458,14 @@ class TestSingleDispatch(unittest.TestCase):
         class Q(c.Sized):
             def __len__(self):
                 return 0
+
         q = Q()
         self.assertEqual(g(q), "sized")
         c.Iterable.register(Q)
         self.assertEqual(g(q), "sized")
         c.Set.register(Q)
         self.assertEqual(g(q), "set")
+
         # because c.Set is a subclass of c.Sized and c.Iterable
 
         @singledispatch
@@ -465,6 +479,7 @@ class TestSingleDispatch(unittest.TestCase):
         @h.register(c.Container)
         def h_container(arg):
             return "container"
+
         # Even though Sized and Container are explicit bases of MutableMapping,
         # this ABC is implicitly registered on defaultdict which makes all of
         # MutableMapping's bases implicit as well from defaultdict's
@@ -474,6 +489,7 @@ class TestSingleDispatch(unittest.TestCase):
 
         class R(defaultdict):
             pass
+
         c.MutableSequence.register(R)
 
         @singledispatch
@@ -487,6 +503,7 @@ class TestSingleDispatch(unittest.TestCase):
         @i.register(c.MutableSequence)
         def i_sequence(arg):
             return "sequence"
+
         r = R()
         with assertRaises(RuntimeError):  # was no error
             self.assertEqual(i(r), "sequence")
@@ -497,14 +514,16 @@ class TestSingleDispatch(unittest.TestCase):
         class T(S, c.Sized):
             def __len__(self):
                 return 0
+
         t = T()
         self.assertEqual(h(t), "sized")
         c.Container.register(T)
-        self.assertEqual(h(t), "sized")   # because it's explicitly in the MRO
+        self.assertEqual(h(t), "sized")  # because it's explicitly in the MRO
 
         class U(object):
             def __len__(self):
                 return 0
+
         u = U()
         self.assertEqual(h(u), "sized")
         # implicit Sized subclass inferred
@@ -542,6 +561,7 @@ class DecoratorTests(unittest.TestCase):
 
     def test_not_specified1(self):
         """ No docstring specified """
+
         def f():
             pass
 
@@ -611,6 +631,7 @@ class DecoratorTests(unittest.TestCase):
 
     def not_supported2(self):
         """ Support of **args """
+
         def f(a, **b):
             """
                 :type a: int
@@ -633,6 +654,7 @@ class DecoratorTests(unittest.TestCase):
 
     def test_ok3(self):
         """ Trying the quoting thing. """
+
         @contract
         def f(a, b):
             """ This is good
@@ -674,40 +696,48 @@ class DecoratorTests(unittest.TestCase):
             @contract(1)
             def g(a, b):
                 return int(a + b)
+
         self.assertRaises(ContractException, f)
 
     def test_invalid_args2(self):
         """ unknown parameter """
+
         def f():
             @contract(c=2)
             def g(a, b):
                 return int(a + b)
+
         self.assertRaises(ContractException, f)
 
     def test_check_it_works1(self):
         @contract(a='int', b='int', returns='int')
         def f(a, b):  # @UnusedVariable
             return 2.0
+
         self.assertRaises(ContractNotRespected, f, 1, 2)
 
     def test_check_it_works2(self):
         @contract(a='int', b='int', returns='int')
         def f(a, b):  # @UnusedVariable
             return a + b
+
         f(1, 2)
         self.assertRaises(ContractNotRespected, f, 1.0, 2)
         self.assertRaises(ContractNotRespected, f, 1, 2.0)
 
     def test_check_it_works2b(self):
         """ Nothing for b """
+
         @contract(a='int', returns='int')
         def f(a, b):  # @UnusedVariable
             return int(a + b)
+
         f(1, 2)
         f(1, 2.0)
 
     def test_check_it_works2c(self):
         """ Nothing for b """
+
         def f1(a, b):  # @UnusedVariable
             return int(a + b)
 
@@ -735,6 +765,7 @@ class DecoratorTests(unittest.TestCase):
                 :rtype: int
             """
             return a + b
+
         f(1, 2)
         self.assertRaises(ContractNotRespected, f, 1.0, 2)
         self.assertRaises(ContractNotRespected, f, 1, 2.0)
@@ -748,6 +779,7 @@ class DecoratorTests(unittest.TestCase):
                 :returns int,>0: Description
             """
             return a + b
+
         f(1, 2)
         self.assertRaises(ContractNotRespected, f, 1.0, 2)
         self.assertRaises(ContractNotRespected, f, -1, 2)
@@ -867,9 +899,7 @@ class DecoratorTests(unittest.TestCase):
 
         self.assertEqual(getfullargspec(f2), getfullargspec(f))
 
-
     def test_empty_types(self):
-
         def x():
             @contract
             def f(myparam):
@@ -880,7 +910,6 @@ class DecoratorTests(unittest.TestCase):
         self.assertRaises(MissingContract, x)
 
     def test_empty_types2(self):
-
         @contract
         def f(x):
             """
