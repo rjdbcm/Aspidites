@@ -1,5 +1,9 @@
 **unreleased**
 **v0.23.0**
+
+- 5d0a859 fix order of condition def py3.10
+
+
 **v0.22.1**
 
 - cc4b3f0 changelog updated
