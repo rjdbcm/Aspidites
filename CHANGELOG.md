@@ -1,4 +1,5 @@
 **unreleased**
+**v0.24.0**
 **v0.23.0**
 
 - 5d0a859 fix order of condition def py3.10
