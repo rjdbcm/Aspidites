@@ -248,5 +248,5 @@ class Warn:
     # noinspection PyMethodMayBeStatic
     def format_locals(self, local_vars, exc: Exception):
         locals_: dict = dict(filter(lambda x: x[1] != str(exc), local_vars))
-        str_locals: bytes = _format_locals(locals_, '')
+        str_locals: bytes = _format_locals(locals_, ''.encode('UTF-8'))
         return str_locals.rstrip("\n".encode('UTF-8'))
