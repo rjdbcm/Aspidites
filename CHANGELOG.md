@@ -1,5 +1,9 @@
 **unreleased**
 **v0.24.0**
+
+- fc39c2f remove conditional def of match case. not backwards compatible at the moment.
+
+
 **v0.23.0**
 
 - 5d0a859 fix order of condition def py3.10
