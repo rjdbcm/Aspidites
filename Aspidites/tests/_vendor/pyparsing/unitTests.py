@@ -471,7 +471,7 @@ class ParseEBNFTest(ParseTestCase):
         table['integer'] = Word(nums)
 
         print_('Parsing EBNF grammar with EBNF parser...')
-        parsers = ebnf.parse(grammar, table)
+        parsers = ebnf.parse_code(grammar, table)
         ebnf_parser = parsers['syntax']
         print_("-","\n- ".join(parsers.keys()))
         self.assertEqual(len(list(parsers.keys())), 13, "failed to construct syntax grammar")

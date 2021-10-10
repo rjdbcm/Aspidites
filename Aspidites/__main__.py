@@ -68,13 +68,9 @@ def get_cython_parser(dummy: ap.ArgumentParser) -> t.Tuple[ap.ArgumentParser, di
     return dummy, cy_kwargs, cy_parser, cy3_fallback_mode
 
 
-def parse_from_dummy(argv: list,
-                     dummy: ap.ArgumentParser,
-                     __test: bool = False) -> t.Tuple[ap.Namespace, list, dict]:
-    dummy, cy_kwargs, cy_parser, cy3_fallback_mode = get_cython_parser(dummy)
+def setup_test_env(argv, __test: bool = False):
     if len(argv) == 1:
-        if not __test:  # pragma: no cover
-            print("%s called without arguments. Next time try --help or -h." % argv[0])
+        not __test or print("%s called without arguments. Next time try --help or -h." % argv[0])
         sys.exit(1)
     if len(argv) >= 2 and argv[1] == "--pytest" or argv[1] == '-pt':  # pragma: no cover
         if not os.getenv("ASPIDITES_DOCKER_BUILD"):
@@ -82,6 +78,13 @@ def parse_from_dummy(argv: list,
         else:
             argv = argv[2:]
         sys.exit(pytest.main(argv))
+
+
+def parse_from_dummy(argv: list,
+                     dummy: ap.ArgumentParser,
+                     __test: bool = False) -> t.Tuple[ap.Namespace, list, dict]:
+    dummy, cy_kwargs, cy_parser, cy3_fallback_mode = get_cython_parser(dummy)
+    setup_test_env(argv, __test)
 
     def add_pre_cy3_args(parser: ap.ArgumentParser) -> None:  # pragma: no cover
         cy_arg_group = parser.add_argument_group("optional cython arguments")
@@ -129,17 +132,21 @@ def parse_from_dummy(argv: list,
     return args, other_args, cy_kwargs
 
 
+def parse_code(target, output):
+    if target == "Aspidites/tests" or target == "Aspidites\\tests":  # pragma: no cover
+        raise SystemExit()
+    code = parse_module(open(target, 'r').read())  # pragma: no cover
+    if output is None:  # pragma: no cover
+        output = Path(target).parent / 'compiled.py'
+    return target, output, code
+
+
 def main(argv=None) -> None:
     argv = sys.argv if not argv else argv
     # any failure results in falling back to the `Cython.Compiler.Options` API
-    args, other_args, cy_kwargs = parse_from_dummy(argv,
-                                                   ap.ArgumentParser(add_help=False))
-    if args.target == "Aspidites/tests" or args.target == "Aspidites\\tests":  # pragma: no cover
-        raise SystemExit()
+    args, other_args, cy_kwargs = parse_from_dummy(argv, ap.ArgumentParser(add_help=False))
 
-    code = parse_module(open(args.target, 'r').read())  # pragma: no cover
-    if args.output is None:  # pragma: no cover
-        args.output = Path(args.target).parent / 'compiled.py'
+    args.target, args.output, code = parse_code(args.target, args.output)
     # TODO: change pyx to pyz on windows
     cy_kwargs.update({  # pragma: no cover
         'code': code,
