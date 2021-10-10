@@ -1,4 +1,5 @@
 **unreleased**
+**v0.22.1**
 **v0.22.0**
 
 - 9b3a4de fix import typo
