@@ -3,7 +3,7 @@ from ..interface import Contract, ContractNotRespected, describe_value
 from ..syntax import (Combine, Word, W, alphas, alphanums, oneOf,
                       ParseException, ZeroOrMore, S, rvalue,
                       delimitedList, Optional)
-from pyparsing import ParseFatalException
+from Aspidites._vendor.pyparsing import ParseFatalException
 
 
 class Extension(Contract):

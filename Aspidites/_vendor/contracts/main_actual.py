@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 # class Extra:
 #     loading = False
 #
@@ -10,18 +10,48 @@
 #         # And after everything else is loaded, load the  utils
 #     else:
 #         print('already loading...')
+from .syntax import ParseException
+from .library.extensions import CheckCallableWithSelf
+from .library import CheckCallable, Extension, SeparateContext, identifier_expression
+from .inspection import can_accept_self, can_accept_at_least_one_argument
+from .interface import Contract, ContractSyntaxError, Where, describe_value, ContractNotRespected
+from .syntax import contract_expression
+from .inspection import getfullargspec
+
+
+class Storage:
+    # Cache storage
+    string2contract = {}
+
+
+def _cacheable(string, c):
+    """ Returns whether the contract c defined by string string is cacheable. """
+    # XXX need a more general way of indicating
+    #     whether a contract is safely cacheable
+    return '$' not in string
+
+
+def get_annotations(function):
+    return getfullargspec(function).annotations
+
+
+def get_all_arg_names(function):
+    spec = getfullargspec(function)
+    possible = spec.args + [spec.varargs, spec.varkw] + spec.kwonlyargs
+    all_args = [x for x in possible if x]
+    return all_args
+
+
+def check_param_is_string(x):
+    if not isinstance(x, str):
+        msg = 'Expected a string, obtained %s' % type(x)
+        raise ValueError(msg)
+
 
 def new_contract_impl(identifier, condition):
-    from .._compat import basestring
-    from .syntax import ParseException
-    from .library.extensions import CheckCallableWithSelf
-    from .library import (CheckCallable, Extension, SeparateContext,
-        identifier_expression)
-    from .interface import describe_value, Where, ContractSyntaxError
-    from .inspection import can_accept_self, can_be_used_as_a_type, can_accept_at_least_one_argument
-
+    from .main import parse_flexible_spec
     # Be friendly
-    if not isinstance(identifier, basestring):
+    if not isinstance(identifier, str):
         msg = 'I expect the identifier to be a string; received %s.' % describe_value(identifier)
         raise ValueError(msg)
 
@@ -51,7 +81,7 @@ def new_contract_impl(identifier, condition):
         loc = e.loc
         if loc >= len(identifier):
             loc -= 1
-        where = Where(identifier, character=loc)  #line=e.lineno, column=e.col)
+        where = Where(identifier, character=loc)  # line=e.lineno, column=e.col)
         # msg = 'Error in parsing string: %s' % e
         msg = ('The given identifier %r does not correspond to my idea '
                'of what an identifier should look like;\n%s\n%s'
@@ -59,7 +89,7 @@ def new_contract_impl(identifier, condition):
         raise ValueError(msg)
 
     # Now let's check the condition
-    if isinstance(condition, basestring):
+    if isinstance(condition, str):
         # We assume it is a condition that should parse cleanly
         try:
             # could call parse_flexible_spec as well here
@@ -69,8 +99,7 @@ def new_contract_impl(identifier, condition):
                    (condition, e))
             raise ValueError(msg)
     # Important: types are callable, so check this first.
-    elif can_be_used_as_a_type(condition):
-        from .main import parse_flexible_spec
+    elif isinstance(condition, type):
         # parse_flexible_spec can take care of types
         bare_contract = parse_flexible_spec(condition)
     # Lastly, it should be a callable
@@ -122,17 +151,11 @@ def new_contract_impl(identifier, condition):
 
 
 def parse_contract_string_actual(string):
-    from .interface import (Contract, ContractDefinitionError, ContractSyntaxError,
-        Where)
-    from .main import Storage, _cacheable, check_param_is_string
-    from .syntax import ParseException, ParseFatalException, contract_expression
     msg: str
     where: Where
     check_param_is_string(string)
-
     if string in Storage.string2contract:
         return Storage.string2contract[string]
-    # TODO: This needs a total rewrite to avoid exception handling
     try:
         c = contract_expression.parseString(string,
                                             parseAll=True)[0]
@@ -140,15 +163,56 @@ def parse_contract_string_actual(string):
         if _cacheable(string, c):
             Storage.string2contract[string] = c
         return c
-    except ContractDefinitionError as e:
-        raise
-    except ParseException as e:
-        where = Where(string, character=e.loc)
+    except Exception as e:
         msg = '%s' % e
-        raise ContractSyntaxError(msg, where=where)
-    except ParseFatalException as e:
-        where = Where(string, character=e.loc)
-        msg = '%s' % e
-        raise ContractSyntaxError(msg, where=where)
+        if hasattr(e, 'loc'):  # ParseBaseException
+            where = Where(string, character=e.loc)
+            raise ContractSyntaxError(msg, where=where)
+        else:
+            raise  # ContractDefinitionError
 
 
+def check_contracts(contracts, values, context_variables=None):
+    """
+        Checks that the values respect the contract.
+        Not a public function -- no friendly messages.
+
+        :param contracts: List of contracts.
+        :type contracts:  ``list[N](str),N>0``
+
+        :param values: Values that should match the contracts.
+        :type values: ``list[N]``
+
+        :param context_variables: Initial context
+        :type context_variables: ``dict(str[1]: *)``
+
+        :return: a Context variable
+        :rtype: type(Context)
+
+        :raise: ContractSyntaxError
+        :raise: ContractNotRespected
+        :raise: ValueError
+    """
+    assert isinstance(contracts, list)
+    assert isinstance(contracts, list)
+    assert len(contracts) == len(values)
+
+    if context_variables is None:
+        context_variables = {}
+
+    for var in context_variables:
+        if not (isinstance(var, str) and len(var) == 1):  # XXX: isalpha
+            msg = ('Invalid name %r for a variable. '
+                   'I expect a string of length 1.' % var)
+            raise ValueError(msg)
+
+    C = []
+    for x in contracts:
+        assert isinstance(x, str)
+        C.append(parse_contract_string_actual(x))
+
+    context = context_variables.copy()
+    for i in range(len(contracts)):
+        C[i]._check_contract(context, values[i], silent=False)
+
+    return context

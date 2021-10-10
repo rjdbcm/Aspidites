@@ -10,7 +10,7 @@ from .compositions import And, OR
 from .suggester import create_suggester
 from numpy import ndarray, dtype
 import numpy
-from pyparsing import infixNotation as operatorPrecedence, Or
+from Aspidites._vendor.pyparsing import infixNotation as operatorPrecedence, Or
 
 
 class Array(Contract):

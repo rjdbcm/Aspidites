@@ -35,7 +35,6 @@ for i, v in pre:
         contract_fails_val += [(i, v)]
 
 
-
 def check_contracts_ok(contract, value):
     if isinstance(contract, basestring):
         contract = [contract]

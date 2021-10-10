@@ -4,7 +4,7 @@ from .interface import (Contract, ContractNotRespected,
                         CannotDecorateClassmethods,
                         ContractSyntaxError, ContractException)
 
-from .main import (check, fail, check_multiple, contract_decorator,
+from .main import (contract_decorator, check, fail, check_multiple,
                    contracts_decorate as decorate,
                    parse_flexible_spec as parse)
 
@@ -23,8 +23,6 @@ def new_contract(*args):
 
 
 new_contract.__doc__ = new_contract_main.__doc__
-
-from .enabling import all_disabled
 
 # A couple of useful functions
 from .interface import describe_value, describe_type, describe_value_multiline

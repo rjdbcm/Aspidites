@@ -8,7 +8,7 @@ from typing import Any, List
 
 from types import ModuleType
 
-from pyparsing import (delimitedList, Forward, Literal,
+from Aspidites._vendor.pyparsing import (delimitedList, Forward, Literal,
                        stringEnd, nums, Word, CaselessLiteral, Combine,
                        Optional, Suppress, OneOrMore, ZeroOrMore, opAssoc,
                        infixNotation as operatorPrecedence, oneOf, ParseException,

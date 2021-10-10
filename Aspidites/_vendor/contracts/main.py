@@ -2,84 +2,104 @@ import sys
 from typing import Callable, cast, TypeVar, Any
 from Aspidites._vendor._compat import IS_PY2, basestring
 
-from .inspection import getfullargspec, getcallargs
+from inspect import getfullargspec
+from .inspection import getcallargs
 from .docstring_parsing import Arg, DocStringInfo
-from .enabling import all_disabled
-from .inspection import (can_accept_at_least_one_argument, can_accept_self,
-    can_be_used_as_a_type)
 from .interface import (CannotDecorateClassmethods, Contract,
     ContractDefinitionError, ContractException, ContractNotRespected,
-    ContractSyntaxError, MissingContract, Where, describe_value)
+    ContractSyntaxError, MissingContract, describe_value)
+from .main_actual import parse_contract_string_actual, check_contracts, get_all_arg_names
+
+
+def check(contract, objekt, desc=None, **context):  # must stay in main.py so that contracts can inspect their scope
+    """
+        Checks that ``object`` satisfies the contract
+        described by ``contract``.
+
+        :param contract: The contract string.
+        :type contract:  str
+
+        :param objekt: Any object.
+        :type objekt: ``*``
+
+        :param desc: An optional description of the error. If given,
+                     it is included in the error message.
+        :type desc: ``None|str``
+    """
+    if not isinstance(contract, str):
+        # XXX: make it more liberal?
+        raise ValueError('I expect a string (contract spec) as the first '
+                         'argument, not a %s.' % describe_value(contract))
+    try:
+        return check_contracts([contract], [objekt], context)
+    except ContractNotRespected as e:
+        if desc is not None:
+            e.error = '%s\n%s' % (desc, e.error)
+        raise e
+
+
+def fail(contract, value, **initial_context):  # must stay in main.py so that contracts can inspect their scope
+    """ Checks that the value **does not** respect this contract.
+        Raises an exception if it does.
+
+       :raise: ValueError
+    """
+    try:
+        parsed_contract = parse_contract_string_actual(contract)
+        context = check_contracts([contract], [value], initial_context)
+    except ContractNotRespected:
+        pass
+    else:
+        msg = 'I did not expect that this value would satisfy this contract.\n'
+        msg += '-    value: %s\n' % describe_value(value)
+        msg += '- contract: %s\n' % parsed_contract
+        msg += '-  context: %r' % context
+        raise ValueError(msg)
+
+
+def check_multiple(couples, desc=None):  # must stay in main.py so that contracts can inspect their scope
+    """
+        Checks multiple couples of (contract, value) in the same context.
+
+        This means that the variables in each contract are shared with
+        the others.
+
+        :param couples: A list of tuple (contract, value) to check.
+        :type couples: ``list[>0](tuple(str, *))``
+
+        :param desc: An optional description of the error. If given,
+                     it is included in the error message.
+        :type desc: ``None|str``
+    """
+
+    check('list[>0](tuple(str, *))', couples, 'I expect a non-empty list of (object, string) tuples.')
+    contracts = [x[0] for x in couples]
+    values = [x[1] for x in couples]
+    try:
+        return check_contracts(contracts, values)
+    except ContractNotRespected as e:
+        if desc is not None:
+            e.error = '%s\n%s' % (desc, e.error)
+        raise e
+
+
+def parse_flexible_spec(spec):  # must stay in main.py so that contracts can inspect their scope
+    """ spec can be either a Contract, a type, or a contract string.
+        In the latter case, the usual parsing takes place"""
+    if isinstance(spec, Contract):
+        return spec
+    elif isinstance(spec, str):
+        return parse_contract_string_actual(spec)
+    elif isinstance(spec, type):
+        from .library import CheckType
+        return CheckType(spec)
+    else:
+        msg = 'I want either a string or a type, not %s.' % describe_value(spec)
+        raise ContractException(msg)
 
 
 # from .library import (CheckCallable, Extension, SeparateContext,
 #     identifier_expression)
-def check_contracts(contracts, values, context_variables=None):
-    """
-        Checks that the values respect the contract.
-        Not a public function -- no friendly messages.
-
-        :param contracts: List of contracts.
-        :type contracts:  ``list[N](str),N>0``
-
-        :param values: Values that should match the contracts.
-        :type values: ``list[N]``
-
-        :param context_variables: Initial context
-        :type context_variables: ``dict(str[1]: *)``
-
-        :return: a Context variable
-        :rtype: type(Context)
-
-        :raise: ContractSyntaxError
-        :raise: ContractNotRespected
-        :raise: ValueError
-    """
-    assert isinstance(contracts, list)
-    assert isinstance(contracts, list)
-    assert len(contracts) == len(values)
-
-    if context_variables is None:
-        context_variables = {}
-
-    for var in context_variables:
-        if not (isinstance(var, basestring) and len(var) == 1):  # XXX: isalpha
-            msg = ('Invalid name %r for a variable. '
-                   'I expect a string of length 1.' % var)
-            raise ValueError(msg)
-
-    C = []
-    for x in contracts:
-        assert isinstance(x, basestring)
-        C.append(parse_contract_string(x))
-
-    context = context_variables.copy()
-    for i in range(len(contracts)):
-        C[i]._check_contract(context, values[i], silent=False)
-
-    return context
-
-
-class Storage:
-    # Cache storage
-    string2contract = {}
-
-
-def _cacheable(string, c):
-    """ Returns whether the contract c defined by string string is cacheable. """
-    # XXX need a more general way of indicating
-    #     whether a contract is safely cacheable
-    return '$' not in string
-
-
-def is_param_string(x):
-    return isinstance(x, basestring)
-
-
-def check_param_is_string(x):
-    if not is_param_string(x):
-        msg = 'Expected a string, obtained %s' % type(x)
-        raise ValueError(msg)
 
 
 F = TypeVar('F', bound=Callable[..., Any])
@@ -118,8 +138,6 @@ def contract_decorator(*arg, **kwargs) -> F:
         if isinstance(arg[0], Callable):
             # We were called without parameters
             function = arg[0]
-            if all_disabled():
-                return function
             try:
                 return cast(F, contracts_decorate(function, **kwargs))
             except ContractSyntaxError as es:
@@ -132,28 +150,20 @@ def contract_decorator(*arg, **kwargs) -> F:
     else:
         # !!! Do not change "tmp_wrap" name; we need it for the definition
         # of scoped variable
-
         # We were called *with* parameters.
-        if all_disabled():
-
-            def tmp_wrap(f: F) -> F:  # do not change name (see above)
-                return f
-
-        else:
-
-            def tmp_wrap(f: F) -> F:  # do not change name (see above)
-                try:
-                    return contracts_decorate(f, **kwargs)
-                except ContractSyntaxError as e:
-                    msg = u"Cannot decorate function %s:" % f.__name__
-                    from .utils import indent
-                    import traceback
-                    msg += u'\n\n' + indent(traceback.format_exc(), u'  ')
-                    raise ContractSyntaxError(msg, e.where)
-                    # erase the stack
-                except ContractDefinitionError as e:
-                    raise e.copy()
-                    # raise
+        def tmp_wrap(f: F) -> F:  # do not change name (see above)
+            try:
+                return contracts_decorate(f, **kwargs)
+            except ContractSyntaxError as e:
+                msg = u"Cannot decorate function %s:" % f.__name__
+                from .utils import indent
+                import traceback
+                msg += u'\n\n' + indent(traceback.format_exc(), u'  ')
+                raise ContractSyntaxError(msg, e.where)
+                # erase the stack
+            except ContractDefinitionError as e:
+                raise e.copy()
+                # raise
 
         return cast(F, tmp_wrap)
 
@@ -204,7 +214,7 @@ you can achieve the same goal by inverting the two decorators:
 
     else:
         # Py3k: check if there are annotations
-        annotations = get_annotations(function_)
+        annotations = getfullargspec(function_).annotations
 
         if annotations:
             if 'return' in annotations:
@@ -238,9 +248,6 @@ you can achieve the same goal by inverting the two decorators:
     is_bound_method = 'self' in all_args
 
     def contracts_checker(unused, *args, **kwargs):
-        do_checks = not all_disabled()
-        if not do_checks:
-            return cast(F, function_(*args, **kwargs))
 
         def get_nice_function_display():
             nice_function_display = '%s()' % function_.__name__
@@ -328,21 +335,6 @@ you can achieve the same goal by inverting the two decorators:
     return cast(F, wrapper)
 
 
-def parse_flexible_spec(spec):
-    """ spec can be either a Contract, a type, or a contract string.
-        In the latter case, the usual parsing takes place"""
-    if isinstance(spec, Contract):
-        return spec
-    elif is_param_string(spec):
-        return parse_contract_string(spec)
-    elif can_be_used_as_a_type(spec):
-        from .library import CheckType
-        return CheckType(spec)
-    else:
-        msg = 'I want either a string or a type, not %s.' % describe_value(spec)
-        raise ContractException(msg)
-
-
 def parse_contracts_from_docstring(function):
     annotations = DocStringInfo.parse(function.__doc__)
 
@@ -407,93 +399,6 @@ a contract to a certain parameter:
 inPy3k = sys.version_info[0] == 3
 
 
-def get_annotations(function):
-    return getfullargspec(function).annotations
-
-
-def get_all_arg_names(function):
-    spec = getfullargspec(function)
-    possible = spec.args + [spec.varargs, spec.varkw] + spec.kwonlyargs
-    all_args = [x for x in possible if x]
-    return all_args
-
-
-def check(contract, object, desc=None, **context):  # @ReservedAssignment
-    """
-        Checks that ``object`` satisfies the contract
-        described by ``contract``.
-
-        :param contract: The contract string.
-        :type contract:  str
-
-        :param object: Any object.
-        :type object: ``*``
-
-        :param desc: An optional description of the error. If given,
-                     it is included in the error message.
-        :type desc: ``None|str``
-    """
-    if all_disabled():
-        return {}
-
-    if not is_param_string(contract):
-        # XXX: make it more liberal?
-        raise ValueError('I expect a string (contract spec) as the first '
-                         'argument, not a %s.' % describe_value(contract))
-    try:
-        return check_contracts([contract], [object], context)
-    except ContractNotRespected as e:
-        if desc is not None:
-            e.error = '%s\n%s' % (desc, e.error)
-        raise e
-
-
-def fail(contract, value, **initial_context):
-    """ Checks that the value **does not** respect this contract.
-        Raises an exception if it does.
-
-       :raise: ValueError
-    """
-    try:
-        parsed_contract = parse_contract_string(contract)
-        context = check_contracts([contract], [value], initial_context)
-    except ContractNotRespected:
-        pass
-    else:
-        msg = 'I did not expect that this value would satisfy this contract.\n'
-        msg += '-    value: %s\n' % describe_value(value)
-        msg += '- contract: %s\n' % parsed_contract
-        msg += '-  context: %r' % context
-        raise ValueError(msg)
-
-
-def check_multiple(couples, desc=None):
-    """
-        Checks multiple couples of (contract, value) in the same context.
-
-        This means that the variables in each contract are shared with
-        the others.
-
-        :param couples: A list of tuple (contract, value) to check.
-        :type couples: ``list[>0](tuple(str, *))``
-
-        :param desc: An optional description of the error. If given,
-                     it is included in the error message.
-        :type desc: ``None|str``
-    """
-
-    check('list[>0](tuple(str, *))', couples,
-          'I expect a non-empty list of (object, string) tuples.')
-    contracts = [x[0] for x in couples]
-    values = [x[1] for x in couples]
-    try:
-        return check_contracts(contracts, values)
-    except ContractNotRespected as e:
-        if desc is not None:
-            e.error = '%s\n%s' % (desc, e.error)
-        raise e
-
-
 def new_contract(*args):
     """ Defines a new contract type. Used both as a decorator and as
         a function.
@@ -547,18 +452,13 @@ def new_contract(*args):
         # TODO: add here for class decorator
         # We were called without parameters
         function = args[0]
-        if all_disabled():
-            return function
         identifier = function.__name__
         new_contract_impl(identifier, function)
         return function
     else:
-        if all_disabled():
-            return None  # XXX: not really sure about this
         return new_contract_impl(*args)
 
 
 def parse_contract_string(string):
-    from .main_actual import parse_contract_string_actual
     return parse_contract_string_actual(string)
 

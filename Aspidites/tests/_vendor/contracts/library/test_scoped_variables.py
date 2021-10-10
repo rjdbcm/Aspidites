@@ -56,7 +56,7 @@ def test_check():
     q = 4
     c = parse('list[$p](>$q)')
 
-    c.check([5, 10])
+    c.check([5, 10], )
     c.fail([5, 3])
 
 

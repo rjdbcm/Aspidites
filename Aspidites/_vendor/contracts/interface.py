@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 # -*- coding: utf-8 -*-
 import sys
 from abc import ABCMeta, abstractmethod
@@ -154,14 +154,10 @@ def format_where(w, context_before=3, mark=None, arrow=True,
 
 def printable_length_where(w):
     """ Returns the printable length of the substring """
-    if sys.version_info[0] >= 3:  # pragma: no cover
-        stype = str
-    else:
-        stype = unicode
     sub = w.string[w.character:w.character_end]
     # return len(stype(sub, 'utf-8'))
     # I am not really sure this is what we want
-    return len(stype(sub))
+    return len(str(sub))
 
 
 from Aspidites._vendor._compat import basestring

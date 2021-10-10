@@ -44,6 +44,7 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/parser/parser.c
 	rm -fr Aspidites/parser/reserved.c
 	rm -fr Aspidites/_vendor/decorator_extension.c
+	rm -fr Aspidites/_vendor/pyparsing_extension.c
 	rm -fr Aspidites/templates.c
 	rm -fr Aspidites/monads.c
 	rm -fr Aspidites/math.c
@@ -57,6 +58,7 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/monads.*.so
 	rm -fr Aspidites/templates.*.so
 	rm -fr Aspidites/_vendor/decorator_extension.*.so
+	rm -fr Aspidites/_vendor/pyparsing_extension.*.so
 	rm -fr Aspidites/_vendor/fn/*.*.so
 	rm -fr Aspidites/_vendor/contracts/metaclass.*.so
 	rm -fr Aspidites/_vendor/contracts/interface.*.so
@@ -101,11 +103,11 @@ docker:
 test-all:
 	python -m pytest Aspidites/tests --cov Aspidites --cov-report=html:.coverage_html --full-trace --capture=tee-sys
 
-build-ext: clean
+build-ext:
 	python setup.py build_ext --inplace
 
 xtest: build-ext
-	python -m pytest Aspidites/tests -x
+	python -m pytest Aspidites/tests -x --profile --profile-svg
 
 coverage:
 	python -m pytest Aspidites/tests --cov-report=xml --cov=Aspidites

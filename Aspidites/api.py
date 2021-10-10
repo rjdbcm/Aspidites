@@ -17,7 +17,7 @@
 
 from textwrap import wrap as _wrap
 from typing import List
-from pyparsing import ParseResults
+from Aspidites._vendor.pyparsing import ParseResults
 
 from ._vendor.contracts import new_contract
 from ._vendor.fn.underscore import ArityError, _Callable

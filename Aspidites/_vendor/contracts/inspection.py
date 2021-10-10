@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 """Get useful information from live Python objects.
 This is a statically compiled version of the inspect module from the standard library.
 
@@ -3195,21 +3195,6 @@ class Signature:
 def signature(obj, *, follow_wrapped=True):
     """Get a signature object for the passed callable."""
     return Signature.from_callable(obj, follow_wrapped=follow_wrapped)
-
-
-def can_be_used_as_a_type(x):
-    """ Checks that x can be used as a type; specifically,
-        we can write isintance(y,x).
-        Here we support old-style classes.
-    """
-    if isinstance(x, type):
-        return True
-
-    if inPy2:  # pragma: no cover
-        if isinstance(x, ClassType):
-            return True
-
-    return False
 
 
 def can_accept_exactly_one_argument(callable_thing):

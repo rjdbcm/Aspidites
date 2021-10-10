@@ -5,6 +5,7 @@ from pathlib import Path
 from setuptools import setup, find_packages
 from setuptools.dist import Distribution
 from setuptools.command.install import install
+import numpy
 # ~#~ # Build static libs # ~#~ #
 from Cython.Build import cythonize
 ext_modules = cythonize([str(Path('Aspidites/_vendor/contracts/metaclass.py')),
@@ -49,6 +50,7 @@ ext_modules = cythonize([str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                          str(Path("Aspidites/_vendor/fn/underscore.py")),
                          str(Path("Aspidites/_vendor/fn/uniform.py")),
                          str(Path('Aspidites/_vendor/decorator_extension.py')),
+                         str(Path('Aspidites/_vendor/pyparsing_extension.py')),
                          str(Path('Aspidites/parser/convert.py')),
                          str(Path('Aspidites/parser/reserved.py')),
                          str(Path('Aspidites/parser/parser.py')),
@@ -68,7 +70,7 @@ cy_kwargs.update(
     code=parser.parse_module(code),
     force=True,
     fname='Aspidites/woma/library.pyx',
-    bytecode=True,
+    bytecode=False,
     c=True,
     verbose=0,
     build_requires=''
@@ -138,6 +140,7 @@ setup(
         'future'
         ],
     packages=find_packages(),
+    include_dirs=[numpy.get_include()],
     ext_modules=ext_modules,
     test_suite='Aspidites/tests',
     distclass=Distribution if sys.platform != 'darwin' else BinaryDistribution,

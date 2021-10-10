@@ -1,7 +1,8 @@
 import pytest
 
 from .utils import contract_strings
-from Aspidites._vendor.contracts import parse, ContractSyntaxError
+from Aspidites._vendor.contracts import ContractSyntaxError, parse
+
 
 import hypothesis
 from hypothesis import strategies as st

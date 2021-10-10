@@ -4,7 +4,7 @@ from Aspidites._vendor.contracts import new_contract, check, Contract, contract
 from Aspidites._vendor.contracts.library.extensions import identifier_expression
 
 from .utils import check_contracts_fail, check_contracts_ok
-from Aspidites._vendor.contracts.main import can_be_used_as_a_type, Storage
+from Aspidites._vendor.contracts.main_actual import Storage
 from Aspidites._vendor.contracts.syntax import ParsingTmp
 
 # The different patterns
@@ -204,8 +204,8 @@ class TestNewContract(unittest.TestCase):
         Storage.string2contract = {}  # TODO remove this hack
         color = new_contract('color', 'list[3](number,>=0,<=1)')
         # Make sure we got it right
-        color.check([0, 0, 0])
-        color.check([0, 0, 1])
+        color.check([0, 0, 0], )
+        color.check([0, 0, 1], )
         color.fail([0, 0])
         color.fail([0, 0, 2])
 
@@ -235,10 +235,10 @@ class TestNewContract(unittest.TestCase):
             return x % 2 == 0
         from Aspidites._vendor.contracts import parse
         p = parse('even')
-        p.check(2)
-        p.check(4)
+        p.check(2, )
+        p.check(4, )
         p.fail(3)
-        p.check(2.0)
+        p.check(2.0, )
 
     def test_as_decorator_multiple(self):
         @new_contract
@@ -248,7 +248,7 @@ class TestNewContract(unittest.TestCase):
 
         from Aspidites._vendor.contracts import parse
         p = parse('even2')
-        p.check(2)
+        p.check(2, )
         p.fail(3)
         p.fail(2.0) # now fails
 
@@ -269,13 +269,13 @@ class TestNewContract(unittest.TestCase):
             def __init__(self, x, y):  # @UnusedVariable
                 pass
 
-        assert can_be_used_as_a_type(OldStyleClass)
+        assert isinstance(OldStyleClass, type)
 
         class NewStyleClass():
             def __init__(self, x, y):  # @UnusedVariable
                 pass
 
-        assert can_be_used_as_a_type(NewStyleClass)
+        assert isinstance(NewStyleClass, type)
 
     def test_as_decorator_with_args(self):
         from Aspidites._vendor.contracts import parse
@@ -285,7 +285,7 @@ class TestNewContract(unittest.TestCase):
             return value > thresh
 
         p = parse('greater_than(5)')
-        p.check(6)
+        p.check(6, )
         p.fail(5)
 
     def test_as_decorator_with_kwargs(self):
@@ -296,7 +296,7 @@ class TestNewContract(unittest.TestCase):
             return value < thresh
 
         p = parse('less_than(thresh=2)')
-        p.check(1)
+        p.check(1, )
         p.fail(2)
 
     def test_as_decorator_with_args_and_kwargs(self):
@@ -307,7 +307,7 @@ class TestNewContract(unittest.TestCase):
             return value < min(a, b, c, d)
 
         p = parse('less_than_all(3, 4, c=5)')
-        p.check(2)
+        p.check(2, )
         p.fail(3)
 
     def test_capital_name1(self):
