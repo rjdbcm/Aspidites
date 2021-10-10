@@ -1,5 +1,9 @@
 **unreleased**
 **v0.22.0**
+
+- 9b3a4de fix import typo
+
+
 **v0.21.2**
 
 - d532585 interred pyparsing to _vendor and added static compile 2.9milliseconds/call -> 80microseconds/call to parseImpl
