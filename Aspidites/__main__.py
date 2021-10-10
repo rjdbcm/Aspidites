@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 
 import argparse as ap
 import os
@@ -69,10 +69,7 @@ def get_cython_parser(dummy: ap.ArgumentParser) -> t.Tuple[ap.ArgumentParser, di
     return dummy, cy_kwargs, cy_parser, cy3_fallback_mode
 
 
-def setup_test_env(argv, __test: bool = False):
-    if len(argv) == 1:
-        not __test or print("%s called without arguments. Next time try --help or -h." % argv[0])
-        sys.exit(1)
+def setup_test_env(argv):
     if len(argv) >= 2 and argv[1] == "--pytest" or argv[1] == '-pt':  # pragma: no cover
         if not os.getenv("ASPIDITES_DOCKER_BUILD"):
             argv = [str(Path(__file__).absolute().parent / Path('tests/test_aspidites.py'))] + argv[2:]
@@ -81,21 +78,28 @@ def setup_test_env(argv, __test: bool = False):
         sys.exit(pytest.main(argv))
 
 
+def check_noargs(argv, __test):
+    if len(argv) == 1:
+        not __test or print("%s called without arguments. Next time try --help or -h." % argv[0])
+        sys.exit(1)
+
+
+def add_pre_cy3_args(parser: ap.ArgumentParser, kwargs) -> None:  # pragma: no cover
+    cy_arg_group = parser.add_argument_group("optional cython arguments")
+    for k, v in kwargs.items():
+        cy_arg_group.add_argument(
+            f'--{k.replace("_", "-")}',
+            default=v,
+            action='store_true' if isinstance(v, (bool,)) else 'store'
+        )
+
+
 def parse_from_dummy(argv: list,
                      dummy: ap.ArgumentParser,
                      __test: bool = False) -> t.Tuple[ap.Namespace, list, dict]:
     dummy, cy_kwargs, cy_parser, cy3_fallback_mode = get_cython_parser(dummy)
-    setup_test_env(argv, __test)
-
-    def add_pre_cy3_args(parser: ap.ArgumentParser) -> None:  # pragma: no cover
-        cy_arg_group = parser.add_argument_group("optional cython arguments")
-        for k, v in cy_kwargs.items():
-            cy_arg_group.add_argument(
-                f'--{k.replace("_", "-")}',
-                default=v,
-                action='store_true' if isinstance(v, (bool,)) else 'store'
-            )
-
+    check_noargs(argv, __test)
+    setup_test_env(argv)
     asp_parser = ap.ArgumentParser(prog='aspidites',
                                    description=__description__,
                                    parents=[cy_parser],
@@ -124,7 +128,7 @@ def parse_from_dummy(argv: list,
                                 default=0,
                                 action='count',
                                 help="increase output verbosity (default: %(default)s) e.g. -v, -vv, -vvv ")
-        add_pre_cy3_args(asp_parser)
+        add_pre_cy3_args(asp_parser, cy_kwargs)
         args, other_args = asp_parser.parse_known_args()
         for k in cy_kwargs.keys():
             cy_kwargs[k] = args.__getattribute__(k)
@@ -146,7 +150,6 @@ def main(argv=None) -> None:
     argv = sys.argv if not argv else argv
     # any failure results in falling back to the `Cython.Compiler.Options` API
     args, other_args, cy_kwargs = parse_from_dummy(argv, ap.ArgumentParser(add_help=False))
-
     args.target, args.output, code = parse_code(args.target, args.output)
     # TODO: change pyx to pyz on windows
     cy_kwargs.update({  # pragma: no cover
