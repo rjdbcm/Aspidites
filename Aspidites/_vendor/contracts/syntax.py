@@ -1,7 +1,6 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 from numbers import Number
 import math
-
 
 # All the imports from pyparsing go here
 from typing import Any, List
@@ -9,14 +8,13 @@ from typing import Any, List
 from types import ModuleType
 
 from Aspidites._vendor.pyparsing import (delimitedList, Forward, Literal,
-                       stringEnd, nums, Word, CaselessLiteral, Combine,
-                       Optional, Suppress, OneOrMore, ZeroOrMore, opAssoc,
-                       infixNotation as operatorPrecedence, oneOf, ParseException,
-                       ParserElement,
-                       alphas, alphanums, ParseFatalException,
-                       ParseSyntaxException, FollowedBy, NotAny, Or,
-                       MatchFirst, Keyword, Group, White, lineno, col)
-
+                                         stringEnd, nums, Word, CaselessLiteral, Combine,
+                                         Optional, Suppress, OneOrMore, ZeroOrMore, opAssoc,
+                                         infixNotation as operatorPrecedence, oneOf, ParseException,
+                                         ParserElement,
+                                         alphas, alphanums, ParseFatalException,
+                                         ParseSyntaxException, FollowedBy, NotAny, Or,
+                                         MatchFirst, Keyword, Group, White, lineno, col)
 
 # from .pyparsing_utils import myOperatorPrecedence
 
@@ -50,8 +48,8 @@ def add_keyword(x):
     """
     ParsingTmp.keywords.append(x)
 
-W = Where
 
+W = Where
 
 O = Optional
 S = Suppress
@@ -88,6 +86,7 @@ def isnumber(x):
 
     return False
 
+
 rvalue = Forward()
 rvalue.setName('rvalue')
 contract_expression = Forward()
@@ -102,11 +101,9 @@ from .library import (EqualTo, Unary, Binary, composite_contract,
                       int_variables_contract, int_variables_ref,
                       misc_variables_ref, SimpleRValue)
 
-
 number = pi | floatnumber | integer
 operand = number | int_variables_ref | misc_variables_ref | scoped_variables_ref
 operand.setName('r-value')
-
 
 op = operatorPrecedence
 # op  = myOperatorPrecedence
@@ -117,7 +114,6 @@ rvalue << op(operand, [
     ('+', 2, opAssoc.LEFT, Binary.parse_action),
     ('^', 2, opAssoc.LEFT, Binary.parse_action),
 ])
-
 
 # I want
 # - BindVariable to have precedence to EqualTo(VariableRef)

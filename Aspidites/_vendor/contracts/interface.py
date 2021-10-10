@@ -359,6 +359,9 @@ class RValue(with_metaclass(ABCMeta, object)):
         return (self.__class__ == other.__class__ and
                 self.__repr__() == other.__repr__())
 
+    def __hash__(self):
+        return hash(self.__repr__())
+
     @abstractmethod
     def __repr__(self):
         """ Same constraints as :py:func:`Contract.__repr__()`. """
@@ -380,10 +383,13 @@ def eval_in_context(context, value, contract):
 
 class Contract(with_metaclass(ABCMeta, object)):
 
+    __slots__ = ('__contract__', 'where')
+
     def __init__(self, where):
         assert ((where is None) or
                 (isinstance(where, Where), 'Wrong type %s' % where))
         self.where = where
+        self.__contract__ = True
         self.enable()
 
     def enable(self):

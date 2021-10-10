@@ -69,6 +69,7 @@ class Extension(Contract):
             callable_thing = contract_ext.callable 
          
             test_args = ('value',) + args
+            # don't move this import
             from Aspidites._vendor.contracts.inspection import check_callable_accepts_these_arguments, InvalidArgs
          
             try:

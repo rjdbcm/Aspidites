@@ -1,14 +1,16 @@
 import sys
-from typing import Callable, cast, TypeVar, Any
+from typing import Callable, cast, TypeVar, Any, Type
 from Aspidites._vendor._compat import IS_PY2, basestring
 
 from inspect import getfullargspec
+from .._compat import IS_PY3A_OR_GREATER
 from .inspection import getcallargs
 from .docstring_parsing import Arg, DocStringInfo
 from .interface import (CannotDecorateClassmethods, Contract,
     ContractDefinitionError, ContractException, ContractNotRespected,
     ContractSyntaxError, MissingContract, describe_value)
 from .main_actual import parse_contract_string_actual, check_contracts, get_all_arg_names
+from .library import CheckType
 
 
 def check(contract, objekt, desc=None, **context):  # must stay in main.py so that contracts can inspect their scope
@@ -83,23 +85,31 @@ def check_multiple(couples, desc=None):  # must stay in main.py so that contract
         raise e
 
 
-def parse_flexible_spec(spec):  # must stay in main.py so that contracts can inspect their scope
-    """ spec can be either a Contract, a type, or a contract string.
-        In the latter case, the usual parsing takes place"""
-    if isinstance(spec, Contract):
-        return spec
-    elif isinstance(spec, str):
-        return parse_contract_string_actual(spec)
-    elif isinstance(spec, type):
-        from .library import CheckType
-        return CheckType(spec)
-    else:
-        msg = 'I want either a string or a type, not %s.' % describe_value(spec)
-        raise ContractException(msg)
-
-
-# from .library import (CheckCallable, Extension, SeparateContext,
-#     identifier_expression)
+if not IS_PY3A_OR_GREATER:
+    def parse_flexible_spec(spec):  # must stay in main.py so that contracts can inspect their scope
+        """ spec can be either a Contract, a type, or a contract string.
+            In the latter case, the usual parsing takes place"""
+        if hasattr(spec, '__contract__'):  # isinstance(spec, Contract) substitute using the __contract__ slot
+            return spec
+        elif hasattr(spec, '__weakrefoffset__'):  # isinstance(spec, type)
+            return CheckType(spec)
+        elif isinstance(spec, str):
+            return parse_contract_string_actual(spec)
+        else:
+            msg = 'I want either a string or a type, not %s.' % describe_value(spec)
+            raise ContractException(msg)
+else:  # Python 3.10: Essentially the same level of optimization as above but much more pythonic
+    def parse_flexible_spec(spec):
+        match spec:
+            case Contract():
+                return spec
+            case type():
+                return CheckType(spec)
+            case str():
+                return parse_contract_string_actual(spec)
+            case _:
+                msg = 'I want either a string or a type, not %s.' % describe_value(spec)
+                raise ContractException(msg)
 
 
 F = TypeVar('F', bound=Callable[..., Any])

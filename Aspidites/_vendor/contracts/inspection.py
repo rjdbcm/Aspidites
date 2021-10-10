@@ -3293,13 +3293,9 @@ def check_callable_accepts_these_arguments(callable_thing, args, kwargs):
     """
     f = get_f_from_callable(callable_thing)
 
-    # TODO: more cleanly
     try:
-        bound = getcallargs(f, *args, **kwargs)
-        # print('bound: %r ' % bound)
-    except (TypeError, ValueError) as e:  # @UnusedVariable
-        # print('no!: %s' % e)
+        getcallargs(f, *args, **kwargs)
+    except Exception as e:
         raise InvalidArgs('%s does not accept %s, %s: %s' % (f, args, kwargs, e))
-        # return False
     else:
         return True

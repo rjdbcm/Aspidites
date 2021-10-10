@@ -99,7 +99,7 @@ def new_contract_impl(identifier, condition):
                    (condition, e))
             raise ValueError(msg)
     # Important: types are callable, so check this first.
-    elif isinstance(condition, type):
+    elif hasattr(condition, '__weakrefoffset__'):
         # parse_flexible_spec can take care of types
         bare_contract = parse_flexible_spec(condition)
     # Lastly, it should be a callable
@@ -157,9 +157,8 @@ def parse_contract_string_actual(string):
     if string in Storage.string2contract:
         return Storage.string2contract[string]
     try:
-        c = contract_expression.parseString(string,
-                                            parseAll=True)[0]
-        assert isinstance(c, Contract), 'Want Contract, not %r' % c
+        c = contract_expression.parseString(string, parseAll=True)[0]
+        assert hasattr(c, '__contract__'), 'Want Contract, not %r' % c
         if _cacheable(string, c):
             Storage.string2contract[string] = c
         return c
