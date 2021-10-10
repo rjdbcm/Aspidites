@@ -168,6 +168,10 @@ def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     return a % b
 
 
+def _unsafe_exp(a, b):
+    (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0)
+
+
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
 def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
@@ -175,7 +179,7 @@ def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     w: str
     stack: PVector
     exc: Exception
-    if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # 0**0, inf**0, 0**inf
+    if _unsafe_exp(a, b):  # 0**0, inf**0, 0**inf
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ArithmeticError(
             f"{str(a)}**{str(b)} == Undefined; this behavior diverges from IEEE 754-1985."
@@ -187,6 +191,18 @@ def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
         return a**b
     except OverflowError:
         return inf  # just a really big number on most systems
+
+
+def _format_locals(lokals, str_locals):
+    for k, v_ in lokals.items():
+        if str(k).startswith("@"):  # skip @py_assert
+            continue
+        if isfunction(v_):
+            s = str(signature(v_)).replace("'", "")
+            str_locals += f"{k}: {s}\n".encode('UTF-8')
+        else:
+            str_locals += f"{k}: {str(v_)}\n".encode('UTF-8')
+    return str_locals
 
 
 class Warn:
@@ -232,13 +248,5 @@ class Warn:
     # noinspection PyMethodMayBeStatic
     def format_locals(self, local_vars, exc: Exception):
         locals_: dict = dict(filter(lambda x: x[1] != str(exc), local_vars))
-        str_locals: bytes = ''.encode('UTF-8')
-        for k, v_ in locals_.items():
-            if str(k).startswith("@"):  # skip @py_assert
-                continue
-            if isfunction(v_):
-                s = str(signature(v_)).replace("'", "")
-                str_locals += f"{k}: {s}\n".encode('UTF-8')
-            else:
-                str_locals += f"{k}: {str(v_)}\n".encode('UTF-8')
+        str_locals: bytes = _format_locals(locals_, '')
         return str_locals.rstrip("\n".encode('UTF-8'))
