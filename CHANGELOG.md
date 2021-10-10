@@ -1,4 +1,5 @@
 **unreleased**
+**v0.24.2**
 **v0.24.1**
 
 - f0ce955 move around code for maintainability
