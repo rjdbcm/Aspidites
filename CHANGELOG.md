@@ -1,5 +1,9 @@
 **unreleased**
 **v0.24.3**
+
+- 5cb1948 fixed encoding whoopsie
+
+
 **v0.24.2**
 
 - e5aaf64 improve cyclomatic complexity
