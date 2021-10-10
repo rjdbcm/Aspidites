@@ -1,5 +1,11 @@
 **unreleased**
 **v0.24.1**
+
+- f0ce955 move around code for maintainability
+- 58f9c24 move around code for maintainability
+- b1e3000 move around code for maintainability
+
+
 **v0.24.0**
 
 - fc39c2f remove conditional def of match case. not backwards compatible at the moment.
