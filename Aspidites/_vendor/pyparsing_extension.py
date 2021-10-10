@@ -63,6 +63,7 @@ __diag__.warn_on_multiple_string_args_to_oneof = False
 __diag__.enable_debug_on_named_expressions = False
 __diag__._all_names = [nm for nm in vars(__diag__) if nm.startswith("enable_") or nm.startswith("warn_")]
 
+
 def _enable_all_warnings():
     __diag__.warn_multiple_tokens_in_named_alternation = True
     __diag__.warn_ungrouped_named_tokens_in_collection = True
