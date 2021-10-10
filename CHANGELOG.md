@@ -1,5 +1,10 @@
 **unreleased**
 **v0.24.2**
+
+- e5aaf64 improve cyclomatic complexity
+- 8432e35 improve cyclomatic complexity
+
+
 **v0.24.1**
 
 - f0ce955 move around code for maintainability
