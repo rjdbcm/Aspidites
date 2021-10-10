@@ -54,6 +54,7 @@ def get_cython_parser(dummy: ap.ArgumentParser) -> t.Tuple[ap.ArgumentParser, di
     cy_kwargs = get_cy_kwargs()
     if cy_version.major == 3:  # pragma: no cover
         try:
+            # noinspection PyUnresolvedReferences
             from Cython.Compiler.CmdLine import create_cython_argparser
             cy_parser = create_cython_argparser()
         except Exception as e:
