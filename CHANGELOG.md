@@ -1,5 +1,16 @@
 **unreleased**
 **v0.21.2**
+
+- de09c5a interred pyparsing to _vendor and added static compile 2.9milliseconds/call -> 80microseconds/call to parseImpl
+- 16e656d major optimizations to speed up refinement typing with contracts
+- f1dfe6e everything is mostly typed so boundschecking and wraparound are mostly off
+- e6929d0 fix tuple typo
+- 5d098c2 added a rudimentary REPL interpreter
+- cd1c7cb moved decorator methods into decorator_extension.py for static compile
+- 1694903 got rid of final decorator for classes keeping the module for now
+- fdd58f4 fix PY3.10 test compatibility
+
+
 **v0.21.1**
 
 - 7475765 fix python-setup action to use v2 and added quotes around 3.10 because YAML
