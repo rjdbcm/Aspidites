@@ -168,10 +168,6 @@ def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     return a % b
 
 
-def _unsafe_exp(a, b):
-    (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0)
-
-
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
 def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
@@ -179,7 +175,8 @@ def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     w: str
     stack: PVector
     exc: Exception
-    if _unsafe_exp(a, b):  # 0**0, inf**0, 0**inf
+    # 0**0, inf**0, 0**inf
+    if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # pragma: no cover
         stack = pvector(getouterframes(sys._getframe(0), 1))
         exc = ArithmeticError(
             f"{str(a)}**{str(b)} == Undefined; this behavior diverges from IEEE 754-1985."
