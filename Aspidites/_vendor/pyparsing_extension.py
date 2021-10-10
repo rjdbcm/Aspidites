@@ -12,6 +12,9 @@ import sre_constants
 
 _generatorType = type((y for y in range(1)))
 
+from collections.abc import Iterable
+from collections.abc import MutableMapping, Mapping
+
 system_version = tuple(sys.version_info)[:3]
 PY_3 = system_version[0] == 3
 try:
@@ -20,7 +23,7 @@ except ImportError:
     from threading import RLock
 
 try:
-    from collections import OrderedDict as _OrderedDict, Iterable, Mapping
+    from collections import OrderedDict as _OrderedDict
 except ImportError:
     try:
         from ordereddict import OrderedDict as _OrderedDict
