@@ -1,4 +1,5 @@
 **unreleased**
+**v0.24.1**
 **v0.24.0**
 
 - fc39c2f remove conditional def of match case. not backwards compatible at the moment.
