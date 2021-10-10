@@ -1,5 +1,9 @@
 **unreleased**
 **v0.22.1**
+
+- 721938b profile guided optimization brought down contract parsing and instantiation to an average of 1.2ms/call
+
+
 **v0.22.0**
 
 - 9b3a4de fix import typo
