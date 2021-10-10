@@ -1,4 +1,5 @@
 **unreleased**
+**v0.22.0**
 **v0.21.2**
 
 - d532585 interred pyparsing to _vendor and added static compile 2.9milliseconds/call -> 80microseconds/call to parseImpl
