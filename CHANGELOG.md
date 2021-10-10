@@ -1,4 +1,5 @@
 **unreleased**
+**v0.23.0**
 **v0.22.1**
 
 - cc4b3f0 changelog updated
