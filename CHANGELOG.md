@@ -1,4 +1,5 @@
 **unreleased**
+**v0.24.4**
 **v0.24.3**
 
 - 5cb1948 fixed encoding whoopsie
