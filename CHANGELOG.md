@@ -1,4 +1,5 @@
 **unreleased**
+**v0.24.3**
 **v0.24.2**
 
 - e5aaf64 improve cyclomatic complexity
