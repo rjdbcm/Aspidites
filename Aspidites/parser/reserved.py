@@ -1,5 +1,5 @@
 #cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
-from pyparsing import oneOf, Keyword, replaceWith, Literal, Suppress, Group, Regex
+from Aspidites._vendor.pyparsing import oneOf, Keyword, replaceWith, Literal, Suppress, Group, Regex
 
 available_bool_pragmas = [
     'cython.binding',

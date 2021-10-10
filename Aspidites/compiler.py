@@ -25,7 +25,7 @@ from pyrsistent import pmap, v
 from hashlib import sha256
 from pathlib import Path
 from ._vendor.semantic_version import Version
-from pyparsing import ParseResults
+from Aspidites._vendor.pyparsing import ParseResults
 import cython
 
 

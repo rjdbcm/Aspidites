@@ -2,7 +2,7 @@ import sys
 from traceback import print_exc
 from typing import List, AnyStr, Union
 
-from pyparsing import ParseException, ParseResults
+from Aspidites._vendor.pyparsing import ParseException, ParseResults
 import Aspidites.parser.parser
 import compile
 import Guards

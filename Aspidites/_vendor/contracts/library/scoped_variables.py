@@ -2,7 +2,7 @@
 from ..interface import ExternalScopedVariableNotFound
 from ..syntax import S, W
 from ..utils import ignore_typeerror
-from pyparsing import Word, alphanums
+from Aspidites._vendor.pyparsing import Word, alphanums
 import inspect
 from Aspidites._vendor.contracts.library.types_misc import CheckType
 
@@ -97,9 +97,7 @@ def scoped_parse_action(s, loc, tokens):
 
     from Aspidites._vendor.contracts.library.simple_values import SimpleRValue
 
-    from Aspidites._vendor.contracts.inspection import can_be_used_as_a_type
-
-    if can_be_used_as_a_type(val):
+    if isinstance(val, type):
         return CheckType(val)
     else:
         return SimpleRValue(value=val, where=where, representation=s)

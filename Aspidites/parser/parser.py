@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 # Aspidites
 # Copyright (C) 2021 Ross J. Duff
 
@@ -14,7 +14,7 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from pyparsing import (
+from Aspidites._vendor.pyparsing import (
     Combine,
     Empty,
     FollowedBy,

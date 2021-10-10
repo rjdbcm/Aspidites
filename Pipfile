@@ -17,6 +17,7 @@ pytest-mock = "*"
 
 [dev-packages]
 pytest = "*"
+pytest-profiling = "*"
 pytest-mypy = "*"
 pytest-pylint = "*"
 pytest-cov = "*"
