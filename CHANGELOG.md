@@ -1,6 +1,11 @@
 **unreleased**
 **v0.22.1**
 
+- cc4b3f0 changelog updated
+- 721938b profile guided optimization brought down contract parsing and instantiation to an average of 1.2ms/call
+
+
+
 - 721938b profile guided optimization brought down contract parsing and instantiation to an average of 1.2ms/call
 
 
