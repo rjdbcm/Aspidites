@@ -26,9 +26,8 @@ from ._vendor.fn.underscore import ArityError, _Callable
 def wrap_lines(text, padchar, width, wrapped_lines, pad):
     for l in text.splitlines():
         line = _wrap(l, width, replace_whitespace=False)
-        if pad:
-            for s in line:
-                s += padchar * width
+        for s in line:
+            s += padchar * width * pad
         wrapped_lines.extend(line)
     return wrapped_lines
 
@@ -55,9 +54,7 @@ def wrap(text, width, pad, padchar):
 def bordered(text, width=160) -> str:
     i: str
     lines: list = [t for t in wrap(text, width=width, pad=True, padchar=" ")]
-    lens: list = []
-    for i in lines:
-        lens.append(len(i))
+    lens: list = [len(i) for i in lines]
     width = max(lens, default=width) or width
     res = ["╭" + "┉" * width + "╮"]
     for s in lines:
