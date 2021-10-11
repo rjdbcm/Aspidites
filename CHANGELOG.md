@@ -1,6 +1,18 @@
 **unreleased**
 **v0.24.10**
 
+- b54770b added proftest for profiling
+- 7d39e0b fix typo: now using internal pyparsing module for tests
+- 792e994 use vendored inspection module
+- e5ffa5a add cython language_level directive
+- 12b9e2b in depth documentation added.
+- 98dbc86 Undefined now caches parameters and works as described in the docs
+- 78e6a73 edit to make sysconfig work again.
+- b892dd7 reduce inspection.py to just what we need.
+- 1d4c561 changelog updated
+
+
+
 - 
 
 
