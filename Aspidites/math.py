@@ -18,7 +18,7 @@ class Undefined:
     """A monad for a failed programmatic unit; like NoneType but hashable.
     Falsy singleton acts as an absorbing element for division."""
 
-    __slots__ = v("__weakref__", "__instance__")
+    __slots__ = v("__weakref__", "__instance__", "args", "kwargs")
     __instance = None
 
     def __hash__(self):
@@ -52,6 +52,9 @@ class Undefined:
     def __str__(self):
         return self.__repr__()
 
+    def __int__(self):
+        return nan
+
     def __float__(self):
         return nan
 
@@ -77,6 +80,10 @@ class Undefined:
 
     def __call__(self, *args, **kwargs):
         return self.__new__(self.__class__, *args, **kwargs)
+
+    def __init__(self, *args, **kwargs):
+        self.args = args
+        self.kwargs = kwargs
 
     # noinspection PyMethodParameters
     def __new__(mcs, *args, **kwargs):
