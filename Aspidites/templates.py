@@ -35,8 +35,8 @@ PYTHON := python
 PYVERSION := $$(shell $$(PYTHON) -c "import sys; print(sys.version[:3])")
 PYPREFIX := $$(shell $$(PYTHON) -c "import sys; print(sys.prefix)")
 
-INCDIR := $$(shell $$(PYTHON) -c "import sysconfig; print(sysconfig.get_python_inc())")
-PLATINCDIR := $$(shell $$(PYTHON) -c "import sysconfig; print(sysconfig.get_python_inc(plat_specific=True))")
+INCDIR := $$(shell $$(PYTHON) -c "import sysconfig; print(sysconfig.get_config_vars()['CONFINCLUDEPY'])")
+PLATINCDIR := $$(shell $$(PYTHON) -c "import sysconfig; print(sysconfig.get_config_vars()['CONFINCLUDEPY'])")
 LIBDIR1 := $$(shell $$(PYTHON) -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))")
 LIBDIR2 := $$(shell $$(PYTHON) -c "import sysconfig; print(sysconfig.get_config_var('LIBPL'))")
 PYLIB := $$(shell $$(PYTHON) -c "import sysconfig; print(sysconfig.get_config_var('LIBRARY')[3:-2])")
