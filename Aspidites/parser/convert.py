@@ -2,7 +2,7 @@
 from .reserved import *
 
 
-def cvt_arith_expr(tks):
+def cvt_arith_expr(tks):  # multiple returns needed, PackRat is very strict about side-effects
     expr = "".join((str(t) for t in tks))
     if "//" in expr:
         return "Maybe(SafeFloorDiv, " + expr.replace("//", sep) + lit_rparen
