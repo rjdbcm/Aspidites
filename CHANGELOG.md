@@ -1,5 +1,11 @@
 **unreleased**
 **v0.24.4**
+
+- a412ce6 added comment to convert explaining PackRat
+- e04dcee removed reference to distutils as it is pending deprecation
+- c26c0a0 fixed whoopsie
+
+
 **v0.24.3**
 
 - 5cb1948 fixed encoding whoopsie
