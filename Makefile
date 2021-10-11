@@ -106,8 +106,11 @@ test-all:
 build-ext: clean
 	python setup.py build_ext --inplace
 
-xtest: build-ext
+proftest: build-ext
 	python -m pytest Aspidites/tests -x --profile --profile-svg
+
+xtest: build-ext
+	python -m pytest Aspidites/tests -x
 
 coverage:
 	python -m pytest Aspidites/tests --cov-report=xml --cov=Aspidites
