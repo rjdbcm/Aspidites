@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.0**
 **v0.24.10**
 
 - b54770b added proftest for profiling
