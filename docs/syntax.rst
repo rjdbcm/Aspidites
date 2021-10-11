@@ -39,7 +39,7 @@ Examples
 
     .. tab::
 
-        Generators, Procedures, and Coroutines
+        Generators and Procedures
 
         .. code:: woma
 
@@ -53,23 +53,6 @@ Examples
             (Hello()) procedure
                 print("Hello, World!")
 
-            `coroutines`
-            (Hello2()) coroutine
-                <^>Hello()
-
-    .. tab::
-
-        Optional Structured Entrypoint
-
-        .. code:: woma
-
-            `main: structure for executable actions when run as a binary`
-            (Hello()) procedure
-                print("Hello, World!")
-
-            main:
-            Hello()
-            print("I'm a binary.")
 
 
 .. tabs::

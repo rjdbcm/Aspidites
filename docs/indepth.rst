@@ -24,14 +24,34 @@ Rather than keywords Woma makes use of three character symbols called trigrams. 
 Operators
 ~~~~~~~~~
 
-The operators in Woma are identical to their python counterparts. Their implementation is different in some cases
+The operators in Woma are identical to their python counterparts. Their implementation is different in some cases to
+avoid raising errors.
 
++------------+------------+----------------+
+| Arity      | Operator   | Associativity  |
++============+============+================+
+| 1          |    ``+``   |    ``right``   |
++------------+------------+----------------+
+| 1          |    ``-``   |    ``right``   |
++------------+------------+----------------+
+| 1          |    ``!``   |    ``left``    |
++------------+------------+----------------+
+| 2          |    ``+``   |    ``left``    |
++------------+------------+----------------+
+| 2          |    ``-``   |    ``left``    |
++------------+------------+----------------+
+| 2          |    ``*``   |    ``left``    |
++------------+------------+----------------+
+| 2          |    ``/``   |    ``left``    |
++------------+------------+----------------+
+| 2          |    ``**``  |    ``right``   |
++------------+------------+----------------+
 
 Literals
 ~~~~~~~~
 
-The only named literals defined currently are the booleans True & False and the nullity element nullit.
-
+The only named literals defined currently are the booleans ``True`` & ``False`` and the nullity element ``nullit``.
+Technically ``_``, the anonymous function generic, could also be considered a literal.
 
 Nullity
 ~~~~~~~
