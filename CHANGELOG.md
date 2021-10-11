@@ -1,4 +1,5 @@
 **unreleased**
+**v0.24.8**
 **v0.24.7**
 
 - 76ed483 rollback codeclimate-action is still broken
