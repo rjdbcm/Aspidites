@@ -6,3 +6,5 @@ omit =
 
 include =
     Aspidites/tests/test_aspidites.py
+
+output = ./coverage.xml
