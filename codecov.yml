@@ -1,0 +1,7 @@
+coverage:
+  precision: 2
+  round: up
+  ignore:
+    - "Aspidites/tests"  # ignore folders and all its contents
+    - "**/*.pyx"
+    - "**/*.pxd"
