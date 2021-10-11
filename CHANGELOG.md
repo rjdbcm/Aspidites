@@ -1,6 +1,12 @@
 **unreleased**
 **v0.24.6**
 
+- ce1befe re add codeclimate coverage reporter
+- 8693ec9 changelog updated
+- c77b99d added vendored test suite for pyparsing.
+
+
+
 - c77b99d added vendored test suite for pyparsing.
 
 
