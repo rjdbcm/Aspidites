@@ -5,7 +5,7 @@
 # Copyright (c) 2003,2019 Paul McGuire
 #
 
-import pyparsing as pp
+from ....._vendor import pyparsing as pp
 
 atomicWeight = {
     "O"  : 15.9994,

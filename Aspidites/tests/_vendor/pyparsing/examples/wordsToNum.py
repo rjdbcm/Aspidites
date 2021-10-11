@@ -3,7 +3,7 @@
 #
 # Sample parser grammar to read a number given in words, and return the numeric value.
 #
-import pyparsing as pp
+from ....._vendor import pyparsing as pp
 from operator import mul
 from functools import reduce
 

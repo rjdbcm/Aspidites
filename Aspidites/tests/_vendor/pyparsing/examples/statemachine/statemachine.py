@@ -21,7 +21,7 @@ except ImportError:
 DEBUG = False
 
 
-import pyparsing as pp
+from ....._vendor import pyparsing as pp
 
 # define basic exception for invalid state transitions - state machine classes will subclass to
 # define their own specific exception type

@@ -8,7 +8,7 @@
 # Added support for exponentiation, using right-to-left evaluation of
 # operands
 #
-from pyparsing import Word, nums, alphas, Combine, oneOf, \
+from ....._vendor.pyparsing import Word, nums, alphas, Combine, oneOf, \
     opAssoc, infixNotation, Literal
 
 class EvalConstant(object):

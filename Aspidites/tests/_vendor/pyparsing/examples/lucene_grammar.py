@@ -7,7 +7,7 @@
 # at http://svn.apache.org/viewvc/lucene/dev/trunk/lucene/docs/queryparsersyntax.html
 #
 
-import pyparsing as pp
+from ....._vendor import pyparsing as pp
 from pyparsing import pyparsing_common as ppc
 pp.ParserElement.enablePackrat()
 

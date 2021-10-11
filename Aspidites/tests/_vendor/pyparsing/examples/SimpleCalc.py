@@ -26,7 +26,7 @@
 
 # Uncomment the line below for readline support on interactive terminal
 # import readline
-from pyparsing import ParseException, Word, alphas, alphanums
+from ....._vendor.pyparsing import ParseException, Word, alphas, alphanums
 import math
 
 # Debugging flag can be set to either "debug_flag=True" or "debug_flag=False"

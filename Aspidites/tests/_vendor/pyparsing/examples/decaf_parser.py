@@ -40,8 +40,8 @@
     Actuals ::=  Expr+, | e 
     Constant ::= intConstant | doubleConstant | boolConstant |  stringConstant | null
 """
-import pyparsing as pp
-from pyparsing import pyparsing_common as ppc
+from ....._vendor import pyparsing as pp
+from ....._vendor.pyparsing import pyparsing_common as ppc
 pp.ParserElement.enablePackrat()
 
 # keywords

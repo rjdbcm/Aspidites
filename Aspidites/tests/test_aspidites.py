@@ -43,7 +43,6 @@ def setup_code(inject_config):
             code_ = parse_module(open(Path(inject_config) / woma_file, 'r').read())
     return code_
 
-import pyparsing
 
 def test_compile_module(inject_config):
     try:

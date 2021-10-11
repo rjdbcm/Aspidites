@@ -7,7 +7,7 @@
 #
 # Copyright 2015, Paul McGuire
 #
-from pyparsing import col,Word,Optional,alphas,nums
+from ....._vendor.pyparsing import col,Word,Optional,alphas,nums
 
 table = """\
          1         2

@@ -9,7 +9,7 @@
 # Copyright (c) 2004-2016, Paul McGuire
 #
 
-import pyparsing as pp
+from ....._vendor import pyparsing as pp
 ppc = pp.pyparsing_common
 
 testData = [

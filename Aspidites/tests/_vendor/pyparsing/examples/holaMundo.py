@@ -3,7 +3,7 @@
 # escrito por Marco Alfonso, 2004 Noviembre
 
 # importamos los símbolos requeridos desde el módulo
-from pyparsing import Word, alphas, oneOf, nums, Group, OneOrMore, pyparsing_unicode as ppu
+from ....._vendor.pyparsing import Word, alphas, oneOf, nums, Group, OneOrMore, pyparsing_unicode as ppu
 
 # usamos las letras en latin1, que incluye las como 'ñ', 'á', 'é', etc.
 alphas = ppu.Latin1.alphas

@@ -43,7 +43,7 @@ BNF reference: http://theory.lcs.mit.edu/~rivest/sexp.txt
 <null>        	:: "" ;
 """
 
-import pyparsing as pp
+from ....._vendor import pyparsing as pp
 from base64 import b64decode
 import pprint
 

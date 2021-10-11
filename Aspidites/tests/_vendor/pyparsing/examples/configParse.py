@@ -6,7 +6,7 @@
 # Copyright (c) 2003, Paul McGuire
 #
 
-from pyparsing import \
+from ....._vendor.pyparsing import \
         Literal, Word, ZeroOrMore, Group, Dict, Optional, \
         printables, ParseException, restOfLine, empty
 import pprint

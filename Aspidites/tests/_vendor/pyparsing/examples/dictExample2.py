@@ -6,7 +6,7 @@
 #
 # Copyright (c) 2004, Paul McGuire
 #
-from pyparsing import Literal, Word, Group, Dict, ZeroOrMore, alphas, nums, delimitedList, pyparsing_common as ppc
+from ....._vendor.pyparsing import Literal, Word, Group, Dict, ZeroOrMore, alphas, nums, delimitedList, pyparsing_common as ppc
 
 testData = """
 +-------+------+------+------+------+------+------+------+------+

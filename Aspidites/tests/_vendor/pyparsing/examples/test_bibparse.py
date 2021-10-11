@@ -1,9 +1,10 @@
 """ Test for bibparse grammar """
 
 import unittest
-from pyparsing import ParseException
+from Aspidites._vendor.pyparsing import ParseException
 from .btpyparse import Macro
 from . import btpyparse as bp
+
 
 class TestBibparse(unittest.TestCase):
     def test_names(self):
@@ -14,7 +15,7 @@ class TestBibparse(unittest.TestCase):
                                  (bp.field_name, False),
                                  (bp.entry_type, False),
                                  (bp.cite_key, True)):
-            if dig1f: # can start with digit
+            if dig1f:  # can start with digit
                 self.assertEqual(name_type.parseString('2t')[0], '2t')
             else:
                 self.assertRaises(ParseException, name_type.parseString, '2t')
@@ -40,7 +41,6 @@ class TestBibparse(unittest.TestCase):
         # something point something leaves a trailing .4 unmatched
         self.assertEqual(bp.number.parseString('0.4')[0], '0')
 
-
     def test_parse_string(self):
         # test string building blocks
         self.assertEqual(bp.chars_no_quotecurly.parseString('x')[0], 'x')
@@ -55,22 +55,21 @@ class TestBibparse(unittest.TestCase):
             self.assertEqual(obj.parseString('{}').asList(), [])
             self.assertEqual(obj.parseString('{a "string}')[0], 'a "string')
             self.assertEqual(obj.parseString('{a {nested} string}').asList(),
-                        ['a ', ['nested'], ' string'])
+                             ['a ', ['nested'], ' string'])
             self.assertEqual(obj.parseString('{a {double {nested}} string}').asList(),
-                        ['a ', ['double ', ['nested']], ' string'])
+                             ['a ', ['double ', ['nested']], ' string'])
         for obj in (bp.quoted_string, bp.string, bp.field_value):
             self.assertEqual(obj.parseString('""').asList(), [])
             self.assertEqual(obj.parseString('"a string"')[0], 'a string')
             self.assertEqual(obj.parseString('"a {nested} string"').asList(),
-                        ['a ', ['nested'], ' string'])
+                             ['a ', ['nested'], ' string'])
             self.assertEqual(obj.parseString('"a {double {nested}} string"').asList(),
-                        ['a ', ['double ', ['nested']], ' string'])
+                             ['a ', ['double ', ['nested']], ' string'])
         # check macro def in string
         self.assertEqual(bp.string.parseString('someascii')[0], Macro('someascii'))
         self.assertRaises(ParseException, bp.string.parseString, '%#= validstring')
         # check number in string
         self.assertEqual(bp.string.parseString('1994')[0], '1994')
-
 
     def test_parse_field(self):
         # test field value - hashes included
@@ -80,17 +79,16 @@ class TestBibparse(unittest.TestCase):
         self.assertEqual(fv.parseString('ANAME')[0], Macro('aname'))
         # String and macro
         self.assertEqual(fv.parseString('aname # "some string"').asList(),
-                     [Macro('aname'), 'some string'])
+                         [Macro('aname'), 'some string'])
         # Nested string
         self.assertEqual(fv.parseString('aname # {some {string}}').asList(),
-                     [Macro('aname'), 'some ', ['string']])
+                         [Macro('aname'), 'some ', ['string']])
         # String and number
         self.assertEqual(fv.parseString('"a string" # 1994').asList(),
-                     ['a string', '1994'])
+                         ['a string', '1994'])
         # String and number and macro
         self.assertEqual(fv.parseString('"a string" # 1994 # a_macro').asList(),
-                     ['a string', '1994', Macro('a_macro')])
-
+                         ['a string', '1994', Macro('a_macro')])
 
     def test_comments(self):
         res = bp.comment.parseString('@Comment{about something}')
@@ -105,24 +103,22 @@ class TestBibparse(unittest.TestCase):
             bp.comment.parseString('@COMment about something').asList(),
             ['comment', ' about something'])
         self.assertRaises(ParseException, bp.comment.parseString,
-                      '@commentabout something')
+                          '@commentabout something')
         self.assertRaises(ParseException, bp.comment.parseString,
-                      '@comment+about something')
+                          '@comment+about something')
         self.assertRaises(ParseException, bp.comment.parseString,
-                      '@comment"about something')
-
+                          '@comment"about something')
 
     def test_preamble(self):
         res = bp.preamble.parseString('@preamble{"about something"}')
         self.assertEqual(res.asList(), ['preamble', 'about something'])
         self.assertEqual(bp.preamble.parseString(
             '@PREamble{{about something}}').asList(),
-            ['preamble', 'about something'])
+                         ['preamble', 'about something'])
         self.assertEqual(bp.preamble.parseString("""@PREamble{
             {about something}
         }""").asList(),
-            ['preamble', 'about something'])
-
+                         ['preamble', 'about something'])
 
     def test_macro(self):
         res = bp.macro.parseString('@string{ANAME = "about something"}')
@@ -131,32 +127,29 @@ class TestBibparse(unittest.TestCase):
             bp.macro.parseString('@string{aname = {about something}}').asList(),
             ['string', 'aname', 'about something'])
 
-
     def test_entry(self):
         txt = """@some_entry{akey, aname = "about something",
         another={something else}}"""
         res = bp.entry.parseString(txt)
         self.assertEqual(res.asList(),
-                     ['some_entry', 'akey',
-                      ['aname', 'about something'], ['another', 'something else']])
+                         ['some_entry', 'akey',
+                          ['aname', 'about something'], ['another', 'something else']])
         # Case conversion
         txt = """@SOME_ENTRY{akey, ANAME = "about something",
         another={something else}}"""
         res = bp.entry.parseString(txt)
         self.assertEqual(res.asList(),
-                     ['some_entry', 'akey',
-                      ['aname', 'about something'], ['another', 'something else']])
-
+                         ['some_entry', 'akey',
+                          ['aname', 'about something'], ['another', 'something else']])
 
     def test_bibfile(self):
         txt = """@some_entry{akey, aname = "about something",
         another={something else}}"""
         res = bp.bibfile.parseString(txt)
         self.assertEqual(res.asList(),
-                     [['some_entry', 'akey',
-                       ['aname', 'about something'],
-                       ['another', 'something else']]])
-
+                         [['some_entry', 'akey',
+                           ['aname', 'about something'],
+                           ['another', 'something else']]])
 
     def test_bib1(self):
         # First pass whole bib-like tests

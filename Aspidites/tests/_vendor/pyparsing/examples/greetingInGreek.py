@@ -6,7 +6,7 @@
 #
 # Copyright 2004-2016, by Paul McGuire
 #
-from pyparsing import Word, pyparsing_unicode as ppu
+from ....._vendor.pyparsing import Word, pyparsing_unicode as ppu
 
 # define grammar
 alphas = ppu.Greek.alphas

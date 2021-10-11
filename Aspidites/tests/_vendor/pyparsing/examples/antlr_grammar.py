@@ -9,7 +9,7 @@ Submitted by Luca DallOlio, September, 2010
 (Minor updates by Paul McGuire, June, 2012)
 (Code idiom updates by Paul McGuire, April, 2019)
 '''
-from pyparsing import (Word, ZeroOrMore, printables, Suppress, OneOrMore, Group,
+from ....._vendor.pyparsing import (Word, ZeroOrMore, printables, Suppress, OneOrMore, Group,
     LineEnd, Optional, White, originalTextFor, hexnums, nums, Combine, Literal, Keyword,
     cStyleComment, Regex, Forward, MatchFirst, And, oneOf, alphas, alphanums,
     delimitedList, Char)

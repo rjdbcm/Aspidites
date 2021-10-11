@@ -8,7 +8,7 @@
 #
 from contextlib import closing
 import urllib.request, urllib.parse, urllib.error
-from pyparsing import (makeHTMLTags, commonHTMLEntity, replaceHTMLEntity,
+from ....._vendor.pyparsing import (makeHTMLTags, commonHTMLEntity, replaceHTMLEntity,
     htmlComment, anyOpenTag, anyCloseTag, LineEnd, OneOrMore, replaceWith)
 
 scriptOpen, scriptClose = makeHTMLTags("script")

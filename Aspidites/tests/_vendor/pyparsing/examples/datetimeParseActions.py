@@ -6,8 +6,8 @@
 # Copyright 2012, Paul T. McGuire
 #
 from datetime import datetime
-import pyparsing as pp
-from pyparsing import pyparsing_common as ppc
+from ....._vendor import pyparsing as pp
+from ....._vendor.pyparsing import pyparsing_common as ppc
 
 # define an integer string, and a parse action to convert it
 # to an integer at parse time

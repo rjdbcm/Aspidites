@@ -5,7 +5,7 @@
 #
 # Copyright 2019, Paul McGuire
 #
-import pyparsing as pp
+from ....._vendor import pyparsing as pp
 from pathlib import Path
 
 # parser elements to be used to assemble into #include parser

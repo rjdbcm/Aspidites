@@ -31,7 +31,7 @@
 #
 
 from datetime import datetime, time, timedelta
-import pyparsing as pp
+from ....._vendor import pyparsing as pp
 import calendar
 
 __all__ = ["time_expression"]

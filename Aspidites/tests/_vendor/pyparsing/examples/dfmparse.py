@@ -8,7 +8,7 @@ __version__ = "1.0"
 __author__ = "Daniel 'Dang' Griffith <pythondev - dang at lazytwinacres . net>"
 
 
-from pyparsing import Literal, CaselessLiteral, Word, delimitedList \
+from ....._vendor.pyparsing import Literal, CaselessLiteral, Word, delimitedList \
     , Optional, Combine, Group, alphas, nums, alphanums, Forward \
     , oneOf, OneOrMore, ZeroOrMore, CharsNotIn
 

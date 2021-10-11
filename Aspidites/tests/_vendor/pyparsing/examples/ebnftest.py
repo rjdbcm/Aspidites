@@ -6,7 +6,7 @@
 # Submitted 2004 by Seo Sanghyeon
 #
 print('Importing pyparsing...')
-from pyparsing import *
+from ....._vendor.pyparsing import *
 
 print('Constructing EBNF parser with pyparsing...')
 import ebnf

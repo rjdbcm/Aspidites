@@ -23,7 +23,7 @@ Referer
 Client Software
 """
 
-from pyparsing import alphas,nums, dblQuotedString, Combine, Word, Group, delimitedList, Suppress, removeQuotes
+from ....._vendor.pyparsing import alphas,nums, dblQuotedString, Combine, Word, Group, delimitedList, Suppress, removeQuotes
 import string
 
 def getCmdFields( s, l, t ):

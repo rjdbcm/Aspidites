@@ -11,7 +11,7 @@
 #
 # Copyright 2006, by Paul McGuire
 #
-import pyparsing as pp
+from ....._vendor import pyparsing as pp
 
 line_end = pp.LineEnd()
 

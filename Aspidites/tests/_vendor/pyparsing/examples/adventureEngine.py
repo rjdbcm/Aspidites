@@ -4,7 +4,7 @@
 # Updated 2012 - latest pyparsing API
 #
 
-from pyparsing import *
+from ....._vendor.pyparsing import *
 import random
 import string
 

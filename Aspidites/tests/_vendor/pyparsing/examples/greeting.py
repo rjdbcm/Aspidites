@@ -5,7 +5,7 @@
 #
 # Copyright 2003, 2019 by Paul McGuire
 #
-import pyparsing as pp
+from ....._vendor import pyparsing as pp
 
 # define grammar
 greet = pp.Word(pp.alphas) + "," + pp.Word(pp.alphas) + pp.oneOf("! ? .")

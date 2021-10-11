@@ -22,7 +22,7 @@
 # Copyright 2008, by Paul McGuire
 #
 
-from pyparsing import ParserElement,LineEnd,Optional,Word,nums,Regex,\
+from ....._vendor.pyparsing import ParserElement,LineEnd,Optional,Word,nums,Regex,\
     Literal,CaselessLiteral,Group,OneOrMore,Suppress,restOfLine,\
     FollowedBy,empty
 

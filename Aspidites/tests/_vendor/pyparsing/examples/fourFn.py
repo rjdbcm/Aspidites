@@ -9,7 +9,7 @@
 #
 # Copyright 2003-2009 by Paul McGuire
 #
-from pyparsing import Literal,Word,Group,\
+from ....._vendor.pyparsing import Literal,Word,Group,\
     ZeroOrMore,Forward,alphas,alphanums,Regex,ParseException,\
     CaselessKeyword, Suppress
 import math

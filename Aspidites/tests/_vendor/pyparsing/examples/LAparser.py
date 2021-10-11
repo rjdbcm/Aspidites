@@ -58,7 +58,7 @@ Usage: To process LA equations embedded in source files, import this module and
 """
 
 import re,sys
-from pyparsing import Word, alphas, ParseException, Literal, CaselessLiteral \
+from ....._vendor.pyparsing import Word, alphas, ParseException, Literal, CaselessLiteral \
 , Combine, Optional, nums, Forward, ZeroOrMore, \
   StringEnd, alphanums
 
