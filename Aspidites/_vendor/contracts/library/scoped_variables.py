@@ -17,6 +17,7 @@ def _lookup_from_calling_scope(token):
     #
     # XXX Check if there are other places where a spec might be defined
     from .. import decorate, parse, check, fail
+    from ..inspection import getouterframes, currentframe
 
     def _code(f):
         try:  # pragma: no cover
@@ -24,7 +25,7 @@ def _lookup_from_calling_scope(token):
         except AttributeError:  # py3
             return f.__code__
 
-    frames = inspect.getouterframes(inspect.currentframe())
+    frames = getouterframes(currentframe())
     frames = [f[0] for f in frames[::-1]]
     fcodes = [f.f_code for f in frames]
 
