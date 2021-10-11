@@ -1,4 +1,5 @@
 **unreleased**
+**v0.24.7**
 **v0.24.6**
 
 - ce1befe re add codeclimate coverage reporter
