@@ -43,14 +43,14 @@ jobs:
           key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
 
       - name: Upload Coverage to codecov.io
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v2.1.0
         with:
           files: ./coverage.xml
 
-      - name: publish code coverage
-        uses: paambaati/codeclimate-action@v3
-        env:
-          CC_TEST_REPORTER_ID: 5bcc9d60bb439f75e102507e595434a393e9be017010223f6f3bc61cce2f5802
+#      - name: publish code coverage
+#        uses: paambaati/codeclimate-action@v3
+#        env:
+#          CC_TEST_REPORTER_ID: 5bcc9d60bb439f75e102507e595434a393e9be017010223f6f3bc61cce2f5802
 
 
   macosx-build:
