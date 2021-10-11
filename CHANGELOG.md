@@ -1,4 +1,5 @@
 **unreleased**
+**v0.24.10**
 **v0.24.9**
 
 - 364b2c8 fix .coveragerc as it overrides pytest-cov's defaults
