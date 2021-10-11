@@ -1,5 +1,9 @@
 **unreleased**
 **v0.24.7**
+
+- 76ed483 rollback codeclimate-action is still broken
+
+
 **v0.24.6**
 
 - ce1befe re add codeclimate coverage reporter
