@@ -1,5 +1,9 @@
 **unreleased**
 **v0.24.8**
+
+- 999ae10 fix .coveragerc as it overrides pytest-cov's defaults
+
+
 **v0.24.7**
 
 - 76ed483 rollback codeclimate-action is still broken
