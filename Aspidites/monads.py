@@ -108,7 +108,10 @@ class Maybe:
         inst = self.__instance__
         inst_undef = inst == Undefined()
         debug = (" -> %s" % Undefined() if inst_undef else " -> %s" % str(inst))
-        fname = str(self._func.__name__)
+        try:
+            fname = str(self._func.__name__)
+        except AttributeError:
+            fname = type(self._func).__name__
         args = str(self._args).strip("()")
         kwargs = [str(k) + " = " + str(v) for k, v in self._kwargs.items()]
         return maybe + "(" + ", ".join([fname, args, *kwargs]) + ")" + debug
