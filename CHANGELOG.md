@@ -1,5 +1,9 @@
 **unreleased**
 **v0.24.6**
+
+- c77b99d added vendored test suite for pyparsing.
+
+
 **v0.24.5**
 
 - 
