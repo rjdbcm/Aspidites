@@ -24,6 +24,11 @@ The reference implementation of the [Woma programming language](https://www.gith
 - How do I get Aspidites?
     
     - We maintain several packages for Aspidites, however, we *recommend* using the PyPI install for the latest stable version. Docker is the place to go for the bleeding edge development versions of Aspidites.
+
+- How do I actually learn the Woma Programming Language?
+    
+    - Use the docs found at https://woma.rtfd.io
+
 ### Installing
 ---------
 [![PyPI](https://img.shields.io/pypi/v/aspidites?label=PyPI&logo=pypi)](https://pypi.org/project/Aspidites/)[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Aspidites?label=CPython)![PyPI - Downloads](https://img.shields.io/pypi/dd/Aspidites)
