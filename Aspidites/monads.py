@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import sys
+from inspect import getouterframes
 from contextlib import suppress
 from warnings import warn
 from typing import Any, AnyStr, Union, Tuple, Dict, Callable
@@ -22,7 +23,6 @@ from typing import Any, AnyStr, Union, Tuple, Dict, Callable
 from pyrsistent import v, pvector
 
 from .math import Undefined, Warn
-from ._vendor.contracts.inspection import getouterframes
 
 
 def _apply(f, args=None, kwargs=None):
