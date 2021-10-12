@@ -1,5 +1,9 @@
 **unreleased**
 **v0.25.3**
+
+- e169a77 Update deploy.yml
+
+
 **v0.25.2**
 
 - 84f86f1 fix workflows to be dependent
