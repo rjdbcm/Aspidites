@@ -79,34 +79,25 @@ $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
 
 - Ultra-smooth runtime exception handling with useful warnings.
 - Demonic non-determinism, favors non-termination and type-negotiation (constraint satisfaction).
-- Terseness that mixes keywords and symbolic operations in order to make code both concise ___and___ readable.
+- Terseness, symbolic operations are used to make code both concise ___and___ readable.
 - Great for writing high-integrity code that works natively with CPython.
 - Usable for general purpose ___or___ scientific computing.
-
-# Syntax
-
-## Lexicon
-
-| Working?      | Symbol        | Verbage             |  Example                                                       |
-|:--------------|:--------------|:--------------------|:---------------------------------------------------------------|
-| ✅            | `->`          |respects             | `identifier` `->` `constraining clauses`                       |
-| ✅            | `<-`          |imposes              | `identifier` `<-` `imposed clauses`                            |
-| ✅            | `<*>`         |return               | `<*>` `statement `                                             |
-| ✅            |  `#`          |pragma               | `#` `compiler directive`                                       |
-| ✅            | ``))``        |return respects      | ``))`` ``return constraints``                                  |                                           
-| ✅            | ``(G(``       |define G as function | ``(`` ``FuncName`` ``(`` ``identifier`` ``->`` ``constraining clauses`` ``;`` ``...`` ``))`` ``return constraints`` |
-
 
 ## Examples
 
 ```
 (Greeter(name -> str)) procedure
     <*>print('Greetings,', name)
-
-main:
-Greeter("Aspidites user")
+```
 
 ```
+`Scala-style anonymous functions`
+scala = (_ * 2)
+val = scala(_ + _)
+val(2, 3)
+>>> 10
+```
+
 # Logo/Mascot
 Wheelie the Woma™ and Woma Programming Language™ are unregistered trademarks of Ross J. Duff. 
 The logos are copyright © Ross J. Duff but may be transferred to an appropriate trust at a later date.
