@@ -1,5 +1,9 @@
 **unreleased**
 **v0.25.9**
+
+- e6f0fa1 got rid of deadline for test_single_underscore_in_binops_can_accept_one_arg
+
+
 **v0.25.8**
 
 - 5327c20 more vendored pyparsing tests
