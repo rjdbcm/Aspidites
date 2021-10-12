@@ -1,5 +1,9 @@
 **unreleased**
 **v0.25.2**
+
+- 84f86f1 fix workflows to be dependent
+
+
 **v0.25.1**
 
 - 49a0cd5 Added missing func slot to Undefined
