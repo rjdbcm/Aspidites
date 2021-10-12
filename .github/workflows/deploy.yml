@@ -7,8 +7,8 @@ on:
 
 jobs:
   linux-build:
-     runs-on: ubuntu-latest
-    strategy:
+   runs-on: ubuntu-latest
+   strategy:
       matrix:
         python:
           - 3.10.0
@@ -16,25 +16,25 @@ jobs:
           - 3.8.11
           - 3.7.11
 
-    steps:
-      - name: Get Source Directory
-        uses: actions/checkout@v2
+   steps:
+    - name: Get Source Directory
+      uses: actions/checkout@v2
 
-      - name: Test Python Versions
-        uses: actions/setup-python@v2
-        with:
-          python-version: "${{ matrix.python }}"
-      - run: |
-          pip install -U pip pipenv wheel cython
-          pipenv lock
-          pipenv sync -d
-          pipenv run pytest --cov=Aspidites --cov-report=xml
-          rm -rf Pipfile.lock
+    - name: Test Python Versions
+      uses: actions/setup-python@v2
+      with:
+        python-version: "${{ matrix.python }}"
+    - run: |
+        pip install -U pip pipenv wheel cython
+        pipenv lock
+        pipenv sync -d
+        pipenv run pytest --cov=Aspidites --cov-report=xml
+        rm -rf Pipfile.lock
 
-      - name: Upload Coverage to codecov.io
-        uses: codecov/codecov-action@v2.1.0
-        with:
-          files: ./coverage.xml
+    - name: Upload Coverage to codecov.io
+      uses: codecov/codecov-action@v2.1.0
+      with:
+        files: ./coverage.xml
 
   #      - name: publish code coverage
   #        uses: paambaati/codeclimate-action@v3
@@ -69,7 +69,7 @@ jobs:
 
 
   source-deploy:
-    name: Build and publish linux distributions 📦 to PyPI and TestPyPI
+    name: Build and publish source
     runs-on: ubuntu-18.04
     needs: linux-build
     steps:
