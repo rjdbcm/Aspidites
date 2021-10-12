@@ -32,7 +32,6 @@ available_bool_pragmas = [
     'cython.warn.unused_result',
     'cython.warn.multiple_declarators'
 ]
-pass_stmt = Keyword("pass").setParseAction(lambda t: str(*t))
 indent = '    '
 nl_indent = '\n' + indent
 sep = ", "
@@ -55,6 +54,10 @@ assign_eq = Literal("=")
 noclosure = Literal("...")  # That's no closure
 return_none = Literal("<*>").setParseAction(replaceWith("return "))
 yield_none = Literal("<^>").setParseAction(replaceWith("yield "))
+for_none = Literal("<@>").setParseAction(replaceWith('for '))
+pass_stmt = Keyword("<#>").setParseAction(replaceWith('pass'))
+cont_stmt = Keyword("<$>").setParseAction(replaceWith('continue'))
+break_stmt = Keyword("<%>").setParseAction(replaceWith('break'))
 respects = Keyword("->").setParseAction(lambda t: ":")
 imposes = Keyword("<-").setParseAction(lambda t: "new_contract")
 struct_main = Keyword("main:").setParseAction(replaceWith('if __name__ == "__main__":'))
