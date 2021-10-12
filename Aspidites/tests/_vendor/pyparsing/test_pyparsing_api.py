@@ -12,7 +12,9 @@ from __future__ import division
 import threading
 from unittest import TestCase, TestSuite, TextTestRunner
 import datetime
-from Aspidites._vendor.pyparsing import ParseException, pyparsing_test as ppt
+from Aspidites._vendor.pyparsing import ParseException, pyparsing_test as ppt, delimitedList, alphanums, alphas, \
+    upcaseTokens, pyparsing_common, tokenMap
+from Aspidites._vendor.pyparsing_extension import CaselessLiteral, Word, Group
 from ...._vendor import pyparsing as pp
 
 import sys
@@ -4679,6 +4681,78 @@ class EmptyDictDoesNotRaiseException(ParseTestCase):
             print_(pp.ParseException.explain(pe))
         else:
             self.assertTrue(False, "failed to raise exception when matching empty string")
+
+
+class BasicParseTest(ParseTestCase):
+    selectToken = CaselessLiteral("select")
+    fromToken = CaselessLiteral("from")
+
+    ident = Word(alphas, alphanums + "_$")
+
+    columnName = delimitedList(ident, ".", combine=True).setParseAction(upcaseTokens)
+    columnNameList = Group(delimitedList(columnName)).setName("columns")
+    columnSpec = ('*' | columnNameList)
+
+    tableName = delimitedList(ident, ".", combine=True).setParseAction(upcaseTokens)
+    tableNameList = Group(delimitedList(tableName)).setName("tables")
+
+    simpleSQL = selectToken("command") + columnSpec("columns") + fromToken + tableNameList("tables")
+
+    # demo runTests method, including embedded comments in test string
+    simpleSQL.runTests("""
+        # '*' as column list and dotted table name
+        select * from SYS.XYZZY
+
+        # caseless match on "SELECT", and casts back to "select"
+        SELECT * from XYZZY, ABC
+
+        # list of column names, and mixed case SELECT keyword
+        Select AA,BB,CC from Sys.dual
+
+        # multiple tables
+        Select A, B, C from Sys.dual, Table2
+
+        # invalid SELECT keyword - should fail
+        Xelect A, B, C from Sys.dual
+
+        # incomplete command - should fail
+        Select
+
+        # invalid column name - should fail
+        Select ^^^ frox Sys.dual
+
+        """)
+
+    pyparsing_common.number.runTests("""
+        100
+        -100
+        +100
+        3.14159
+        6.02e23
+        1e-12
+        """)
+
+    # any int or real number, returned as float
+    pyparsing_common.fnumber.runTests("""
+        100
+        -100
+        +100
+        3.14159
+        6.02e23
+        1e-12
+        """)
+
+    pyparsing_common.hex_integer.runTests("""
+        100
+        FF
+        """)
+
+    import uuid
+
+    pyparsing_common.uuid.setParseAction(tokenMap(uuid.UUID))
+    pyparsing_common.uuid.runTests("""
+        12345678-1234-5678-1234-567812345678
+        """)
 
 
 class ExplainExceptionTest(ParseTestCase):
