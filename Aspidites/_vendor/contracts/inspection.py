@@ -1021,7 +1021,6 @@ def can_accept_self_plus_one_argument(callable_thing):
     if len(spec.args) == 0 or spec.args[0] != 'self':
         return False
 
-    # TODO: redo better
     f = get_f_from_callable(callable_thing)
     try:
         getcallargs(f, 'self', 'value')

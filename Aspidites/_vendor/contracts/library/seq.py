@@ -22,7 +22,6 @@ class Seq(Contract):
 
     def check_contract(self, context, value, silent):
         if has_numpy and isinstance(value, numpy.ndarray):
-            # TODO: check basic datatypes
             # use value.size and value.flat for iteration
             if self.length_contract is not None:
                 self.length_contract._check_contract(context, value.size, silent)

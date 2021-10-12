@@ -60,7 +60,6 @@ class Stream(object):
 
     def __getitem__(self, index):
         if isinstance(index, int):
-            # todo: i'm not sure what to do with negative indices
             if index < 0:
                 raise TypeError("Invalid argument type")
             self._fill_to(index)

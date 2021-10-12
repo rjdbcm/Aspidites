@@ -89,7 +89,6 @@ class Surely:
         return cls.__instance__
 
 
-# TODO: Refactor so we're not passing around stack frames that may or may not exist.
 class Maybe:
     """Sandboxes a Surely call and handles ContractNotRespected by returning Undefined"""
 

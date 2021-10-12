@@ -37,8 +37,6 @@
 #    For questions or inquiries regarding this license, or commercial use of
 #    this software, contact the author via e-mail: ptmcg@users.sourceforge.net
 #
-# Todo:
-#  - add pre-process pass to implement compilerDirectives (ifdef, include, etc.)
 #
 # Revision History:
 #

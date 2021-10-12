@@ -79,7 +79,6 @@ class DocStringInfo(object):
         type_keys = ['type']
         return_keys = ['returns', 'return']
         rtype_keys = ['rtype']
-        # TODO: document state?
         # var_keys = ['var', 'ivar', 'cvar']
         # raises, raise, except, exception
 

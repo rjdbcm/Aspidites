@@ -101,8 +101,7 @@ good('shape[0]', a0d)
 good('shape[1]', a1d)
 good('shape[2]', a2d)
 good('shape[3]', a3d)
-# TODO: check this
-# good('array[shape[3]]', a3d)
+good('array[shape[3]]', a3d)
 
 good('array[1x2]', zeros((1, 2)))
 

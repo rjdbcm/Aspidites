@@ -72,7 +72,7 @@ class ShapeContract(Contract):
         expected = len(self.dimensions)
         ndim = len(value)
 
-        if ndim < expected:  # TODO: write clearer message
+        if ndim < expected:
             error = 'Expected %d dimensions, got %d.' % (expected, ndim)
             raise ContractNotRespected(contract=self, error=error,
                                        value=value, context=context)

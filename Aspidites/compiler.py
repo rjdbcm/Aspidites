@@ -217,8 +217,6 @@ class Compiler:
 
     def compile_object(self) -> None:
         glob_so = str(self.app_name) + ".*.so"
-        # TODO: get this working for docker builds
-        #  (maybe executable param with os.path.relpath?)
         setup_runner = "%s %s build_ext -b ." % (sys.executable, str(Path(self.root) / 'setup.py'))
         print("running", setup_runner)
         with os.popen(setup_runner) as p:

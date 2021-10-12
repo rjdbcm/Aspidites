@@ -184,7 +184,7 @@ class TestNewContract(unittest.TestCase):
         assert o.f('value') == True
         new_contract(cname(), o.f)
 
-# TODO: removed after checking in class methods
+# removed after checking in class methods
 #    def test_callable_invalid(self):
 #        class MyTest_fail(object):
 #            def __call__(self, x, y):  # @UnusedVariable

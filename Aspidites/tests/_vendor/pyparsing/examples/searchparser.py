@@ -52,10 +52,6 @@ CONTRIBUTORS:
 - Rudolph Froger
 - Paul McGuire
 
-TODO:
-- add more docs
-- ask someone to check my English texts
-- add more kinds of wildcards ('*' at the beginning and '*' inside a word)?
 """
 from pyparsing import Word, alphanums, Keyword, Group, Combine, Forward, Suppress, OneOrMore, oneOf
 

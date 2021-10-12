@@ -18,7 +18,6 @@ class BindVariable(Contract):
         if self.variable in context:
             expected = context[self.variable]
             if not (expected == value):
-                # TODO: add where it was bound
                 error = ('Expected value for %r was: %s\n        instead I received: %s' % (self.variable, describe_value(expected), describe_value(value)))
                 raise ContractNotRespected(contract=self, error=error,
                                            value=value, context=context)

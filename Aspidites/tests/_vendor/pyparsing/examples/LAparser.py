@@ -405,11 +405,6 @@ def test():
           print('\n' + name)
 
    equation.runTests((t[1] for t in testcases), postParse=post_test)
-
-
-   ##TODO: Write testcases with invalid expressions and test that the expected
-   ## exceptions are raised.
-
    print("Tests completed!")
    print("PASSED" if all_passed[0] else "FAILED")
    assert all_passed[0]

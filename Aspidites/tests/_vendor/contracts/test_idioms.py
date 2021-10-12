@@ -82,7 +82,7 @@ class TestIdioms(unittest.TestCase):
 
 #     def test_symbols(self):
 #         from contracts import contract_expression  # @UnusedImport
-        # TODO: type
+
 
     def test_equality_contract(self):
         c1 = parse('list[C](str),C>0')

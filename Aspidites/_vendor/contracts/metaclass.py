@@ -55,7 +55,7 @@ class ContractsMeta(ABCMeta):
                                 spec = f0.__contracts__
                                 # msg = 'inherit contracts for %s:%s() from %s' % (clsname, k, b.__name__)
                                 # print(msg)
-                                # TODO: check that the contracts are a subtype
+                                # TODO: check that the contracts are a subtype of ContractsMeta
                                 from Aspidites._vendor.contracts import ContractException
                                 try:
                                     from .main import contracts_decorate
