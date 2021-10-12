@@ -1,4 +1,5 @@
 **unreleased**
+**v0.26.0**
 **v0.25.13**
 
 - 7ff8d2c remove non-applicable note
