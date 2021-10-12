@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.4**
 **v0.25.3**
 
 - e169a77 Update deploy.yml
