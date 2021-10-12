@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.12**
 **v0.25.11**
 
 - db0cbfd cleaned up todos for automated issue creation
