@@ -311,6 +311,7 @@ jobs:
 
   create-release:
     runs-on: ubuntu-latest
+    needs: source-deploy
     steps:
     - uses: actions/checkout@master
     - name: Create a Release
