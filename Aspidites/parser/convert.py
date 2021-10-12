@@ -41,9 +41,10 @@ def cvt_comment_line(s, loc, t):
 
 def cvt_for_loop_decl(t):
     t = t[0]
-    print(t)
-    s = str(t[3] + ''.join(t[:3]) + ' in ' + t[4] + lit_colon).encode('UTF-8')
-    print(s)
+    if len(t) == 5:
+        s = str(t[3] + ''.join(t[:3]) + ' in ' + t[4] + lit_colon).encode('UTF-8')
+    else:
+        s = str(t[1] + t[0] + ' in ' + t[2] + lit_colon).encode('UTF-8')
     return s.decode('UTF-8')
 
 

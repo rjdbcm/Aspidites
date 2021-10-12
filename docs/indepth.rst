@@ -35,12 +35,16 @@ Trigrams
 Rather than keywords Woma makes use of three character symbols called trigrams. Two of the most basic are ``<*>`` and
 ``<^>``, meaning ``return`` and ``yield`` respectively.
 
+**Table of Trigrams**
+
 
 Operators
 ~~~~~~~~~
 
 The operators in Woma are identical to their python counterparts. Their implementation is different in some cases to
 avoid raising errors.
+
+**Table of Operators**
 
 +------------+------------+----------------+
 | Arity      | Operator   | Associativity  |
