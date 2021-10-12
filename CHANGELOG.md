@@ -1,5 +1,9 @@
 **unreleased**
 **v0.25.8**
+
+- 5327c20 more vendored pyparsing tests
+
+
 **v0.25.7**
 
 - cef1ac1 Merge remote-tracking branch 'origin/main'
