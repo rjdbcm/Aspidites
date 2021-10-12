@@ -84,7 +84,7 @@ Paradigms
     
         Functions are first class citizens in woma. More info on functional programming:
         
-        In 1989 when functional programming was still considered a niche topic, Hughes wrote a visionary paper arguing convincingly ‘why functional programming             matters’. More than two decades have passed. Has functional programming really mattered? Our answer is a resounding ‘Yes!’. Functional programming is now           at the forefront of a new generation of programming technologies, and enjoying increasing popularity and influence. In this paper, we review the impact of         functional programming, focusing on how it has changed the way we may construct programs, the way we may verify programs, and fundamentally the way we may         think about programs.
+        ``"In 1989 when functional programming was still considered a niche topic, Hughes wrote a visionary paper arguing convincingly ‘why functional programming             matters’. More than two decades have passed. Has functional programming really mattered? Our answer is a resounding ‘Yes!’. Functional programming is now           at the forefront of a new generation of programming technologies, and enjoying increasing popularity and influence. In this paper, we review the impact of         functional programming, focusing on how it has changed the way we may construct programs, the way we may verify programs, and fundamentally the way we may         think about programs."``
         
         Reference:
         Zhenjiang Hu, John Hughes, Meng Wang, How functional programming mattered, National Science Review, Volume 2, Issue 3, September 2015, Pages 349–370, 
@@ -116,7 +116,7 @@ Goals
 -  Ultra-smooth runtime exception handling with useful warnings.
 -  Demonic non-determinism, favors non-termination and type-negotiation
    (constraint satisfaction).
--  Terseness that mixes keywords and symbolic operations in order to
+-  Terseness that uses symbolic operations in order to
    make code both concise ***and*** readable.
 -  Great for writing high-integrity code that works natively with
    CPython.
