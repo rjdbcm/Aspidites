@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.5**
 **v0.25.4**
 
 - 5491a8d readd test_final.py
