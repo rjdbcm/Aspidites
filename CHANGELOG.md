@@ -1,5 +1,16 @@
 **unreleased**
 **v0.25.13**
+
+- 7ff8d2c remove non-applicable note
+- d0e8bc4 added SafeFactorial implementation of math.factorial
+- 034d36b add trigram table to docs
+- ab51d32 loop trigram (<@>) now parses into for loop for single bindvar
+- f7a4501 loop trigram (<@>) now parses into for loop
+- ecd71ec added for (<@>), pass (<#>), continue (<$>), and break (<%>) trigrams.
+- a164c33 add immutables and ellipsis sections.
+- b68be98 Update README.md
+
+
 **v0.25.12**
 
 - c2bc363 add todo-to-issue
