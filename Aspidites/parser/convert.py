@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 from .reserved import *
 
 
@@ -37,6 +37,14 @@ def cvt_tuple(t):
 
 def cvt_comment_line(s, loc, t):
     return "# comment_line %s:" % (len([c for c in s[:loc] if c == "\n"]) + 1) + t[0]
+
+
+def cvt_for_loop_decl(t):
+    t = t[0]
+    print(t)
+    s = str(t[3] + ''.join(t[:3]) + ' in ' + t[4] + lit_colon).encode('UTF-8')
+    print(s)
+    return s.decode('UTF-8')
 
 
 def cvt_dict(t):

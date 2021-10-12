@@ -141,6 +141,7 @@ contract_define.setParseAction(cvt_contract_define)
 contract_respect = respects + _contract_expression
 contract_assign = identifier + assign_eq + list_item + contract_respect
 contract_assign.setParseAction(cvt_contract_assign)
+
 tuple_str <<= (lparen + Optional(delimitedList(list_item)) + Optional(comma) + rparen).setParseAction(cvt_tuple)
 list_str <<= (lbrack + Optional(delimitedList(list_item) + Optional(comma)) + rbrack).setParseAction(cvt_list)
 list_str_evolver <<= ((lbrack + Optional(delimitedList(list_item) + Optional(comma)) + rbrack).setParseAction(cvt_list) + noclosure.setParseAction(replaceWith('.evolver()'))).setParseAction(lambda t: ''.join(t))
@@ -149,11 +150,14 @@ set_str_evolver <<= ((lbrace + Optional(delimitedList(list_item) + Optional(comm
 dict_entry = Group(list_item + colon + list_item)
 dict_str <<= (lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(cvt_dict)
 dict_str_evolver <<= ((lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(cvt_dict) + noclosure.setParseAction(replaceWith('.evolver()'))).setParseAction(lambda t: ''.join(t))
+
 def_args = Optional(delimitedList(contract_assign, delim=";")).setParseAction(lambda t: sep.join(t))
 def_args = Group(lit_lparen + def_args + args_end).setParseAction(lambda t: "".join(*t))
+
 bool_pragmas = Combine(
     pragma + oneOf(' '.join(available_bool_pragmas)) + lit_lparen + oneOf('True False') + lit_rparen
 ).setParseAction(cvt_pragma)
+
 func_decl = Group(
     Optional(OneOrMore(bool_pragmas)) + MatchFirst(private_def_decl | c_def_decl) + identifier + def_args + _contract_expression
 ).setParseAction(lambda t: "\n@contract()\n" + "".join(*t) + lit_colon)
@@ -162,10 +166,15 @@ comment_line = (
     .setParseAction(lambda t: t[0])
     .setParseAction(cvt_comment_line)
 )
+
+loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + identifier).setParseAction(cvt_for_loop_decl)
+loop_def = Group(loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+
 return_value = return_none + rvalue
 yield_value = yield_none + rvalue
 ret_stmt = Group(return_value).setParseAction(lambda t: "".join(*t))
 yield_stmt = Group(yield_value).setParseAction(lambda t: "".join(*t))
+
 func_def = Group(func_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
 lambda_def = Combine(Group(lit_lparen + arith_expr | comp_expr + lit_rparen))
 func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_func_call)  # if len(t[0]) != 3 else t[0][0] + '()')
@@ -175,7 +184,7 @@ else_stmt = Keyword("?!?").setParseAction(replaceWith('else:')) + suite
 if_stmt = Group(list_item + "?").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
 cond_stmt = if_stmt + Optional(elif_stmt) + Optional(else_stmt)
 suite <<= IndentedBlock(
-    OneOrMore(comment_line | pass_stmt | ret_stmt | yield_stmt | cond_stmt | func_call | func_def | contract_assign)).setParseAction(
+    OneOrMore(comment_line | pass_stmt | cont_stmt | break_stmt | ret_stmt | yield_stmt | cond_stmt | func_call | func_def | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
 rvalue <<= clos_call | func_call | list_item | lambda_def
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
