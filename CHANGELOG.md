@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.1**
 **v0.25.0**
 
 - 32484ba Undefined records elements absorbed without affecting arithmetic
