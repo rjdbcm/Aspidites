@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.9**
 **v0.25.8**
 
 - 5327c20 more vendored pyparsing tests
