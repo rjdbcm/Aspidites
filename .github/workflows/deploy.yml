@@ -6,6 +6,13 @@ on:
       - v*
 
 jobs:
+  todo-to-issue:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@master"
+      - name: "TODO to Issue"
+        uses: "alstr/todo-to-issue-action@v4.2"
+        id: "todo"
   linux-build:
    runs-on: ubuntu-latest
    strategy:
