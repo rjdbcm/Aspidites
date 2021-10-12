@@ -1,5 +1,9 @@
 **unreleased**
 **v0.25.12**
+
+- c2bc363 add todo-to-issue
+
+
 **v0.25.11**
 
 - db0cbfd cleaned up todos for automated issue creation
