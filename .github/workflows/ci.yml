@@ -37,11 +37,6 @@ jobs:
               pipenv run pytest --cov=Aspidites --cov-report=xml
               rm -rf Pipfile.lock
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.local/share/virtualenvs
-          key: ${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-pipenv-${{ hashFiles('Pipfile.lock') }}
-
       - name: Upload Coverage to codecov.io
         uses: codecov/codecov-action@v2.1.0
         with:
@@ -58,6 +53,7 @@ jobs:
       strategy:
           matrix:
            python:
+            - 3.10.0
             - 3.9.6
             - 3.8.11
             - 3.7.11
