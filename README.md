@@ -114,16 +114,16 @@ If you'd like to help out financially, Aspidites' maintainer accepts [Liberapay]
 [![libraries.io](https://img.shields.io/badge/Libraries.io--inactive)](https://libraries.io/github/rjdbcm/Aspidites)
 
 ## Core Dependencies
-Aspidites has 10 core dependencies, all licensed under a compatible OSI approved license. In general, dependencies are vendored unless they contain Python Extensions.
+Aspidites has just 4 core dependencies, all licensed under a compatible OSI approved license. In general, dependencies are vendored unless they contain Python Extensions.
 - cython
 - pyrsistent
-- pyparsing
-- mypy
+- numpy
+- future
+
+In addition to the core dependencies are the 4 optional dependencies, all licensed under a compatible OSI approved license, needed to run the canned test-suite.
 - pytest
 - pytest-xdist
 - pytest-mock
-- numpy
-- future
 - hypothesis
 
 ## Copying
