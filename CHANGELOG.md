@@ -1,5 +1,19 @@
 **unreleased**
 **v0.25.0**
+
+- 32484ba Undefined records elements absorbed without affecting arithmetic
+- 8171598 add hasattr check in place of try-except in Maybe repr
+- b9e559c Merge remote-tracking branch 'origin/main'
+- fb2d059 attempt to fix flakey CI tests introduced in 0.25.0
+- 36b482a make it so repr succeeds for builtins called via Maybe
+- c4c581a remove caching to try and fix flakey tests
+- 060575d add SLOC to badges
+- f4c795d add operator table to indepth.rst
+- d370e0c add tokei configuration
+- 3ffd3f3 Merge remote-tracking branch 'origin/main'
+- 8c1e01e Create codecov.yml
+
+
 **v0.24.10**
 
 - b54770b added proftest for profiling
