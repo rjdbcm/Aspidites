@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.11**
 **v0.25.10**
 
 - f0f8bbf Update deploy.yml
