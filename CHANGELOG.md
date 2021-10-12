@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.2**
 **v0.25.1**
 
 - 49a0cd5 Added missing func slot to Undefined
