@@ -14,6 +14,21 @@ clauses in union ``number`` and ``str``. When called with a ``number`` or ``str`
 argument ``x``. This is a pure function in the traditional sense and in the Womatic sense. In Woma, a pure function is a
 function where any two contracts can be switched and the output remains unchanged for all inputs.
 
+Immutables
+~~~~~~~~~~
+
+All sequences, mappings, and sets are immutable and hashable. `Evolvers <https://github.com/tobgu/pyrsistent#evolvers>`_
+are the only mechanism for changing items or elements in place. This is accomplished in woma by assigning a sequence,
+map, or set with a trailing ellipsis ``...``
+
+
+Ellipsis
+~~~~~~~~
+
+The ellipsis is a contextual shorthand for several assigment operations:
+ - In calling a function a trailing ``...`` indicates that the function is to be invoked in a different scope.
+ - In creating an immutable collection a trailing ``...`` indicates that the values can be evolved.
+
 Trigrams
 ~~~~~~~~
 
