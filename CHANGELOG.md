@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.6**
 **v0.25.5**
 
 - cebe91e optimization of try-excepts
