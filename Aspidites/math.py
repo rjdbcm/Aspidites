@@ -4,6 +4,7 @@ from warnings import warn
 from typing import Any, Union, ItemsView, NoReturn
 from inspect import getouterframes
 from cmath import inf, isinf, nan, isnan
+from math import factorial
 import numbers
 import cython
 import numpy as np
@@ -95,6 +96,21 @@ class Undefined:
             mcs.__instance__ = mcs.__instance
         # noinspection PyUnresolvedReferences
         return mcs.__instance__  # instance descriptor from __slots__ -> actual instance
+
+
+# noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
+def SafeFactorial(a: Numeric) -> Union[Numeric, Undefined]:
+    a: Numeric
+    w: str
+    stack: PVector
+    exc: Exception
+    if a < 0 or isnan(a) or isinf(a) or isinstance(a, (float, complex)):
+        stack = pvector(getouterframes(sys._getframe(0), 1))
+        exc = ArithmeticError(f"Factorial is Undefined for {a}")
+        w = Warn(stack, stack[0][3], [a], {}).create(exc)
+        warn(w, category=RuntimeWarning, stacklevel=0)
+        return Undefined(SafeFactorial, a)
+    return factorial(a)
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
