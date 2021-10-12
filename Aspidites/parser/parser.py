@@ -110,7 +110,7 @@ arith_expr = Combine(
         rpar=lit_rparen,
     )
 ).setParseAction(cvt_arith_expr)
-comp_expr = infixNotation( # This does not work dear god
+comp_expr = infixNotation(
     arith_expr,
     [
         (comparisonop, 2, opAssoc.LEFT),
