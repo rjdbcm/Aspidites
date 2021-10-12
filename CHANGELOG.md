@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.8**
 **v0.25.7**
 
 - cef1ac1 Merge remote-tracking branch 'origin/main'
