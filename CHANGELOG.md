@@ -1,5 +1,9 @@
 **unreleased**
 **v0.25.6**
+
+- 6a1bd60 add the rest of the pyparsing test cases
+
+
 **v0.25.5**
 
 - cebe91e optimization of try-excepts
