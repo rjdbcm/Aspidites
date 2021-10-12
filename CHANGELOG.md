@@ -1,5 +1,11 @@
 **unreleased**
 **v0.25.7**
+
+- cef1ac1 Merge remote-tracking branch 'origin/main'
+- 5317362 Update deploy.yml
+- cab30fa add create-release
+
+
 **v0.25.6**
 
 - 6a1bd60 add the rest of the pyparsing test cases
