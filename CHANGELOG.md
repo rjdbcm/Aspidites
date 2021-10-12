@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.7**
 **v0.25.6**
 
 - 6a1bd60 add the rest of the pyparsing test cases
