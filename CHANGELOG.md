@@ -1,5 +1,11 @@
 **unreleased**
 **v0.25.11**
+
+- db0cbfd cleaned up todos for automated issue creation
+- 41e57c4 Update deploy.yml
+- 3654fac add TODO to issue
+
+
 **v0.25.10**
 
 - f0f8bbf Update deploy.yml
