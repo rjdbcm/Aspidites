@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import sys
+# ~ do not used the vendored version of getouterframes ~
 from inspect import getouterframes
 from contextlib import suppress
 from warnings import warn
@@ -108,9 +109,9 @@ class Maybe:
         inst = self.__instance__
         inst_undef = inst == Undefined()
         debug = (" -> %s" % Undefined() if inst_undef else " -> %s" % str(inst))
-        try:
+        if hasattr(self._func, '__name__'):
             fname = str(self._func.__name__)
-        except AttributeError:
+        else:
             fname = type(self._func).__name__
         args = str(self._args).strip("()")
         kwargs = [str(k) + " = " + str(v) for k, v in self._kwargs.items()]
