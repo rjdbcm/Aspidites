@@ -40,6 +40,7 @@ class C2(object):
 
 
 @hypothesis.given(st.floats())
+@hypothesis.settings(deadline=None)
 def test_single_underscore_in_binops_can_accept_one_arg(x):
     assert can_accept_exactly_one_argument(add(_, x)) == (True, None)
     assert can_accept_exactly_one_argument(sub(_, x)) == (True, None)
