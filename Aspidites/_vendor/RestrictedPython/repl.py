@@ -39,6 +39,7 @@ class ReadEvalParse:
         # noinspection PyBroadException
         if isinstance(x, ParseResults):
             x = x[0]
+        # noinspection PyBroadException
         try:
             print(eval(compile.compile_restricted(x, filename='<inline code>', mode='eval')),
                   self.__locals__,

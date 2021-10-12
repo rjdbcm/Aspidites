@@ -8,7 +8,7 @@ from past.builtins import xrange
 try:
     import numpy
     has_numpy = True
-except:
+except ImportError:
     has_numpy = False
 
 

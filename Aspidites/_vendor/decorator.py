@@ -33,7 +33,7 @@ https://github.com/micheles/decorator/blob/master/docs/documentation.md
 for the documentation.
 """
 import operator
-from contextlib import _GeneratorContextManager
+from contextlib import _GeneratorContextManager, suppress
 from typing import cast
 from inspect import signature, isgeneratorfunction, iscoroutinefunction
 from .decorator_extension import F, EMPTY, POS, fix
@@ -123,24 +123,11 @@ def decorate(func: F, caller, extras=(), kwsyntax=False) -> F:
     fun.__signature__ = sig
     fun.__qualname__ = func.__qualname__
     # builtin functions like defaultdict.__setitem__ lack many attributes
-    try:
+    with suppress(AttributeError):
         fun.__defaults__ = func.__defaults__
-    except AttributeError:
-        pass
-    try:
         fun.__kwdefaults__ = func.__kwdefaults__
-    except AttributeError:
-        pass
-    try:
         fun.__annotations__ = func.__annotations__
-    except AttributeError:
-        pass
-    try:
         fun.__module__ = func.__module__
-    except AttributeError:
-        pass
-    try:
         fun.__dict__.update(func.__dict__)
-    except AttributeError:
-        pass
+
     return cast(F, fun)
