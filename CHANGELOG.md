@@ -1,4 +1,5 @@
 **unreleased**
+**v0.25.10**
 **v0.25.9**
 
 - e6f0fa1 got rid of deadline for test_single_underscore_in_binops_can_accept_one_arg
