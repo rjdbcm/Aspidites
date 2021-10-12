@@ -1,5 +1,12 @@
 **unreleased**
 **v0.25.5**
+
+- cebe91e optimization of try-excepts
+- 6cb464c Merge remote-tracking branch 'origin/main'
+- 78e64bb Update README.md
+- 1e2abca Update README.md
+
+
 **v0.25.4**
 
 - 5491a8d readd test_final.py
