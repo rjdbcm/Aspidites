@@ -1,5 +1,11 @@
 **unreleased**
 **v0.25.4**
+
+- 5491a8d readd test_final.py
+- d8ff880 improve readability
+- 076dece Update test.yaml
+
+
 **v0.25.3**
 
 - e169a77 Update deploy.yml
