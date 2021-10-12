@@ -1,4 +1,4 @@
-name: 🐍 📦 PyPI
+name: Continuous Delivery
 
 on:
   push:
@@ -6,9 +6,72 @@ on:
       - v*
 
 jobs:
+  linux-build:
+     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python:
+          - 3.10.0
+          - 3.9.6
+          - 3.8.11
+          - 3.7.11
+
+    steps:
+      - name: Get Source Directory
+        uses: actions/checkout@v2
+
+      - name: Test Python Versions
+        uses: actions/setup-python@v2
+        with:
+          python-version: "${{ matrix.python }}"
+      - run: |
+          pip install -U pip pipenv wheel cython
+          pipenv lock
+          pipenv sync -d
+          pipenv run pytest --cov=Aspidites --cov-report=xml
+          rm -rf Pipfile.lock
+
+      - name: Upload Coverage to codecov.io
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          files: ./coverage.xml
+
+  #      - name: publish code coverage
+  #        uses: paambaati/codeclimate-action@v3
+  #        env:
+  #          CC_TEST_REPORTER_ID: 5bcc9d60bb439f75e102507e595434a393e9be017010223f6f3bc61cce2f5802
+
+
+  macosx-build:
+    runs-on: macos-11
+    strategy:
+      matrix:
+        python:
+          - 3.10.0
+          - 3.9.6
+          - 3.8.11
+          - 3.7.11
+
+    steps:
+      - name: Get Source Directory
+        uses: actions/checkout@v2
+
+      - name: Test Python Versions
+        uses: actions/setup-python@v2
+        with:
+          python-version: "${{ matrix.python }}"
+      - run: |
+          pip install -U pip pipenv wheel cython
+          pipenv lock
+          pipenv sync -d
+          pipenv run pytest
+          rm -rf Pipfile.lock
+
+
   source-deploy:
     name: Build and publish linux distributions 📦 to PyPI and TestPyPI
     runs-on: ubuntu-18.04
+    needs: linux-build
     steps:
       - uses: actions/checkout@master
       - name: Set up Python 3.9
@@ -48,6 +111,7 @@ jobs:
   manylinux-deploy:
       name: Build and publish linux distributions 📦 to PyPI and TestPyPI
       runs-on: ubuntu-18.04
+      needs: linux-build
       steps:
       - uses: actions/checkout@master
       - name: Set up Python 3.9
@@ -81,6 +145,7 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
           twine upload dist/*-manylinux*.whl
+
   windows-deploy:
       name: Build and publish Windows distributions 📦 to PyPI and TestPyPI
       runs-on: windows-latest
@@ -128,7 +193,7 @@ jobs:
   macos-11-deploy:
       name: Build and publish MacOS distributions 📦 to PyPI and TestPyPI
       runs-on: macos-11
-      needs: manylinux-deploy
+      needs: macosx-build
       strategy:
         matrix:
           python:
@@ -180,6 +245,65 @@ jobs:
         uses: ethomson/send-tweet-action@v1
         with:
           status: "📦 New PyPI package: Aspidites ${{ github.event.head_commit.message }}! 🎉🎉🎉 Check it out: https://pypi.org/project/Aspidites"
+          consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
+          consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
+          access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+
+  docker-deploy:
+    runs-on: ubuntu-latest
+    needs: linux-build
+    steps:
+      -
+        name: Docker metadata fetch 📊
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            rjdbcm/aspidites
+            ghcr.io/rjdbcm/aspidites
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+      -
+        name: Login to GitHub Container 📦 Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Set up QEMU 🖥️
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx 🖥️
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub 🐳
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and Push Image 🐳
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+      -
+        name: Send a Tweet
+        continue-on-error: true
+        uses: ethomson/send-tweet-action@v1
+        with:
+          status:
+            "#Aspidites ${{ github.event.head_commit.message }}! 🐳  Our docker container is ready to ship! 🚚 Check it out: https://github.com/rjdbcm/Aspidites/pkgs/container/aspidites"
           consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
           consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
           access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
