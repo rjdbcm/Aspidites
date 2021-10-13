@@ -1,4 +1,5 @@
 **unreleased**
+**v0.26.1**
 **v0.26.0**
 
 - 1b14255 added a tab on coroutines
