@@ -1,4 +1,5 @@
 **unreleased**
+**v1.0.0-alpha0**
 **v1.0.0**
 
 - c7f51c6 update Makefile
