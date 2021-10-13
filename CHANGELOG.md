@@ -1,5 +1,9 @@
 **unreleased**
 **v0.26.2**
+
+- 424ce04 add release make target
+
+
 **v0.26.1**
 
 - 5d771ab Merge remote-tracking branch 'origin/main'
