@@ -1,4 +1,5 @@
 **unreleased**
+**v0.27.0**
 **v0.26.2**
 
 - 56dc8b3 added copyright to repl.py
