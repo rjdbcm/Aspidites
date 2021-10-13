@@ -1,5 +1,12 @@
 **unreleased**
 **v0.27.0**
+
+- 4462ffc fix woopsies
+- 453d624 fix woopsies
+- 241487a fix woopsies
+- d5cec61 API Documentation and API nailed down
+
+
 **v0.26.2**
 
 - 56dc8b3 added copyright to repl.py
