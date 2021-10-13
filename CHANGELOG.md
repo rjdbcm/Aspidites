@@ -1,4 +1,5 @@
 **unreleased**
+**v0.26.2**
 **v0.26.1**
 
 - 5d771ab Merge remote-tracking branch 'origin/main'
