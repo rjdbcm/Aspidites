@@ -73,7 +73,7 @@ class Undefined:
         return 0
 
     def __repr__(self):
-        return self.__class__.__name__ + "()"
+        return self.__class__.__name__ + f"({self.func.__name__}, {self.args}, {self.kwargs})"
 
     # noinspection PyMethodMayBeStatic
     def __nonzero__(self):
@@ -107,7 +107,7 @@ def SafeFactorial(a: Numeric) -> Union[Numeric, Undefined]:
         exc = ArithmeticError(f"Factorial is Undefined for {a}")
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
-        return Undefined(SafeFactorial, a)
+        return Undefined(SafeFactorial, (a,))
     return factorial(a)
 
 
@@ -122,7 +122,7 @@ def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
         exc = ArithmeticError(f"Unary Add is Undefined for {type(a)}")
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
-        return Undefined(SafeUnaryAdd, a)
+        return Undefined(SafeUnaryAdd, (a,))
     return +a
 
 
@@ -137,7 +137,7 @@ def SafeUnarySub(a: Numeric) -> Union[Numeric, Undefined]:
         exc = ArithmeticError(f"Unary Sub is Undefined for {type(a)}")
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
-        return Undefined(SafeUnarySub, a)
+        return Undefined(SafeUnarySub, (a,))
     return -a
 
 
@@ -153,7 +153,7 @@ def SafeFloorDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
         exc = ArithmeticError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
-        return Undefined(SafeFloorDiv, a, b)
+        return Undefined(SafeFloorDiv, (a, b))
     return a // b
 
 
@@ -185,7 +185,7 @@ def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
         exc = ArithmeticError("Modulus by zero is Undefined; this behavior diverges from IEEE 754-1985.")
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
-        return Undefined(SafeMod, a, b)
+        return Undefined(SafeMod, (a, b))
     return a % b
 
 
@@ -202,7 +202,7 @@ def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
         exc = ArithmeticError(f"{str(a)}**{str(b)} == Undefined; this behavior diverges from IEEE 754-1985.")
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
-        return Undefined(SafeExp, a, b)
+        return Undefined(SafeExp, (a, b))
     try:
         return a ** b
     except OverflowError:

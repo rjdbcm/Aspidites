@@ -84,6 +84,7 @@ class Surely:
     # def __call__(cls, *args, **kwargs):
     #     return cls.__instance__
 
+    # The default value for instance__ MUST BE Undefined()
     def __new__(cls, instance__=Undefined(), *args, **kwargs):
         cls.__instance__ = instance__
         # noinspection PyUnresolvedReferences
