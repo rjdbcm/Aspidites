@@ -1,5 +1,6 @@
 **unreleased**
 **v1.0.0**
+**v1.0.0**
 
 - 09b0e1d update Makefile
 
