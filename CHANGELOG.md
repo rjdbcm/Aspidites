@@ -1,6 +1,20 @@
 **unreleased**
 **v1.0.0**
+
+- c7f51c6 update Makefile
+- 0cde380 v1.0.0-01 released
+- e821556 changelog updated
+- 09b0e1d update Makefile
+
+
 **v1.0.0**
+
+- c7f51c6 update Makefile
+- 0cde380 v1.0.0-01 released
+- e821556 changelog updated
+- 09b0e1d update Makefile
+
+
 
 - 09b0e1d update Makefile
 
