@@ -1,4 +1,5 @@
 **unreleased**
+**v1.0.0-alpha1**
 **v1.0.0-alpha0**
 
 - 83e8101 Added every math and monads symbol to the Aspidites __init__.py
