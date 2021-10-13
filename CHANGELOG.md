@@ -1,4 +1,5 @@
 **unreleased**
+**v1.0.0**
 **v0.26.2**
 
 - 7cd68b1 update .bumpversion.cfg
