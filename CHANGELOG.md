@@ -1,4 +1,5 @@
 **unreleased**
+**v0.28.0**
 **v0.27.0**
 
 - 4462ffc fix woopsies
