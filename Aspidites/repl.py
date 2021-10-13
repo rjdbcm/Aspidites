@@ -1,17 +1,29 @@
+import re
+import readline
 import sys
+import warnings
+from pathlib import Path
 from traceback import print_exc
 from typing import List, AnyStr, Union
-
 from Aspidites._vendor.pyparsing import ParseException, ParseResults
+from Aspidites import *
 import Aspidites.parser.parser
-import compile
-import Guards
+
+try:
+    import readline
+except ImportError:
+    readline = None
+histfile = Path('~/.woma_shell_history').expanduser()
+histfile_size = 1000
 START_PROMPT = '>>> '
 CONTINUE_PROMPT = '... '
-globals().update(Guards.safe_globals)
+
+single_arg_help = re.compile(r'(?:help[\(])(\w+)(?:[\)])')
 
 
 class ReadEvalParse:
+    intro = "Welcome to the Woma Interactive Shell. Use the 'help()' or '?' command to see a list of commands.\nThis is experimental and mainly aims to help developers to sandbox " \
+            "Woma without compilation."
     ruler = "┉"
     doc_leader = ""
     nohelp = "*** No help on %s"
@@ -40,40 +52,62 @@ class ReadEvalParse:
         if isinstance(x, ParseResults):
             x = x[0]
         # noinspection PyBroadException
+        warnings.resetwarnings()
         try:
-            print(eval(compile.compile_restricted(x, filename='<inline code>', mode='eval')),
-                  self.__locals__,
-                  self.__locals__)
+            print(eval(compile(x, filename='<inline code>', mode='eval'),
+                       self.__locals__,
+                       self.__locals__))
         except:
             out = exec(
-                compile.compile_restricted(x, filename='<inline code>', mode='exec'),
+                compile(x, filename='<inline code>', mode='exec'),
                 self.__locals__,
                 self.__locals__
             )
-            if out is not None:
-                print(out)
+            # if out is not None:
+            #     print(out)
+
+    def preloop(self):
+        if readline and Path(histfile).exists():
+            readline.read_history_file(histfile)
+
+    def postloop(self):
+        if readline:
+            readline.set_history_length(histfile_size)
+            readline.write_history_file(histfile)
 
     def loop(self) -> None:
+        print(self.intro)
         try:
             while True:
+                self.postloop()
+                self.preloop()
                 try:
                     _in = input(START_PROMPT)
                     if _in == 'exit()':
                         raise SystemExit
-                    elif self.find_token('?', _in):
+                    if self.find_token('?', _in):
                         self.do_help(_in.lstrip('? '))
                         continue
-                    elif self.find_token('help ', _in):
+                    if self.find_token('help ', _in):
                         self.do_help(_in.split(' ')[1])
-                    elif _in == 'help()':
-                        self.do_help()
                         continue
-                    elif self.find_token('print,', _in):
-                        print('Printing is not available in the Woma Interactive Shell.')
+                    if single_arg_help.match(_in):
+                        self.do_help(single_arg_help.search(_in).group(1))
+                        continue
+                    if hasattr(self, 'do_' + _in):
+                        getattr(self, 'do_' + _in)()
+                        continue
+                    if str(_in).isidentifier():
+                        self.eval_exec(_in)
                         continue
 
-                    p = Aspidites.parser.parser.parse_module(_in)
-                    self.eval_exec(p)
+                    try:
+                        p = Aspidites.parser.parser.parse_module(_in)
+                    except ParseException:
+                        # print(f"Warning: Failed to parse Woma.")
+                        self.eval_exec(_in)
+                    else:
+                        self.eval_exec(p)
 
                 except Exception as e:
                     print(f"Error: {e}")
@@ -90,6 +124,9 @@ class ReadEvalParse:
     def do_copyright(self):
         """Copyright Ross J. Duff 2021 licensed under the GNU Public License v3."""
         pass
+
+    def do_flush(self):
+        self.stdout.flush()
 
     def do_help(self, arg=None):
         'List available commands with "help" or detailed help with "help cmd".'
@@ -206,4 +243,3 @@ class ReadEvalParse:
 if __name__ == "__main__":
     rep = ReadEvalParse()
     rep.loop()
-
