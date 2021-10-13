@@ -1,5 +1,13 @@
 **unreleased**
 **v0.26.2**
+
+- 56dc8b3 added copyright to repl.py
+- b46c0b0 Added every math and monads symbol to the Aspidites __init__.py
+- b9106e7 vastly improved repl with command history
+- 8d1820f Update README.md
+- 7cd68b1 update .bumpversion.cfg
+
+
 **v0.26.1**
 
 - 5d771ab Merge remote-tracking branch 'origin/main'
