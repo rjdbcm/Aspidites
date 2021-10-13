@@ -73,7 +73,11 @@ class Undefined:
         return 0
 
     def __repr__(self):
-        return self.__class__.__name__ + f"({self.func.__name__}, {self.args}, {self.kwargs})"
+        if hasattr(self.func, '__name__'):
+            r = self.__class__.__name__ + f"({self.func.__name__}, {self.args}, {self.kwargs})"
+        else:
+            r = self.__class__.__name__ + f"({None}, {self.args}, {self.kwargs})"
+        return r
 
     # noinspection PyMethodMayBeStatic
     def __nonzero__(self):
