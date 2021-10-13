@@ -30,7 +30,18 @@ Examples
             (Hello()) procedure
                 print("Hello, World!")
 
+    .. tab::
 
+        True Coroutines
+
+        .. code:: woma
+
+            (Yield123()) coroutine
+                <^>Add(0, 1)
+                <^>Add(0, 2)
+                <^>Add(0, 3)
+            `ellipsis calling creates a true coroutine`
+            c = Yield123()...
 
 .. tabs::
 
