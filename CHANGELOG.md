@@ -1,5 +1,14 @@
 **unreleased**
 **v0.26.0**
+
+- 1b14255 added a tab on coroutines
+- 9a20430 added a note on coroutines
+- 9a5e98e added Any to the return annotation of Maybe
+- 3d11296 looping works
+- 2b0cc42 Update readme
+- 1e83f50 remove table as it is now redundant
+
+
 **v0.25.13**
 
 - 7ff8d2c remove non-applicable note
