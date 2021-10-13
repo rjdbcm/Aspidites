@@ -1,5 +1,6 @@
 **unreleased**
 **v0.26.2**
+**v0.26.2**
 
 - 424ce04 add release make target
 
