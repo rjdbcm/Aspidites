@@ -139,6 +139,12 @@ release:
 	git commit -m 'changelog updated'
 	bump2version release
 
+prerel:
+	python -m Aspidites.scripts.bumpversion_hook prerel
+	git add CHANGELOG.md
+	git commit -m 'changelog updated'
+	bump2version prerel
+
 build: clean test-all clean
 	python setup.py sdist bdist_wheel
 
