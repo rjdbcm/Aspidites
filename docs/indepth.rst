@@ -28,6 +28,7 @@ Ellipsis
 The ellipsis is a contextual shorthand for several assigment operations:
  - In calling a function a trailing ``...`` indicates that the function is to be invoked in a different scope.
  - In creating an immutable collection a trailing ``...`` indicates that the values can be evolved.
+ - In making a ``coroutine`` respecting function a true coroutine at call time.
 
 Trigrams
 ~~~~~~~~
@@ -52,16 +53,6 @@ Rather than keywords Woma makes use of three character symbols called trigrams. 
 +------------+------------+--------------------+-----------------+
 | 2          |    ``<@>`` |    ``loop over``   |   ``both``      |
 +------------+------------+--------------------+-----------------+
-
-
-
-
-
-
-
-
-
-
 
 Operators
 ~~~~~~~~~
