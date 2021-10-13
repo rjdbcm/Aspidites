@@ -23,8 +23,15 @@ __all__ = [
     'Undefined',
     'Maybe',
     'Surely',
-    'Warn'
+    'Warn',
+    'parse_module',
+    'parse_statement',
+    'bordered'
     ]
 
+from Aspidites.api import *
+from Aspidites.parser import *
 from Aspidites.monads import *
 from Aspidites.math import *
+
+Maybe.__doc__ = Maybe.__doc__

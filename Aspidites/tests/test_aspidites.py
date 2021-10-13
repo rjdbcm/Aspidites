@@ -15,7 +15,7 @@ except ImportError:
 from .._vendor.contracts import ContractNotRespected
 from ..__main__ import get_cy_kwargs, main
 from ..parser import parse_module
-from ..templates import lib
+from ..templates import woma_template
 from ..monads import Maybe, Surely
 from ..math import SafeFloorDiv, SafeMod, SafeDiv, SafeExp, Undefined
 from ..compiler import Compiler
@@ -46,9 +46,9 @@ def setup_code(inject_config):
 
 def test_compile_module(inject_config):
     try:
-        compile(lib.substitute(code='\n'.join(setup_code(inject_config))), '', 'exec')
+        compile(woma_template.substitute(code='\n'.join(setup_code(inject_config))), '', 'exec')
     except FileNotFoundError:  # ????
-        compile(lib.substitute(code='\n'.join(os.path.join(inject_config(), woma_file))), '',
+        compile(woma_template.substitute(code='\n'.join(os.path.join(inject_config(), woma_file))), '',
                 'exec')
 
 

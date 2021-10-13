@@ -196,5 +196,8 @@ def parse_module(module):
     return module_body.parseString(module, parseAll=True)
 
 
+def parse_statement(s):
+    return stmt.parseString(s)
+
 # if __name__ == "__main__":
 #     print(parse_module(open('../examples/math.wom').read()))

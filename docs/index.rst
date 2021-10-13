@@ -13,5 +13,6 @@ Welcome to the Woma Programming Language!
    README
    syntax
    indepth
+   api
    devinfo
 

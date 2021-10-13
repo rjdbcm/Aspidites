@@ -31,8 +31,9 @@ def _apply(f, args=None, kwargs=None):
 
 
 class Surely:
-    """A monad for a successful programmatic unit
-    Truthy, defers to an instance of a successful computation"""
+    """A monad for a successful programmatic unit.
+    Truthy, defers to an instance of a successful computation
+    """
 
     __slots__ = v(
         "__weakref__", "__instance__" "__str__", "__int__", "__float__", "__complex__"
@@ -90,7 +91,8 @@ class Surely:
 
 
 class Maybe:
-    """Sandboxes a Surely call and handles ContractNotRespected by returning Undefined"""
+    """Sandboxes a :class:`Aspidites.monads.Surely` call and handles ContractNotRespected by returning an instance of
+     :class:`Aspidites.math.Undefined`"""
 
     __slots__ = v("_func", "_args", "_kwargs", "_stack", "_warn", "__instance__")
 

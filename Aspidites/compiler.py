@@ -20,7 +20,7 @@ import py_compile
 import sys
 from glob import glob
 import typing as t
-from .templates import lib, makefile, pyproject, setup, default_file, inject_stack
+from .templates import woma_template, makefile_template, pyproject_template, setup_template, default_template
 from pyrsistent import pmap, v
 from hashlib import sha256
 from pathlib import Path
@@ -99,7 +99,7 @@ class CheckedFileStack:
         """Registers a filename to a checksum of its contents."""
         self.all_files.set(*self._write_checksum(fname))
 
-    def create_file(self, fname, mode, root='', text=default_file) -> None:
+    def create_file(self, fname, mode, root='', text=default_template) -> None:
         """API for creating and registering checked files"""
         if len(str(root)) > 0:
             root = Path(root)
@@ -156,7 +156,7 @@ class Compiler:
         files = {
             self.fname: (
                 self.mode,
-                dict(root='', text=lib.substitute(code="\n".join(self.args.code)))
+                dict(root='', text=woma_template.substitute(code="\n".join(self.args.code)))
             ),
             '__init__.py': (
                 self.mode,
@@ -168,11 +168,11 @@ class Compiler:
             ),
             'pyproject.toml': (
                 self.mode,
-                dict(root=self.root, text=pyproject.substitute(build_requires=self.args.build_requires))
+                dict(root=self.root, text=pyproject_template.substitute(build_requires=self.args.build_requires))
             ),
             'Makefile': (
                 self.mode,
-                dict(root=self.root, text=makefile.substitute(project=self.project))
+                dict(root=self.root, text=makefile_template.substitute(project=self.project))
             ),
         }
 
@@ -203,7 +203,7 @@ class Compiler:
 
     def setup(self, **kwargs) -> None:
         module_name = str(self.app_name).replace("/", ".")
-        text = setup.substitute(
+        text = setup_template.substitute(
            app_name=module_name,
            src_file=kwargs['fname'],
            inc_dirs=[],

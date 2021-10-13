@@ -40,6 +40,7 @@ release = __version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.autodoc',
     "sphinx_rtd_theme",
     "sphinx_copybutton",
     "sphinx_tabs.tabs"
@@ -48,6 +49,7 @@ copybutton_only_copy_prompt_lines = True
 copybutton_prompt_text = "$ "
 copybutton_selector = "div.highlight-shell pre"
 sphinx_tabs_disable_tab_closing = True
+autodoc_typehints = "description"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
