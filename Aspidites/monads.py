@@ -134,7 +134,7 @@ class Maybe:
     def kwargs(self) -> Dict[AnyStr, Any]:
         return self._kwargs
 
-    def __call__(self, warn_undefined=True) -> Union[Surely, Undefined]:
+    def __call__(self, warn_undefined=True) -> Union[Surely, Undefined, Any]:
         try:
             with suppress(ValueError):
                 val = _apply(self.func, self.args, self.kwargs)
