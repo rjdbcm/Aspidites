@@ -21,20 +21,22 @@ That said, try to avoid long block comments (maybe create an issue instead) and 
 Core Dependencies
 ~~~~~~~~~~~~~~~~~
 
-Aspidites has 10 core dependencies, all licensed under a compatible OSI
+Aspidites has 4 core dependencies, all licensed under a compatible OSI
 approved license. In general, dependencies are vendored unless they
 contain Python Extensions.
 
--  cython
--  pyrsistent
--  pyparsing
--  mypy
--  pytest
--  pytest-xdist
--  pytest-mock
 -  numpy
+-  cython
 -  future
+-  pyrsistent
+
+In addition to the core dependencies are the 4 optional dependencies, all licensed under a compatible OSI approved license, needed to run the canned test-suite.
+
+-  pytest
+-  pytest-mock
+-  pytest-xdist
 -  hypothesis
+
 
 Copying
 ~~~~~~~
