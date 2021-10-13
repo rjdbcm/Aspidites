@@ -1,5 +1,5 @@
 # Aspidites 
-[![Continuous Integration](https://github.com/rjdbcm/Aspidites/actions/workflows/test.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/test.yml) [![Continuous Delivery](https://github.com/rjdbcm/Aspidites/actions/workflows/deploy.yml/badge.svg)](https://github.com/rjdbcm/Aspidites/actions/workflows/deploy.yml) [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/rjdbcm/Aspidites)](https://codeclimate.com/github/rjdbcm/Aspidites/maintainability) ![Lines of code](https://img.shields.io/tokei/lines/github/rjdbcm/Aspidites) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
+![GitHub Integration Status](https://img.shields.io/github/workflow/status/rjdbcm/Aspidites/Continuous%20Integration?label=Continous%20Integration&logo=github) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rjdbcm/Aspidites/Continuous%20Deployment?label=Continous%20Deployment&logo=github) [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/rjdbcm/Aspidites)](https://codeclimate.com/github/rjdbcm/Aspidites/maintainability) ![Lines of code](https://img.shields.io/tokei/lines/github/rjdbcm/Aspidites) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
 ![GitHub top language](https://img.shields.io/github/languages/top/rjdbcm/Aspidites)
 ![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)
 ----------------
@@ -79,34 +79,25 @@ $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
 
 - Ultra-smooth runtime exception handling with useful warnings.
 - Demonic non-determinism, favors non-termination and type-negotiation (constraint satisfaction).
-- Terseness that mixes keywords and symbolic operations in order to make code both concise ___and___ readable.
+- Terseness, symbolic operations are used to make code both concise ___and___ readable.
 - Great for writing high-integrity code that works natively with CPython.
 - Usable for general purpose ___or___ scientific computing.
-
-# Syntax
-
-## Lexicon
-
-| Working?      | Symbol        | Verbage             |  Example                                                       |
-|:--------------|:--------------|:--------------------|:---------------------------------------------------------------|
-| ✅            | `->`          |respects             | `identifier` `->` `constraining clauses`                       |
-| ✅            | `<-`          |imposes              | `identifier` `<-` `imposed clauses`                            |
-| ✅            | `<*>`         |return               | `<*>` `statement `                                             |
-| ✅            |  `#`          |pragma               | `#` `compiler directive`                                       |
-| ✅            | ``))``        |return respects      | ``))`` ``return constraints``                                  |                                           
-| ✅            | ``(G(``       |define G as function | ``(`` ``FuncName`` ``(`` ``identifier`` ``->`` ``constraining clauses`` ``;`` ``...`` ``))`` ``return constraints`` |
-
 
 ## Examples
 
 ```
 (Greeter(name -> str)) procedure
     <*>print('Greetings,', name)
-
-main:
-Greeter("Aspidites user")
+```
 
 ```
+`Scala-style anonymous functions`
+scala = (_ * 2)
+val = scala(_ + _)
+val(2, 3)
+>>> 10
+```
+
 # Logo/Mascot
 Wheelie the Woma™ and Woma Programming Language™ are unregistered trademarks of Ross J. Duff. 
 The logos are copyright © Ross J. Duff but may be transferred to an appropriate trust at a later date.
@@ -123,16 +114,16 @@ If you'd like to help out financially, Aspidites' maintainer accepts [Liberapay]
 [![libraries.io](https://img.shields.io/badge/Libraries.io--inactive)](https://libraries.io/github/rjdbcm/Aspidites)
 
 ## Core Dependencies
-Aspidites has 10 core dependencies, all licensed under a compatible OSI approved license. In general, dependencies are vendored unless they contain Python Extensions.
+Aspidites has just 4 core dependencies, all licensed under a compatible OSI approved license. In general, dependencies are vendored unless they contain Python Extensions.
 - cython
 - pyrsistent
-- pyparsing
-- mypy
+- numpy
+- future
+
+In addition to the core dependencies are the 4 optional dependencies, all licensed under a compatible OSI approved license, needed to run the canned test-suite.
 - pytest
 - pytest-xdist
 - pytest-mock
-- numpy
-- future
 - hypothesis
 
 ## Copying
