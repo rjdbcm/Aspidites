@@ -1,5 +1,10 @@
 **unreleased**
 **v1.0.0-alpha0**
+
+- 83e8101 Added every math and monads symbol to the Aspidites __init__.py
+- 1a67c57 vastly improved repl with command history
+
+
 **v1.0.0**
 
 - c7f51c6 update Makefile
