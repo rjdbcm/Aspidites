@@ -1,4 +1,5 @@
 **unreleased**
+**v0.28.2**
 **v0.28.1**
 
 - 4aa9884 fix woopsie in repr
