@@ -88,9 +88,9 @@ class Undefined:
         self.kwargs = kwargs
 
     # noinspection PyMethodParameters
-    def __new__(mcs):
+    def __new__(mcs, *args, **kwargs):
         if mcs.__instance is None:
-            mcs.__instance = super(Undefined, mcs).__new__(mcs)
+            mcs.__instance = super(Undefined, mcs).__new__(mcs, *args, **kwargs)
             mcs.__instance__ = mcs.__instance
         # noinspection PyUnresolvedReferences
         return mcs.__instance__  # instance descriptor from __slots__ -> actual instance

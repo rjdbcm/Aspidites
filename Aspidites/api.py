@@ -123,17 +123,15 @@ class Warn:
             tb=bordered(str(exc)),
         )
 
+    def format_kwargs(self, sep: str = ", ") -> bytes:
+        return f'{sep}{str(self.kwargs).strip("{} ").replace(":", "=") if len(self.kwargs) else ""}'.encode('UTF-8')
 
-def format_kwargs(self, sep: str = ", ") -> bytes:
-    return f'{sep}{str(self.kwargs).strip("{} ").replace(":", "=") if len(self.kwargs) else ""}'.encode('UTF-8')
+        # noinspection PyMethodMayBeStatic
 
-    # noinspection PyMethodMayBeStatic
-
-
-def format_locals(self, local_vars, exc: Exception) -> bytes:
-    lokals: dict = dict(filter(lambda x: x[1] != str(exc), local_vars))
-    str_locals: bytes = _format_locals(lokals)
-    return str_locals.rstrip("\n".encode('UTF-8'))
+    def format_locals(self, local_vars, exc: Exception) -> bytes:
+        lokals: dict = dict(filter(lambda x: x[1] != str(exc), local_vars))
+        str_locals: bytes = _format_locals(lokals)
+        return str_locals.rstrip("\n".encode('UTF-8'))
 
 
 code = new_contract("code", lambda x: isinstance(x, ParseResults))
