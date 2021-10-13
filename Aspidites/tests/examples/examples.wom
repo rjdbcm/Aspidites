@@ -10,15 +10,17 @@
 	<^>Add(0, 2)
 	<^>Add(0, 3)
 
+l = Yield123()
+
+i<@>l
+    print(i)
+
+
 `procedures`
 #cython.binding(True)
 (Hello()) procedure
 	print("Hello, World!")
 
-`coroutines`
-#cython.binding(True)
-(Hello2()) coroutine
-	<^>Hello()
 
 `persistent vectors`
 D = [2, 4, 6, 8, 10]

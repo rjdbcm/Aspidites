@@ -184,11 +184,11 @@ else_stmt = Keyword("?!?").setParseAction(replaceWith('else:')) + suite
 if_stmt = Group(list_item + "?").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
 cond_stmt = if_stmt + Optional(elif_stmt) + Optional(else_stmt)
 suite <<= IndentedBlock(
-    OneOrMore(comment_line | pass_stmt | cont_stmt | break_stmt | ret_stmt | yield_stmt | cond_stmt | func_call | func_def | contract_assign)).setParseAction(
+    OneOrMore(comment_line | pass_stmt | cont_stmt | break_stmt | ret_stmt | yield_stmt | cond_stmt | func_call | loop_def | func_def | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
 rvalue <<= clos_call | func_call | list_item | lambda_def
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
-stmt <<= func_def | contract_define | cond_stmt | func_call | simple_assign | comment_line
+stmt <<= func_def | loop_def | contract_define | cond_stmt | func_call | simple_assign | comment_line
 module_body = OneOrMore(stmt) + Optional(struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
 
 
