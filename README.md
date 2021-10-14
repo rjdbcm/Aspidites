@@ -1,3 +1,5 @@
+<img align="left" width="70" height="70" src="https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie.png" alt="Wheel the Woma">
+
 # Aspidites 
 ![GitHub Integration Status](https://img.shields.io/github/workflow/status/rjdbcm/Aspidites/Continuous%20Integration?label=Continous%20Integration&logo=github) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rjdbcm/Aspidites/Continuous%20Deployment?label=Continous%20Deployment&logo=github) [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/rjdbcm/Aspidites)](https://codeclimate.com/github/rjdbcm/Aspidites/maintainability) ![Lines of code](https://img.shields.io/tokei/lines/github/rjdbcm/Aspidites) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
 ![GitHub top language](https://img.shields.io/github/languages/top/rjdbcm/Aspidites)
