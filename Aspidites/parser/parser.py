@@ -19,12 +19,14 @@ from Aspidites._vendor.pyparsing import (
     Empty,
     FollowedBy,
     Forward,
+    ZeroOrMore,
     OneOrMore,
     MatchFirst,
     Optional,
     ParseElementEnhance,
     ParseException,
     Regex,
+    Char,
     Word,
     alphanums,
     alphas,
@@ -79,7 +81,8 @@ class IndentedBlock(ParseElementEnhance):
 
 quoted_str = quotedString().setParseAction(lambda t: t[0])
 integer = Word(nums).setParseAction(cvt_int)
-real = Combine(Word(nums) + "." + Word(nums))
+# TODO: .5 not recognized as a float
+real = Combine(Optional(Word(nums)) + "." + Word(nums))
 complex_ = Combine(real | integer + "+" + real | integer + "j")
 list_str = Forward()
 list_str_evolver = Forward()
@@ -132,10 +135,13 @@ list_item = (  # Precedence important!!!
     | dict_str_evolver
     | collection
 )
+
+assignable = list_item | rvalue
+
 contract_define = identifier + imposes + _contract_expression  #  ^ funcCall
 contract_define.setParseAction(cvt_contract_define)
 contract_respect = respects + _contract_expression
-contract_assign = identifier + assign_eq + list_item + contract_respect
+contract_assign = identifier + assign_eq + assignable + contract_respect
 contract_assign.setParseAction(cvt_contract_assign)
 
 tuple_str <<= (lparen + Optional(delimitedList(list_item)) + Optional(comma) + rparen).setParseAction(cvt_tuple)
@@ -174,10 +180,12 @@ lambda_def = Combine(Group(lit_lparen + arith_expr | comp_expr + lit_rparen))
 func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_func_call)  # if len(t[0]) != 3 else t[0][0] + '()')
 clos_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_clos_call) + Suppress(noclosure)
 
-# TODO: (!) trigram does not bind a variable.
-case_stmt = Group(list_item + colon + rvalue).setParseAction(lambda t: sep.join(*t))
-match_suite = IndentedBlock(OneOrMore(case_stmt)).setParseAction(lambda t: (sep.join(t.asList())))
-match_decl = Group(match_none + list_item).setParseAction(lambda t: lit_lparen.join(*t))
+
+# TODO: (!) trigram only binds a single letter variable identifier
+lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
+case_stmt = Group(rvalue + colon + rvalue).setParseAction(lambda t: sep.join(t[0]))
+match_suite = Group(IndentedBlock(OneOrMore(case_stmt))).setParseAction(lambda t: (sep.join(t.asList()[0])))
+match_decl = Group(match_none + Char(alphas)).setParseAction(lambda t: lit_lparen.join(*t))
 match_def = Group(match_decl + match_suite).setParseAction(lambda t: sep.join(t[0]) + lit_rparen)
 
 # elif_stmt = Group(list_item + "?!").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
@@ -216,11 +224,13 @@ suite <<= IndentedBlock(
               # | cond_stmt
               | func_call
               | func_def
+              | match_def
               | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
-rvalue <<= clos_call | func_call | list_item | lambda_def
+rvalue <<= clos_call | func_call | list_item | lambda_def | lit_ellipse
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
 stmt <<= (func_def
+          | match_def
           | ident_loop_def
           | string_loop_def
           | list_loop_def
