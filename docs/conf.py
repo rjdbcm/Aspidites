@@ -50,6 +50,8 @@ copybutton_prompt_text = "$ "
 copybutton_selector = "div.highlight-shell pre"
 sphinx_tabs_disable_tab_closing = True
 autodoc_typehints = "description"
+locale_dirs = ['locale/']   # path is example but recommended.
+gettext_compact = False     # optional.
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
