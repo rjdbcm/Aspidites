@@ -1,6 +1,6 @@
 from pyrsistent import v
 from .fn import *
-from .apm import *
+from .apm import match
 
 __all__ = v("F",  # BEGIN func.py
             "curried",  # END func.py
