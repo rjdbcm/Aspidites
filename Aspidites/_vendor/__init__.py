@@ -1,5 +1,6 @@
 from pyrsistent import v
 from .fn import *
+from .apm import *
 
 __all__ = v("F",  # BEGIN func.py
             "curried",  # END func.py
@@ -39,5 +40,6 @@ __all__ = v("F",  # BEGIN func.py
             "_",
             "reduce",
             "filterfalse",
-            "zip_longest"
+            "zip_longest",
+            "match"
             )

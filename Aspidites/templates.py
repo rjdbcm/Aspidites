@@ -174,6 +174,7 @@ from Aspidites._vendor import (
     drop,
     takelast,
     droplast,
+    match,
     _,
 )
 from Aspidites.monads import Maybe, Surely
