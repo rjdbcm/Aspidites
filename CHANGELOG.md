@@ -1,5 +1,9 @@
 **unreleased**
 **v0.29.0**
+
+- a8bdd39 added match operator to parser
+
+
 **v0.28.2**
 
 - 48fd177 add space
