@@ -1,6 +1,6 @@
 from pyrsistent import v
 from .fn import *
-from .apm import match
+from .apm import match, InstanceOf
 
 __all__ = v("F",  # BEGIN func.py
             "curried",  # END func.py
@@ -41,5 +41,6 @@ __all__ = v("F",  # BEGIN func.py
             "reduce",
             "filterfalse",
             "zip_longest",
-            "match"
+            "match",
+            "InstanceOf"
             )
