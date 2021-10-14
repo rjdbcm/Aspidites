@@ -77,7 +77,6 @@ class IndentedBlock(ParseElementEnhance):
         return OneOrMore(inner_expr).parseImpl(instring, loc, doActions)
 
 
-unistr = unicodeString().setParseAction(lambda t: t[0][2:-1])
 quoted_str = quotedString().setParseAction(lambda t: t[0])
 integer = Word(nums).setParseAction(cvt_int)
 real = Combine(Word(nums) + "." + Word(nums))
@@ -117,6 +116,8 @@ comp_expr = infixNotation(
     ],
 )
 
+collection = quoted_str | list_str | set_str | tuple_str | dict_str
+
 list_item = (  # Precedence important!!!
     comp_expr  # Expressions
     | arith_expr
@@ -124,17 +125,12 @@ list_item = (  # Precedence important!!!
     | integer  # Literals
     | complex_
     | real
-    | quoted_str
-    | unistr
     | bool_literal
     | nullit
     | list_str_evolver
     | set_str_evolver
     | dict_str_evolver
-    | list_str  # Collections
-    | set_str
-    | tuple_str
-    | dict_str
+    | collection
 )
 contract_define = identifier + imposes + _contract_expression  #  ^ funcCall
 contract_define.setParseAction(cvt_contract_define)
@@ -167,8 +163,6 @@ comment_line = (
     .setParseAction(cvt_comment_line)
 )
 
-loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + identifier).setParseAction(cvt_for_loop_decl)
-loop_def = Group(loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
 return_value = return_none + rvalue
 yield_value = yield_none + rvalue
@@ -179,16 +173,60 @@ func_def = Group(func_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]
 lambda_def = Combine(Group(lit_lparen + arith_expr | comp_expr + lit_rparen))
 func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_func_call)  # if len(t[0]) != 3 else t[0][0] + '()')
 clos_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_clos_call) + Suppress(noclosure)
-elif_stmt = Group(list_item + "?!").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
-else_stmt = Keyword("?!?").setParseAction(replaceWith('else:')) + suite
-if_stmt = Group(list_item + "?").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
-cond_stmt = if_stmt + Optional(elif_stmt) + Optional(else_stmt)
+
+# elif_stmt = Group(list_item + "?!").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
+# else_stmt = Keyword("?!?").setParseAction(replaceWith('else:')) + suite
+# if_stmt = Group(list_item + "?").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
+# cond_stmt = if_stmt + Optional(elif_stmt) + Optional(else_stmt)
+
+ident_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + identifier).setParseAction(cvt_for_loop_decl)
+ident_loop_def = Group(ident_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+
+list_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + list_str).setParseAction(cvt_for_loop_decl)
+list_loop_def = Group(list_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+
+set_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + set_str).setParseAction(cvt_for_loop_decl)
+set_loop_def = Group(set_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+
+tuple_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + tuple_str).setParseAction(cvt_for_loop_decl)
+tuple_loop_def = Group(tuple_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+
+dict_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + dict_str).setParseAction(cvt_for_loop_decl)
+dict_loop_def = Group(dict_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+
+string_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + quoted_str).setParseAction(cvt_for_loop_decl)
+string_loop_def = Group(string_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+
+func_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + func_call).setParseAction(cvt_for_loop_decl)
+func_loop_def = Group(func_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+
 suite <<= IndentedBlock(
-    OneOrMore(comment_line | pass_stmt | cont_stmt | break_stmt | ret_stmt | yield_stmt | cond_stmt | func_call | loop_def | func_def | contract_assign)).setParseAction(
+    OneOrMore(pass_stmt
+              | ident_loop_def
+              | cont_stmt
+              | break_stmt
+              | ret_stmt
+              | yield_stmt
+              # | cond_stmt
+              | func_call
+              | func_def
+              | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
 rvalue <<= clos_call | func_call | list_item | lambda_def
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
-stmt <<= func_def | loop_def | contract_define | cond_stmt | func_call | simple_assign | comment_line
+stmt <<= (func_def
+          | ident_loop_def
+          | string_loop_def
+          | list_loop_def
+          | set_loop_def
+          | tuple_loop_def
+          | dict_loop_def
+          | func_loop_def
+          | contract_define
+          # | cond_stmt
+          | func_call
+          | simple_assign
+          | comment_line)
 module_body = OneOrMore(stmt) + Optional(struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
 
 

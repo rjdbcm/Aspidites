@@ -1,5 +1,9 @@
 # cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
+import re
+
 from .reserved import *
+
+pmap_re = re.compile(r"(pmap\(\{.*\}\))")
 
 
 def cvt_arith_expr(tks):  # multiple returns needed, PackRat is very strict about side-effects
@@ -43,8 +47,14 @@ def cvt_comment_line(s, loc, t):
 
 def cvt_for_loop_decl(t):
     t = t[0]
+    print(t)
     if len(t) == 5:
-        s = str(t[3] + ''.join(t[:3]) + ' in ' + t[4] + lit_colon).encode('UTF-8')
+        r = pmap_re.match(t[4])
+        if r:
+            m = r.group(1) + ".items()"
+        else:
+            m = t[4]
+        s = str(t[3] + ''.join(t[:3]) + ' in ' + m + lit_colon).encode('UTF-8')
     else:
         s = str(t[1] + t[0] + ' in ' + t[2] + lit_colon).encode('UTF-8')
     return s.decode('UTF-8')

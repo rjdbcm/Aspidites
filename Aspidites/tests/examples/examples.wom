@@ -3,6 +3,7 @@
 (Add(x = 3 -> int; y = 3 -> int)) int
 	<*>x+y
 
+
 `generators`
 #cython.binding(True)
 (Yield123()) coroutine
@@ -10,9 +11,23 @@
 	<^>Add(0, 2)
 	<^>Add(0, 3)
 
-l = Yield123()
-
+l = [1,2,3]
 i<@>l
+    print(i)
+
+i<@>[1,2,3]
+    print(i)
+
+i<@>(1,2,3)
+    print(i)
+
+i<@>{1,2,3}
+    print(i)
+
+k,v<@>{'a': 0, 'b': 2}
+    print(v)
+
+i<@>"abcdefg"
     print(i)
 
 
