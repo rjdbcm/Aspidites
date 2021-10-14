@@ -1,4 +1,5 @@
 **unreleased**
+**v0.29.1**
 **v0.29.0**
 
 - a8bdd39 added match operator to parser
