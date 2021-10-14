@@ -52,6 +52,7 @@ factop = Literal("!")
 comparisonop = Regex(">=|<=|!=|>|<|==").setName("operator")
 assign_eq = Literal("=")
 noclosure = Literal("...")  # That's no closure
+match_none = Literal("(!)").setParseAction(replaceWith('match'))
 return_none = Literal("<*>").setParseAction(replaceWith("return "))
 yield_none = Literal("<^>").setParseAction(replaceWith("yield "))
 for_none = Literal("<@>").setParseAction(replaceWith('for '))

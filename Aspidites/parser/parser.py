@@ -174,6 +174,12 @@ lambda_def = Combine(Group(lit_lparen + arith_expr | comp_expr + lit_rparen))
 func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_func_call)  # if len(t[0]) != 3 else t[0][0] + '()')
 clos_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_clos_call) + Suppress(noclosure)
 
+# TODO: (!) trigram does not bind a variable.
+case_stmt = Group(list_item + colon + rvalue).setParseAction(lambda t: sep.join(*t))
+match_suite = IndentedBlock(OneOrMore(case_stmt)).setParseAction(lambda t: (sep.join(t.asList())))
+match_decl = Group(match_none + list_item).setParseAction(lambda t: lit_lparen.join(*t))
+match_def = Group(match_decl + match_suite).setParseAction(lambda t: sep.join(t[0]) + lit_rparen)
+
 # elif_stmt = Group(list_item + "?!").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
 # else_stmt = Keyword("?!?").setParseAction(replaceWith('else:')) + suite
 # if_stmt = Group(list_item + "?").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
