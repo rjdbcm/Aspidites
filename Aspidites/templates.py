@@ -179,7 +179,7 @@ from Aspidites._vendor import (
     InstanceOf,
 )
 from Aspidites.monads import Maybe, Surely
-from Aspidites.math import Undefined, SafeDiv, SafeExp, SafeMod, SafeFloorDiv, SafeUnaryAdd, SafeUnarySub
+from Aspidites.math import Undefined, SafeDiv, SafeExp, SafeMod, SafeFloorDiv, SafeUnaryAdd, SafeUnarySub, SafeFactorial
 from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.RestrictedPython import safe_builtins
 safe_builtins['print'] = print
