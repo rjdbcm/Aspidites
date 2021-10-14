@@ -106,10 +106,16 @@ test-all:
 build-ext: clean
 	python setup.py build_ext --inplace
 
+quickbuild:
+	python setup.py build_ext --inplace
+
 proftest: build-ext
 	python -m pytest Aspidites/tests -x --profile --profile-svg
 
 xtest: build-ext
+	python -m pytest Aspidites/tests -x
+
+quicktest: quickbuild
 	python -m pytest Aspidites/tests -x
 
 coverage:
