@@ -1,5 +1,11 @@
 **unreleased**
 **v0.28.2**
+
+- 1d4399a yeeting conditionals. loops work with bound variables, string literals, and collection literals outside function bodies. (bound variables work inside functions)
+- 2307309 add analytics tag
+- 08f3f22 locale_dirs for future internationalization
+
+
 **v0.28.1**
 
 - 4aa9884 fix woopsie in repr
