@@ -1,5 +1,15 @@
 **unreleased**
 **v0.30.0**
+
+- 03fd2d4 Merge remote-tracking branch 'origin/main'
+- 3c979ca nullit replaced with /0 in keeping with WEEP10
+- f4ed7e8 func_def now has proper whitespace following
+- c187dc1 SafeMath ops now nest properly when parse
+- 5dedf82 Update README.md
+- 1e70579 this is why we have alphas, math operations now work as expected (automatically closed)
+- f48e0dd removed mutable default from _apply
+
+
 **v0.29.1**
 
 - cc799ea Merge remote-tracking branch 'origin/main'
