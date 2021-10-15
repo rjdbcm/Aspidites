@@ -27,7 +27,7 @@ from .math import Undefined, Warn
 
 
 def _apply(f, args=None, kwargs=None):
-    return f(*(args or []), **(kwargs or {}))
+    return f(*(args or tuple()), **(kwargs or {}))
 
 
 class Surely:
