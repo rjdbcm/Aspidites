@@ -1,5 +1,24 @@
 **unreleased**
 **v0.29.1**
+
+- cc799ea Merge remote-tracking branch 'origin/main'
+- 66986ab #cython.binding(True) no longer needed for functions to work. It is on globally on by default now.
+- c7ce0ef add SafeFactorial
+- 78c98a7 added more targets for quick testing
+- d67d998 matching works, floats now work for leading . case // operator added
+- b0b60dc Added a InstanceOf from apm
+- 012a400 Added a fibonacci example
+- d82e278 added the rest of the SafeX functions
+- de175db vendored apm tests
+- 1ce1323 vendored apm for match functionality.
+- 24138a1 Update README.md
+- e8df47d Update README.md
+- e5e5217 Merge remote-tracking branch 'origin/main'
+- 1adbfcf Update README.md
+- ee5e6b7 Update README.md
+- cc9f025 Update README.md
+
+
 **v0.29.0**
 
 - a8bdd39 added match operator to parser
