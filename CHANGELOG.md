@@ -1,4 +1,5 @@
 **unreleased**
+**v0.30.0**
 **v0.29.1**
 
 - cc799ea Merge remote-tracking branch 'origin/main'
