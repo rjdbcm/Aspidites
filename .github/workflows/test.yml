@@ -5,8 +5,7 @@ name: Continuous Integration
 
 on:
   push:
-    tags-ignore:
-      - '**'
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -49,7 +48,7 @@ jobs:
         with:
           name: "linux-profile-python-${{ matrix.python }}"
           path: |
-            prof/*.prof
+            prof/combined.prof
 
       - name: Upload Coverage to codecov.io
         uses: codecov/codecov-action@v2.1.0
@@ -91,7 +90,7 @@ jobs:
         with:
             name: "macos-profile-python-${{ matrix.python }}"
             path: |
-              prof/*.prof
+              prof/combined.prof
 
 #  windows-build:
 #        runs-on: windows-latest
