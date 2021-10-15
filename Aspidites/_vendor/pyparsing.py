@@ -342,6 +342,8 @@ def _trim_arity(func, maxargs=2):
 class _PendingSkip(ParserElement):
     # internal placeholder class to hold a place were '...' is added to a parser element,
     # once another ParserElement is added, this placeholder will be replaced with a SkipTo
+    __slots__ = ("name", "anchor", "must_skip")
+
     def __init__(self, expr, must_skip=False):
         super(_PendingSkip, self).__init__()
         self.strRepr = str(expr + Empty()).replace('Empty', '...')

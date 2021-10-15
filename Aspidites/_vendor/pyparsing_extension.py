@@ -1092,6 +1092,9 @@ class ParserElement(object):
     """Abstract base level parser element class."""
     DEFAULT_WHITE_CHARS = " \n\t\r"
     verbose_stacktrace = False
+    __slots__ = ("parseAction", "failAction", "strRepr", "resultsName", "saveAsList", "skipWhitespace", "whiteChars",
+                 "copyDefaultWhiteChars", "mayReturnEmpty", "keepTabs", "ignoreExprs", "debug", "streamlined",
+                 "mayIndexError", "errmsg", "modalResults", "debugActions", "re", "callPreparse", "callDuringTry")
 
     @staticmethod
     def setDefaultWhitespaceChars(chars):

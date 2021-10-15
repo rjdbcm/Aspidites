@@ -17,6 +17,7 @@ class Where(object):
         Character_end should be >= character (so that you can splice with 
         string[character:character_end])
     """
+    __slots__ = ("line", "col", "line_end", "col_end", "string", "character", "character_end", "filename")
 
     def __init__(self, string, character, character_end=None):
         from Aspidites._vendor.contracts.utils import raise_desc
