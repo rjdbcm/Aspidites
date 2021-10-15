@@ -41,8 +41,15 @@ jobs:
               pip install -U pip pipenv wheel cython
               pipenv lock
               pipenv sync -d
-              pipenv run pytest --cov=Aspidites --cov-report=xml
+              pipenv run pytest -x --cov=Aspidites --cov-report=xml --profile --profile-svg
               rm -rf Pipfile.lock
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: "linux-profile-python-${{ matrix.python }}"
+          path: |
+            prof/*.prof
 
       - name: Upload Coverage to codecov.io
         uses: codecov/codecov-action@v2.1.0
@@ -77,9 +84,15 @@ jobs:
               pip install -U pip pipenv wheel cython
               pipenv lock
               pipenv sync -d
-              pipenv run pytest
+              pipenv run pytest -x --profile
               rm -rf Pipfile.lock
-  
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+            name: "macos-profile-python-${{ matrix.python }}"
+            path: |
+              prof/*.prof
+
 #  windows-build:
 #        runs-on: windows-latest
 #        env:
