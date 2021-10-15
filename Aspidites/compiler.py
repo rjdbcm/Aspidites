@@ -14,10 +14,11 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+import inspect
 import os
 import py_compile
 import sys
+from dataclasses import dataclass
 from glob import glob
 import typing as t
 from .templates import woma_template, makefile_template, pyproject_template, setup_template, default_template
@@ -31,7 +32,7 @@ import cython
 
 class CheckedFileStack:
 
-    """A convenience class for reading file data streams to stdout or to checksum"""
+    """A convenience class for reading and checksumming file data streams."""
 
     __slots__ = v('all_files', 'pre_size')
 
@@ -127,6 +128,9 @@ class CheckedFileStack:
 
 
 class CompilerArgs:
+
+    __slots__ = ("code", "fname", "force", "bytecode", "c", "build_requires", "verbose", "embed")
+
     def __init__(self, **kwargs):
         self.code: ParseResults = kwargs['code']
         self.fname: Path = kwargs['fname']
@@ -136,7 +140,6 @@ class CompilerArgs:
         self.build_requires: t.Union[t.List, str] = kwargs['build_requires']
         self.verbose: int = kwargs['verbose']
         self.embed: t.Union[str, None] = kwargs['embed']
-        self.__setattr__ = lambda x, y: None
 
     def __repr__(self) -> str:
         return self.__class__.__name__
