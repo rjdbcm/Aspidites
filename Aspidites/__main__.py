@@ -15,7 +15,7 @@ from pyrsistent import v
 import pytest
 
 from ._vendor.semantic_version import Version
-from .compiler import Compiler
+from .compiler import Compiler, CompilerArgs
 from .parser import parse_module
 from . import __description__
 
@@ -161,4 +161,5 @@ def main(argv=None) -> None:
         'build_requires': args.build_requires,
         'verbose': args.verbose
     })
-    Compiler(**cy_kwargs)  # pragma: no cover
+    compile_args = CompilerArgs(**cy_kwargs)
+    Compiler(compile_args)  # pragma: no cover

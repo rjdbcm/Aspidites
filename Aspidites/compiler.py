@@ -127,11 +127,12 @@ class CheckedFileStack:
                 raise RuntimeError("\nfor file %s\n%s\n  did not match cached digest\n%s")
 
 
-class CompilerArgs:
+class CompilerArgs(dict):
 
     __slots__ = ("code", "fname", "force", "bytecode", "c", "build_requires", "verbose", "embed")
 
     def __init__(self, **kwargs):
+        super(CompilerArgs, self).__init__(**kwargs)
         self.code: ParseResults = kwargs['code']
         self.fname: Path = kwargs['fname']
         self.force: bool = kwargs['force']
@@ -146,8 +147,8 @@ class CompilerArgs:
 
 
 class Compiler:
-    def __init__(self, **kwargs):
-        self.args = CompilerArgs(**kwargs)
+    def __init__(self, compile_args: CompilerArgs):
+        self.args = compile_args
         self.file_stack = CheckedFileStack()
         self.fname = Path(self.args.fname)
         self.app_name = self.fname.parent / self.fname.stem
@@ -190,7 +191,7 @@ class Compiler:
             # self.compile_c()
             if self.args.embed and 'main' in self.args.embed:
                 pass  # maybe write a wrapper or something idk?
-            self.setup(**kwargs)
+            self.setup(compile_args)
 
         self.file_stack.finalize()
 
@@ -204,7 +205,7 @@ class Compiler:
             py_compile.compile(str(self.fname), fname_pyc, quiet=quiet)
         self.file_stack.register(fname_pyc)
 
-    def setup(self, **kwargs) -> None:
+    def setup(self, kwargs) -> None:
         module_name = str(self.app_name).replace("/", ".")
         text = setup_template.substitute(
            app_name=module_name,

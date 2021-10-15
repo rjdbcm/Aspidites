@@ -75,7 +75,8 @@ cy_kwargs.update(
     verbose=0,
     build_requires=''
 )
-compiler.Compiler(**cy_kwargs)
+compile_args = compiler.CompilerArgs(**cy_kwargs)
+compiler.Compiler(compile_args)
 
 
 def read(fname):
