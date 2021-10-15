@@ -76,9 +76,15 @@ Paradigms
 
         This means Woma uses a simple predicate logic to create well-constrained types. This is currently implemented using `AndreaCensi/contracts <https://github.com/AndreaCensi/contracts>`_. More info on refinement type systems:
 
-        Refinement types enrich a language's type system with logical predicates that circumscribe the set of values described by the type, thereby providing               software developers a tunable knob with which to inform the type system about what invariants and correctness properties should be checked on their code.           In this article, we distill the ideas developed in the substantial literature on refinement types into a unified tutorial that explains the key ingredients         of modern refinement type systems. In particular, we show how to implement a refinement type checker via a progression of languages that incrementally add         features to the language or type system.
-        Reference: Jhala, R. and Vazou, N., 2020. Refinement Types: A Tutorial. arXiv preprint arXiv:2010.07763.
-        `Read More <https://arxiv.org/pdf/2010.07763.pdf>`__
+            "Refinement types enrich a language's type system with logical predicates that circumscribe the set of values
+            described by the type, thereby providing software developers a tunable knob with which to inform the type
+            system about what invariants and correctness properties should be checked on their code. In this article,
+            we distill the ideas developed in the substantial literature on refinement types into a unified tutorial
+            that explains the key ingredients of modern refinement type systems. In particular, we show how to implement
+            a refinement type checker via a progression of languages that incrementally add features to the language or
+            type system."
+
+         Reference: Jhala, R. and Vazou, N., 2020. Refinement Types: A Tutorial. arXiv preprint arXiv:2010.07763. `Read More <https://arxiv.org/pdf/2010.07763.pdf>`__
 
     .. tab:: Pragmatic
 
@@ -89,7 +95,13 @@ Paradigms
 
         Functions are first class citizens in woma. More info on functional programming:
 
-        ``"In 1989 when functional programming was still considered a niche topic, Hughes wrote a visionary paper arguing convincingly ‘why functional programming             matters’. More than two decades have passed. Has functional programming really mattered? Our answer is a resounding ‘Yes!’. Functional programming is now           at the forefront of a new generation of programming technologies, and enjoying increasing popularity and influence. In this paper, we review the impact of         functional programming, focusing on how it has changed the way we may construct programs, the way we may verify programs, and fundamentally the way we may         think about programs."``
+            "In 1989 when functional programming was still considered a niche topic, Hughes wrote a visionary paper
+            arguing convincingly ‘why functional programming matters’. More than two decades have passed.
+            Has functional programming really mattered? Our answer is a resounding ‘Yes!’. Functional programming is now
+            at the forefront of a new generation of programming technologies, and enjoying increasing popularity and
+            influence. In this paper, we review the impact of functional programming, focusing on how it has changed
+            the way we may construct programs, the way we may verify programs, and fundamentally the way we may think
+            about programs."
 
         Reference:
         Zhenjiang Hu, John Hughes, Meng Wang, How functional programming mattered, National Science Review, Volume 2, Issue 3, September 2015, Pages 349–370,
@@ -100,8 +112,17 @@ Paradigms
         Constraint satisfaction is core to woma, should constraints not be satisfied for a given function nullity is returned rather than raising an exception.
         More about constraint programming:
 
-        Constraint programming is a powerful paradigm for solving combinatorial search problems that draws on a wide range of techniques from artificial                   intelligence, computer science, databases, programming languages, and operations research. Constraint programming is currently applied with success to many         domains, such as scheduling, planning, vehicle routing, configuration, networks, and bioinformatics. The basic idea in constraint programming is that the           user states the constraints and a general purpose constraint solver is used to solve them.
-        `Read More <https://www.elsevier.com/books/handbook-of-constraint-programming/rossi/978-0-444-52726-4>`__
+            "A discrete optimization problem can be given a declarative or procedural formulation, and
+            both have their advantages. A declarative formulation simply states the constraints and
+            objective function. It allows one to describe what sort of solution one seeks without the
+            distraction of algorithmic details. A procedural formulation specifies how to search for a
+            solution, and it therefore allows one to take advantage of insight into the problem in order
+            to direct the search. The ideal, of course, would be to have the best of both worlds, and
+            this is the goal of constraint programming."
+
+        Reference:
+        Alexander Bockmayr, John N. Hooker, Constraint programming, May 2003,
+        `Read More <https://public.tepper.cmu.edu/jnh/cp-hb.pdf>`__
 
 Inspirations
 ~~~~~~~~~~~~
@@ -112,6 +133,13 @@ Inspirations
 -  `Curry <https://curry.pages.ps.informatik.uni-kiel.de/curry-lang.org/>`__
 -  `Cobra <http://cobra-language.com/>`__
 -  `ELI <https://fastarray.appspot.com/index.html>`__
+
+Motivation
+~~~~~~~~~~
+
+-  Words should be for the programmer and the data model not built-in language features.
+-  A programmers focus should be on the logic of the program not trying to remember methods and namespaces.
+-  The off-sides rule is sufficient to delineate scope, but should be limited in it's ability to nest.
 
 Goals
 ~~~~~
@@ -139,6 +167,8 @@ Goals
    :target: https://codecov.io/gh/rjdbcm/Aspidites
 .. |logo| image:: https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie.png
 
+Table of Contents
+~~~~~~~~~~~~~~~~~
 
 .. toctree::
    :numbered:
