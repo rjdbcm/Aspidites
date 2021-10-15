@@ -101,13 +101,11 @@ Paradigms
 Inspirations
 ~~~~~~~~~~~~
 
--  `coconut <http://coconut-lang.org/>`__ 
 -  `Ada <https://www.adacore.com/get-started>`__
 -  `Scala <https://www.scala-lang.org/>`__
 -  `Prolog <https://www.swi-prolog.org/features.html>`__
 -  `Curry <https://curry.pages.ps.informatik.uni-kiel.de/curry-lang.org/>`__
 -  `Cobra <http://cobra-language.com/>`__
--  `J <https://www.jsoftware.com/#/README>`__
 -  `ELI <https://fastarray.appspot.com/index.html>`__
 
 Goals
