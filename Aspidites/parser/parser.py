@@ -175,7 +175,7 @@ yield_value = yield_none + rvalue
 ret_stmt = Group(return_value).setParseAction(lambda t: "".join(*t))
 yield_stmt = Group(yield_value).setParseAction(lambda t: "".join(*t))
 
-func_def = Group(func_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+func_def = Group(func_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]) + "\n")
 lambda_def = Combine(Group(lit_lparen + arith_expr | comp_expr + lit_rparen))
 func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_func_call)  # if len(t[0]) != 3 else t[0][0] + '()')
 clos_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_clos_call) + Suppress(noclosure)
