@@ -9,20 +9,23 @@ pmap_re = re.compile(r"(pmap\(\{.*\}\))")
 def cvt_arith_expr(tks):  # multiple returns needed, PackRat is very strict about side-effects
     expr = "".join((str(t) for t in tks))
     end = lit_rparen + lit_lparen + lit_rparen
+
     if "!" in expr:
-        return "Maybe(SafeFactorial, " + expr.replace('!', '') + end
-    elif "//" in expr:
-        return "Maybe(SafeFloorDiv, " + expr.replace("//", sep) + end
-    elif "/" in expr:
-        return "Maybe(SafeDiv, " + expr.replace("/", sep) + end
-    elif "%" in expr:
-        return "Maybe(SafeMod, " + expr.replace("%", sep) + end
-    elif "**" in expr:
-        return "Maybe(SafeExp, " + expr.replace("**", sep) + end
-    elif expr.startswith('+'):
-        return "Maybe(SafeUnaryAdd, " + expr.replace("+", sep) + end
-    elif expr.startswith('-'):
-        return "Maybe(SafeUnaryAdd, " + expr.replace("-", sep) + end
+        expr = "Maybe(SafeFactorial, " + expr.replace('!', '') + end
+    if "//" in expr:
+        expr = "Maybe(SafeFloorDiv, " + expr.replace("//", sep) + end
+    if "/" in expr:
+        expr = "Maybe(SafeDiv, " + expr.replace("/", sep) + end
+    if "%" in expr:
+        expr = "Maybe(SafeMod, " + expr.replace("%", sep) + end
+    if "**" in expr:
+        expr = "Maybe(SafeExp, " + expr.replace("**", sep) + end
+    if expr.startswith('+'):
+        expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", sep) + end
+    if expr.startswith('-'):
+        expr = "Maybe(SafeUnaryAdd, " + expr.replace("-", sep) + end
+    return expr
+
 
 
 def cvt_pragma(tks):
