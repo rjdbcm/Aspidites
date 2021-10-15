@@ -24,19 +24,19 @@ try:
 except ImportError:
     ThreadPoolExecutor = None
 
-from test.support import cpython_only
-from test.support import MISSING_C_DOCSTRINGS, ALWAYS_EQ
-from test.support.import_helper import DirsOnSysPath
-from test.support.os_helper import TESTFN
-from test.support.script_helper import assert_python_ok, assert_python_failure
-from test import inspect_fodder as mod
-from test import inspect_fodder2 as mod2
-from test import support
-from test import inspect_stock_annotations
-from test import inspect_stringized_annotations
-from test import inspect_stringized_annotations_2
+from Aspidites.tests.support import cpython_only
+from Aspidites.tests.support import MISSING_C_DOCSTRINGS, ALWAYS_EQ
+from Aspidites.tests.support.import_helper import DirsOnSysPath
+from Aspidites.tests.support.os_helper import TESTFN
+from Aspidites.tests.support.script_helper import assert_python_ok, assert_python_failure
+from Aspidites.tests import inspect_fodder as mod
+from Aspidites.tests import inspect_fodder2 as mod2
+from Aspidites.tests import support
+from Aspidites.tests import inspect_stock_annotations
+from Aspidites.tests import inspect_stringized_annotations
+from Aspidites.tests import inspect_stringized_annotations_2
 
-from test.test_import import _ready_to_import
+from Aspidites.tests.test_import import _ready_to_import
 
 
 # Functions tested in this suite:
