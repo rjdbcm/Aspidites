@@ -150,7 +150,7 @@ if Options.embed:
 """)
 """A setup.py template for woma compilation."""
 
-woma_template = Template("""#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8
+woma_template = Template("""#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, binding=True
 # THIS FILE IS GENERATED - DO NOT EDIT #
 
 from typing import Any
