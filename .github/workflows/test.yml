@@ -5,8 +5,7 @@ name: Continuous Integration
 
 on:
   push:
-    tags-ignore:
-      - '**'
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
