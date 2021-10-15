@@ -1,4 +1,4 @@
-<img align="left" width="80" height="80" src="https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie.png" alt="Wheel the Woma">
+<a href="https://mobile.twitter.com/WheelieTheWoma"><img align="left" width="80" height="80" src="https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie.png" alt="Wheel the Woma"></a>
 
 # Aspidites 
 ![GitHub Integration Status](https://img.shields.io/github/workflow/status/rjdbcm/Aspidites/Continuous%20Integration?label=Continous%20Integration&logo=github) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rjdbcm/Aspidites/Continuous%20Deployment?label=Continous%20Deployment&logo=github) [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/rjdbcm/Aspidites)](https://codeclimate.com/github/rjdbcm/Aspidites/maintainability) ![Lines of code](https://img.shields.io/tokei/lines/github/rjdbcm/Aspidites) [![codecov](https://codecov.io/gh/rjdbcm/Aspidites/branch/main/graph/badge.svg?token=78fHNV5al0)](https://codecov.io/gh/rjdbcm/Aspidites)
@@ -68,13 +68,10 @@ $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
 
 ## Inspirations
 
-- [`coconut`](http://coconut-lang.org/)
-- [`Ada`](https://www.adacore.com/get-started)
 - [`Scala`](https://www.scala-lang.org/)
 - [`Prolog`](https://www.swi-prolog.org/features.html)
 - [`Curry`](https://curry.pages.ps.informatik.uni-kiel.de/curry-lang.org/)
 - [`Cobra`](http://cobra-language.com/)
-- [`J`](https://www.jsoftware.com/#/README)
 - [`ELI`](https://fastarray.appspot.com/index.html)
 
 ## Goals
