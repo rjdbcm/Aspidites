@@ -889,6 +889,7 @@ class ParseResults(object):
 
 class ParseBaseException(Exception):
     """base exception class for all parsing runtime exceptions"""
+    __slots__ = ("loc", "msg", "pstr", "parserElement", "args")
 
     # Performance tuning: we construct a *lot* of these, so keep this
     # constructor as small and fast as possible
