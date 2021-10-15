@@ -76,6 +76,13 @@ $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
 - [`Cobra`](http://cobra-language.com/)
 - [`ELI`](https://fastarray.appspot.com/index.html)
 
+## Motivation
+
+-  Words should be for the programmer and the data model not built-in language features.
+-  A programmers focus should be on the logic of the program not trying to remember methods and namespaces.
+-  The off-sides rule is sufficient to delineate scope, but should be limited in it's ability to nest.
+
+
 ## Goals
 
 - Ultra-smooth runtime exception handling with useful warnings.
