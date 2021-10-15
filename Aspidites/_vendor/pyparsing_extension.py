@@ -4019,6 +4019,7 @@ class MatchFirst(ParseExpression):
     def parseImpl(self, instring, loc, doActions=True):
         maxExcLoc = -1
         maxException = None
+        length = len(instring)
         for e in self.exprs:
             try:
                 ret = e._parse(instring, loc, doActions)
@@ -4028,9 +4029,9 @@ class MatchFirst(ParseExpression):
                     maxException = err
                     maxExcLoc = err.loc
             except IndexError:
-                if len(instring) > maxExcLoc:
-                    maxException = ParseException(instring, len(instring), e.errmsg, self)
-                    maxExcLoc = len(instring)
+                if length > maxExcLoc:
+                    maxException = ParseException(instring, length, e.errmsg, self)
+                    maxExcLoc = length
 
         # only got here if no expression matched, raise exception for match that made it the furthest
         else:
