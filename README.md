@@ -17,7 +17,7 @@ The reference implementation of the [Woma programming language](https://www.gith
 
 - Isn't this just Cython with extra steps? 
 
-    - Well yes, but with totally different goals. Cython intends to be a syntactic superset of python where Woma syntax has taken inspiration from a variety of sources. You can think of Aspidites as a wrapper for Cython that parses Woma code into Cython's python superset. Cython does much of the "heavy lifting". Where Woma shines is that it is fundamentally different to most programming languages algebraically. No operation is forbidden and unexpected behavior arises in the form of program nullification rather than termination. The wheel keeps on turning.
+    - Well yes, but with totally different goals. Cython intends to be a syntactic superset of python where Woma syntax has taken inspiration from a variety of sources. You can think of Aspidites as a wrapper for Cython that parses Woma code into Cython's python superset. Cython does much of the "heavy lifting". The specifics of the Woma Programming Language are being standardized as a series of WEEPs ([Woma Extension and Evaluation Proposals](https://github.com/rjdbcm/woma/blob/main/QQ.md)).
     
  - Why use the name _Aspidites_? What's a Woma?
  
@@ -2223,12 +2223,3 @@ SOFTWARE.
 </pre>
 </details>
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RX0ZG1JLRD"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-RX0ZG1JLRD');
-</script>
