@@ -43,7 +43,8 @@ extensions = [
     'sphinx.ext.autodoc',
     "sphinx_rtd_theme",
     "sphinx_copybutton",
-    "sphinx_tabs.tabs"
+    "sphinx_tabs.tabs",
+    "sphinx.ext.intersphinx"
 ]
 copybutton_only_copy_prompt_lines = True
 copybutton_prompt_text = "$ "
@@ -81,6 +82,7 @@ html_logo = '_static/aspidites_logo_wheelie.png'
 lexers.update(woma=WomaLexer())
 pygments_style = "sphinx"
 
+intersphinx_mapping = {'python':('http://docs.python.org', None)}
 
 def setup(app):
     app.add_js_file("js/script.js")

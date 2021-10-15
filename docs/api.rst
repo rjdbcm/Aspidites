@@ -7,6 +7,32 @@ API Proper
 
 .. autoclass:: Aspidites.api.Warn
 
+Compiler
+~~~~~~~~
+
+.. autoclass:: Aspidites.compiler.CheckedFileStack
+    :members:
+
+.. autoclass:: Aspidites.compiler.CompilerArgs
+
+    :attr:`~.Aspidites.compiler.CompilerArgs.code:` :class:`pyparsing.ParseResults`
+
+    :attr:`~.Aspidites.compiler.CompilerArgs.fname:` :py:class:`pathlib.Path`
+
+    :attr:`~.Aspidites.compiler.CompilerArgs.force:` :py:class:`bool`
+
+    :attr:`~.Aspidites.compiler.CompilerArgs.bytecode:` :py:class:`bool`
+
+    :attr:`~.Aspidites.compiler.CompilerArgs.build_requires:` :py:attr:`typing.Union[typing.List, str]`
+
+    :attr:`~.Aspidites.compiler.CompilerArgs.verbose` :py:class:`int`
+
+    :attr:`~.Aspidites.compiler.CompilerArgs.embed:` :py:class:`typing.Union[str, None]`
+
+
+.. autoclass:: Aspidites.compiler.Compiler
+    :members:
+
 Monads
 ~~~~~~
 
