@@ -1,4 +1,5 @@
 **unreleased**
+**v0.32.0**
 **v0.31.0**
 
 - 5ecf24f fix TODO formatting
