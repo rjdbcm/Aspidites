@@ -122,7 +122,6 @@ coverage:
 	python -m pytest Aspidites/tests --cov-report=xml --cov=Aspidites
 
 release:
-	python -m Aspidites.scripts.bumpversion_hook release
 	git add CHANGELOG.md
 	git commit -m 'changelog updated'
 	bump2version release
