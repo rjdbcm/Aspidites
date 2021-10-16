@@ -18,16 +18,16 @@ import time
 import unittest
 from unittest import mock
 
-from test.support import os_helper
-from test.support import (
+from Aspidites.tests.support import os_helper
+from Aspidites.tests.support import (
     STDLIB_DIR, is_jython, swap_attr, swap_item, cpython_only)
-from test.support.import_helper import (
+from Aspidites.tests.support.import_helper import (
     forget, make_legacy_pyc, unlink, unload, DirsOnSysPath, CleanImport)
-from test.support.os_helper import (
+from Aspidites.tests.support.os_helper import (
     TESTFN, rmtree, temp_umask, TESTFN_UNENCODABLE, temp_dir)
-from test.support import script_helper
-from test.support import threading_helper
-from test.test_importlib.util import uncache
+from Aspidites.tests.support import script_helper
+from Aspidites.tests.support import threading_helper
+from Aspidites.tests.test_importlib.util import uncache
 from types import ModuleType
 
 
