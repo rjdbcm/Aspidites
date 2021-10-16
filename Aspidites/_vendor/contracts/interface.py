@@ -592,6 +592,7 @@ def describe_value(x, clip=80):
 
 def describe_value_multiline(x):  # pragma: no cover
     """ Describes an object, for use in the error messages. """
+    # TODO add all types to describe_value_multiline
     if hasattr(x, 'shape') and hasattr(x, 'dtype'):
         # XXX this fails for bs4, Tag
         if x.shape is not None:
@@ -615,7 +616,6 @@ def describe_value_multiline(x):  # pragma: no cover
         #                 return x.__repr__()
         else:
             class_name = describe_type(x)
-            # TODO add all types to describe_value_multiline
             desc = 'Instance of %s.' % class_name
             try:
                 # This fails for classes
