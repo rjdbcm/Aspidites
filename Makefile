@@ -126,7 +126,6 @@ coverage:
 
 release:
 	git add CHANGELOG.md
-	git commit -m 'changelog updated'
 	bump2version release
 
 patch:
