@@ -114,7 +114,7 @@ class TAPSummary(object):
             else:
                 self.failedTests.append(test)
             if test.skipped: self.skippedTests.append(test)
-            if test.TODO self.todoTests.append(test)
+            if test.todo: self.todoTests.append(test)
             if test.todo and test.passed: self.bonusTests.append(test)
 
         self.passedSuite = not self.bail and (set(self.failedTests)-set(self.todoTests) == set())
