@@ -1,4 +1,5 @@
 **unreleased**
+**v1.0.0**
 **v0.32.0**
 
 - 9dd5457 update TODOs
