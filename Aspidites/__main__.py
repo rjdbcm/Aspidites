@@ -80,8 +80,9 @@ def setup_test_env(argv):
 
 def check_noargs(argv, __test):
     if len(argv) == 1:
-        not __test or print("%s called without arguments. Next time try --help or -h." % argv[0])
-        sys.exit(1)
+        from .repl import ReadEvalParse
+        rep = ReadEvalParse()
+        rep.loop()
 
 
 def add_pre_cy3_args(parser: ap.ArgumentParser, kwargs) -> None:  # pragma: no cover

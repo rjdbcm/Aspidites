@@ -13,6 +13,7 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import os
 import re
 import sys
 import warnings
@@ -22,6 +23,7 @@ from typing import List, AnyStr, Union
 from Aspidites._vendor.pyparsing import ParseException, ParseResults
 from Aspidites import *
 import Aspidites.parser.parser
+from Aspidites.api import _format_locals
 
 try:
     import readline
@@ -61,6 +63,20 @@ class ReadEvalParse:
     def find_token(self, token: str, text: str) -> bool:
         return text.find(token) != -1
 
+    def displayhook(self, text):
+        if text is None:
+            return
+        try:
+            self.stdout.write(text)
+        except UnicodeEncodeError:
+            bytes = text.encode(sys.stdout.encoding, 'backslashreplace')
+            if hasattr(self.stdout, 'buffer'):
+                self.stdout.buffer.write(bytes)
+            else:
+                text = bytes.decode(sys.stdout.encoding, 'strict')
+                self.stdout.write(text)
+        self.stdout.write("\n")
+
     def eval_exec(self, x: Union[List, AnyStr]):
         # noinspection PyBroadException
         if isinstance(x, ParseResults):
@@ -68,9 +84,9 @@ class ReadEvalParse:
         # noinspection PyBroadException
         warnings.resetwarnings()
         try:
-            print(eval(compile(x, filename='<inline code>', mode='eval'),
+            out = eval(compile(x, filename='<inline code>', mode='eval'),
                        self.__locals__,
-                       self.__locals__))
+                       self.__locals__)
         except:
             out = exec(
                 compile(x, filename='<inline code>', mode='exec'),
@@ -79,6 +95,7 @@ class ReadEvalParse:
             )
             # if out is not None:
             #     print(out)
+        self.displayhook(out)
 
     def preloop(self):
         if readline and Path(histfile).exists():
@@ -90,6 +107,7 @@ class ReadEvalParse:
             readline.write_history_file(histfile)
 
     def loop(self) -> None:
+        os.system('cls' if os.name == 'nt' else 'clear')
         print(self.intro)
         try:
             while True:
@@ -132,18 +150,23 @@ class ReadEvalParse:
             self.do_exit()
 
     def do_exit(self, arg=None):
-        'Exit the woma interactive interpreter.'
+        """Exit the woma interactive interpreter."""
         raise SystemExit
 
     def do_copyright(self):
         """Copyright Ross J. Duff 2021 licensed under the GNU Public License v3."""
         pass
 
+    def do_locals(self, arg=None):
+        """Print local variables"""
+        print(_format_locals(self.__locals__))
+
     def do_flush(self):
+        """forcibly flush stdout"""
         self.stdout.flush()
 
     def do_help(self, arg=None):
-        'List available commands with "help" or detailed help with "help cmd".'
+        """List available commands with "help" or detailed help with "help cmd"."""
         if arg:
             # XXX check arg syntax
             try:
