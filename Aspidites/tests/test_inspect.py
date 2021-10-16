@@ -26,7 +26,6 @@ except ImportError:
 
 from Aspidites.tests.support import cpython_only
 from Aspidites.tests.support import MISSING_C_DOCSTRINGS, ALWAYS_EQ
-from Aspidites.tests.support.import_helper import DirsOnSysPath
 from Aspidites.tests.support.os_helper import TESTFN
 from Aspidites.tests.support.script_helper import assert_python_ok, assert_python_failure
 from Aspidites.tests import inspect_fodder as mod
