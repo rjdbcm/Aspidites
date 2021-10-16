@@ -1,5 +1,43 @@
 **unreleased**
 **v0.31.0**
+
+- 5ecf24f fix TODO formatting
+- 07c0df2 fix TODO formatting
+- 73f24a1 added command line usage to docs
+- 8ab88d3 got unary sub and add working
+- 8f9569b added inspection.py unit tests
+- b746f20 added inspection.py unit tests
+- a871598 added inspection.py unit tests
+- 697a271 added inspection.py unit tests
+- 303dcf7 added inspection.py unit tests
+- f0718dd added inspection.py unit tests
+- 2a11d09 added inspection.py unit tests
+- cdd0101 added inspection.py unit tests
+- e0c8587 added inspection.py unit tests
+- 312f271 added inspection.py unit tests
+- 7f7fa6e ParseElement no longer slotted, significant detriment to performance.
+- 20b6e73 slotted __init__ of ParseBaseException
+- ada9fa8 Update README.md to add motivation
+- b8bf639 Update docs to add motivation
+- e56e699 Update Compiler argument signature to use CompilerArgs
+- 56216e9 slotted ParserElement
+- 08a56dc slotted CompilerArgs
+- 82d3507 documented CompilerArgs
+- 8b7d999 prebind variables but leave try-except-except alone
+- b0486b2 Revert "changed line:4019 parseImpl to prebind string length"
+- f29c8f1 Merge remote-tracking branch 'origin/main'
+- 3d2f613 changed line:4019 parseImpl to prebind string length
+- b0989f6 Update test.yml
+- 51a1509 Update test.yml
+- 631dfad add profile artifact upload to CI
+- 4269a72 Merge remote-tracking branch 'origin/main'
+- 178243f update logo with specular highlights
+- f4e79f3 Update README.rst
+- 7fe9e84 Merge remote-tracking branch 'origin/main'
+- 5730e91 add pragmas to docs
+- 995b31f add stability badge
+
+
 **v0.30.0**
 
 - 03fd2d4 Merge remote-tracking branch 'origin/main'
