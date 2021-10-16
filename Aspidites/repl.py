@@ -67,7 +67,7 @@ class ReadEvalParse:
         if text is None:
             return
         try:
-            self.stdout.write(text)
+            self.stdout.write(str(text))
         except UnicodeEncodeError:
             bytes = text.encode(sys.stdout.encoding, 'backslashreplace')
             if hasattr(self.stdout, 'buffer'):
