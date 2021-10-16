@@ -176,16 +176,6 @@ class SlotUser:
                  'distance': 'measured in kilometers'}
 
 
-class TestGetsourceInteractive(unittest.TestCase):
-    def test_getclasses_interactive(self):
-        code = "import sys, inspect; \
-                assert not hasattr(sys.modules['__main__'], '__file__'); \
-                A = type('A', (), {}); \
-                inspect.getsource(A)"
-        _, _, stderr = assert_python_failure("-c", code, __isolated=True)
-        self.assertIn(b'OSError: source code not available', stderr)
-
-
 class _BrokenDataDescriptor(object):
     """
     A broken data descriptor. See bug 
