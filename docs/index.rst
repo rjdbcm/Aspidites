@@ -175,6 +175,7 @@ Table of Contents
    :maxdepth: 4
 
    syntax
+   usage
    indepth
    api
    devinfo
