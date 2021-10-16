@@ -50,7 +50,7 @@ def test_single_underscore_in_binops_can_accept_one_arg(x):
     assert can_accept_exactly_one_argument(lt(_, x)) == (True, None)
     assert can_accept_exactly_one_argument(le(_, x)) == (True, None)
     assert can_accept_exactly_one_argument(ge(_, x)) == (True, None)
-    # TODO: can_accept_exactly_one_argument: bool accepts one arg but isn't a callable
+    # TODO can_accept_exactly_one_argument: bool accepts one arg but isn't a callable
     # assert can_accept_exactly_one_argument(is_(_, x)) == (True, None)
     # assert can_accept_exactly_one_argument(is_not(_, x)) == (True, None)
 

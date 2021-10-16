@@ -615,7 +615,7 @@ def describe_value_multiline(x):  # pragma: no cover
         #                 return x.__repr__()
         else:
             class_name = describe_type(x)
-            # TODO: add all types to describe_value_multiline
+            # TODO add all types to describe_value_multiline
             desc = 'Instance of %s.' % class_name
             try:
                 # This fails for classes

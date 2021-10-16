@@ -81,7 +81,7 @@ class IndentedBlock(ParseElementEnhance):
 
 quoted_str = quotedString().setParseAction(lambda t: t[0])
 integer = Word(nums).setParseAction(cvt_int)
-# TODO: .5 not recognized as a float
+# TODO .5 not recognized as a float
 real = Combine(Optional(Word(nums)) + "." + Word(nums))
 complex_ = Combine(real | integer + "+" + real | integer + "j")
 list_str = Forward()
@@ -181,7 +181,7 @@ func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + li
 clos_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_clos_call) + Suppress(noclosure)
 
 
-# TODO: (!) trigram only binds a single letter variable identifier
+# TODO (!) trigram only binds a single letter variable identifier
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
 case_stmt = Group(rvalue + colon + rvalue).setParseAction(lambda t: sep.join(t[0]))
 match_suite = Group(IndentedBlock(OneOrMore(case_stmt))).setParseAction(lambda t: (sep.join(t.asList()[0])))

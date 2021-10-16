@@ -61,7 +61,7 @@ def get_all_super_names(value):
 def get_oldstyle_bases(klass):
     todo = [klass]
     res = []
-    while todo:
+    while TODO
         x = todo.pop(0)
         res.append(x)
         for b in x.__bases__:

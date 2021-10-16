@@ -54,7 +54,7 @@ def test_compile_module(inject_config):
 
 @given(x=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
        y=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False))
-@hypothesis.settings(deadline=None)  # TODO: SafeDiv/SafeExp/SafeMod: the specific edge case x=1 y=1 is slow
+@hypothesis.settings(deadline=None)  # TODO SafeDiv/SafeExp/SafeMod: the specific edge case x=1 y=1 is slow
 @pt.mark.filterwarnings('ignore::RuntimeWarning')
 def test_safe_div(x, y):
     assert SafeDiv(x, 0) == Undefined()

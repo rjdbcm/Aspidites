@@ -151,7 +151,7 @@ def main(argv=None) -> None:
     # any failure results in falling back to the `Cython.Compiler.Options` API
     args, other_args, cy_kwargs = parse_from_dummy(argv, ap.ArgumentParser(add_help=False))
     args.target, args.output, code = parse_code(args.target, args.output)
-    # TODO: change pyx to pyz on windows
+    # TODO change pyx to pyz on windows
     cy_kwargs.update({  # pragma: no cover
         'code': code,
         'fname': args.output or "compiled.py",

@@ -329,7 +329,7 @@ you can achieve the same goal by inverting the two decorators:
     contracts_checker.__name__ = name
     contracts_checker.__module__ = function_.__module__
 
-    # TODO: is using functools.wraps better than decorator.decorate?
+    # TODO is using functools.wraps better than decorator.decorate?
     from ..decorator import decorate
 
     wrapper = decorate(function_, contracts_checker)
@@ -455,7 +455,7 @@ def new_contract(*args):
     """
     from .main_actual import new_contract_impl
     if args and len(args) == 1 and isinstance(args[0], Callable):
-        # TODO: add class decorator for new_contract
+        # TODO add class decorator for new_contract
         # We were called without parameters
         function = args[0]
         identifier = function.__name__
