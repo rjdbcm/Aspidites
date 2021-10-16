@@ -21,9 +21,9 @@ def cvt_arith_expr(tks):  # multiple returns needed, PackRat is very strict abou
     if "**" in expr:
         expr = "Maybe(SafeExp, " + expr.replace("**", sep) + end
     if expr.startswith('+'):
-        expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", sep) + end
+        expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", '') + end
     if expr.startswith('-'):
-        expr = "Maybe(SafeUnaryAdd, " + expr.replace("-", sep) + end
+        expr = "Maybe(SafeUnaryAdd, " + expr.replace("-", '') + end
     return expr
 
 

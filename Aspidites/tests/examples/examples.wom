@@ -36,7 +36,13 @@ i<@>"abcdefg"
 
 nullity = /0
 
-golden = (1 + 5 ** 0.5) /0
+test_factorial = 5!
+
+test_unary_add = +5
+
+test_unary_sub = -5
+
+golden = 1 + 5 ** 0.5 / 2
 
 (Fibonacci(x = 0 -> int)) int
     g = 5 ** .5 -> float

@@ -239,7 +239,9 @@ def test_compile_to_shared_object(inject_config):
         compile_args = CompilerArgs(**kwargs)
         Compiler(compile_args)
 
-    from .examples.compiled import Add, x, y, z, val, div_by_zero, Yield123, Hello
+    from .examples.compiled import (Add, x, y, z, val, div_by_zero, Yield123, Hello, test_unary_sub, test_unary_add,
+                                    test_factorial)
+
 
     with pt.raises(ContractNotRespected):
         # noinspection PyTypeChecker
