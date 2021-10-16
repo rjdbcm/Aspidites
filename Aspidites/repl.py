@@ -159,7 +159,7 @@ class ReadEvalParse:
 
     def do_locals(self, arg=None):
         """Print local variables"""
-        print(_format_locals(self.__locals__))
+        self.stdout.write(_format_locals(self.__locals__).decode('UTF-8'))
 
     def do_flush(self):
         """forcibly flush stdout"""
