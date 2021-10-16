@@ -9,3 +9,4 @@
 .pycrunch-config.yaml
 .coverage*
 /Aspidites.egg-info/
+/Pipfile.lock

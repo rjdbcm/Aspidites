@@ -26,6 +26,7 @@ clean: clean-build clean-pyc clean-test clean-sha clean-woma## remove all build,
 
 clean-build: ## remove build artifacts
 	rm -fr build/
+	rm -fr prof/
 	rm -fr dist/
 	rm -fr .eggs/
 	rm -fr __main__.pyi
@@ -74,6 +75,8 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/parser/reserved.*.so
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
+	find . -name '*.DS_Store' -exec rm -f {} +
+
 
 clean-sha:
 	find . -name '*.sha256' -exec rm -f {} +
