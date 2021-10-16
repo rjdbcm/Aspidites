@@ -816,134 +816,134 @@ class Parameter:
                 self._annotation == other._annotation)
 
 
-class BoundArguments:
-    """Result of `Signature.bind` call.  Holds the mapping of arguments
-    to the function's parameters.
-
-    Has the following public attributes:
-
-    * arguments : dict
-        An ordered mutable mapping of parameters' names to arguments' values.
-        Does not contain arguments' default values.
-    * signature : Signature
-        The Signature object that created this instance.
-    * args : tuple
-        Tuple of positional arguments values.
-    * kwargs : dict
-        Dict of keyword arguments values.
-    """
-
-    __slots__ = ('arguments', '_signature', '__weakref__')
-
-    def __init__(self, signature, arguments):
-        self.arguments = arguments
-        self._signature = signature
-
-    @property
-    def signature(self):
-        return self._signature
-
-    @property
-    def args(self):
-        args = []
-        for param_name, param in self._signature.parameters.items():
-            if param.kind in (_VAR_KEYWORD, _KEYWORD_ONLY):
-                break
-
-            try:
-                arg = self.arguments[param_name]
-            except KeyError:
-                # We're done here. Other arguments
-                # will be mapped in 'BoundArguments.kwargs'
-                break
-            else:
-                if param.kind == _VAR_POSITIONAL:
-                    # *args
-                    args.extend(arg)
-                else:
-                    # plain argument
-                    args.append(arg)
-
-        return tuple(args)
-
-    @property
-    def kwargs(self):
-        kwargs = {}
-        kwargs_started = False
-        for param_name, param in self._signature.parameters.items():
-            if not kwargs_started:
-                if param.kind in (_VAR_KEYWORD, _KEYWORD_ONLY):
-                    kwargs_started = True
-                else:
-                    if param_name not in self.arguments:
-                        kwargs_started = True
-                        continue
-
-            if not kwargs_started:
-                continue
-
-            try:
-                arg = self.arguments[param_name]
-            except KeyError:
-                pass
-            else:
-                if param.kind == _VAR_KEYWORD:
-                    # **kwargs
-                    kwargs.update(arg)
-                else:
-                    # plain keyword argument
-                    kwargs[param_name] = arg
-
-        return kwargs
-
-    def apply_defaults(self):
-        """Set default values for missing arguments.
-
-        For variable-positional arguments (*args) the default is an
-        empty tuple.
-
-        For variable-keyword arguments (**kwargs) the default is an
-        empty dict.
-        """
-        arguments = self.arguments
-        new_arguments = []
-        for name, param in self._signature.parameters.items():
-            try:
-                new_arguments.append((name, arguments[name]))
-            except KeyError:
-                if param.default is not _empty:
-                    val = param.default
-                elif param.kind is _VAR_POSITIONAL:
-                    val = ()
-                elif param.kind is _VAR_KEYWORD:
-                    val = {}
-                else:
-                    # This BoundArguments was likely produced by
-                    # Signature.bind_partial().
-                    continue
-                new_arguments.append((name, val))
-        self.arguments = dict(new_arguments)
-
-    def __eq__(self, other):
-        if self is other:
-            return True
-        if not isinstance(other, BoundArguments):
-            return NotImplemented
-        return (self.signature == other.signature and
-                self.arguments == other.arguments)
-
-    def __setstate__(self, state):
-        self._signature = state['_signature']
-        self.arguments = state['arguments']
-
-    def __getstate__(self):
-        return {'_signature': self._signature, 'arguments': self.arguments}
-
-    def __repr__(self):
-        args = []
-        for arg, value in self.arguments.items():
-            args.append('{}={!r}'.format(arg, value))
-        return '<{} ({})>'.format(self.__class__.__name__, ', '.join(args))
+# class BoundArguments:
+#     """Result of `Signature.bind` call.  Holds the mapping of arguments
+#     to the function's parameters.
+#
+#     Has the following public attributes:
+#
+#     * arguments : dict
+#         An ordered mutable mapping of parameters' names to arguments' values.
+#         Does not contain arguments' default values.
+#     * signature : Signature
+#         The Signature object that created this instance.
+#     * args : tuple
+#         Tuple of positional arguments values.
+#     * kwargs : dict
+#         Dict of keyword arguments values.
+#     """
+#
+#     __slots__ = ('arguments', '_signature', '__weakref__')
+#
+#     def __init__(self, signature, arguments):
+#         self.arguments = arguments
+#         self._signature = signature
+#
+#     @property
+#     def signature(self):
+#         return self._signature
+#
+#     @property
+#     def args(self):
+#         args = []
+#         for param_name, param in self._signature.parameters.items():
+#             if param.kind in (_VAR_KEYWORD, _KEYWORD_ONLY):
+#                 break
+#
+#             try:
+#                 arg = self.arguments[param_name]
+#             except KeyError:
+#                 # We're done here. Other arguments
+#                 # will be mapped in 'BoundArguments.kwargs'
+#                 break
+#             else:
+#                 if param.kind == _VAR_POSITIONAL:
+#                     # *args
+#                     args.extend(arg)
+#                 else:
+#                     # plain argument
+#                     args.append(arg)
+#
+#         return tuple(args)
+#
+#     @property
+#     def kwargs(self):
+#         kwargs = {}
+#         kwargs_started = False
+#         for param_name, param in self._signature.parameters.items():
+#             if not kwargs_started:
+#                 if param.kind in (_VAR_KEYWORD, _KEYWORD_ONLY):
+#                     kwargs_started = True
+#                 else:
+#                     if param_name not in self.arguments:
+#                         kwargs_started = True
+#                         continue
+#
+#             if not kwargs_started:
+#                 continue
+#
+#             try:
+#                 arg = self.arguments[param_name]
+#             except KeyError:
+#                 pass
+#             else:
+#                 if param.kind == _VAR_KEYWORD:
+#                     # **kwargs
+#                     kwargs.update(arg)
+#                 else:
+#                     # plain keyword argument
+#                     kwargs[param_name] = arg
+#
+#         return kwargs
+#
+#     def apply_defaults(self):
+#         """Set default values for missing arguments.
+#
+#         For variable-positional arguments (*args) the default is an
+#         empty tuple.
+#
+#         For variable-keyword arguments (**kwargs) the default is an
+#         empty dict.
+#         """
+#         arguments = self.arguments
+#         new_arguments = []
+#         for name, param in self._signature.parameters.items():
+#             try:
+#                 new_arguments.append((name, arguments[name]))
+#             except KeyError:
+#                 if param.default is not _empty:
+#                     val = param.default
+#                 elif param.kind is _VAR_POSITIONAL:
+#                     val = ()
+#                 elif param.kind is _VAR_KEYWORD:
+#                     val = {}
+#                 else:
+#                     # This BoundArguments was likely produced by
+#                     # Signature.bind_partial().
+#                     continue
+#                 new_arguments.append((name, val))
+#         self.arguments = dict(new_arguments)
+#
+#     def __eq__(self, other):
+#         if self is other:
+#             return True
+#         if not isinstance(other, BoundArguments):
+#             return NotImplemented
+#         return (self.signature == other.signature and
+#                 self.arguments == other.arguments)
+#
+#     def __setstate__(self, state):
+#         self._signature = state['_signature']
+#         self.arguments = state['arguments']
+#
+#     def __getstate__(self):
+#         return {'_signature': self._signature, 'arguments': self.arguments}
+#
+#     def __repr__(self):
+#         args = []
+#         for arg, value in self.arguments.items():
+#             args.append('{}={!r}'.format(arg, value))
+#         return '<{} ({})>'.format(self.__class__.__name__, ', '.join(args))
 
 
 def can_accept_exactly_one_argument(callable_thing):
