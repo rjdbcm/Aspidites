@@ -112,7 +112,7 @@ def parse_from_dummy(argv: list,
                             help="run mypy with args", metavar='ARGS')
     asp_parser.add_argument("target",
                             help="source to compile")
-    asp_parser.add_argument(argparse.SUPPRESS, help="running Aspidites with no arguments opens an interpreter session")
+    asp_parser.add_argument(" ", help="running Aspidites with no arguments opens an interpreter session")
     # Compatible with Cython 0.X:
     # 3.0 switched to using the argparse module
     if cy_version.major == 0 or cy3_fallback_mode:
