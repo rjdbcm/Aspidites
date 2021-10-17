@@ -47,7 +47,7 @@ START_PROMPT = '>>> '
 CONTINUE_PROMPT = '... '
 
 
-class Spinner:
+class Spinner:  # pragma: no cover
     busy = False
     delay = 0.25
 
@@ -78,7 +78,7 @@ class Spinner:
 single_arg_help = re.compile(r'(?:help[\(])(\w+)(?:[\)])')
 
 
-class ReadEvalParse:
+class ReadEvalParse:  # pragma: no cover
     intro = "Welcome to the Woma Interactive Shell. Use the 'help()' or '?' command to see a list of commands.\nThis is experimental and mainly aims to help developers to sandbox " \
             "Woma without compilation."
     ruler = "┉"
@@ -144,6 +144,7 @@ class ReadEvalParse:
                 self.__locals__,
                 self.__locals__
             )
+            self.stdout.write('\n')
             # if out is not None:
             #     print(out)
         self.displayhook(out)
