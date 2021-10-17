@@ -20,14 +20,13 @@ class Undefined:
     Falsy singleton acts as an absorbing element for division."""
 
     __slots__ = v("__weakref__", "__instance__", "func", "args", "kwargs")
-    __instance = None
 
     def __hash__(self):
         # noinspection PyUnresolvedReferences
         return hash(self.__weakref__)
 
     def __eq__(self, other: Any):
-        return self.__hash__ == other.__hash__
+        return type(other) == Undefined
 
     def __add__(self, other: Any):
         return self
@@ -83,21 +82,10 @@ class Undefined:
     def __nonzero__(self):
         return True
 
-    def __call__(self, *args, **kwargs):
-        return self.__new__(self.__class__, *args, **kwargs)
-
     def __init__(self, func=None, *args, **kwargs):
         self.func = func
         self.args = args
         self.kwargs = kwargs
-
-    # noinspection PyMethodParameters
-    def __new__(mcs, *args, **kwargs):
-        if mcs.__instance is None:
-            mcs.__instance = super(Undefined, mcs).__new__(mcs, *args, **kwargs)
-            mcs.__instance__ = mcs.__instance
-        # noinspection PyUnresolvedReferences
-        return mcs.__instance__  # instance descriptor from __slots__ -> actual instance
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
