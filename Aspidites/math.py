@@ -3,7 +3,12 @@ import sys
 from warnings import warn
 from typing import Any, Union
 from inspect import getouterframes
-from math import factorial, inf, isinf, nan, isnan
+try:
+    from numpy import isinf, isnan, inf, nan
+except ImportError:
+    from math import inf, isinf, nan, isnan
+finally:
+    from math import factorial
 import numbers
 import numpy as np
 from .api import Warn
