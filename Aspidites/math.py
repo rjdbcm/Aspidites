@@ -9,9 +9,6 @@ import numbers
 import numpy as np
 from .api import Warn
 
-from pyrsistent import v, pvector, PVector
-
-
 Numeric = Union[int, float, complex, np.number]
 
 
@@ -19,7 +16,7 @@ class Undefined:
     """A monad for a failed programmatic unit; like NoneType but hashable.
     Falsy singleton acts as an absorbing element for division."""
 
-    __slots__ = v("__weakref__", "__instance__", "func", "args", "kwargs")
+    __slots__ = ("__weakref__", "__instance__", "func", "args", "kwargs")
 
     def __hash__(self):
         # noinspection PyUnresolvedReferences
@@ -92,10 +89,10 @@ class Undefined:
 def SafeFactorial(a: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     w: str
-    stack: PVector
+    stack: list
     exc: Exception
     if a < 0 or isnan(a) or isinf(a) or isinstance(a, (float, complex)):
-        stack = pvector(getouterframes(sys._getframe(0), 1))
+        stack = getouterframes(sys._getframe(0))
         exc = ArithmeticError(f"Factorial is Undefined for {a}")
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
@@ -107,10 +104,10 @@ def SafeFactorial(a: Numeric) -> Union[Numeric, Undefined]:
 def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     w: str
-    stack: PVector
+    stack: list
     exc: Exception
     if isnan(a) or not isinstance(a, numbers.Number):
-        stack = pvector(getouterframes(sys._getframe(0), 1))
+        stack = getouterframes(sys._getframe(0))
         exc = ArithmeticError(f"Unary Add is Undefined for {type(a)}")
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
@@ -122,10 +119,10 @@ def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
 def SafeUnarySub(a: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     w: str
-    stack: PVector
+    stack: list
     exc: Exception
     if isnan(a) or not isinstance(a, numbers.Number):
-        stack = pvector(getouterframes(sys._getframe(0), 1))
+        stack = getouterframes(sys._getframe(0))
         exc = ArithmeticError(f"Unary Sub is Undefined for {type(a)}")
         w = Warn(stack, stack[0][3], [a], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
@@ -138,10 +135,10 @@ def SafeFloorDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     b: Numeric
     w: str
-    stack: PVector
+    stack: list
     exc: Exception
     if isinf(a) or b == 0 or (isinf(a) and isinf(b)):
-        stack = pvector(getouterframes(sys._getframe(0), 1))
+        stack = getouterframes(sys._getframe(0))
         exc = ArithmeticError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
@@ -154,10 +151,10 @@ def SafeDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     b: Numeric
     w: str
-    stack: PVector
+    stack: list
     exc: Exception
     if b == 0 or (isinf(a) and isinf(b)):
-        stack = pvector(getouterframes(sys._getframe(0), 1))
+        stack = getouterframes(sys._getframe(0))
         exc = ArithmeticError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
@@ -170,10 +167,10 @@ def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     b: Numeric
     w: str
-    stack: PVector
+    stack: list
     exc: Exception
     if isinf(a) or b == 0:
-        stack = pvector(getouterframes(sys._getframe(0), 1))
+        stack = getouterframes(sys._getframe(0))
         exc = ArithmeticError("Modulus by zero is Undefined; this behavior diverges from IEEE 754-1985.")
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
@@ -186,11 +183,11 @@ def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     b: Numeric
     w: str
-    stack: PVector
+    stack: list
     exc: Exception
     # 0**0, inf**0, 0**inf
     if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # pragma: no cover
-        stack = pvector(getouterframes(sys._getframe(0), 1))
+        stack = getouterframes(sys._getframe(0))
         exc = ArithmeticError(f"{str(a)}**{str(b)} == Undefined; this behavior diverges from IEEE 754-1985.")
         w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
         warn(w, category=RuntimeWarning, stacklevel=0)
