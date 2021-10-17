@@ -13,14 +13,26 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import sys
+from itertools import cycle
+import threading
 import os
 import re
-import sys
 import warnings
+from contextlib import suppress
+import time
 from pathlib import Path
 from traceback import print_exc
 from typing import List, AnyStr, Union
+
+# noinspection PyUnresolvedReferences
+from pyrsistent import pvector, pmap, pset
+# noinspection PyUnresolvedReferences
+from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.pyparsing import ParseException, ParseResults
+# noinspection PyUnresolvedReferences
+from cmath import inf
+# noinspection PyUnresolvedReferences
 from Aspidites import *
 import Aspidites.parser.parser
 from Aspidites.api import _format_locals
@@ -34,6 +46,35 @@ histfile_size = 1000
 START_PROMPT = '>>> '
 CONTINUE_PROMPT = '... '
 
+
+class Spinner:
+    busy = False
+    delay = 0.25
+
+    def __init__(self, delay=None, stdout=sys.stdout):
+        self.spinner_generator = (i for i in cycle('|/-\\'))
+        self.stdout = stdout
+        if delay and float(delay): self.delay = delay
+
+    def spinner_task(self):
+        while self.busy:
+            self.stdout.write(next(self.spinner_generator))
+            self.stdout.flush()
+            time.sleep(self.delay)
+            self.stdout.write('\b')
+            self.stdout.flush()
+
+    def __enter__(self):
+        self.busy = True
+        threading.Thread(target=self.spinner_task).start()
+
+    def __exit__(self, exception, value, tb):
+        self.busy = False
+        time.sleep(self.delay)
+        if exception is not None:
+            return False
+
+
 single_arg_help = re.compile(r'(?:help[\(])(\w+)(?:[\)])')
 
 
@@ -46,14 +87,24 @@ class ReadEvalParse:
     doc_header = "Documented commands (type help <topic>):"
     misc_header = "Miscellaneous help topics:"
     undoc_header = "Undocumented commands:"
+    _globals = globals().copy()
 
     def __init__(self, stdout=None):
         if stdout is not None:
             self.stdout = stdout
         else:
             self.stdout = sys.stdout
-
+        self.warn = lambda x: sys.stderr.write(x) and sys.stderr.flush()
         self.__locals__ = dict(locals(), **globals())
+
+    def stdin(self):
+        self.stdout.flush()
+        line = input(START_PROMPT)
+        if ';' in line:
+            line = line.replace(';', '\n    ')
+            self.stdout.write(line + '\n')
+            self.stdout.flush()
+        return line
 
     def get_names(self):
         # This method used to pull in base class attributes
@@ -114,43 +165,50 @@ class ReadEvalParse:
                 self.postloop()
                 self.preloop()
                 try:
-                    _in = input(START_PROMPT)
-                    if _in == 'exit()':
+                    line = self.stdin()
+                    if line == '':
+                        continue
+                    if line == 'exit()':
                         raise SystemExit
-                    if self.find_token('?', _in):
-                        self.do_help(_in.lstrip('? '))
+                    if self.find_token('?', line):
+                        self.do_help(line.lstrip('? '))
                         continue
-                    if self.find_token('help ', _in):
-                        self.do_help(_in.split(' ')[1])
+                    if self.find_token('help ', line):
+                        self.do_help(line.split(' ')[1])
                         continue
-                    if single_arg_help.match(_in):
-                        self.do_help(single_arg_help.search(_in).group(1))
+                    if single_arg_help.match(line):
+                        self.do_help(single_arg_help.search(line).group(1))
                         continue
-                    if hasattr(self, 'do_' + _in):
-                        getattr(self, 'do_' + _in)()
+                    if hasattr(self, 'do_' + line):
+                        getattr(self, 'do_' + line)()
                         continue
-                    if str(_in).isidentifier():
-                        self.eval_exec(_in)
+                    if str(line).isidentifier():
+                        self.eval_exec(line)
                         continue
-
                     try:
-                        p = Aspidites.parser.parser.parse_module(_in)
+                        with Spinner():
+                            p = Aspidites.parser.parser.parse_module(line)
                     except ParseException:
-                        # print(f"Warning: Failed to parse Woma.")
-                        self.eval_exec(_in)
+                        self.warn(f'Warning: Failed to parse "{line}" as Woma.\n'
+                              f'Remember that Woma does not allow literal evaluation, try assigning to a variable.\n'
+                              f'Falling back to python with suppressed exceptions.')
+                        with suppress(Exception):
+                            self.eval_exec(line)
+                        continue
                     else:
                         self.eval_exec(p)
+                        continue
 
                 except Exception as e:
-                    print(f"Error: {e}")
+                    self.stdout.write(f"Error: {e}")
                     print_exc()
                     continue
         except KeyboardInterrupt as e:
-            print("\nExiting...")
             self.do_exit()
 
     def do_exit(self, arg=None):
         """Exit the woma interactive interpreter."""
+        self.stdout.write("\nExiting...")
         raise SystemExit
 
     def do_copyright(self):
@@ -159,7 +217,15 @@ class ReadEvalParse:
 
     def do_locals(self, arg=None):
         """Print local variables"""
-        self.stdout.write(_format_locals(self.__locals__).decode('UTF-8'))
+        hidden = ['self', 'stdout', 'ReadEvalParse', '__warningregistry__']
+        visible = dict()
+        for k, v in self.__locals__.items():
+            if k in self._globals.keys() or k in hidden:
+                continue
+            else:
+                visible[k] = v
+
+        self.stdout.write(_format_locals(visible).decode('UTF-8'))
 
     def do_flush(self):
         """forcibly flush stdout"""
