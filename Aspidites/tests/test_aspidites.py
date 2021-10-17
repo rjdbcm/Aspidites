@@ -255,7 +255,7 @@ def test_compile_to_shared_object(inject_config):
     assert z == 9
     assert Add(x=3, y=2) == 5
     assert val() == Undefined()
-    assert div_by_zero() == Undefined()
+    assert div_by_zero == Undefined()
     Hello()
 
 #
