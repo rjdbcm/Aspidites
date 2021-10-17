@@ -177,6 +177,7 @@ def test_dict_undefined_sanity(x):
 
 
 @given(x=st.integers(min_value=MIN, max_value=MAX))
+@hypothesis.settings(deadline=None)
 def test_integer_monad_sanity(x):
     assert Maybe(x) != x
     assert Surely(x) == Surely(x)
