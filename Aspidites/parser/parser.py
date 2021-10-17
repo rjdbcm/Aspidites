@@ -91,6 +91,7 @@ set_str_evolver = Forward()
 dict_str = Forward()
 dict_str_evolver = Forward()
 tuple_str = Forward()
+slice_str = Forward()
 simple_assign = Forward()
 # for_stmt = Forward()
 suite = Forward()
@@ -122,7 +123,8 @@ comp_expr = infixNotation(
 collection = quoted_str | list_str | set_str | tuple_str | dict_str
 
 list_item = (  # Precedence important!!!
-    comp_expr  # Expressions
+    slice_str
+    | comp_expr  # Expressions
     | arith_expr
     | identifier
     | integer  # Literals
@@ -138,7 +140,7 @@ list_item = (  # Precedence important!!!
 
 assignable = list_item | rvalue
 
-contract_define = identifier + imposes + _contract_expression  #  ^ funcCall
+contract_define = identifier + imposes + _contract_expression
 contract_define.setParseAction(cvt_contract_define)
 contract_respect = respects + _contract_expression
 contract_assign = identifier + assign_eq + assignable + contract_respect
@@ -152,7 +154,8 @@ set_str_evolver <<= ((lbrace + Optional(delimitedList(list_item) + Optional(comm
 dict_entry = Group(list_item + colon + list_item)
 dict_str <<= (lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(cvt_dict)
 dict_str_evolver <<= ((lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(cvt_dict) + noclosure.setParseAction(replaceWith('.evolver()'))).setParseAction(lambda t: ''.join(t))
-
+slice_str <<= identifier + lit_lbrack + (integer | identifier)  + Optional(lit_colon + (integer | identifier)) + lit_rbrack
+slice_str.setParseAction(lambda t: ''.join(str(i) for i in t))
 def_args = Optional(delimitedList(contract_assign, delim=";")).setParseAction(lambda t: sep.join(t))
 def_args = Group(lit_lparen + def_args + args_end).setParseAction(lambda t: "".join(*t))
 
