@@ -191,7 +191,7 @@ class ReadEvalParse:
                     except ParseException:
                         self.warn(f'Warning: Failed to parse "{line}" as Woma.\n'
                               f'Remember that Woma does not allow literal evaluation, try assigning to a variable.\n'
-                              f'Falling back to python with suppressed exceptions.')
+                              f'Falling back to python with suppressed exceptions.\n')
                         with suppress(Exception):
                             self.eval_exec(line)
                         continue
