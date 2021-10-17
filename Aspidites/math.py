@@ -3,8 +3,7 @@ import sys
 from warnings import warn
 from typing import Any, Union
 from inspect import getouterframes
-from cmath import inf, isinf, nan, isnan
-from math import factorial
+from math import factorial, inf, isinf, nan, isnan
 import numbers
 import numpy as np
 from .api import Warn
