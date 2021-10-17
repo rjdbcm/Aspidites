@@ -6,13 +6,58 @@ Functions
 
 .. code:: woma
 
-    (Identity(x -> number, str)) number, str
+    (Identity(x = \0 -> number, str)) number, str
         <*>x
 
 Here we have defined a function called ``Identity`` that takes a single argument ``x`` that respects a contract with two
 clauses in union ``number`` and ``str``. When called with a ``number`` or ``str`` argument this function will return the
 argument ``x``. This is a pure function in the traditional sense and in the Womatic sense. In Woma, a pure function is a
 function where any two contracts can be switched and the output remains unchanged for all inputs.
+
+Data Model
+~~~~~~~~~~
+
+Types
+-----
+Woma comes with a standard set of built-in data types. Broadly, they can be categorized as numerics and collections.
+These types can further be constrained by additional contract clauses.
+
+Numerics
+^^^^^^^^
+
+- int
+- float
+- complex
+
+Collections
+^^^^^^^^^^^
+
+- dict
+- list
+- string
+- set
+- tuple
+
+Contract clauses
+----------------
+Contract clauses are used to specify the built-in data types.
+Most commonly this takes the form of the ``and`` operator ``,`` e.g. ``int,>0,<5``.
+
+In the case of collections we can also specify length and type:
+
+- ``dict[length_contract](key_contract:value_contract)``
+- ``list[length_contract](type_contract)``
+
+Complex contracts can always be aliased to make them easier to handle.
+e.g. the built-in ``number <- int|float|complex``
+
+Contracts can also contain bound variables. This allows for an additional level of specificity when used with
+the ``type`` operator:
+
+.. code-block:: woma
+
+    (func(l = [] -> list(type(t)))) type(t)
+        <*>l[0]
 
 Immutables
 ~~~~~~~~~~
