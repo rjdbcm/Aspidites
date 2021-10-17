@@ -3,12 +3,8 @@ import sys
 from warnings import warn
 from typing import Any, Union
 from inspect import getouterframes
-try:
-    from numpy import isinf, isnan, inf, nan
-except ImportError:
-    from math import inf, isinf, nan, isnan
-finally:
-    from math import factorial
+from math import inf, isinf, nan, isnan
+from math import factorial
 import numbers
 import numpy as np
 from .api import Warn
@@ -96,10 +92,6 @@ def SafeFactorial(a: Numeric) -> Union[Numeric, Undefined]:
     stack: list
     exc: Exception
     if a < 0 or isnan(a) or isinf(a) or isinstance(a, (float, complex)):
-        stack = getouterframes(sys._getframe(0))
-        exc = ArithmeticError(f"Factorial is Undefined for {a}")
-        w = Warn(stack, stack[0][3], [a], {}).create(exc)
-        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined(SafeFactorial, a)
     return factorial(a)
 
@@ -107,14 +99,7 @@ def SafeFactorial(a: Numeric) -> Union[Numeric, Undefined]:
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
-    w: str
-    stack: list
-    exc: Exception
     if isnan(a) or not isinstance(a, numbers.Number):
-        stack = getouterframes(sys._getframe(0))
-        exc = ArithmeticError(f"Unary Add is Undefined for {type(a)}")
-        w = Warn(stack, stack[0][3], [a], {}).create(exc)
-        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined(SafeUnaryAdd, a)
     return +a
 
@@ -122,14 +107,7 @@ def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeUnarySub(a: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
-    w: str
-    stack: list
-    exc: Exception
     if isnan(a) or not isinstance(a, numbers.Number):
-        stack = getouterframes(sys._getframe(0))
-        exc = ArithmeticError(f"Unary Sub is Undefined for {type(a)}")
-        w = Warn(stack, stack[0][3], [a], {}).create(exc)
-        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined(SafeUnarySub, a)
     return -a
 
@@ -138,14 +116,7 @@ def SafeUnarySub(a: Numeric) -> Union[Numeric, Undefined]:
 def SafeFloorDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     b: Numeric
-    w: str
-    stack: list
-    exc: Exception
     if isinf(a) or b == 0 or (isinf(a) and isinf(b)):
-        stack = getouterframes(sys._getframe(0))
-        exc = ArithmeticError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
-        w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
-        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined(SafeFloorDiv, a, b)
     return a // b
 
@@ -154,14 +125,7 @@ def SafeFloorDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 def SafeDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     b: Numeric
-    w: str
-    stack: list
-    exc: Exception
     if b == 0 or (isinf(a) and isinf(b)):
-        stack = getouterframes(sys._getframe(0))
-        exc = ArithmeticError("Division by zero is Undefined; this behavior diverges from IEEE 754-1985.")
-        w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
-        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined(SafeDiv, a, b)
     return a / b
 
@@ -170,14 +134,7 @@ def SafeDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     b: Numeric
-    w: str
-    stack: list
-    exc: Exception
     if isinf(a) or b == 0:
-        stack = getouterframes(sys._getframe(0))
-        exc = ArithmeticError("Modulus by zero is Undefined; this behavior diverges from IEEE 754-1985.")
-        w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
-        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined(SafeMod, a, b)
     return a % b
 
@@ -186,15 +143,7 @@ def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     a: Numeric
     b: Numeric
-    w: str
-    stack: list
-    exc: Exception
-    # 0**0, inf**0, 0**inf
     if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # pragma: no cover
-        stack = getouterframes(sys._getframe(0))
-        exc = ArithmeticError(f"{str(a)}**{str(b)} == Undefined; this behavior diverges from IEEE 754-1985.")
-        w = Warn(stack, stack[0][3], [a, b], {}).create(exc)
-        warn(w, category=RuntimeWarning, stacklevel=0)
         return Undefined(SafeExp, a, b)
     try:
         return a ** b
