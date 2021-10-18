@@ -25,9 +25,9 @@ x = Yield123()
 `matching is also valid in a loop body`
 i<@>Yield123()
     (!)i
-        0: 'I was called without arguments.'
-        1: 'I was called with an argument of 1.'
-      ...: 'I was called with any other integer argument.'
+        0: 'matched 0'
+        1: 'matched 1'
+      ...: 'matched any'
 
 
 i<@>Yield123()

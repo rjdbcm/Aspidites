@@ -123,13 +123,13 @@ from Aspidites._vendor.pyparsing_extension import (ParseBaseException, ParseExce
 from itertools import filterfalse
 try:
     from _thread import RLock
-except ImportError:
+except ImportError:  # pragma: no cover
     from threading import RLock
 from collections.abc import Iterable
 from collections.abc import MutableMapping
 try:
     from types import SimpleNamespace
-except ImportError:  # Python < 3.3
+except ImportError:  # pragma: no cover
     class SimpleNamespace:
         pass
 

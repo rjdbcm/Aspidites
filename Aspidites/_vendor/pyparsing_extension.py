@@ -20,12 +20,12 @@ system_version = tuple(sys.version_info)[:3]
 PY_3 = system_version[0] == 3
 try:
     from _thread import RLock
-except ImportError:
+except ImportError:  # pragma: no cover
     from threading import RLock
 
 try:
     from collections import OrderedDict as _OrderedDict
-except ImportError:
+except ImportError:  # pragma: no cover
     try:
         from ordereddict import OrderedDict as _OrderedDict
     except ImportError:
@@ -33,7 +33,7 @@ except ImportError:
 
 try:
     from types import SimpleNamespace
-except ImportError:
+except ImportError:  # pragma: no cover
     class SimpleNamespace:
         pass
 
@@ -68,7 +68,7 @@ __diag__.enable_debug_on_named_expressions = False
 __diag__._all_names = [nm for nm in vars(__diag__) if nm.startswith("enable_") or nm.startswith("warn_")]
 
 
-def _enable_all_warnings():
+def _enable_all_warnings():  # pragma: no cover
     __diag__.warn_multiple_tokens_in_named_alternation = True
     __diag__.warn_ungrouped_named_tokens_in_collection = True
     __diag__.warn_name_set_on_empty_Forward = True
