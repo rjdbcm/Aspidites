@@ -155,7 +155,7 @@ setup(
         "Operating System :: POSIX :: Linux",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: Microsoft :: Windows",
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Environment :: Console",
         "Programming Language :: Other",
         # "Programming Language :: Python :: 3.6", EOL in December 2021 and don't want to vendor dataclasses

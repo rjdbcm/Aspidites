@@ -2,7 +2,6 @@
 (Add(x = 3 -> int; y = 3 -> int)) int
 	<*>x+y
 
-
 `generators`
 (Yield123()) coroutine
 	<^>1
