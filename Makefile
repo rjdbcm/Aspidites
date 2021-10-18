@@ -128,7 +128,7 @@ release:
 	git add CHANGELOG.md
 	bump2version release
 
-release:
+prerel:
 	git add CHANGELOG.md
 	bump2version prerel
 
