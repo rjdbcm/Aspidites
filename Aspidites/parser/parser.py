@@ -118,7 +118,7 @@ comp_expr = infixNotation(
     [
         (comparisonop, 2, opAssoc.LEFT),
     ],
-)
+).setParseAction(lambda t: ''.join(t[0]))
 
 collection = quoted_str | list_str | set_str | tuple_str | dict_str
 
@@ -171,7 +171,6 @@ comment_line = (
     .setParseAction(lambda t: t[0])
     .setParseAction(cvt_comment_line)
 )
-
 
 return_value = return_none + rvalue
 yield_value = yield_none + rvalue
@@ -247,9 +246,9 @@ stmt <<= (func_def
           | func_loop_def
           | contract_define
           | func_call
-          | simple_assign
-          | comment_line)
+          | simple_assign)
 module_body = OneOrMore(stmt) + Optional(struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
+module_body.ignore(comment_line)
 
 
 def parse_module(module):

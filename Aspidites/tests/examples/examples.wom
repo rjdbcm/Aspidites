@@ -9,9 +9,9 @@
 	<^>3
 
 `matching is valid in a module body`
-x = Yield123()
+x = Yield123() `an inline comment`
 (!)x
-    0: 'matched 0'
+    0: 'matched 0' `a comment here too`
     1: 'matched 1'
   ...: 'matched any'
 
@@ -118,9 +118,7 @@ div_by_zero = 1 / denom
 mod_zero = 1 % denom
 div_by_zero2 = 1 / 0
 mod_zero2 = 1 % 0
-`a_truth = 1 + 2 == 2 + 1`
 
-`main: structure for executable actions when run as a binary`
 main:
 Hello()
 print("I'm a binary.")
