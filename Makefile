@@ -128,6 +128,10 @@ release:
 	git add CHANGELOG.md
 	bump2version release
 
+release:
+	git add CHANGELOG.md
+	bump2version prerel
+
 patch:
 	python -m Aspidites.scripts.bumpversion_hook patch
 	git add CHANGELOG.md
