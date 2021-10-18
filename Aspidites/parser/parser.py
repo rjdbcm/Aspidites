@@ -195,38 +195,42 @@ match_def = Group(match_decl + match_suite).setParseAction(lambda t: sep.join(t[
 # else_stmt = Keyword("?!?").setParseAction(replaceWith('else:')) + suite
 # if_stmt = Group(list_item + "?").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
 # cond_stmt = if_stmt + Optional(elif_stmt) + Optional(else_stmt)
+loop_suite = Forward()
 
 ident_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + identifier).setParseAction(cvt_for_loop_decl)
-ident_loop_def = Group(ident_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+ident_loop_def = Group(ident_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
 list_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + list_str).setParseAction(cvt_for_loop_decl)
-list_loop_def = Group(list_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+list_loop_def = Group(list_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
 set_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + set_str).setParseAction(cvt_for_loop_decl)
-set_loop_def = Group(set_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+set_loop_def = Group(set_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
 tuple_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + tuple_str).setParseAction(cvt_for_loop_decl)
-tuple_loop_def = Group(tuple_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+tuple_loop_def = Group(tuple_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
 dict_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + dict_str).setParseAction(cvt_for_loop_decl)
-dict_loop_def = Group(dict_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+dict_loop_def = Group(dict_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
 string_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + quoted_str).setParseAction(cvt_for_loop_decl)
-string_loop_def = Group(string_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+string_loop_def = Group(string_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
 func_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + func_call).setParseAction(cvt_for_loop_decl)
-func_loop_def = Group(func_loop_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]))
+func_loop_def = Group(func_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
+
+loop_suite <<= IndentedBlock(
+    OneOrMore(pass_stmt
+              | cont_stmt
+              | break_stmt
+              | func_call
+              | match_def
+              ))
 
 suite <<= IndentedBlock(
     OneOrMore(pass_stmt
-              | ident_loop_def
-              | cont_stmt
-              | break_stmt
               | ret_stmt
               | yield_stmt
-              # | cond_stmt
               | func_call
-              | func_def
               | match_def
               | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
@@ -242,7 +246,6 @@ stmt <<= (func_def
           | dict_loop_def
           | func_loop_def
           | contract_define
-          # | cond_stmt
           | func_call
           | simple_assign
           | comment_line)
