@@ -87,10 +87,6 @@ class Undefined:
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeFactorial(a: Numeric) -> Union[Numeric, Undefined]:
-    a: Numeric
-    w: str
-    stack: list
-    exc: Exception
     if a < 0 or isnan(a) or isinf(a) or isinstance(a, (float, complex)):
         return Undefined(SafeFactorial, a)
     return factorial(a)
@@ -98,7 +94,6 @@ def SafeFactorial(a: Numeric) -> Union[Numeric, Undefined]:
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
-    a: Numeric
     if isnan(a) or not isinstance(a, numbers.Number):
         return Undefined(SafeUnaryAdd, a)
     return +a
@@ -106,7 +101,6 @@ def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeUnarySub(a: Numeric) -> Union[Numeric, Undefined]:
-    a: Numeric
     if isnan(a) or not isinstance(a, numbers.Number):
         return Undefined(SafeUnarySub, a)
     return -a
@@ -114,8 +108,6 @@ def SafeUnarySub(a: Numeric) -> Union[Numeric, Undefined]:
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeFloorDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
-    a: Numeric
-    b: Numeric
     if isinf(a) or b == 0 or (isinf(a) and isinf(b)):
         return Undefined(SafeFloorDiv, a, b)
     return a // b
@@ -123,8 +115,6 @@ def SafeFloorDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
-    a: Numeric
-    b: Numeric
     if b == 0 or (isinf(a) and isinf(b)):
         return Undefined(SafeDiv, a, b)
     return a / b
@@ -132,8 +122,6 @@ def SafeDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
 def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
-    a: Numeric
-    b: Numeric
     if isinf(a) or b == 0:
         return Undefined(SafeMod, a, b)
     return a % b
@@ -141,8 +129,6 @@ def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
 def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
-    a: Numeric
-    b: Numeric
     if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # pragma: no cover
         return Undefined(SafeExp, a, b)
     try:

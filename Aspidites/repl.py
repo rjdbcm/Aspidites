@@ -13,10 +13,12 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import subprocess
 import sys
 from itertools import cycle
 import threading
 import os
+import curses
 import re
 import warnings
 from contextlib import suppress
@@ -97,8 +99,9 @@ class ReadEvalParse:  # pragma: no cover
         self.warn = lambda x: sys.stderr.write(x) and sys.stderr.flush()
         self.__locals__ = dict(locals(), **globals())
 
-    def stdin(self):
+    def input(self):
         self.stdout.flush()
+
         line = input(START_PROMPT)
         if ';' in line:
             line = line.replace(';', '\n    ')
@@ -138,12 +141,8 @@ class ReadEvalParse:  # pragma: no cover
             out = eval(compile(x, filename='<inline code>', mode='eval'),
                        self.__locals__,
                        self.__locals__)
-        except:
-            out = exec(
-                compile(x, filename='<inline code>', mode='exec'),
-                self.__locals__,
-                self.__locals__
-            )
+        except Exception:
+            out = exec(compile(x, filename='<inline code>', mode='exec'), self.__locals__, self.__locals__)
             self.stdout.write('\n')
             # if out is not None:
             #     print(out)
@@ -160,13 +159,13 @@ class ReadEvalParse:  # pragma: no cover
 
     def loop(self) -> None:
         os.system('cls' if os.name == 'nt' else 'clear')
-        print(self.intro)
+        self.stdout.write(self.intro + '\n')
         try:
             while True:
                 self.postloop()
                 self.preloop()
                 try:
-                    line = self.stdin()
+                    line = self.input()
                     if line == '':
                         continue
                     if line == 'exit()':
@@ -201,8 +200,7 @@ class ReadEvalParse:  # pragma: no cover
                         continue
 
                 except Exception as e:
-                    self.stdout.write(f"Error: {e}")
-                    print_exc()
+                    self.stdout.write(f"Error: {e}\n")
                     continue
         except KeyboardInterrupt as e:
             self.do_exit()

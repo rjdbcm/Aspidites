@@ -59,7 +59,8 @@ ext_modules = cythonize([str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                          str(Path('Aspidites/math.py')),
                          str(Path('Aspidites/api.py')),
                          str(Path('Aspidites/__main__.py')),
-                         str(Path('Aspidites/compiler.py'))
+                         str(Path('Aspidites/compiler.py')),
+                         # str(Path('Aspidites/repl.py'))
                          ])
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
 from Aspidites.__main__ import get_cy_kwargs
