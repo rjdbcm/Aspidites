@@ -1,5 +1,15 @@
 **unreleased**
 **v1.0.2**
+
+- 902c601 v1.0.2 released
+- e945eaf changelog updated
+- 342d2d7 fix typo in examples.wom
+- 728b811 changelog updated
+- 1fa54d1 v1.0.2 released
+- 1524fde changelog updated
+- c81542f fix type in examples.wom
+
+
 **v1.0.1-beta3**
 
 - 342d2d7 fix typo in examples.wom
