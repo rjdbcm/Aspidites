@@ -5,3 +5,4 @@ coverage:
     - "Aspidites/tests"  # ignore folders and all its contents
     - "**/*.pyx"
     - "**/*.pxd"
+    - "Aspidites/repl.py"

@@ -49,6 +49,7 @@ multop = oneOf("* / // %")
 plusop = oneOf("+ -")
 exponp = Literal("**")
 factop = Literal("!")
+bitwiseop = Regex(r"<<|>>|&|\||~|^").setName("bitwise operator")
 comparisonop = Regex(">=|<=|!=|>|<|==").setName("operator")
 assign_eq = Literal("=")
 noclosure = Literal("...")  # That's no closure

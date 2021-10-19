@@ -27,7 +27,6 @@ def cvt_arith_expr(tks):  # multiple returns needed, PackRat is very strict abou
     return expr
 
 
-
 def cvt_pragma(tks):
     t: list = tks.asList()
     return '\n'.join(t) + '\n'

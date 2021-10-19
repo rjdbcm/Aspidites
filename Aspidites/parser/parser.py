@@ -108,6 +108,7 @@ arith_expr = Combine(
             (signop, 1, opAssoc.RIGHT),
             (multop, 2, opAssoc.LEFT),
             (plusop, 2, opAssoc.LEFT),
+            (bitwiseop, 2, opAssoc.LEFT),
         ],
         lpar=lit_lparen,
         rpar=lit_rparen,
