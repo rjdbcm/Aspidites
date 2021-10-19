@@ -3,7 +3,7 @@ import functools
 import unittest
 import pytest as pt
 
-from Aspidites._vendor.contracts import ContractNotRespected, contract, ContractsMeta
+from Aspidites._vendor.contracts import ContractNotRespected, ContractException, contract, ContractsMeta
 from Aspidites._vendor.contracts import CannotDecorateClassmethods
 from Aspidites._vendor.contracts import with_metaclass
 
@@ -162,5 +162,17 @@ class TestMeta(unittest.TestCase):
 
         self.assertRaises(CannotDecorateClassmethods, test_classmethod2)
 
+    def test_specs(self):
+        def test_specs_match():
+            class A(with_metaclass(ContractsMeta, object)):
 
+                @abstractmethod
+                @contract(a='>0')
+                def f(self, a):
+                    pass
+
+            class B(A):
+                def f(self, b):
+                    pass
+        self.assertRaises(ContractException, test_specs_match)
 
