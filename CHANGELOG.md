@@ -1,4 +1,5 @@
 **unreleased**
+**v1.0.1-beta2**
 **v1.0.1-beta1**
 **v1.0.1-beta0**
 **v1.0.1-alpha6**
