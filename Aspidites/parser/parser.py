@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 # Aspidites
 # Copyright (C) 2021 Ross J. Duff
 
@@ -124,19 +124,19 @@ comp_expr = infixNotation(
 collection = quoted_str | list_str | set_str | tuple_str | dict_str
 
 list_item = (  # Precedence important!!!
-    slice_str
-    | comp_expr  # Expressions
-    | arith_expr
-    | identifier
-    | integer  # Literals
-    | complex_
-    | real
-    | bool_literal
-    | nullit
-    | list_str_evolver
-    | set_str_evolver
-    | dict_str_evolver
-    | collection
+        slice_str
+        | comp_expr  # Expressions
+        | arith_expr
+        | identifier
+        | integer  # Literals
+        | complex_
+        | real
+        | bool_literal
+        | nullit
+        | list_str_evolver
+        | set_str_evolver
+        | dict_str_evolver
+        | collection
 )
 
 assignable = list_item | rvalue
@@ -149,13 +149,17 @@ contract_assign.setParseAction(cvt_contract_assign)
 
 tuple_str <<= (lparen + Optional(delimitedList(list_item)) + Optional(comma) + rparen).setParseAction(cvt_tuple)
 list_str <<= (lbrack + Optional(delimitedList(list_item) + Optional(comma)) + rbrack).setParseAction(cvt_list)
-list_str_evolver <<= ((lbrack + Optional(delimitedList(list_item) + Optional(comma)) + rbrack).setParseAction(cvt_list) + noclosure.setParseAction(replaceWith('.evolver()'))).setParseAction(lambda t: ''.join(t))
+list_str_evolver <<= ((lbrack + Optional(delimitedList(list_item) + Optional(comma)) + rbrack).setParseAction(
+    cvt_list) + noclosure.setParseAction(replaceWith('.evolver()'))).setParseAction(lambda t: ''.join(t))
 set_str <<= (lbrace + Optional(delimitedList(list_item) + Optional(comma)) + rbrace).setParseAction(cvt_set)
-set_str_evolver <<= ((lbrace + Optional(delimitedList(list_item) + Optional(comma)) + rbrace).setParseAction(cvt_set) + noclosure.setParseAction(replaceWith('.evolver()'))).setParseAction(lambda t: ''.join(t))
+set_str_evolver <<= ((lbrace + Optional(delimitedList(list_item) + Optional(comma)) + rbrace).setParseAction(
+    cvt_set) + noclosure.setParseAction(replaceWith('.evolver()'))).setParseAction(lambda t: ''.join(t))
 dict_entry = Group(list_item + colon + list_item)
 dict_str <<= (lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(cvt_dict)
-dict_str_evolver <<= ((lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(cvt_dict) + noclosure.setParseAction(replaceWith('.evolver()'))).setParseAction(lambda t: ''.join(t))
-slice_str <<= identifier + lit_lbrack + (integer | identifier)  + Optional(lit_colon + (integer | identifier)) + lit_rbrack
+dict_str_evolver <<= ((lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(
+    cvt_dict) + noclosure.setParseAction(replaceWith('.evolver()'))).setParseAction(lambda t: ''.join(t))
+slice_str <<= identifier + lit_lbrack + (integer | identifier) + Optional(
+    lit_colon + (integer | identifier)) + lit_rbrack
 slice_str.setParseAction(lambda t: ''.join(str(i) for i in t))
 def_args = Optional(delimitedList(contract_assign, delim=";")).setParseAction(lambda t: sep.join(t))
 def_args = Group(lit_lparen + def_args + args_end).setParseAction(lambda t: "".join(*t))
@@ -165,12 +169,13 @@ bool_pragmas = Combine(
 ).setParseAction(cvt_pragma)
 
 func_decl = Group(
-    Optional(OneOrMore(bool_pragmas)) + MatchFirst(private_def_decl | c_def_decl) + identifier + def_args + _contract_expression
+    Optional(OneOrMore(bool_pragmas)) + MatchFirst(
+        private_def_decl | c_def_decl) + identifier + def_args + _contract_expression
 ).setParseAction(lambda t: "\n@contract()\n" + "".join(*t) + lit_colon)
 comment_line = (
     Combine(Regex(r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`")
-    .setParseAction(lambda t: t[0])
-    .setParseAction(cvt_comment_line)
+        .setParseAction(lambda t: t[0])
+        .setParseAction(cvt_comment_line)
 )
 
 return_value = return_none + rvalue
@@ -180,13 +185,17 @@ yield_stmt = Group(yield_value).setParseAction(lambda t: "".join(*t))
 
 func_def = Group(func_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]) + "\n")
 lambda_def = Combine(Group(lit_lparen + arith_expr | comp_expr + lit_rparen))
-func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_func_call)  # if len(t[0]) != 3 else t[0][0] + '()')
-clos_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(cvt_clos_call) + Suppress(noclosure)
+func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(
+    cvt_func_call)  # if len(t[0]) != 3 else t[0][0] + '()')
+clos_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(
+    cvt_clos_call) + Suppress(noclosure)
 
+context_def = Group(context_stmt + func_call + IndentedBlock(OneOrMore(func_call))).setParseAction(
+    lambda t: ''.join(*t) + lit_colon)
 
-# TODO (!) trigram only binds a single letter variable identifier
+# TODO (!): trigram only binds a single letter variable identifier
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
-case_stmt = Group(rvalue + colon + rvalue).setParseAction(lambda t: sep.join(t[0]))
+case_stmt = Group(rvalue + colon + func_call).setParseAction(lambda t: sep.join(t[0]))
 match_suite = Group(IndentedBlock(OneOrMore(case_stmt))).setParseAction(lambda t: (sep.join(t.asList()[0])))
 match_decl = Group(match_none + Char(alphas)).setParseAction(lambda t: lit_lparen.join(*t))
 match_def = Group(match_decl + match_suite).setParseAction(lambda t: sep.join(t[0]) + lit_rparen)
@@ -197,25 +206,32 @@ match_def = Group(match_decl + match_suite).setParseAction(lambda t: sep.join(t[
 # cond_stmt = if_stmt + Optional(elif_stmt) + Optional(else_stmt)
 loop_suite = Forward()
 
-ident_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + identifier).setParseAction(cvt_for_loop_decl)
+ident_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + identifier).setParseAction(
+    cvt_for_loop_decl)
 ident_loop_def = Group(ident_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
-list_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + list_str).setParseAction(cvt_for_loop_decl)
+list_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + list_str).setParseAction(
+    cvt_for_loop_decl)
 list_loop_def = Group(list_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
-set_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + set_str).setParseAction(cvt_for_loop_decl)
+set_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + set_str).setParseAction(
+    cvt_for_loop_decl)
 set_loop_def = Group(set_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
-tuple_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + tuple_str).setParseAction(cvt_for_loop_decl)
+tuple_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + tuple_str).setParseAction(
+    cvt_for_loop_decl)
 tuple_loop_def = Group(tuple_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
-dict_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + dict_str).setParseAction(cvt_for_loop_decl)
+dict_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + dict_str).setParseAction(
+    cvt_for_loop_decl)
 dict_loop_def = Group(dict_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
-string_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + quoted_str).setParseAction(cvt_for_loop_decl)
+string_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + quoted_str).setParseAction(
+    cvt_for_loop_decl)
 string_loop_def = Group(string_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
-func_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + func_call).setParseAction(cvt_for_loop_decl)
+func_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + func_call).setParseAction(
+    cvt_for_loop_decl)
 func_loop_def = Group(func_loop_decl + loop_suite).setParseAction(lambda t: nl_indent.join(t[0]))
 
 loop_suite <<= IndentedBlock(
@@ -247,8 +263,10 @@ stmt <<= (func_def
           | func_loop_def
           | contract_define
           | func_call
-          | simple_assign)
-module_body = OneOrMore(stmt) + Optional(struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
+          | simple_assign
+          | context_def)
+module_body = OneOrMore(stmt) + Optional(
+    struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
 module_body.ignore(comment_line)
 
 

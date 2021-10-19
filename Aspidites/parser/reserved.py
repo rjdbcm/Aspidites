@@ -54,6 +54,7 @@ comparisonop = Regex(">=|<=|!=|>|<|==").setName("operator")
 assign_eq = Literal("=")
 noclosure = Literal("...")  # That's no closure
 match_none = Literal("(!)").setParseAction(replaceWith('match'))
+context_stmt = Literal("<!>").setParseAction(replaceWith("with "))
 return_none = Literal("<*>").setParseAction(replaceWith("return "))
 yield_none = Literal("<^>").setParseAction(replaceWith("yield "))
 for_none = Literal("<@>").setParseAction(replaceWith('for '))

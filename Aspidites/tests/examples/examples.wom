@@ -11,23 +11,23 @@
 `matching is valid in a module body`
 x = Yield123() `an inline comment`
 (!)x
-    0: 'matched 0' `a comment here too`
-    1: 'matched 1'
-  ...: 'matched any'
+    0: print('matched 0' `a comment here too`)
+    1: print('matched 1')
+  ...: print('matched any')
 
 `matching is valid in a function body`
 (Match(x = 0 -> int)) procedure
     (!)x
-        0: 'I was called without arguments.'
-        1: 'I was called with an argument of 1.'
-      ...: 'I was called with any other integer argument.'
+        0: print('I was called without arguments.')
+        1: print('I was called with an argument of 1.')
+      ...: print('I was called with any other integer argument.')
 
 `matching is also valid in a loop body`
 i<@>Yield123()
     (!)i
-        0: 'matched 0'
-        1: 'matched 1'
-      ...: 'matched any'
+        0: print('matched 0')
+        1: print('matched 1')
+      ...: print('matched any')
 
 
 i<@>Yield123()
