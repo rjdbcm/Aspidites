@@ -57,7 +57,6 @@ Examples
 
             D = [2, 4, 6, 8, 10]
             
-
             G = {'a', 'b', 'c'}
 
             C = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}
@@ -69,8 +68,11 @@ Examples
         Evolvers
         
         .. code:: woma
+        
             E = [12, 14, 16, 18]...
+            
             F = {'e', 'f', 'g'}...
+            
             B = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}...
 
         This is implemented using the library `pyrsistent <https://github.com/tobgu/pyrsistent>`_.
