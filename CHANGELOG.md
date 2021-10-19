@@ -1,4 +1,5 @@
 **unreleased**
+**v1.0.2**
 **v1.0.1-beta3**
 
 - 342d2d7 fix typo in examples.wom
