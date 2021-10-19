@@ -1,19 +1,30 @@
 **unreleased**
+
 **v1.0.1-beta3**
+
 **v1.0.1-beta2**
+
 **v1.0.1-beta1**
+
 **v1.0.1-beta0**
+
 **v1.0.1-alpha6**
+
 **v1.0.1-alpha5**
+
 **v1.0.1-alpha4**
+
 **v1.0.1-alpha3**
+
 **v1.0.1-alpha2**
+
 **v1.0.1-alpha1**
+
 **v1.0.0**
+
 **v0.32.0**
 
 - 9dd5457 update TODOs
-
 
 **v0.31.0**
 
@@ -21,16 +32,7 @@
 - 07c0df2 fix TODO formatting
 - 73f24a1 added command line usage to docs
 - 8ab88d3 got unary sub and add working
-- 8f9569b added inspection.py unit tests
-- b746f20 added inspection.py unit tests
-- a871598 added inspection.py unit tests
-- 697a271 added inspection.py unit tests
-- 303dcf7 added inspection.py unit tests
-- f0718dd added inspection.py unit tests
-- 2a11d09 added inspection.py unit tests
-- cdd0101 added inspection.py unit tests
-- e0c8587 added inspection.py unit tests
-- 312f271 added inspection.py unit tests
+- 8f9569b..312f271 added inspection.py unit tests
 - 7f7fa6e ParseElement no longer slotted, significant detriment to performance.
 - 20b6e73 slotted __init__ of ParseBaseException
 - ada9fa8 Update README.md to add motivation

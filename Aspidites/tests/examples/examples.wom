@@ -11,7 +11,7 @@
 `matching is valid in a module body`
 x = Yield123() `an inline comment`
 (!)x
-    0: print('matched 0' `a comment here too`)
+    0: print('matched 0') `a comment here too`
     1: print('matched 1')
   ...: print('matched any')
 
