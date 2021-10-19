@@ -1,3 +1,6 @@
+`Here are some (not at all optimal) functional interfaces for atomic arithmetic ops`
+`This file mainly serves as the standard library bootstrapper for the python files in`
+`Aspidites/woma`
 #cython.binding(True)
 (Add(x = 0 -> number; y = 0 -> number)) number
 	<*> x + y

@@ -62,6 +62,7 @@ ext_modules = cythonize([str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                          str(Path('Aspidites/compiler.py')),
                          # str(Path('Aspidites/repl.py'))
                          ])
+print('bootstrapping standard library in Aspidites/woma')
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
 from Aspidites.__main__ import get_cy_kwargs
 cy_kwargs = get_cy_kwargs()
