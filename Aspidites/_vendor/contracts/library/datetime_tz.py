@@ -35,9 +35,9 @@ class DatetimeWithTz(Contract):
         return DatetimeWithTz(where=where)
 
 
-list_contract = (Keyword('datetime_tz'))
+list_contract = (Keyword('dtz'))
 list_contract.setParseAction(DatetimeWithTz.parse_action)
 
-list_contract.setName('datetime_tz contract')
-add_keyword('datetime_tz')
+list_contract.setName('dtz contract')
+add_keyword('dtz')
 add_contract(list_contract)
