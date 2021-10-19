@@ -2,6 +2,10 @@
 
 **v1.0.1-beta3**
 
+- c81542f fix type in examples.wom
+
+
+
 **v1.0.1-beta2**
 
 **v1.0.1-beta1**
