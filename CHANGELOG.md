@@ -1,5 +1,185 @@
 **unreleased**
 **v1.1.0**
+
+- af58801 v1.1.0 released
+- 891a45d changelog updated
+- 7568f76 added a standard library (With DearPyGui) and context management.
+- b06a654 Merge remote-tracking branch 'origin/main'
+- e77bd42 fix typo in doc examples
+- 928b434 Update README.md
+- 76cb3ff v1.0.3 released
+- 1ade0b7 changelog updated
+- 902c601 v1.0.2 released
+- e945eaf changelog updated
+- 342d2d7 fix typo in examples.wom
+- 728b811 changelog updated
+- 757fc75 v1.0.1-beta3 released
+- 1d7b9b1 add context manager trigram
+- a4f7a5d v1.0.1-beta2 released
+- 6197236 Update README.md
+- 073104d Bitwise operations are working
+- 3f783f9 ContractsMeta test coverage
+- b90c126 datetime tz
+- 22333be v1.0.1-beta1 released
+- 36526da comments are now properly ignored
+- 388979d Merge remote-tracking branch 'origin/main'
+- 583d748 update CI/CD cp37 to 3.7.12
+- d5d3d03 Update FUNDING.yml
+- 0054b6b v1.0.1-beta0 released
+- ed56f67 prepare for beta release
+- 79a4433 prepare for beta release
+- 5c08ea4 prepare for beta release
+- e9c7b6e adjust coverage
+- 228e632 v1.0.1-alpha6 released
+- fdc0903 SECURITY UPDATE cp38 wheels 3.8.11->3.8.12
+- ad03a38 Pretty much feature-complete parser with nesting disallowed except for match ``(!)`` constructs
+- f1a5b6f split up tests for the compiler and the maths
+- bef2d28 no coverage for repl
+- e06d817 no coverage for repl
+- cea6a47 got rid of deadline for test_integer_monad_sanity
+- 0d2de33 yeeted warnings for safe math operations.
+- 3881a39 added np math optional import
+- 9bcb4c1 removed import cmath
+- 7b8df7a removed some excess calls from each safemath function
+- 8ceaafe data model documentation
+- a081df9 added slicing syntax
+- 93861b3 add newline to end of Failed to parse warning
+- a6c5d35 v1.0.1-alpha5 released
+- 6476f71 A very nice and handy REPL called WIS
+- c232d91 Update tests for Undefined not being callable.
+- 0eb2486 Undefined is no longer a borg, unfortunately tagging was not working as intended.
+- fd2587b add documentation for running Aspidites without arguments.
+- b855b11 add documentation for running Aspidites without arguments.
+- c28fbd9 v1.0.1-alpha4 released
+- 7c28f32 make sure to cast text to string when printing locals
+- 852f913 v1.0.1-alpha3 released
+- b8eeecf add more repl functionality to display local environment
+- 6f6cdf2 v1.0.1-alpha2 released
+- d8d96a2 add more repl functionality
+- fdf902e remove BoundArgument from inspection.py
+- 391ff56 v1.0.1-alpha1 released
+- e654a0a add release option to makefile
+- 2627853 add release option to makefile
+- 9bf001e add release option to makefile
+- ccd3710 add release option to makefile
+- 58c08e0 Update deploy.yml
+- 2057b08 Merge pull request #17 from rjdbcm/1.0.0-alpha
+- d26da05 improve logo
+- ae8a90a update to 1.0.1-alpha0
+- 40c12e7 v1.0.0 released
+- 8bd4fdb changelog updated
+- 9dd5457 update TODOs
+- 8e48e01 v0.32.0 released
+- dff62ae changelog updated
+- 5ecf24f fix TODO formatting
+- 07c0df2 fix TODO formatting
+- 73f24a1 added command line usage to docs
+- 8ab88d3 got unary sub and add working
+- 8f9569b added inspection.py unit tests
+- b746f20 added inspection.py unit tests
+- a871598 added inspection.py unit tests
+- 697a271 added inspection.py unit tests
+- 303dcf7 added inspection.py unit tests
+- f0718dd added inspection.py unit tests
+- 2a11d09 added inspection.py unit tests
+- cdd0101 added inspection.py unit tests
+- e0c8587 added inspection.py unit tests
+- 312f271 added inspection.py unit tests
+- 7f7fa6e ParseElement no longer slotted, significant detriment to performance.
+- 20b6e73 slotted __init__ of ParseBaseException
+- ada9fa8 Update README.md to add motivation
+- b8bf639 Update docs to add motivation
+- e56e699 Update Compiler argument signature to use CompilerArgs
+- 56216e9 slotted ParserElement
+- 08a56dc slotted CompilerArgs
+- 82d3507 documented CompilerArgs
+- 8b7d999 prebind variables but leave try-except-except alone
+- b0486b2 Revert "changed line:4019 parseImpl to prebind string length"
+- f29c8f1 Merge remote-tracking branch 'origin/main'
+- 3d2f613 changed line:4019 parseImpl to prebind string length
+- b0989f6 Update test.yml
+- 51a1509 Update test.yml
+- 631dfad add profile artifact upload to CI
+- 4269a72 Merge remote-tracking branch 'origin/main'
+- 178243f update logo with specular highlights
+- f4e79f3 Update README.rst
+- 7fe9e84 Merge remote-tracking branch 'origin/main'
+- 5730e91 add pragmas to docs
+- 995b31f add stability badge
+- aaea133 v0.31.0 released
+- c82f089 changelog updated
+- 03fd2d4 Merge remote-tracking branch 'origin/main'
+- 3c979ca nullit replaced with /0 in keeping with WEEP10
+- f4ed7e8 func_def now has proper whitespace following
+- c187dc1 SafeMath ops now nest properly when parse
+- 5dedf82 Update README.md
+- 1e70579 this is why we have alphas, math operations now work as expected (automatically closed)
+- f48e0dd removed mutable default from _apply
+- 00f5c7c v0.30.0 released
+- db55d93 changelog updated
+- cc799ea Merge remote-tracking branch 'origin/main'
+- 66986ab #cython.binding(True) no longer needed for functions to work. It is on globally on by default now.
+- c7ce0ef add SafeFactorial
+- 78c98a7 added more targets for quick testing
+- d67d998 matching works, floats now work for leading . case // operator added
+- b0b60dc Added a InstanceOf from apm
+- 012a400 Added a fibonacci example
+- d82e278 added the rest of the SafeX functions
+- de175db vendored apm tests
+- 1ce1323 vendored apm for match functionality.
+- 24138a1 Update README.md
+- e8df47d Update README.md
+- e5e5217 Merge remote-tracking branch 'origin/main'
+- 81df960 v0.29.1 released
+- 18b95b3 changelog updated
+- a8bdd39 added match operator to parser
+- 1adbfcf Update README.md
+- ee5e6b7 Update README.md
+- cc9f025 Update README.md
+- baaad5b v0.29.0 released
+- 133fb67 changelog updated
+- 48fd177 add space
+- 22efa4a changelog updated
+- 1d4399a yeeting conditionals. loops work with bound variables, string literals, and collection literals outside function bodies. (bound variables work inside functions)
+- 2307309 add analytics tag
+- 08f3f22 locale_dirs for future internationalization
+- c8becf5 v0.28.2 released
+- f7b1344 changelog updated
+- 4aa9884 fix woopsie in repr
+- dbff8fd v0.28.1 released
+- d07e3c6 changelog updated
+- c683389 update docs
+- 8e6c293 v0.28.0 released
+- 5ec6d0c changelog updated
+- 4462ffc fix woopsies
+- 453d624 fix woopsies
+- 241487a fix woopsies
+- d5cec61 API Documentation and API nailed down
+- db0cb2a v0.27.0 released
+- cfe57f6 changelog updated
+- 56dc8b3 added copyright to repl.py
+- b46c0b0 Added every math and monads symbol to the Aspidites __init__.py
+- b9106e7 vastly improved repl with command history
+- 8d1820f Update README.md
+- 7cd68b1 update .bumpversion.cfg
+- 1e48954 v1.1.0 released
+- ef6990f changelog updated
+- f404b61 v1.0.0-rc2 released
+- 463b72a update .bumpversion.cfg
+- e981fe7 update .bumpversion.cfg
+- 52ae1dc update .bumpversion.cfg
+- 91ab866 update .bumpversion.cfg
+- ec83d20 changelog updated
+- 92fd50f update .bumpversion.cfg
+- f45b70d changelog updated
+- 794778e changelog updated
+- 5d025c0 update .bumpversion.cfg
+- 9f0ad17 v1.0.0-rc1 released
+- 744f8ef v0.26.2-1 released
+- 162bd25 changelog updated
+- 424ce04 add release make target
+
+
 **v1.0.3**
 
 - 7568f76 added a standard library (With DearPyGui) and context management.
