@@ -6,40 +6,44 @@ Examples
 
     .. tab::
 
-        First Class Functions
+        Functions
 
         .. code:: woma
 
-            #cython.binding(True)
             (Add(x = 3 -> int; y = 3 -> int)) int
                 <*>x+y
 
     .. tab::
 
-        Generators and Procedures
+        Generators
 
         .. code:: woma
 
-            `generators`
             (Yield123()) coroutine
-                <^>Add(0, 1)
-                <^>Add(0, 2)
-                <^>Add(0, 3)
-
-            `procedures`
+                <^>1
+                <^>2
+                <^>3
+            
+    .. tab::
+    
+        Procedures
+        
+        .. code:: woma
+            
             (Hello()) procedure
-                print("Hello, World!")
+               print("Hello, World!")
+    
 
     .. tab::
 
-        True Coroutines
+        Coroutines
 
         .. code:: woma
 
             (Yield123()) coroutine
-                <^>Add(0, 1)
-                <^>Add(0, 2)
-                <^>Add(0, 3)
+                <^>1
+                <^>2
+                <^>3
             `ellipsis calling creates a true coroutine`
             c = Yield123()...
 
@@ -47,30 +51,35 @@ Examples
 
     .. tab::
 
-        Persistent or Evolver Iterables
+        Collections
 
         .. code:: woma
 
-            `persistent vectors`
             D = [2, 4, 6, 8, 10]
-            `evolver vectors`
-            E = [12, 14, 16, 18]...
-
-            `persistent sets`
+            
             G = {'a', 'b', 'c'}
-            `evolver sets`
-            F = {'e', 'f', 'g'}...
 
-            `persistent mappings`
             C = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}
-            `evolver mappings`
+
+        This is implemented using the library `pyrsistent <https://github.com/tobgu/pyrsistent>`_.
+        
+    .. tab::
+
+        Evolvers
+        
+        .. code:: woma
+        
+            E = [12, 14, 16, 18]...
+            
+            F = {'e', 'f', 'g'}...
+            
             B = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}...
 
         This is implemented using the library `pyrsistent <https://github.com/tobgu/pyrsistent>`_.
-
+        
     .. tab::
 
-        Refinement Types use Contract Clauses
+        Contracts
 
         .. code:: woma
 
@@ -81,7 +90,7 @@ Examples
 
     .. tab::
 
-        Closures and Lambdas
+        Lambdas
 
         .. code:: woma
 
@@ -102,7 +111,7 @@ Examples
 
     .. tab::
 
-        nullit as the Nullity Element
+        Nullity
 
         .. code:: woma
 
