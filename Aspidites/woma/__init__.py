@@ -24,7 +24,7 @@ from .mathutils import clamp, ceil, floor
 from contextlib import contextmanager
 from functools import lru_cache
 
-__version__ = '1.2.5'
+__version__ = '1.2.6'
 
 
 def woma_version():

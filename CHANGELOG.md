@@ -1,4 +1,5 @@
 **unreleased**
+**v1.2.6**
 **v1.2.5**
 
 - 3660dbb yeeted dearpygui for the time being
