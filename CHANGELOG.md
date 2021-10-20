@@ -1,4 +1,5 @@
 **unreleased**
+**v1.2.2**
 **v1.2.1**
 
 - 36a6941 update Pipfile
