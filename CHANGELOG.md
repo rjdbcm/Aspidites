@@ -1,5 +1,9 @@
 **unreleased**
 **v1.2.2**
+
+- d3aed5d update requirements to build packages
+
+
 **v1.2.1**
 
 - 36a6941 update Pipfile
