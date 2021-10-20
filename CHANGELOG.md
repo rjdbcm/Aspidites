@@ -1,5 +1,12 @@
 **unreleased**
 **v1.2.0**
+
+- 66d0f4d update Pipfile
+- 455d40b Merge remote-tracking branch 'origin/main'
+- c487984 Update syntax.rst
+- 13094d0 Update docs
+
+
 **v1.1.0**
 
 - af58801 v1.1.0 released
