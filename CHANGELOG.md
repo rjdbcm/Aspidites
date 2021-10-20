@@ -1,4 +1,5 @@
 **unreleased**
+**v1.2.4**
 **v1.2.3**
 
 - bca7fc0 update requirements to build packages
