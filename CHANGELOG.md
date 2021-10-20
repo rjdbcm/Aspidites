@@ -1,5 +1,12 @@
 **unreleased**
 **v1.0.3**
+
+- 7568f76 added a standard library (With DearPyGui) and context management.
+- b06a654 Merge remote-tracking branch 'origin/main'
+- e77bd42 fix typo in doc examples
+- 928b434 Update README.md
+
+
 **v1.0.2**
 
 - 902c601 v1.0.2 released
