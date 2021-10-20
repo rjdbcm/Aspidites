@@ -1,5 +1,9 @@
 **unreleased**
 **v1.2.4**
+
+- d90fa4f attempt to fix dearpygui import by using absolute.
+
+
 **v1.2.3**
 
 - bca7fc0 update requirements to build packages
