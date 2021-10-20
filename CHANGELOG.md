@@ -1,4 +1,5 @@
 **unreleased**
+**v1.2.3**
 **v1.2.2**
 
 - d3aed5d update requirements to build packages
