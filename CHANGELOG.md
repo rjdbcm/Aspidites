@@ -1,4 +1,5 @@
 **unreleased**
+**v1.1.0**
 **v1.0.3**
 
 - 7568f76 added a standard library (With DearPyGui) and context management.
