@@ -126,11 +126,11 @@ class GCToggler(object):
             gc.collect()
 
 
-toggle_gc = GCToggler()
-"""A context manager for disabling GC for a code block. See
-:class:`GCToggler` for more details."""
-
-
-toggle_gc_postcollect = GCToggler(postcollect=True)
-"""A context manager for disabling GC for a code block, and collecting
-before re-enabling. See :class:`GCToggler` for more details."""
+# toggle_gc = GCToggler()
+# """A context manager for disabling GC for a code block. See
+# :class:`GCToggler` for more details."""
+#
+#
+# toggle_gc_postcollect = GCToggler(postcollect=True)
+# """A context manager for disabling GC for a code block, and collecting
+# before re-enabling. See :class:`GCToggler` for more details."""

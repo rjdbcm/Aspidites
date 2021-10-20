@@ -189,9 +189,11 @@ func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + li
     cvt_func_call)  # if len(t[0]) != 3 else t[0][0] + '()')
 clos_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(
     cvt_clos_call) + Suppress(noclosure)
+context_suite = Forward()
+context_def = Group(context_stmt + func_call).setParseAction(lambda t: ''.join(*t) + lit_colon)
 
-context_def = Group(context_stmt + func_call + IndentedBlock(OneOrMore(func_call))).setParseAction(
-    lambda t: ''.join(*t) + lit_colon)
+context_decl = Group(context_def + context_suite).setParseAction(
+    lambda t: ''.join(*t))
 
 # TODO (!): trigram only binds a single letter variable identifier
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
@@ -242,13 +244,19 @@ loop_suite <<= IndentedBlock(
               | match_def
               ))
 
+context_suite <<= IndentedBlock(OneOrMore(contract_assign
+                                          | match_def
+                                          | func_call)).setParseAction(
+    lambda t: (nl_indent.join(t.asList())))
+
 suite <<= IndentedBlock(
     OneOrMore(pass_stmt
               | ret_stmt
               | yield_stmt
               | func_call
               | match_def
-              | contract_assign)).setParseAction(
+              | contract_assign
+              | context_decl)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
 rvalue <<= clos_call | func_call | list_item | lambda_def | lit_ellipse
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
@@ -264,7 +272,7 @@ stmt <<= (func_def
           | contract_define
           | func_call
           | simple_assign
-          | context_def)
+          | context_decl)
 module_body = OneOrMore(stmt) + Optional(
     struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
 module_body.ignore(comment_line)

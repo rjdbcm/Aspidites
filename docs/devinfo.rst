@@ -21,12 +21,13 @@ That said, try to avoid long block comments (maybe create an issue instead) and 
 Core Dependencies
 ~~~~~~~~~~~~~~~~~
 
-Aspidites has 4 core dependencies, all licensed under a compatible OSI
+Aspidites has 5 core dependencies, all licensed under a compatible OSI
 approved license. In general, dependencies are vendored unless they
 contain Python Extensions.
 
 -  numpy
 -  cython
+-  dearpygui
 -  future
 -  pyrsistent
 

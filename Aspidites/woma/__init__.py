@@ -1,3 +1,6 @@
+"""This is the standard library bootstrapped with the compiler on a per-version basis.
+This should allow for some semblance of backwards compatibility.
+"""
 # Aspidites - Woma Programming Language Standard Library
 # Copyright (C) 2021 Ross J. Duff
 
@@ -13,3 +16,16 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from .gcutils import GCToggler, get_all
+from .setutils import complement
+from .fileutils import mkdir_p, atomic_save, atomic_rename, iter_find_files, AtomicSaver
+from .guiutils import *
+from .mathutils import clamp, ceil, floor
+from contextlib import contextmanager
+from functools import lru_cache
+
+__version__ = '1.0.3'
+
+
+def woma_version():
+    return __version__

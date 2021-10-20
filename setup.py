@@ -8,6 +8,8 @@ from setuptools.command.install import install
 import numpy
 # ~#~ # Build static libs # ~#~ #
 from Cython.Build import cythonize
+from Cython.Compiler import Options
+from Cython.Build.Cythonize import cython_compile
 ext_modules = cythonize([str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                          str(Path('Aspidites/_vendor/contracts/interface.py')),
                          str(Path('Aspidites/_vendor/contracts/syntax.py')),
@@ -61,6 +63,11 @@ ext_modules = cythonize([str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                          str(Path('Aspidites/__main__.py')),
                          str(Path('Aspidites/compiler.py')),
                          # str(Path('Aspidites/repl.py'))
+                         str(Path('Aspidites/woma/fileutils.py')),
+                         str(Path('Aspidites/woma/setutils.py')),
+                         str(Path('Aspidites/woma/gcutils.py')),
+                         str(Path('Aspidites/woma/guiutils.py')),
+                         str(Path('Aspidites/woma/mathutils.py'))
                          ])
 print('bootstrapping standard library in Aspidites/woma')
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser

@@ -8,6 +8,18 @@
 	<^>2
 	<^>3
 
+(openwindow()) procedure
+    <!>window("example")
+        add_text('hello')
+    stop_dearpygui()
+
+openwindow()
+
+(garbo()) procedure
+    <!>GCToggler()
+        x = 1 -> int
+        print(x)
+
 `matching is valid in a module body`
 x = Yield123() `an inline comment`
 (!)x
