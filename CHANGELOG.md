@@ -1,6 +1,11 @@
 **unreleased**
 **v1.2.5**
 
+- 3660dbb yeeted dearpygui for the time being
+- 5a5fb36 changelog updated
+
+
+
 - 
 
 
