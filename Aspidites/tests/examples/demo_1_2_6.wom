@@ -74,4 +74,4 @@
 `Procedures`
 
 (proc()) procedure
-    print(a
+    print(a)
