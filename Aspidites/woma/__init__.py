@@ -16,9 +16,9 @@ This should allow for some semblance of backwards compatibility.
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from .gcutils import GCToggler, get_all
+from .gcutils import get_all
 from .setutils import complement
-from .fileutils import mkdir_p, atomic_save, atomic_rename, iter_find_files, AtomicSaver
+from .fileutils import mkdir_p, atomic_save, atomic_rename, iter_find_files, copytree
 from .guiutils import *
 from .mathutils import clamp, ceil, floor
 from contextlib import contextmanager

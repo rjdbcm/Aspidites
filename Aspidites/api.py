@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import itertools
+from collections import OrderedDict
 from typing import Union, ItemsView
 from textwrap import wrap
 from Aspidites._vendor.pyparsing import ParseResults
@@ -129,6 +131,7 @@ class Warn:
         # noinspection PyMethodMayBeStatic
 
     def format_locals(self, local_vars, exc: Exception) -> bytes:
+        OrderedDict(itertools.islice(local_vars, 10))
         lokals: dict = dict(filter(lambda x: x[1] != str(exc), local_vars))
         str_locals: bytes = _format_locals(lokals)
         return str_locals.rstrip("\n".encode('UTF-8'))

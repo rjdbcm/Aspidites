@@ -243,7 +243,7 @@ loop_suite <<= IndentedBlock(
               | func_call
               | match_def
               ))
-
+# TODO context managers get eaten by the preceding code blocks
 context_suite <<= IndentedBlock(OneOrMore(contract_assign
                                           | match_def
                                           | func_call)).setParseAction(
@@ -255,8 +255,7 @@ suite <<= IndentedBlock(
               | yield_stmt
               | func_call
               | match_def
-              | contract_assign
-              | context_decl)).setParseAction(
+              | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
 rvalue <<= clos_call | func_call | list_item | lambda_def | lit_ellipse
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
@@ -271,8 +270,7 @@ stmt <<= (func_def
           | func_loop_def
           | contract_define
           | func_call
-          | simple_assign
-          | context_decl)
+          | simple_assign)
 module_body = OneOrMore(stmt) + Optional(
     struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
 module_body.ignore(comment_line)

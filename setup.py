@@ -1,7 +1,10 @@
 #!/usr/bin/python3
+import importlib.util
 import sys
 from glob import glob
 from pathlib import Path
+
+import pkg_resources
 from setuptools import setup, find_packages
 from setuptools.dist import Distribution
 from setuptools.command.install import install

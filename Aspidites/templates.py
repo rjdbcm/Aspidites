@@ -156,27 +156,53 @@ woma_template = Template("""#cython: language_level=3, annotation_typing=True, c
 from typing import Any
 from collections.abc import Generator
 import cython  # type: ignore
+from cython import (declare as cdecl, address as caddr, sizeof as csizeof, typeof as ctypeof, struct as cstruct, 
+                    union as cunion, typedef as ctypedef, cast as ccast, char as cchar, short as cshort, int as cint,
+                    double as cdouble, long as clong, longlong as clonglong)
+
 from pyrsistent import (
     pset, 
     pmap, 
     pvector, 
-    s, v, m, 
-    PRecord,
-    PClass
+    s, v, m
 )
 from Aspidites.woma import *
 from Aspidites._vendor import (
-    reduce,
-    filterfalse,
-    zip_longest,
-    accumulate,
     take,
     drop,
     takelast,
     droplast,
+    consume,
+    nth,         
+    first_true,  
+    iterate,     
+    padnone,     
+    ncycles,     
+    repeatfunc,  
+    grouper,     
+    group_by,    
+    roundrobin,  
+    partition,   
+    splitat,     
+    splitby,     
+    powerset,    
+    pairwise,    
+    iter_suppress,
+    flatten,     
+    accumulate,  
+    reduce,      
+    filterfalse, 
+    zip_longest,
+    call,   
+    apply,  
+    flip,   
+    curry,  
+    zipwith,
+    foldl,  
+    foldr,  
+    unfold,
     match,
     _,
-    InstanceOf,
 )
 from Aspidites.monads import Maybe, Surely
 from Aspidites.math import Undefined, SafeDiv, SafeExp, SafeMod, SafeFloorDiv, SafeUnaryAdd, SafeUnarySub, SafeFactorial

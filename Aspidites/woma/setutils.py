@@ -15,6 +15,7 @@ from __future__ import print_function
 from bisect import bisect_left
 from itertools import chain, islice
 import operator
+from pyrsistent import PSet
 
 try:
     from collections.abc import MutableSet
@@ -158,9 +159,9 @@ class _ComplementSet(object):
 
     def __init__(self, included=None, excluded=None):
         if included is None:
-            assert type(excluded) in (set, frozenset)
+            assert type(excluded) in (set, frozenset, PSet)
         elif excluded is None:
-            assert type(included) in (set, frozenset)
+            assert type(included) in (set, frozenset, PSet)
         else:
             raise ValueError('one of included or excluded must be a set')
         self._included, self._excluded = included, excluded

@@ -73,10 +73,6 @@ def foldr(f, init=None):
     """Return function to fold iterator to scala value using
     passed function as reducer in reverse order (consume values
     from iterator from right-to-left).
-
-    Usage:
-        >>> print foldr(call, 10)([lambda s: s**2, lambda k: k+10])
-        400
     """
 
     def fold(it):
@@ -96,11 +92,6 @@ def unfold(f):
       * tuple of two elements (value, cursor), value will be added
         to output, cursor will be used for next function call
       * None in order to stop producing sequence
-
-    Usage:
-        >>> doubler = unfold(lambda x: (x*2, x*2))
-        >>> list(islice(doubler(10), 0, 10))
-        [20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240]
     """
 
     def _unfolder(start):

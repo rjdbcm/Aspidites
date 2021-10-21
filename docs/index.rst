@@ -177,6 +177,7 @@ Table of Contents
    syntax
    usage
    indepth
+   builtins
    api
    devinfo
 

@@ -1,0 +1,77 @@
+`Iterators and Iterable Functions: `
+`    take,                         `
+`    drop,                         `
+`    takelast,                     `
+`    droplast,                     `
+`    consume,                      `
+`    nth,                          `
+`    first_true,                   `
+`    iterate,                      `
+`    padnone,                      `
+`    ncycles,                      `
+`    repeatfunc,                   `
+`    grouper,                      `
+`    group_by,                     `
+`    roundrobin,                   `
+`    partition,                    `
+`    splitat,                      `
+`    splitby,                      `
+`    powerset,                     `
+`    pairwise,                     `
+`    iter_suppress,                `
+`    flatten,                      `
+`    accumulate,                   `
+`    reduce,                       `
+`    filterfalse,                  `
+`    zip_longest                   `
+`Higher Order Functions:           `
+`    call,                         `
+`    apply,                        `
+`    flip,                         `
+`    curry,                        `
+`    zipwith,                      `
+`    foldl,                        `
+`    foldr,                        `
+`    unfold                        `
+`These Python Builtins:            `
+`    abs                           `
+`    bool                          `
+`    bytes                         `
+`    callable                      `
+`    chr                           `
+`    complex                       `
+`    divmod                        `
+`    float                         `
+`    hash                          `
+`    hex                           `
+`    id                            `
+`    int                           `
+`    isinstance                    `
+`    issubclass                    `
+`    len                           `
+`    oct                           `
+`    ord                           `
+`    pow                           `
+`    range                         `
+`    repr                          `
+`    round                         `
+`    slice                         `
+`    sorted                        `
+`    str                           `
+`    tuple                         `
+`    zip                           `
+`RestrictedPython Guarded Builtins:`
+`    delattr                       `
+`    setattr                       `
+`    compile                       `
+
+
+`Functions`
+
+(identity(x -> *)) *
+    <*>x
+
+`Procedures`
+
+(proc()) procedure
+    print(a
