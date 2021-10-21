@@ -16,11 +16,12 @@ x = Yield123() `an inline comment`
   ...: print('matched any')
 
 `matching is valid in a function body`
-(Match(x = 0 -> int)) procedure
+(Match(x = 0 -> int)) int
     (!)x
-        0: print('I was called without arguments.')
-        1: print('I was called with an argument of 1.')
-      ...: print('I was called with any other integer argument.')
+        0: Add(x, 1)
+        1: Add(x, 2)
+      ...: Add(x, 3)
+    <*>x
 
 `matching is also valid in a loop body`
 i<@>Yield123()
@@ -91,7 +92,6 @@ C = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}
 `evolver mappings`
 B = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}...
 
-`persistent sets`
 
 `new contracts can impose more complex contractual clauses`
 colors <- list[3](int, <256)

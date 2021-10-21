@@ -11,19 +11,19 @@ def cvt_arith_expr(tks):  # multiple returns needed, PackRat is very strict abou
     end = lit_rparen + lit_lparen + lit_rparen
 
     if "!" in expr:
-        expr = "Maybe(SafeFactorial, " + expr.replace('!', '') + end
-    if "//" in expr:
-        expr = "Maybe(SafeFloorDiv, " + expr.replace("//", sep) + end
-    if "/" in expr:
-        expr = "Maybe(SafeDiv, " + expr.replace("/", sep) + end
-    if "%" in expr:
-        expr = "Maybe(SafeMod, " + expr.replace("%", sep) + end
+        expr = "Maybe(SafeFactorial, " + expr.replace('!', '', 1) + end
     if "**" in expr:
-        expr = "Maybe(SafeExp, " + expr.replace("**", sep) + end
+        expr = "Maybe(SafeExp, " + expr.replace("**", sep, 1) + end
+    if "//" in expr:
+        expr = "Maybe(SafeFloorDiv, " + expr.replace("//", sep, 1) + end
+    if "/" in expr:
+        expr = "Maybe(SafeDiv, " + expr.replace("/", sep, 1) + end
+    if "%" in expr:
+        expr = "Maybe(SafeMod, " + expr.replace("%", sep, 1) + end
     if expr.startswith('+'):
-        expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", '') + end
+        expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", '', 1) + end
     if expr.startswith('-'):
-        expr = "Maybe(SafeUnaryAdd, " + expr.replace("-", '') + end
+        expr = "Maybe(SafeUnaryAdd, " + expr.replace("-", '', 1) + end
     return expr
 
 

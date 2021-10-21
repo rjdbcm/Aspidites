@@ -93,7 +93,7 @@ dict_str_evolver = Forward()
 tuple_str = Forward()
 slice_str = Forward()
 simple_assign = Forward()
-# for_stmt = Forward()
+func_call = Forward()
 suite = Forward()
 rvalue = Forward()
 stmt = Forward()
@@ -139,7 +139,7 @@ list_item = (  # Precedence important!!!
         | collection
 )
 
-assignable = list_item | rvalue
+assignable = func_call | list_item
 
 contract_define = identifier + imposes + _contract_expression
 contract_define.setParseAction(cvt_contract_define)
@@ -185,7 +185,7 @@ yield_stmt = Group(yield_value).setParseAction(lambda t: "".join(*t))
 
 func_def = Group(func_decl + suite).setParseAction(lambda t: nl_indent.join(t[0]) + "\n")
 lambda_def = Combine(Group(lit_lparen + arith_expr | comp_expr + lit_rparen))
-func_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(
+func_call <<= Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(
     cvt_func_call)  # if len(t[0]) != 3 else t[0][0] + '()')
 clos_call = Group(identifier + lit_lparen + Optional(delimitedList(rvalue)) + lit_rparen).setParseAction(
     cvt_clos_call) + Suppress(noclosure)
@@ -199,13 +199,9 @@ context_decl = Group(context_def + context_suite).setParseAction(
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
 case_stmt = Group(rvalue + colon + func_call).setParseAction(lambda t: sep.join(t[0]))
 match_suite = Group(IndentedBlock(OneOrMore(case_stmt))).setParseAction(lambda t: (sep.join(t.asList()[0])))
-match_decl = Group(match_none + Char(alphas)).setParseAction(lambda t: lit_lparen.join(*t))
+match_decl = Group(match_none + Char(alphas)).setParseAction(lambda t: t[0][1] + '=' + t[0][0] + lit_lparen + t[0][1])
 match_def = Group(match_decl + match_suite).setParseAction(lambda t: sep.join(t[0]) + lit_rparen)
 
-# elif_stmt = Group(list_item + "?!").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
-# else_stmt = Keyword("?!?").setParseAction(replaceWith('else:')) + suite
-# if_stmt = Group(list_item + "?").setParseAction(lambda t: ' '.join(list(reversed(t.asList()))) + ":") + suite
-# cond_stmt = if_stmt + Optional(elif_stmt) + Optional(else_stmt)
 loop_suite = Forward()
 
 ident_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + identifier).setParseAction(
