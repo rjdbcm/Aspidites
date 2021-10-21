@@ -55,6 +55,7 @@ jobs:
 
   macosx-build:
     runs-on: macos-11
+    needs: linux-build
     strategy:
       matrix:
         python:
