@@ -1,5 +1,9 @@
 **unreleased**
 **v1.2.6**
+
+- c605760 documentation updated, context managers are not working.
+
+
 **v1.2.5**
 
 - 3660dbb yeeted dearpygui for the time being
