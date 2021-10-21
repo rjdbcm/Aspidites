@@ -1,4 +1,5 @@
 **unreleased**
+**v1.3.0**
 **v1.2.6**
 
 - 7edd322 typo fixed
