@@ -1,6 +1,12 @@
 **unreleased**
 **v1.2.6**
 
+- 7edd322 typo fixed
+- 822b5af changelog updated
+- c605760 documentation updated, context managers are not working.
+
+
+
 - c605760 documentation updated, context managers are not working.
 
 
