@@ -109,7 +109,7 @@ val(2, 3)
 # Logo/Mascot
 Wheelie the Woma™ and Woma Programming Language™ are unregistered trademarks of Ross J. Duff. 
 The logos are copyright © Ross J. Duff but may be transferred to an appropriate trust at a later date.
-This is to prevent confusing/malicious use.<p align="center">[![logo](https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie_96_96.png)](https://mobile.twitter.com/WheelieTheWoma)</p><p align="center"></p>
+This is to prevent confusing/malicious use.
 
 
 # Contributing
