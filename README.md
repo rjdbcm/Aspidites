@@ -118,7 +118,7 @@ If you'd like to help with the Aspidites project as a developer check out the Is
 Now, for early woma adopters that do not wish to write any Python, reporting issues is always appreciated.
 If you'd like to help out financially, Aspidites' maintainer accepts donations.
 
-<a href="https://liberapay.com/rjdbcm/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a> 
+<a href="https://liberapay.com/rjdbcm/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a> <a href="https://www.buymeacoffee.com/woma"><img height=29 src=https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/bmc.png></a>
 
 # Information for Developers
 [![libraries.io](https://img.shields.io/badge/Libraries.io--inactive)](https://libraries.io/github/rjdbcm/Aspidites)
