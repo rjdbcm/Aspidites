@@ -120,7 +120,7 @@ def test_parse_func_def(w, x, y, z):
 #  +      where <built-in method join of str object at 0x10ac04030> = ''.join
 #  +      and   (['Maybe(SafeDiv, Maybe(SafeFloorDiv, -1, 1, 1)())()'], {}) = <bound method ParserElement.parseString of Combine:(Forward: bitwise operator term)>('-1/1//1')
 #  +        where <bound method ParserElement.parseString of Combine:(Forward: bitwise operator term)> = arith_expr.parseString
-
+@hypothesis.settings(deadline=None)
 @hypothesis.given(st.integers(min_value=1, max_value=255),  # exponent
                   st.integers(min_value=1),
                   st.text(['/', '*', '%', '+', '-'], min_size=1, max_size=1),
