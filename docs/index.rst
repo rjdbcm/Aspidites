@@ -176,6 +176,7 @@ Table of Contents
 
    syntax
    usage
+   limits
    indepth
    builtins
    api

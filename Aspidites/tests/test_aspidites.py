@@ -74,7 +74,7 @@ def test_cli_examples():
         main(['Aspidites', woma_file, f'-o={python_file}', '-c'])
 
 
-@hypothesis.settings(suppress_health_check=[hypothesis.HealthCheck.filter_too_much])
+@hypothesis.settings(suppress_health_check=[hypothesis.HealthCheck.filter_too_much], deadline=None)
 @hypothesis.given(st.text([c for c in ascii_letters]),
                   st.text([c for c in ascii_lowercase]),
                   st.integers(),
