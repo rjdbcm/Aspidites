@@ -116,7 +116,9 @@ This is to prevent confusing/malicious use.<p align="center">[![logo](https://ra
 
 If you'd like to help with the Aspidites project as a developer check out the Issues page or fork and make a pull request.
 Now, for early woma adopters that do not wish to write any Python, reporting issues is always appreciated.
-If you'd like to help out financially, Aspidites' maintainer accepts [Liberapay](https://liberapay.com/rjdbcm/).
+If you'd like to help out financially, Aspidites' maintainer accepts donations.
+
+<a href="https://liberapay.com/rjdbcm/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a> 
 
 # Information for Developers
 [![libraries.io](https://img.shields.io/badge/Libraries.io--inactive)](https://libraries.io/github/rjdbcm/Aspidites)
