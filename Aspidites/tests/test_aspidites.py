@@ -126,7 +126,7 @@ def test_parse_func_def(w, x, y, z):
                   st.text(['/', '*', '%', '+', '-'], min_size=1, max_size=1),
                   st.text(['+', '-'], min_size=1, max_size=1))
 def test_parse_arith(p, q, binop, unop):
-    stmt = str(p) + binop + str(q)
+    stmt = str(p) + binop + "(" + str(q) + binop + str(p) + "+1" ")"
     assert eval(stmt) == eval(''.join(arith_expr.parseString(stmt)))
     stmt = str(p) + binop + str(q)
     assert eval(stmt) == eval(''.join(arith_expr.parseString(stmt)))

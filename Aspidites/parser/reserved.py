@@ -45,7 +45,7 @@ lit_lparen, lit_rparen, lit_lbrack, lit_rbrack, lit_lbrace, lit_rbrace, lit_colo
 bool_literal = oneOf("True False", asKeyword=True).setParseAction(lambda t: t[0] == "True")
 nullit = Literal("/0").setParseAction(replaceWith("Undefined()"))
 signop = oneOf("+ -")
-multop = oneOf("* / // %")
+multop = oneOf("* / % //")
 plusop = oneOf("+ -")
 exponp = Literal("**")
 factop = Literal("!")

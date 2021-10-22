@@ -105,7 +105,7 @@ arith_expr = Combine(
         [
             (factop, 1, opAssoc.LEFT),
             (exponp, 2, opAssoc.RIGHT),
-            (signop, 1, opAssoc.RIGHT),
+            (signop, 1, opAssoc.RIGHT),  # Changing this to LEFT causes the entire parser to break
             (multop, 2, opAssoc.LEFT),
             (plusop, 2, opAssoc.LEFT),
             (bitwiseop, 2, opAssoc.LEFT),
