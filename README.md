@@ -109,14 +109,16 @@ val(2, 3)
 # Logo/Mascot
 Wheelie the Woma™ and Woma Programming Language™ are unregistered trademarks of Ross J. Duff. 
 The logos are copyright © Ross J. Duff but may be transferred to an appropriate trust at a later date.
-This is to prevent confusing/malicious use.<p align="center">[![logo](https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/aspidites_logo_wheelie_96_96.png)](https://mobile.twitter.com/WheelieTheWoma)</p><p align="center"></p>
+This is to prevent confusing/malicious use.
 
 
 # Contributing
 
 If you'd like to help with the Aspidites project as a developer check out the Issues page or fork and make a pull request.
 Now, for early woma adopters that do not wish to write any Python, reporting issues is always appreciated.
-If you'd like to help out financially, Aspidites' maintainer accepts [Liberapay](https://liberapay.com/rjdbcm/).
+If you'd like to help out financially, Aspidites' maintainer accepts donations.
+
+<a href="https://liberapay.com/rjdbcm/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a> <a href="https://www.buymeacoffee.com/woma"><img height=29 src=https://raw.githubusercontent.com/rjdbcm/Aspidites/main/docs/_static/bmc.png></a>
 
 # Information for Developers
 [![libraries.io](https://img.shields.io/badge/Libraries.io--inactive)](https://libraries.io/github/rjdbcm/Aspidites)
