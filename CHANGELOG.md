@@ -1,5 +1,9 @@
 **unreleased**
 **v1.3.2**
+
+- 34e9bff fix unary regex
+
+
 **v1.3.1**
 
 - 9f1c569 convert.py now preprocesses unary add/sub to detect negation.
