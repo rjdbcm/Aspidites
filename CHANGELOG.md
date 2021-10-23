@@ -1,5 +1,17 @@
 **unreleased**
 **v1.3.1**
+
+- 9f1c569 convert.py now preprocesses unary add/sub to detect negation.
+- 59e693a edit workflow to not tweet 4x
+- 1f16c55 Merge remote-tracking branch 'origin/main'
+- 7062d0a Update README.md
+- ea68932 Update README.md
+- 3563179 add buymecoffee
+- c8515a1 Delete buycoffee.gif
+- 4dfee6a Add buymeacoffe
+- dcc0cfa Update README.md
+
+
 **v1.3.0**
 
 - 59720d7 changed library.wom functions to snake case (WEEP17)
