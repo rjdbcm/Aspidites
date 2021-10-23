@@ -156,9 +156,8 @@ woma_template = Template("""#cython: language_level=3, annotation_typing=True, c
 from typing import Any
 from collections.abc import Generator
 import cython  # type: ignore
-from cython import (declare as cdecl, address as caddr, sizeof as csizeof, typeof as ctypeof, struct as cstruct, 
-                    union as cunion, typedef as ctypedef, cast as ccast, char as cchar, short as cshort, int as cint,
-                    double as cdouble, long as clong, longlong as clonglong)
+from cython import (declare as decl, address as addr, sizeof, typeof, struct, 
+                    union, typedef, cast, char, short, int as cint, double, long, longlong)
 
 from pyrsistent import (
     pset, 
@@ -201,7 +200,7 @@ from Aspidites._vendor import (
     foldl,  
     foldr,  
     unfold,
-    match,
+    match as __match,
     _,
 )
 from Aspidites.monads import Maybe, Surely
