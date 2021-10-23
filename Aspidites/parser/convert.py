@@ -6,24 +6,51 @@ from .reserved import *
 pmap_re = re.compile(r"(pmap\(\{.*\}\))")
 
 
-def cvt_arith_expr(tks):  # multiple returns needed, PackRat is very strict about side-effects
+def cvt_arith_expr(tks):
     expr = "".join((str(t) for t in tks))
     end = lit_rparen + lit_lparen + lit_rparen
-
-    if "!" in expr:
-        expr = "Maybe(SafeFactorial, " + expr.replace('!', '', 1) + end
-    if "**" in expr:
-        expr = "Maybe(SafeExp, " + expr.replace("**", sep, 1) + end
-    if "//" in expr:
-        expr = "Maybe(SafeFloorDiv, " + expr.replace("//", sep, 1) + end
-    if "/" in expr:
-        expr = "Maybe(SafeDiv, " + expr.replace("/", sep, 1) + end
-    if "%" in expr:
-        expr = "Maybe(SafeMod, " + expr.replace("%", sep, 1) + end
-    if expr.startswith('+'):
-        expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", '', 1) + end
-    if expr.startswith('-'):
-        expr = "Maybe(SafeUnaryAdd, " + expr.replace("-", '', 1) + end
+    substr = ['!', '**', '//', '/', '%']
+    rex = re.compile(r'[^|\),][\+-]+\s*\d')
+    while any([s in expr for s in substr]):
+        if "!" in expr:
+            expr = "Maybe(SafeFactorial, " + expr.replace('!', '', 1) + end
+            if expr.count(end) > 1:
+                expr = "Maybe(SafeFactorial, " + expr
+            continue
+        elif "**" in expr:
+            a, op, b = expr.partition('**')
+            expr = a + op + b.replace('**', end, 1) + sep
+            expr = "Maybe(SafeExp, " + expr.replace("**", sep, 1) + end
+            if expr.count(end) > 1:
+                expr = "Maybe(SafeExp, " + expr
+            continue
+        elif "//" in expr:
+            a, op, b = expr.partition('//')
+            expr = a + op + b.replace('//', end, 1) + sep
+            expr = "Maybe(SafeFloorDiv, " + expr.replace("//", sep, 1) + end
+            if expr.count(end) > 1:
+                expr = "Maybe(SafeFloorDiv, " + expr
+            continue
+        elif "/" in expr:
+            a, op, b = expr.partition('/')
+            expr = a + op + b.replace('/', end + sep, 1)
+            expr = "Maybe(SafeDiv, " + expr.replace("/", sep, 1) + end
+            if expr.count(end) > 1:
+                expr = "Maybe(SafeDiv, " + expr
+            continue
+        elif "%" in expr:
+            a, op, b = expr.partition('%')
+            expr = a + op + b.replace('%', end, 1) + sep
+            expr = "Maybe(SafeMod, " + expr.replace("%", sep, 1) + end
+            if expr.count(end) > 1:
+                expr = "Maybe(SafeMod, " + expr
+            continue
+        elif rex.search(expr):
+            expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", '', 1) + end
+            continue
+        elif rex.search(expr):
+            expr = "Maybe(SafeUnarySub, " + expr.replace("-", '', 1) + end
+            continue
     return expr
 
 
