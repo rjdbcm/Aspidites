@@ -66,14 +66,6 @@ test_unary_add = +5
 
 test_unary_sub = -5
 
-golden = 1 + 5 ** 0.5 / 2
-
-(Fibonacci(x = 0 -> int)) int
-    g = 5 ** .5 -> float
-    f = golden ** x -> float
-    e = g // f -> int
-    <*>e
-
 (FirstElem(x = [0] -> list(type(t)))) type(t)
     <*>x[0:1]
 
@@ -114,6 +106,7 @@ val = val(scala)...
 
 `modulus and division by 0 handled by returning Undefined()`
 denom = 0
+chained = -1 / 2 / 1
 div_by_zero = 1 / denom
 mod_zero = 1 % denom
 div_by_zero2 = 1 / 0
