@@ -1,4 +1,5 @@
 **unreleased**
+**v1.3.3**
 **v1.3.2**
 
 - 34e9bff fix unary regex
