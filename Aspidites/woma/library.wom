@@ -1,22 +1,17 @@
 `Here are some (not at all optimal) functional interfaces for atomic arithmetic ops`
 `This file mainly serves as the standard library bootstrapper for the python files in`
 `Aspidites/woma`
-#cython.binding(True)
-(Add(x = 0 -> number; y = 0 -> number)) number
+(add(x = 0 -> number; y = 0 -> number)) number
 	<*> x + y
 
-#cython.binding(True)
-(Sub(x = 0 -> number; y = 0 -> number)) number
+(sub(x = 0 -> number; y = 0 -> number)) number
 	<*> x - y
 
-#cython.binding(True)
-(Div(x = 0 -> number; y = 0 -> number)) number
+(div(x = 0 -> number; y = 0 -> number)) number
 	<*> x / y
 
-#cython.binding(True)
-(Exp(x = 0 -> number; y = 0 -> number)) number
+(exp(x = 0 -> number; y = 0 -> number)) number
 	<*> x ** y
 
-#cython.binding(True)
-(Mod(x = 0 -> number; y = 0 -> number)) number
+(mod(x = 0 -> number; y = 0 -> number)) number
     <*> x % y
