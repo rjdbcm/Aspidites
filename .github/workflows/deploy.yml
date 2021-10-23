@@ -252,15 +252,22 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: twine upload dist/*.whl
 
-      - name: Send a Tweet
-        continue-on-error: true
+  tweet-pypi:
+      name: send a tweet
+      needs: macos-11-deploy
+      runs-on: ubuntu-latest
+      continue-on-error: true
+      steps:
+      - name: tweet about PyPI package
         uses: ethomson/send-tweet-action@v1
         with:
-          status: "📦 New PyPI package: Aspidites ${{ github.event.head_commit.message }}! 🎉🎉🎉 Check it out: https://pypi.org/project/Aspidites"
+          status: "📦 New PyPI package: Aspidites ${{ github.event.head_commit.message }}!\nCheck it out:\nhttps://pypi.org/project/Aspidites"
           consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
           consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
           access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
           access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+
+
 
   docker-deploy:
     runs-on: ubuntu-latest
