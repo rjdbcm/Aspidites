@@ -10,7 +10,7 @@ def cvt_arith_expr(tks):
     expr = "".join((str(t) for t in tks))
     end = lit_rparen + lit_lparen + lit_rparen
     substr = ['!', '**', '//', '/', '%']
-    rex = re.compile(r'([\+-]+)\s*\w+')
+    rex = re.compile(r'=\s*([\+-]+)\s*\w+')
     while any([s in expr for s in substr]):
         if "!" in expr:
             expr = "Maybe(SafeFactorial, " + expr.replace('!', '', 1) + end
