@@ -1,4 +1,5 @@
 **unreleased**
+**v1.3.1**
 **v1.3.0**
 
 - 59720d7 changed library.wom functions to snake case (WEEP17)
