@@ -1,5 +1,20 @@
 **unreleased**
 **v1.3.0**
+
+- 59720d7 changed library.wom functions to snake case (WEEP17)
+- 0fd0f20 arithmetic test runs once
+- 7c00971 chained arithmetic added to examples.wom
+- 5f929d7 added cython c interfaces to builtins
+- 1c09015 fixed order of operations and chaining of arithmetic
+- 102033b remove deadline for arithmetic test
+- 18bbdbc remove deadline for test and add limitations to toctree
+- 5fc3dee Documented some known limitations
+- c1aeed5 add parser regression tests
+- 4428c38 adjust workflow
+- b1ba3cc Merge remote-tracking branch 'origin/main'
+- dd1cf94 Update README.md
+
+
 **v1.2.6**
 
 - 7edd322 typo fixed
