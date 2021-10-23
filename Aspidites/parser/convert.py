@@ -10,7 +10,6 @@ def cvt_arith_expr(tks):
     expr = "".join((str(t) for t in tks))
     end = lit_rparen + lit_lparen + lit_rparen
     substr = ['!', '**', '//', '/', '%']
-    rex = re.compile(r'=\s*([\+-]+)\s*\w+')
     while any([s in expr for s in substr]):
         if "!" in expr:
             expr = "Maybe(SafeFactorial, " + expr.replace('!', '', 1) + end
@@ -45,15 +44,16 @@ def cvt_arith_expr(tks):
             if expr.count(end) > 1:
                 expr = "Maybe(SafeMod, " + expr
             continue
-        elif rex.search(expr):
-            ops = rex.match(expr)[1]
-            negate = ops.count('-') % 2 == 0
-            if negate:
-                expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", '', 1) + end
-            else:
-                expr = "Maybe(SafeUnarySub, " + expr.replace("-", '', 1) + end
+        # TODO Unary ops don't get caught during parsing.
+        elif '-' in expr and expr.count('-') % 2 == 0:
+            expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", '') + end
             continue
-
+        elif '-' in expr and expr.count('-') % 2 == 1:
+            expr = "Maybe(SafeUnarySub, " + expr.replace("-", '') + end
+            continue
+        elif '+' in expr:
+            expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", '') + end
+            continue
     return expr
 
 

@@ -29,6 +29,7 @@ woma_file = str(Path('examples/examples.wom'))
 
 valid_id = [c for c in ascii_letters + digits + '_']
 
+
 @pt.fixture(autouse=True)
 def inject_config(request):
     return request.config.rootpath
@@ -52,6 +53,7 @@ def test_compile_module(inject_config):
     except FileNotFoundError:  # ????
         compile(woma_template.substitute(code='\n'.join(os.path.join(inject_config(), woma_file))), '',
                 'exec')
+
 
 def test_cli_help_exit():
     with pt.raises(SystemExit):
@@ -129,7 +131,6 @@ def test_parse_func_def(w, x, y, z):
 def test_parse_arith(p, q, binop, unop):
     stmt = str(p) + binop + str(q)
     assert eval(stmt) == eval(''.join(arith_expr.parseString(stmt)))
-
 
 
 # @pt.mark.filterwarnings('ignore::RuntimeWarning')
