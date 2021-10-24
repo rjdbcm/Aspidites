@@ -33,7 +33,11 @@ available_bool_pragmas = [
     'cython.warn.multiple_declarators'
 ]
 available_pragmas = [
-    'cfunc'
+    'cfunc',
+    'ccall',
+    'nogil',
+    'no_gc',
+    'inline',
 ]
 indent = '    '
 nl_indent = '\n' + indent
