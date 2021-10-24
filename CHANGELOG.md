@@ -1,4 +1,5 @@
 **unreleased**
+**v1.5.3**
 **v1.5.2**
 
 - 6dea112 add annotation_typing to pragmas
