@@ -1,5 +1,9 @@
 **unreleased**
 **v1.5.2**
+
+- 6dea112 add annotation_typing to pragmas
+
+
 **v1.5.1**
 
 - 561a00c compiler optimizations not working on windows
