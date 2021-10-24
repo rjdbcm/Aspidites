@@ -1,5 +1,9 @@
 **unreleased**
 **v1.5.3**
+
+- 33ae941 change annotation_typing to False in Templates and remove pragma
+
+
 **v1.5.2**
 
 - 6dea112 add annotation_typing to pragmas
