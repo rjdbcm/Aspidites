@@ -81,7 +81,6 @@ class IndentedBlock(ParseElementEnhance):
 
 quoted_str = quotedString().setParseAction(lambda t: t[0])
 integer = Word(nums).setParseAction(cvt_int)
-# TODO .5 not recognized as a float
 real = Combine(Optional(Word(nums)) + "." + Word(nums))
 complex_ = Combine(real | integer + "+" + real | integer + "j")
 list_str = Forward()
@@ -199,7 +198,7 @@ context_decl = Group(context_def + context_suite).setParseAction(
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
 case_stmt = Group(rvalue + colon + func_call).setParseAction(lambda t: sep.join(t[0]))
 match_suite = Group(IndentedBlock(OneOrMore(case_stmt))).setParseAction(lambda t: (sep.join(t.asList()[0])))
-match_decl = Group(match_none + Char(alphas)).setParseAction(lambda t: t[0][1] + '=' + t[0][0] + lit_lparen + t[0][1])
+match_decl = Group(match_none + identifier).setParseAction(lambda t: t[0][1] + '=' + t[0][0] + lit_lparen + t[0][1])
 match_def = Group(match_decl + match_suite).setParseAction(lambda t: sep.join(t[0]) + lit_rparen)
 
 loop_suite = Forward()
