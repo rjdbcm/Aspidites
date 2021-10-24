@@ -5,7 +5,6 @@ available_bool_pragmas = [
     'cython.binding',
     'cython.boundscheck',
     'cython.wraparound',
-    'cython.annotation_typing',
     'cython.initializedcheck',
     'cython.nonecheck',
     'cython.overflowcheck',
