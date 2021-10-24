@@ -1,5 +1,11 @@
 **unreleased**
 **v1.4.0**
+
+- 19e6503 add compile-time optimizations to Aspidites setup.py
+- 0b860fe add ccall, nogil, no_gc, and inline pragmas + the rest of the numeric types
+- 9534291 add ccall, nogil, no_gc, and inline pragmas
+
+
 **v1.3.6**
 
 - 09a8035 add cfunc pragma
