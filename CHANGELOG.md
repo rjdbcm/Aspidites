@@ -1,5 +1,9 @@
 **unreleased**
 **v1.6.0**
+
+- 781cb5e fix __init__
+
+
 **v1.5.4**
 
 - b313cf5 added all match patterns to template and API
