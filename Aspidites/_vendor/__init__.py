@@ -63,4 +63,4 @@ __all__ = ["F",  # BEGIN func.py
             "Object"
             ]
 from .fn import *
-from .apm import match, InstanceOf
+from .apm import *
