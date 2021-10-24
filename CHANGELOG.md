@@ -1,4 +1,5 @@
 **unreleased**
+**v1.6.1**
 **v1.6.0**
 
 - 781cb5e fix __init__
