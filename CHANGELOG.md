@@ -1,4 +1,5 @@
 **unreleased**
+**v1.6.2**
 **v1.6.1**
 
 - fca6c55 fix __init__
