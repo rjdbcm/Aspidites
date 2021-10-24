@@ -63,4 +63,25 @@ __all__ = ["F",  # BEGIN func.py
             "Object"
             ]
 from .fn import *
-from .apm import *
+from .apm import (
+            Capture,
+            Strict,
+            OneOf,
+            AllOf,
+            NoneOf,
+            Not,
+            Each,
+            EachItem,
+            Some,
+            Between,
+            Length,
+            Contains,
+            Regex,
+            Check,
+            InstanceOf,
+            SubclassOf,
+            Arguments,
+            Returns,
+            Transformed,
+            At,
+            Object)
