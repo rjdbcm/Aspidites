@@ -168,8 +168,8 @@ bool_pragmas = Combine(
 ).setParseAction(cvt_pragma)
 
 func_decl = Group(
-    Optional(OneOrMore(bool_pragmas)) + MatchFirst(
-        private_def_decl | c_def_decl) + identifier + def_args + _contract_expression
+    Optional(OneOrMore(bool_pragmas)) +
+        private_def_decl + identifier + def_args + _contract_expression
 ).setParseAction(lambda t: "\n@contract()\n" + "".join(*t) + lit_colon)
 comment_line = (
     Combine(Regex(r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`")
