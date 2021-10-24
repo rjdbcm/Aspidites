@@ -156,8 +156,9 @@ woma_template = Template("""#cython: language_level=3, annotation_typing=True, c
 from typing import Any
 from collections.abc import Generator
 import cython  # type: ignore
-from cython import (declare as decl, address as addr, sizeof, typeof, struct, cfunc,
-                    union, typedef, cast, char, short, int as cint, double, long, longlong)
+from cython import (declare as decl, address as addr, sizeof, typeof, struct, cfunc, ccall, nogil, no_gc, inline,
+                    union, typedef, cast, char, short, int as cint, bint, short, double, long, longdouble,
+                    longdoublecomplex, longlong, complex, float as cfloat)
 
 from pyrsistent import (
     pset, 
