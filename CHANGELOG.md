@@ -1,5 +1,9 @@
 **unreleased**
 **v1.6.3**
+
+- af7ca41 fixed init
+
+
 **v1.6.2**
 
 - a2529a1 remove stacked ---- from examples.wom
