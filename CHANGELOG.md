@@ -1,5 +1,9 @@
 **unreleased**
 **v1.6.2**
+
+- a2529a1 remove stacked ---- from examples.wom
+
+
 **v1.6.1**
 
 - fca6c55 fix __init__
