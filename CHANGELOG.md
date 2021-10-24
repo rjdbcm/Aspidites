@@ -1,4 +1,5 @@
 **unreleased**
+**v1.3.4**
 **v1.3.3**
 
 - c83b671 added cfunc
