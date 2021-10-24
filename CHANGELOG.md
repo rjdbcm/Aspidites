@@ -1,4 +1,5 @@
 **unreleased**
+**v1.5.0**
 **v1.4.0**
 
 - 19e6503 add compile-time optimizations to Aspidites setup.py
