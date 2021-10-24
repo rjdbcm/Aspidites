@@ -1,5 +1,9 @@
 **unreleased**
 **v1.3.4**
+
+- a8b374a fixed cmd line
+
+
 **v1.3.3**
 
 - c83b671 added cfunc
