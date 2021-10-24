@@ -1,5 +1,9 @@
 **unreleased**
 **v1.5.4**
+
+- b313cf5 added all match patterns to template and API
+
+
 **v1.5.3**
 
 - 33ae941 change annotation_typing to False in Templates and remove pragma
