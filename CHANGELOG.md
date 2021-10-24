@@ -1,5 +1,11 @@
 **unreleased**
 **v1.3.3**
+
+- c83b671 added cfunc
+- b52d328 made blank argument optional
+- 5f0640e unary add not working
+
+
 **v1.3.2**
 
 - 34e9bff fix unary regex
