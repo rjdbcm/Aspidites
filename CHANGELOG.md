@@ -1,4 +1,5 @@
 **unreleased**
+**v1.6.0**
 **v1.5.4**
 
 - b313cf5 added all match patterns to template and API
