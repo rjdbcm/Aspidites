@@ -1,5 +1,9 @@
 **unreleased**
 **v1.3.6**
+
+- 09a8035 add cfunc pragma
+
+
 **v1.3.5**
 
 - 856da60 fix parser
