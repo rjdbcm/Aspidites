@@ -1,4 +1,5 @@
 **unreleased**
+**v1.3.6**
 **v1.3.5**
 
 - 856da60 fix parser
