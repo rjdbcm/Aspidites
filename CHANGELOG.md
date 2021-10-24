@@ -1,4 +1,5 @@
 **unreleased**
+**v1.6.4**
 **v1.6.3**
 
 - af7ca41 fixed init
