@@ -1,4 +1,5 @@
 **unreleased**
+**v1.5.2**
 **v1.5.1**
 
 - 561a00c compiler optimizations not working on windows
