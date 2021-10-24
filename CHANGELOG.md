@@ -1,4 +1,5 @@
 **unreleased**
+**v1.5.4**
 **v1.5.3**
 
 - 33ae941 change annotation_typing to False in Templates and remove pragma
