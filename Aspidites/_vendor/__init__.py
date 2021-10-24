@@ -40,7 +40,27 @@ __all__ = ["F",  # BEGIN func.py
             "filterfalse",
             "zip_longest",
             "match",
-            "InstanceOf"
+            "Capture",
+            "Strict",
+            "OneOf",
+            "AllOf",
+            "NoneOf",
+            "Not",
+            "Each",
+            "EachItem",
+            "Some",
+            "Between",
+            "Length",
+            "Contains",
+            "Regex",
+            "Check",
+            "InstanceOf",
+            "SubclassOf",
+            "Arguments",
+            "Returns",
+            "Transformed",
+            "At",
+            "Object"
             ]
 from .fn import *
 from .apm import match, InstanceOf
