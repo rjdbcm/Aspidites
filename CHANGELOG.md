@@ -1,4 +1,5 @@
 **unreleased**
+**v1.4.0**
 **v1.3.6**
 
 - 09a8035 add cfunc pragma
