@@ -1,5 +1,12 @@
 **unreleased**
 **v1.6.4**
+
+- be29934 document module body
+- b487c84 document matching patterns
+- 4b5cec7 move parser symbols around and update docs for 1.7.x
+- 816de22 parser is now very opinionated as to the contents of the module body.
+
+
 **v1.6.3**
 
 - af7ca41 fixed init
