@@ -174,27 +174,27 @@ loop_suite = Forward()
 
 ident_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + identifier).setParseAction(
     cvt_for_loop_decl)
-ident_loop_def = Group(ident_loop_decl + loop_suite).setParseAction(base_parse_action)
+ident_loop_def = Group(ident_loop_decl + loop_suite).setParseAction(lambda t: (nl_indent + indent).join(t[0]))
 
 list_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + list_str).setParseAction(
     cvt_for_loop_decl)
-list_loop_def = Group(list_loop_decl + loop_suite).setParseAction(base_parse_action)
+list_loop_def = Group(list_loop_decl + loop_suite).setParseAction(lambda t: (nl_indent + indent).join(t[0]))
 
 set_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + set_str).setParseAction(
     cvt_for_loop_decl)
-set_loop_def = Group(set_loop_decl + loop_suite).setParseAction(base_parse_action)
+set_loop_def = Group(set_loop_decl + loop_suite).setParseAction(lambda t: (nl_indent + indent).join(t[0]))
 
 tuple_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + tuple_str).setParseAction(
     cvt_for_loop_decl)
-tuple_loop_def = Group(tuple_loop_decl + loop_suite).setParseAction(base_parse_action)
+tuple_loop_def = Group(tuple_loop_decl + loop_suite).setParseAction(lambda t: (nl_indent + indent).join(t[0]))
 
 dict_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + dict_str).setParseAction(
     cvt_for_loop_decl)
-dict_loop_def = Group(dict_loop_decl + loop_suite).setParseAction(base_parse_action)
+dict_loop_def = Group(dict_loop_decl + loop_suite).setParseAction(lambda t: (nl_indent + indent).join(t[0]))
 
 string_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + quoted_str).setParseAction(
     cvt_for_loop_decl)
-string_loop_def = Group(string_loop_decl + loop_suite).setParseAction(base_parse_action)
+string_loop_def = Group(string_loop_decl + loop_suite).setParseAction(lambda t: (nl_indent + indent).join(t[0]))
 
 func_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + func_call).setParseAction(
     cvt_for_loop_decl)
