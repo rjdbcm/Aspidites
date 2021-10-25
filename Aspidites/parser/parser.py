@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from Aspidites._vendor.pyparsing import (
+    IndentedBlock,
     Combine,
     Empty,
     FollowedBy,
@@ -44,46 +45,6 @@ from Aspidites._vendor.pyparsing import (
 from .._vendor.contracts.syntax import contract_expression
 from ..parser.convert import *
 
-_contract_expression = contract_expression.copy()
-_contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")
-
-
-class IndentedBlock(ParseElementEnhance):
-    """
-    Expression to match one or more expressions at a given indentation level.
-    Useful for parsing text where structure is implied by indentation (like Python source code).
-    """
-
-    def __init__(self, expr, recursive=True):
-        super().__init__(expr, savelist=True)
-        self._recursive = recursive
-        self.skipWhitespace = False
-
-    def parseImpl(self, instring, loc, doActions=True):
-        # see if self.expr matches at the current location - if not it will raise an exception
-        # and no further work is necessary
-        self.expr.parseImpl(instring, loc, doActions)
-
-        indent_col = col(loc, instring)
-        peer_parse_action = matchOnlyAtCol(indent_col)
-        peer_expr = FollowedBy(self.expr).addParseAction(peer_parse_action)
-        inner_expr = Empty() + peer_expr.suppress() + self.expr
-
-        if self._recursive:
-            indent_parse_action = conditionAsParseAction(
-                lambda s, l, t, relative_to_col=indent_col: col(l, s) > relative_to_col
-            )
-            indent_expr = FollowedBy(self.expr).addParseAction(indent_parse_action)
-            inner_expr += Optional(indent_expr + self)
-
-        return OneOrMore(inner_expr).parseImpl(instring, loc, doActions)
-
-
-base_parse_action = lambda t: nl_indent.join(t[0])
-quoted_str = quotedString().setParseAction(lambda t: t[0])
-integer = Word(nums).setParseAction(cvt_int)
-real = Combine(Optional(Word(nums)) + "." + Word(nums))
-complex_ = Combine(real | integer + "+" + real | integer + "j")
 list_str = Forward()
 list_str_evolver = Forward()
 set_str = Forward()
@@ -97,6 +58,11 @@ func_call = Forward()
 suite = Forward()
 rvalue = Forward()
 stmt = Forward()
+
+quoted_str = quotedString().setParseAction(lambda t: t[0])
+integer = Word(nums).setParseAction(cvt_int)
+real = Combine(Optional(Word(nums)) + "." + Word(nums))
+complex_ = Combine(real | integer + "+" + real | integer + "j")
 identifier = Word(alphas + "_", alphanums + "_")
 operand = nullit | complex_ | real | bool_literal | integer | identifier | underscore
 arith_expr = Combine(
@@ -144,6 +110,8 @@ list_item = (  # Precedence important!!!
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
 assignable = func_call | list_item | lit_ellipse
 
+_contract_expression = contract_expression.copy()
+_contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")
 contract_define = identifier + imposes + _contract_expression
 contract_define.setParseAction(cvt_contract_define)
 contract_respect = respects + _contract_expression

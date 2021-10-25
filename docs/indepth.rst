@@ -64,6 +64,13 @@ the ``type`` operator:
     (func(l = [] -> list(type(t)))) type(t)
         <*>l[0]
 
+There is also a 'match any' contract called ``*``. So lets say we want to make an identity function again, we can do it like so:
+
+.. code-block:: woma
+
+    (identity(x = /0 -> *)) *
+        <*>x
+
 Immutables
 ~~~~~~~~~~
 

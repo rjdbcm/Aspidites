@@ -3,6 +3,7 @@ import re
 
 from .reserved import *
 
+base_parse_action = lambda t: nl_indent.join(t[0])
 pmap_re = re.compile(r"(pmap\(\{.*\}\))")
 
 

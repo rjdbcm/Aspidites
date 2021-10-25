@@ -3,19 +3,16 @@ Compiler Usage
 
 .. code-block:: text
 
-    usage: aspidites [-h] [-pt ARGS] [-o PATH/TO/FILE] [-f] [-p] [-c]
-                     [--build-requires] [-v] [--annotate] [--annotate-coverage-xml]
-                     [--buffer-max-dims BUFFER_MAX_DIMS] [--cache-builtins]
-                     [--cimport-from-pyx] [--clear-to-none] [--closure-freelist-size]
-                     [--convert-range] [--docstrings] [--embed-pos-in-docstring]
-                     [--generate-cleanup-code] [--fast-fail] [--warning-errors]
-                     [--error-on-unknown-names] [--error-on-uninitialized]
-                     [--gcc-branch-hints] [--lookup-module-cpdef] [--embed EMBED]
-                     target
+    usage: aspidites [-h] [-pt ARGS] [-o PATH/TO/FILE] [-f] [-p] [-c] [--build-requires] [-v] [--annotate]
+                     [--annotate-coverage-xml ANNOTATE_COVERAGE_XML] [--buffer-max-dims BUFFER_MAX_DIMS]
+                     [--cache-builtins] [--cimport-from-pyx] [--clear-to-none] [--closure-freelist-size CLOSURE_FREELIST_SIZE]
+                     [--convert-range] [--docstrings] [--embed-pos-in-docstring] [--generate-cleanup-code] [--fast-fail]
+                     [--warning-errors] [--error-on-unknown-names] [--error-on-uninitialized] [--gcc-branch-hints]
+                     [--lookup-module-cpdef] [--embed EMBED] target
 
     positional arguments:
       target                source to compile
-
+    
     options:
       -h, --help            show this help message and exit
       -pt ARGS, --pytest ARGS
@@ -47,3 +44,4 @@ Compiler Usage
       --gcc-branch-hints
       --lookup-module-cpdef
       --embed EMBED
+

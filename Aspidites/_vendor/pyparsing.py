@@ -1240,6 +1240,38 @@ def infixNotation(baseExpr, opList, lpar=Suppress('('), rpar=Suppress(')')):
     return ret
 
 
+class IndentedBlock(ParseElementEnhance):
+    """
+    Expression to match one or more expressions at a given indentation level.
+    Useful for parsing text where structure is implied by indentation (like Python source code).
+    """
+
+    def __init__(self, expr, recursive=True):
+        super().__init__(expr, savelist=True)
+        self._recursive = recursive
+        self.skipWhitespace = False
+
+    def parseImpl(self, instring, loc, doActions=True):
+        # see if self.expr matches at the current location - if not it will raise an exception
+        # and no further work is necessary
+        self.expr.parseImpl(instring, loc, doActions)
+
+        indent_col = col(loc, instring)
+        peer_parse_action = matchOnlyAtCol(indent_col)
+        peer_expr = FollowedBy(self.expr).addParseAction(peer_parse_action)
+        inner_expr = Empty() + peer_expr.suppress() + self.expr
+
+        if self._recursive:
+            indent_parse_action = conditionAsParseAction(
+                lambda s, l, t, relative_to_col=indent_col: col(l, s) > relative_to_col
+            )
+            indent_expr = FollowedBy(self.expr).addParseAction(indent_parse_action)
+            inner_expr += Optional(indent_expr + self)
+
+        return OneOrMore(inner_expr).parseImpl(instring, loc, doActions)
+
+
+
 operatorPrecedence = infixNotation
 """(Deprecated) Former name of :class:`infixNotation`, will be
 dropped in a future release."""

@@ -23,16 +23,6 @@ Examples
                 <^>1
                 <^>2
                 <^>3
-            
-    .. tab::
-    
-        Procedures
-        
-        .. code:: woma
-            
-            (Hello()) procedure
-               print("Hello, World!")
-    
 
     .. tab::
 
