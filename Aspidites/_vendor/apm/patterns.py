@@ -153,6 +153,7 @@ class Returns(Pattern, Nested):
 
 
 class Each(Pattern, Nested):
+
     def __init__(self, pattern, *, at_least: int = 0):
         self._pattern = pattern
         self._at_least = at_least
