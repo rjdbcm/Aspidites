@@ -1,6 +1,16 @@
 Woma In Depth
 =============
 
+Modules
+~~~~~~~
+
+A woma module is the entirety of a text file. The body of a module can have 3 citizens:
+
+- Functions
+- Contracted Assignment i.e. ``a = 2 -> int``
+- Simple Assignment i.e. ``b = 'foo'``
+
+
 Functions
 ~~~~~~~~~
 
