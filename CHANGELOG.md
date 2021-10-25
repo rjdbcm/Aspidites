@@ -1,5 +1,10 @@
 **unreleased**
 **v1.7.0**
+
+- 9c3e692 all loops now indent properly
+- aaa96e7 add yield statement to loop_suite
+
+
 **v1.6.4**
 
 - be29934 document module body
