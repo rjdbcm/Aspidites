@@ -202,6 +202,7 @@ func_loop_def = Group(func_loop_decl + loop_suite).setParseAction(lambda t: (nl_
 
 loop_suite <<= IndentedBlock(
     OneOrMore(pass_stmt
+              | yield_stmt
               | cont_stmt
               | break_stmt
               | func_call
