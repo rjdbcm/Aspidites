@@ -1,4 +1,5 @@
 **unreleased**
+**v1.7.0**
 **v1.6.4**
 
 - be29934 document module body
