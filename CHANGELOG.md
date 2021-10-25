@@ -1,4 +1,5 @@
 **unreleased**
+**v1.8.0**
 **v1.7.0**
 
 - 9c3e692 all loops now indent properly
