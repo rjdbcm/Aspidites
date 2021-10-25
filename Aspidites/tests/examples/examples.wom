@@ -8,12 +8,11 @@
 	<^>2
 	<^>3
 
-`matching is valid in a module body`
-x = Yield123() `an inline comment`
-(!)x
-    0: print('matched 0') `a comment here too`
-    1: print('matched 1')
-  ...: print('matched any')
+`first-class functions`
+(loop(x = 3 -> *)) coroutine
+    i<@>range(x)
+        Match(i)
+
 
 `matching is valid in a function body`
 (Match(x = 0 -> int)) int
@@ -23,40 +22,6 @@ x = Yield123() `an inline comment`
       ...: Add(x, 3)
     <*>x
 
-`matching is also valid in a loop body`
-i<@>Yield123()
-    (!)i
-        0: print('matched 0')
-        1: print('matched 1')
-      ...: print('matched any')
-
-
-i<@>Yield123()
-    print(i)
-
-l = [1,2,3]
-i<@>l
-    print(i)
-
-i<@>[1,2,3]
-    print(i)
-
-i<@>(1,2,3)
-    print(i)
-
-i<@>{1,2,3}
-    print(i)
-
-k,v<@>{'a': 0, 'b': 2}
-    print(v)
-
-i<@>"abcdefg"
-    print(i)
-
-
-`procedures`
-(Hello()) procedure
-	print("Hello, World!")
 
 nullity = /0
 
@@ -112,7 +77,3 @@ mod_zero = 1 % denom
 div_by_zero2 = 1 / 0
 mod_zero2 = 1 % 0
 truth = 1 + 1 == 2 >> 0
-
-main:
-Hello()
-print("I'm a binary.")

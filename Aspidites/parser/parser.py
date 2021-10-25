@@ -176,13 +176,8 @@ pragmas = Combine(pragma + oneOf(' '.join(available_pragmas))).setParseAction(cv
 
 func_decl = Group(
     Optional(OneOrMore(bool_pragmas) | OneOrMore(pragmas)) +
-        private_def_decl + identifier + def_args + _contract_expression
-).setParseAction(lambda t: "\n@contract()\n" + "".join(*t) + lit_colon)
-comment_line = (
-    Combine(Regex(r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`")
-        .setParseAction(lambda t: t[0])
-        .setParseAction(cvt_comment_line)
-)
+    private_def_decl + identifier + def_args + _contract_expression).setParseAction(lambda t: "\n@contract()\n" + "".join(*t) + lit_colon)
+comment_line = (Combine(Regex(r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`").setParseAction(lambda t: t[0]).setParseAction(cvt_comment_line))
 
 return_value = return_none + rvalue
 yield_value = yield_none + rvalue
@@ -235,14 +230,13 @@ string_loop_def = Group(string_loop_decl + loop_suite).setParseAction(base_parse
 
 func_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + func_call).setParseAction(
     cvt_for_loop_decl)
-func_loop_def = Group(func_loop_decl + loop_suite).setParseAction(base_parse_action)
+func_loop_def = Group(func_loop_decl + loop_suite).setParseAction(lambda t: (nl_indent + indent).join(t[0]))
 
 loop_suite <<= IndentedBlock(
     OneOrMore(pass_stmt
               | cont_stmt
               | break_stmt
               | func_call
-              | match_def
               ))
 # TODO context managers get eaten by the preceding code blocks
 context_suite <<= IndentedBlock(OneOrMore(contract_assign
@@ -254,24 +248,19 @@ suite <<= IndentedBlock(
     OneOrMore(pass_stmt
               | ret_stmt
               | yield_stmt
-              | func_call
+              | ident_loop_def
+              | string_loop_def
+              | list_loop_def
+              | set_loop_def
+              | tuple_loop_def
+              | dict_loop_def
+              | func_loop_def
               | match_def
               | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
 rvalue <<= clos_call | func_call | list_item | lambda_def
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
-stmt <<= (func_def
-          | match_def
-          | ident_loop_def
-          | string_loop_def
-          | list_loop_def
-          | set_loop_def
-          | tuple_loop_def
-          | dict_loop_def
-          | func_loop_def
-          | contract_define
-          | func_call
-          | simple_assign)
+stmt <<= (func_def | contract_define | simple_assign)
 module_body = OneOrMore(stmt) + Optional(
     struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
 module_body.ignore(comment_line)

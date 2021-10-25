@@ -149,7 +149,7 @@ def test_compile_to_shared_object(inject_config):
         compile_args = CompilerArgs(**kwargs)
         Compiler(compile_args)
 
-    from .examples.compiled import (Add, x, y, z, val, div_by_zero, Yield123, Hello, test_unary_sub, test_unary_add,
+    from .examples.compiled import (Add, x, y, z, val, div_by_zero, Yield123, test_unary_sub, test_unary_add,
                                     test_factorial, Match, nullity)
 
     assert Match() == 1
@@ -170,7 +170,6 @@ def test_compile_to_shared_object(inject_config):
     assert Add(x=3, y=2) == 5
     assert val() == Undefined()
     assert div_by_zero == Undefined()
-    Hello()
 
 #
 # def teardown_function():
