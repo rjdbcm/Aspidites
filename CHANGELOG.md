@@ -1,5 +1,9 @@
 **unreleased**
 **v1.8.0**
+
+- ee08906 added F/ƒ
+
+
 **v1.7.0**
 
 - 9c3e692 all loops now indent properly
