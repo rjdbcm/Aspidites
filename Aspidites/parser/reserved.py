@@ -65,7 +65,7 @@ index_items = Literal("[!]")
 keys = Literal("[@]")
 count_vals = Literal("[#]")
 set_add = Literal("[$]")
-
+append_update = Literal("[^]")
 match_none = Literal("(!)").setParseAction(replaceWith('__match'))
 context_stmt = Literal("<!>").setParseAction(replaceWith("with "))
 return_none = Literal("<*>").setParseAction(replaceWith("return "))

@@ -49,6 +49,7 @@ list_str = Forward()
 list_str_evolver = Forward()
 list_index = Forward()
 list_count = Forward()
+list_append = Forward()
 set_str = Forward()
 set_str_evolver = Forward()
 dict_str = Forward()
@@ -93,6 +94,7 @@ list_item = (  # Precedence important!!!
         slice_str
         | list_index
         | list_count
+        | list_append
         | comp_expr  # Expressions
         | arith_expr
         | identifier
@@ -117,6 +119,10 @@ list_index <<= (
 
 list_count <<= (
             (identifier | list_str | slice_str) + count_vals.setParseAction(replaceWith('.count')) + list_item).setParseAction(
+    cvt_list_index)
+
+list_append <<= (
+            (identifier | list_str | slice_str) + count_vals.setParseAction(replaceWith('.append')) + list_item).setParseAction(
     cvt_list_index)
 
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
