@@ -1,5 +1,15 @@
 **unreleased**
 **v1.8.1**
+
+- af4684b trigrams for list: index, count, append, remove trigrams for dict: discard, copy, remove trigrams for set: copy, remove
+- 6441b8e eight trigrams sixty-four palms
+- c5debf7 added list set trigram
+- 4a77cc3 added list set trigram
+- 51277ae added list append & list remove trigram
+- 037ecee added list append trigram
+- 3c64651 added list count and index trigrams
+
+
 **v1.8.0**
 
 - ee08906 added F/ƒ
