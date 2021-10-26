@@ -48,8 +48,10 @@ from ..parser.convert import *
 list_str = Forward()
 list_str_evolver = Forward()
 list_index = Forward()
+list_set = Forward()
 list_count = Forward()
 list_append = Forward()
+list_remove = Forward()
 set_str = Forward()
 set_str_evolver = Forward()
 dict_str = Forward()
@@ -94,6 +96,7 @@ list_item = (  # Precedence important!!!
         slice_str
         | list_index
         | list_count
+        | list_set
         | list_append
         | list_remove
         | comp_expr  # Expressions
@@ -122,6 +125,11 @@ list_index <<= (
 list_count <<= (
         (identifier | list_str | slice_str) + count_vals.setParseAction(
     replaceWith('.count')) + list_item).setParseAction(
+    cvt_list_index)
+
+list_set <<= (
+        (identifier | list_str | slice_str) + set_add.setParseAction(
+    replaceWith('.set')) + Combine(integer | identifier + lit_comma + list_item)).setParseAction(
     cvt_list_index)
 
 list_append <<= (
