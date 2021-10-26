@@ -1,4 +1,5 @@
 **unreleased**
+**v1.8.1**
 **v1.8.0**
 
 - ee08906 added F/ƒ
