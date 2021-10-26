@@ -61,6 +61,11 @@ bitwiseop = Regex(r"<<|>>|&|\||~|^").setName("bitwise operator")
 comparisonop = Regex(">=|<=|!=|>|<|==").setName("operator")
 assign_eq = Literal("=")
 noclosure = Literal("...")  # That's no closure
+index_items = Literal("[!]")
+keys = Literal("[@]")
+count_vals = Literal("[#]")
+set_add = Literal("[$]")
+
 match_none = Literal("(!)").setParseAction(replaceWith('__match'))
 context_stmt = Literal("<!>").setParseAction(replaceWith("with "))
 return_none = Literal("<*>").setParseAction(replaceWith("return "))

@@ -35,10 +35,14 @@ test_unary_sub = -5
 (FirstElem(x = [0] -> list(type(t)))) type(t)
     <*>x[0:1]
 
+
 `persistent vectors`
 D = [2, 4, 6, 8, 10]
 `evolver vectors`
 E = [12, 14, 16, 18]...
+
+idx = D[!]4
+count = D[#]4
 
 `persistent sets`
 G = {'a', 'b', 'c'}

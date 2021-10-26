@@ -47,6 +47,8 @@ from ..parser.convert import *
 
 list_str = Forward()
 list_str_evolver = Forward()
+list_index = Forward()
+list_count = Forward()
 set_str = Forward()
 set_str_evolver = Forward()
 dict_str = Forward()
@@ -89,6 +91,8 @@ comp_expr = infixNotation(
 
 list_item = (  # Precedence important!!!
         slice_str
+        | list_index
+        | list_count
         | comp_expr  # Expressions
         | arith_expr
         | identifier
@@ -106,6 +110,14 @@ list_item = (  # Precedence important!!!
         | tuple_str
         | dict_str
 )
+
+list_index <<= (
+            (identifier | list_str | slice_str) + index_items.setParseAction(replaceWith('.index')) + list_item).setParseAction(
+    cvt_list_index)
+
+list_count <<= (
+            (identifier | list_str | slice_str) + count_vals.setParseAction(replaceWith('.count')) + list_item).setParseAction(
+    cvt_list_index)
 
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
 assignable = func_call | list_item | lit_ellipse

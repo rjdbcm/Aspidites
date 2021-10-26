@@ -118,6 +118,13 @@ def cvt_list(t):
     return f"pvector([{s.decode('UTF-8')}])"
 
 
+def cvt_list_index(t):
+    t = t.asList()
+    t.insert(2, lit_lparen)
+    t.append(lit_rparen)
+    return ''.join(t)
+
+
 def cvt_set(t):
     t: list = t.asList()
     s: bytes
