@@ -96,7 +96,7 @@ list_item = (  # Precedence important!!!
         slice_str
         | list_index
         | list_count
-        | list_set
+        # | list_set
         | list_append
         | list_remove
         | comp_expr  # Expressions
@@ -127,10 +127,10 @@ list_count <<= (
     replaceWith('.count')) + list_item).setParseAction(
     cvt_list_index)
 
-list_set <<= (
-        (identifier | list_str | slice_str) + set_add.setParseAction(
-    replaceWith('.set')) + Combine(integer | identifier + lit_comma + list_item)).setParseAction(
-    cvt_list_index)
+# list_set <<= (
+#         (identifier | list_str | slice_str) + set_add.setParseAction(
+#     replaceWith('.set')) + integer | identifier +  + list_item).setParseAction(
+#     cvt_list_index)
 
 list_append <<= (
         (identifier | list_str | slice_str) + append_update.setParseAction(

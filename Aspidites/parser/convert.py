@@ -121,6 +121,7 @@ def cvt_list(t):
 def cvt_list_index(t):
     t = t.asList()
     t.insert(2, lit_lparen)
+    t[3] = str(t[3])
     t.append(lit_rparen)
     return ''.join(t)
 

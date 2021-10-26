@@ -43,11 +43,13 @@ E = [12, 14, 16, 18]...
 
 idx = D[!]4
 count = D[#]4
+remove = D[*]2
+append = D[^]E
 
 `persistent sets`
 G = {'a', 'b', 'c'}
 `evolver sets`
-F = {'e', 'f', 'g'}...
+H = {'e', 'f', 'g'}...
 
 `persistent mappings`
 C = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}
