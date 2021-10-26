@@ -52,6 +52,17 @@ list_set = Forward()
 list_count = Forward()
 list_append = Forward()
 list_remove = Forward()
+dict_items = Forward()
+dict_keys = Forward()
+dict_vals = Forward()
+dict_discard = Forward()
+dict_update = Forward()
+dict_copy = Forward()
+dict_remove = Forward()
+set_discard = Forward()
+set_update = Forward()
+set_copy = Forward()
+set_remove = Forward()
 set_str = Forward()
 set_str_evolver = Forward()
 dict_str = Forward()
@@ -95,10 +106,21 @@ comp_expr = infixNotation(
 list_item = (  # Precedence important!!!
         slice_str
         | list_index
+        | dict_items
+        | dict_keys
         | list_count
+        | dict_vals
+        | dict_discard
+        | set_discard
         # | list_set
         | list_append
+        | dict_update
+        | set_update
+        | dict_copy
+        | set_copy
         | list_remove
+        | dict_remove
+        | set_remove
         | comp_expr  # Expressions
         | arith_expr
         | identifier
@@ -138,6 +160,41 @@ list_append <<= (
     cvt_list_index)
 
 list_remove <<= (
+        (identifier | list_str | slice_str) + remove.setParseAction(
+    replaceWith('.remove')) + list_item).setParseAction(
+    cvt_list_index)
+
+dict_items <<= ((identifier | list_str | slice_str) + index_items.setParseAction(replaceWith('.items()')))
+dict_keys <<= ((identifier | list_str | slice_str) + keys.setParseAction(replaceWith('.keys()')))
+dict_vals <<= ((identifier | list_str | slice_str) + count_vals.setParseAction(replaceWith('.values()')))
+dict_discard <<= (
+        (identifier | list_str | slice_str) + discard.setParseAction(
+    replaceWith('.discard')) + list_item).setParseAction(
+    cvt_list_index)
+dict_update <<= (
+        (identifier | list_str | slice_str) + append_update.setParseAction(
+    replaceWith('.append')) + list_item).setParseAction(
+    cvt_list_index)
+
+dict_copy <<= ((identifier | list_str | slice_str) + copy.setParseAction(replaceWith('.copy()')))
+
+dict_remove <<= (
+        (identifier | list_str | slice_str) + remove.setParseAction(
+    replaceWith('.remove')) + list_item).setParseAction(
+    cvt_list_index)
+
+set_discard <<= (
+        (identifier | list_str | slice_str) + discard.setParseAction(
+    replaceWith('.discard')) + list_item).setParseAction(
+    cvt_list_index)
+set_update <<= (
+        (identifier | list_str | slice_str) + append_update.setParseAction(
+    replaceWith('.append')) + list_item).setParseAction(
+    cvt_list_index)
+
+set_copy <<= ((identifier | list_str | slice_str) + copy.setParseAction(replaceWith('.copy()')))
+
+set_remove <<= (
         (identifier | list_str | slice_str) + remove.setParseAction(
     replaceWith('.remove')) + list_item).setParseAction(
     cvt_list_index)
