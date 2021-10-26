@@ -95,6 +95,7 @@ list_item = (  # Precedence important!!!
         | list_index
         | list_count
         | list_append
+        | list_remove
         | comp_expr  # Expressions
         | arith_expr
         | identifier
@@ -114,15 +115,23 @@ list_item = (  # Precedence important!!!
 )
 
 list_index <<= (
-            (identifier | list_str | slice_str) + index_items.setParseAction(replaceWith('.index')) + list_item).setParseAction(
+        (identifier | list_str | slice_str) + index_items.setParseAction(
+    replaceWith('.index')) + list_item).setParseAction(
     cvt_list_index)
 
 list_count <<= (
-            (identifier | list_str | slice_str) + count_vals.setParseAction(replaceWith('.count')) + list_item).setParseAction(
+        (identifier | list_str | slice_str) + count_vals.setParseAction(
+    replaceWith('.count')) + list_item).setParseAction(
     cvt_list_index)
 
 list_append <<= (
-            (identifier | list_str | slice_str) + count_vals.setParseAction(replaceWith('.append')) + list_item).setParseAction(
+        (identifier | list_str | slice_str) + append_update.setParseAction(
+    replaceWith('.append')) + list_item).setParseAction(
+    cvt_list_index)
+
+list_remove <<= (
+        (identifier | list_str | slice_str) + remove.setParseAction(
+    replaceWith('.remove')) + list_item).setParseAction(
     cvt_list_index)
 
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
