@@ -1,4 +1,5 @@
 **unreleased**
+**v1.9.0**
 **v1.8.1**
 
 - af4684b trigrams for list: index, count, append, remove trigrams for dict: discard, copy, remove trigrams for set: copy, remove
