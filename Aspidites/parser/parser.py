@@ -14,7 +14,7 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from Aspidites._vendor.pyparsing import (
+from .._vendor.pyparsing import (
     IndentedBlock,
     Combine,
     Empty,
@@ -63,8 +63,8 @@ quoted_str = quotedString().setParseAction(lambda t: t[0])
 integer = Word(nums).setParseAction(cvt_int)
 real = Combine(Optional(Word(nums)) + "." + Word(nums))
 complex_ = Combine(real | integer + "+" + real | integer + "j")
-identifier = Word(alphas + "_", alphanums + "_")
-operand = nullit | complex_ | real | bool_literal | integer | identifier | underscore
+identifier = Word(alphas + "_", alphanums + "_") + ~bigf
+operand = nullit | complex_ | real | bool_literal | integer | identifier | underscore | bigf
 arith_expr = Combine(
     infixNotation(
         operand,
@@ -144,8 +144,10 @@ pragmas = Combine(pragma + oneOf(' '.join(available_pragmas))).setParseAction(cv
 
 func_decl = Group(
     Optional(OneOrMore(bool_pragmas) | OneOrMore(pragmas)) +
-    private_def_decl + identifier + def_args + _contract_expression).setParseAction(lambda t: "\n@contract()\n" + "".join(*t) + lit_colon)
-comment_line = (Combine(Regex(r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`").setParseAction(lambda t: t[0]).setParseAction(cvt_comment_line))
+    private_def_decl + identifier + def_args + _contract_expression).setParseAction(
+    lambda t: "\n@contract()\n" + "".join(*t) + lit_colon)
+comment_line = (Combine(Regex(r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`").setParseAction(
+    lambda t: t[0]).setParseAction(cvt_comment_line))
 
 return_value = return_none + rvalue
 yield_value = yield_none + rvalue

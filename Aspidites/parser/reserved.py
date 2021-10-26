@@ -38,6 +38,7 @@ available_pragmas = [
     'nogil',
     'no_gc',
     'inline',
+    'curried'
 ]
 indent = '    '
 nl_indent = '\n' + indent
@@ -49,12 +50,13 @@ underscore = Literal("_")
 lparen, rparen, lbrack, rbrack, lbrace, rbrace, colon, comma = map(Suppress, "()[]{}:,")
 lit_lparen, lit_rparen, lit_lbrack, lit_rbrack, lit_lbrace, lit_rbrace, lit_colon, lit_comma = map(str, "()[]{}:,")
 bool_literal = oneOf("True False", asKeyword=True).setParseAction(lambda t: t[0] == "True")
-nullit = Literal("/0").setParseAction(replaceWith("Undefined()"))
+nullit = oneOf("/0 ø Ø").setParseAction(replaceWith("Undefined()"))
 signop = Literal("+") | Literal("-")
 multop = Literal("*") | oneOf("/ //") | Literal("%")
 plusop = Literal("+") | Literal("-")
 exponp = Literal("**")
 factop = Literal("!")
+bigf = oneOf("F ƒ").setParseAction(replaceWith('F()'))
 bitwiseop = Regex(r"<<|>>|&|\||~|^").setName("bitwise operator")
 comparisonop = Regex(">=|<=|!=|>|<|==").setName("operator")
 assign_eq = Literal("=")

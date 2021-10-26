@@ -1,7 +1,6 @@
 #cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 from functools import partial, update_wrapper, wraps
 from sys import version_info
-from symtable import Function
 
 _has_type_hint_support = version_info[:2] >= (3, 5)
 
@@ -10,17 +9,17 @@ def identity(arg):
     return arg
 
 
-class F(Function):
+class F:
     """Provide simple syntax for functions composition
     (through << and >> operators) and partial function
     application (through simple tuple syntax).
 
     Usage example:
 
-    >>> func = F() << (_ + 10) << (_ + 5)
+    >>> func = F << (_ + 10) << (_ + 5)
     >>> print(func(10))
     25
-    >>> func = F() >> (filter, _ < 6) >> sum
+    >>> func = F >> (filter, _ < 6) >> sum
     >>> print(func(range(10)))
     15
     """
@@ -28,7 +27,6 @@ class F(Function):
     __slots__ = "f",
 
     def __init__(self, f=identity, *args, **kwargs):
-        super(F, self).__init__(self, 'F')
         self.f = partial(f, *args, **kwargs) if any([args, kwargs]) else f
 
     @classmethod

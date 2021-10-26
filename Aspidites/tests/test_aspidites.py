@@ -150,12 +150,12 @@ def test_compile_to_shared_object(inject_config):
         Compiler(compile_args)
 
     from .examples.compiled import (Add, x, y, z, val, div_by_zero, Yield123, test_unary_sub, test_unary_add,
-                                    test_factorial, Match, nullity)
+                                    test_factorial, match, nullity)
 
-    assert Match() == 1
-    assert Match(0) == 1
-    assert Match(1) == 3
-    assert Match(4) == 7
+    assert match() == 1
+    assert match(0) == 1
+    assert match(1) == 3
+    assert match(4) == 7
 
     with pt.raises(ContractNotRespected):
         # noinspection PyTypeChecker

@@ -81,7 +81,6 @@ def cvt_comment_line(s, loc, t):
 
 def cvt_for_loop_decl(t):
     t = t[0]
-    print(t)
     if len(t) == 5:
         r = pmap_re.match(t[4])
         if r:

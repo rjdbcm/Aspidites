@@ -168,6 +168,7 @@ from pyrsistent import (
 )
 from Aspidites.woma import *
 from Aspidites._vendor import (
+    F,
     take,
     drop,
     takelast,
@@ -196,7 +197,8 @@ from Aspidites._vendor import (
     call,   
     apply,  
     flip,   
-    curry,  
+    curry,
+    curried,
     zipwith,
     foldl,  
     foldr,  
@@ -229,6 +231,7 @@ from Aspidites.monads import Maybe, Surely
 from Aspidites.math import Undefined, SafeDiv, SafeExp, SafeMod, SafeFloorDiv, SafeUnaryAdd, SafeUnarySub, SafeFactorial
 from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.RestrictedPython import safe_builtins
+safe_builtins['F'] = F 
 safe_builtins['print'] = print
 from Aspidites._vendor.RestrictedPython import compile_restricted as compile
 safe_builtins['compile'] = compile

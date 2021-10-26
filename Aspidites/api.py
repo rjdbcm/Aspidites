@@ -19,9 +19,7 @@ import itertools
 from collections import OrderedDict
 from typing import Union, ItemsView
 from textwrap import wrap
-from Aspidites._vendor.pyparsing import ParseResults
 from inspect import isfunction, signature
-from ._vendor.contracts import new_contract
 from ._vendor.fn.underscore import ArityError, _Callable
 from .templates import warning_template
 import cython
@@ -137,4 +135,3 @@ class Warn:
         return str_locals.rstrip("\n".encode('UTF-8'))
 
 
-code = new_contract("code", lambda x: isinstance(x, ParseResults))
