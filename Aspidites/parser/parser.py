@@ -102,20 +102,22 @@ comp_expr = infixNotation(
         (comparisonop, 2, opAssoc.LEFT),
     ],
 ).setParseAction(lambda t: ''.join(t[0]))
+# TODO dict trigrams cause RecursionError:
+#  maximum recursion depth exceeded while getting the str of an object
 
 list_item = (  # Precedence important!!!
         slice_str
         | list_index
-        | dict_items
-        | dict_keys
+        # | dict_items
+        # | dict_keys
         | list_count
-        | dict_vals
+        # | dict_vals
         | dict_discard
         | set_discard
         # | list_set
         | list_append
-        | dict_update
-        | set_update
+        # | dict_update
+        # | set_update
         | dict_copy
         | set_copy
         | list_remove
@@ -164,38 +166,38 @@ list_remove <<= (
     replaceWith('.remove')) + list_item).setParseAction(
     cvt_list_index)
 
-dict_items <<= ((identifier | list_str | slice_str) + index_items.setParseAction(replaceWith('.items()')))
-dict_keys <<= ((identifier | list_str | slice_str) + keys.setParseAction(replaceWith('.keys()')))
-dict_vals <<= ((identifier | list_str | slice_str) + count_vals.setParseAction(replaceWith('.values()')))
+# dict_items <<= ((dict_str) + index_items.setParseAction(replaceWith('.items()')))
+# dict_keys <<= ((dict_str) + keys.setParseAction(replaceWith('.keys()')))
+# dict_vals <<= ((dict_str) + count_vals.setParseAction(replaceWith('.values()')))
 dict_discard <<= (
-        (identifier | list_str | slice_str) + discard.setParseAction(
+        (dict_str) + discard.setParseAction(
     replaceWith('.discard')) + list_item).setParseAction(
     cvt_list_index)
-dict_update <<= (
-        (identifier | list_str | slice_str) + append_update.setParseAction(
-    replaceWith('.append')) + list_item).setParseAction(
-    cvt_list_index)
+# dict_update <<= (
+#         (dict_str) + append_update.setParseAction(
+#     replaceWith('.append')) + list_item).setParseAction(
+#     cvt_list_index)
 
-dict_copy <<= ((identifier | list_str | slice_str) + copy.setParseAction(replaceWith('.copy()')))
+dict_copy <<= ((identifier | dict_str) + copy.setParseAction(replaceWith('.copy()')))
 
 dict_remove <<= (
-        (identifier | list_str | slice_str) + remove.setParseAction(
+        (identifier | dict_str) + remove.setParseAction(
     replaceWith('.remove')) + list_item).setParseAction(
     cvt_list_index)
 
-set_discard <<= (
-        (identifier | list_str | slice_str) + discard.setParseAction(
-    replaceWith('.discard')) + list_item).setParseAction(
-    cvt_list_index)
-set_update <<= (
-        (identifier | list_str | slice_str) + append_update.setParseAction(
-    replaceWith('.append')) + list_item).setParseAction(
-    cvt_list_index)
+# set_discard <<= (
+#         (identifier | set_str) + discard.setParseAction(
+#     replaceWith('.discard')) + list_item).setParseAction(
+#     cvt_list_index)
+# set_update <<= (
+#         (identifier | set_str) + append_update.setParseAction(
+#     replaceWith('.append')) + list_item).setParseAction(
+#     cvt_list_index)
 
-set_copy <<= ((identifier | list_str | slice_str) + copy.setParseAction(replaceWith('.copy()')))
+set_copy <<= ((identifier | list_str) + copy.setParseAction(replaceWith('.copy()')))
 
 set_remove <<= (
-        (identifier | list_str | slice_str) + remove.setParseAction(
+        (identifier | list_str) + remove.setParseAction(
     replaceWith('.remove')) + list_item).setParseAction(
     cvt_list_index)
 
