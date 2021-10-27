@@ -70,6 +70,7 @@ dict_str_evolver = Forward()
 tuple_str = Forward()
 slice_str = Forward()
 simple_assign = Forward()
+slice_assign = Forward()
 func_call = Forward()
 suite = Forward()
 rvalue = Forward()
@@ -304,6 +305,7 @@ loop_suite <<= IndentedBlock(
               | break_stmt
               | func_call
               | simple_assign
+              | slice_assign
               ))
 # TODO context managers get eaten by the preceding code blocks
 context_suite <<= IndentedBlock(OneOrMore(contract_assign
@@ -323,10 +325,12 @@ suite <<= IndentedBlock(
               | dict_loop_def
               | func_loop_def
               | match_def
+              | slice_assign
               | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
 rvalue <<= clos_call | func_call | list_item | lambda_def
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
+slice_assign << Group(slice_str + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
 stmt <<= (func_def | contract_define | simple_assign)
 module_body = OneOrMore(stmt) + Optional(
     struct_main + OneOrMore(stmt).setParseAction(lambda t: indent + nl_indent.join(t)))
