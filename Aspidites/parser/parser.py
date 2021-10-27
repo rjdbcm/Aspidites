@@ -224,8 +224,9 @@ dict_entry = Group(list_item + colon + list_item)
 dict_str <<= (lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(cvt_dict)
 dict_str_evolver <<= ((lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(
     cvt_dict) + noclosure).setParseAction(lambda t: ''.join(t))
-slice_str <<= identifier + lit_lbrack + (integer | identifier) + Optional(
-    lit_colon + (integer | identifier)) + lit_rbrack
+slice_str <<= identifier + lit_lbrack + (integer | identifier) + \
+              Optional(lit_colon + (integer | identifier)) +\
+              Optional(lit_colon + (integer | identifier)) + lit_rbrack
 slice_str.setParseAction(lambda t: ''.join(str(i) for i in t))
 def_args = Optional(delimitedList(contract_assign, delim=";")).setParseAction(lambda t: sep.join(t))
 def_args = Group(lit_lparen + def_args + args_end).setParseAction(lambda t: "".join(*t))
@@ -302,6 +303,7 @@ loop_suite <<= IndentedBlock(
               | cont_stmt
               | break_stmt
               | func_call
+              | simple_assign
               ))
 # TODO context managers get eaten by the preceding code blocks
 context_suite <<= IndentedBlock(OneOrMore(contract_assign

@@ -14,6 +14,40 @@
     i<@>range(x)
         Match(i)
 
+(identity(x = /0 -> *)) *
+    <*>x
+
+(falsify(i = /0 -> int; is_prime = /0 -> list)) list
+    is_prime = False -> bool
+    <*>is_prime
+
+(n_is_prime(n = /0 -> int,>-1; is_prime = /0 -> list; limit = 3 -> int,>3)) list
+    <*>is_prime
+
+(n_is_prime2(n = /0 -> int,>-1; is_prime = /0 -> list)) int
+    (!)n
+        Check(is_prime[n]): identity(n)
+    <*>n
+
+(iter_primes(limit = 3 -> int,>3; is_prime = /0 -> list; n = /0 -> int,>0)) list
+    m = n ** 2 -> int
+    lim = limit + 1 -> int
+    i<@>range(m, lim, n)
+        is_prime = falsify(i, is_prime)
+    <*>is_prime
+
+(yield_primes(limit = 3 -> int,>3; is_prime = /0 -> list; n = /0 -> int,>0)) coroutine
+    i<@>range(limit + 1)
+        <^>n_is_prime2(n, is_prime)
+
+(iprimes_upto(limit = 3 -> int,>3)) coroutine
+    t = [True] -> list(bool)
+    f = [False] -> list(bool)
+    is_prime = f * 2 + t * (limit - 1) -> list(bool)
+    n<@>range(int(limit**0.5 + 1.5))
+        is_prime = n_is_prime(n, is_prime, limit)
+    i<@>yield_primes(limit, is_prime, n)
+        <^>i
 
 `matching is valid in a function body`
 (match(x = 0 -> int)) int
