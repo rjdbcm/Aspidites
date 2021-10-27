@@ -1,4 +1,5 @@
 **unreleased**
+**v1.9.2**
 **v1.9.1**
 
 - 48ad531 can now assign to slices
