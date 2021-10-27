@@ -1,5 +1,9 @@
 **unreleased**
 **v1.9.0**
+
+- 6d48da0 list contract now properly recognizes PVector simple assignment now allowed within loops slices allow for full slice syntax
+
+
 **v1.8.1**
 
 - af4684b trigrams for list: index, count, append, remove trigrams for dict: discard, copy, remove trigrams for set: copy, remove
