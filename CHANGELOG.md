@@ -1,5 +1,9 @@
 **unreleased**
 **v1.9.1**
+
+- 48ad531 can now assign to slices
+
+
 **v1.9.0**
 
 - 6d48da0 list contract now properly recognizes PVector simple assignment now allowed within loops slices allow for full slice syntax
