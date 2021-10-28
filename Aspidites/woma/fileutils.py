@@ -96,7 +96,7 @@ def path_to_unicode(path):
     return path.decode(encoding)
 
 
-if os.name == 'nt':
+if os.name == 'nt':  # pragma: no cover
     import ctypes
     from ctypes import c_wchar_p
     from ctypes.wintypes import DWORD, LPVOID
@@ -415,7 +415,7 @@ def copy_tree(src, dst, symlinks=False, ignore=None):
             errors.append((srcname, dstname, str(why)))
     try:
         copystat(src, dst)
-    except OSError as why:
+    except OSError as why:  # pragma: no cover
         if WindowsError is not None and isinstance(why, WindowsError):
             # Copying file access times may fail on Windows
             pass
@@ -512,9 +512,3 @@ class DummyFile(file):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         return
-
-
-if __name__ == '__main__':
-    with atomic_save('/tmp/final.txt') as f:
-        f.write('rofl')
-        f.write('\n')

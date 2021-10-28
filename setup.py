@@ -75,10 +75,9 @@ if sys.platform == 'darwin' or sys.platform == 'linux':
     sep = '/'
 else:
     sep = '\\'
-
 extensions = []
 for i in module_paths:
-    extensions.append(Extension(i.replace('.py', '').replace(sep, '.'), sources=[i], extra_compile_args=['fno-wrapv']))
+    extensions.append(Extension(i.replace('.py', '').replace(sep, '.'), sources=[i], extra_compile_args=['-fno-wrapv']))
 ext_modules = cythonize(extensions)
 print('bootstrapping standard library in Aspidites/woma')
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
