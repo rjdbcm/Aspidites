@@ -1,4 +1,5 @@
 **unreleased**
+**v1.10.5**
 **v1.10.4**
 
 - 0528fda fix windows build
