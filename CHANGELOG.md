@@ -1,5 +1,9 @@
 **unreleased**
 **v1.10.4**
+
+- 0528fda fix windows build
+
+
 **v1.10.3**
 
 - 84b3a0c fix windows build
