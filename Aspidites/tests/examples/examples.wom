@@ -14,19 +14,11 @@
     i<@>range(x)
         Match(i)
 
-(concat(x = [] -> list; y = [] -> list)) list
-    <*>x + y
-
-(next_pascal(xs = /0 -> int)) int
-    <*>map(add, concat([0], xs), concat(xs,[0]))
-
-(pascal_triangle()) coroutine
-    x = iterate(next_pascal) -> coroutine
-    <*>x([1])
-
-(finite_pascal_rows(n = /0 -> int)) int
-    x = next_pascal(_) -> coroutine
-    <*>accumulate(chain([[1]], range(1,n)), x)
+(loop10()) coroutine
+    i<@>count()
+        i % 2 == 0<?>print(i)
+        <$>i > 10
+        <%>i == 10
 
 `matching is valid in a function body`
 (match(x = 0 -> int)) int

@@ -150,7 +150,7 @@ def test_compile_to_shared_object(inject_config):
         Compiler(compile_args)
 
     from .examples.compiled import (Add, x, y, z, val, div_by_zero, Yield123, test_unary_sub, test_unary_add,
-                                    test_factorial, match, nullity, D, idx, finite_pascal_rows)
+                                    test_factorial, match, nullity, D, idx)
 
     assert match() == 1
     assert match(0) == 1

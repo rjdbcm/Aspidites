@@ -2,7 +2,6 @@
 """Provides decorators to deal with tail calls in recursive functions."""
 import warnings
 from collections import namedtuple
-from Aspidites._vendor.contracts import contract
 
 
 class TailCallWarning(RuntimeWarning):
@@ -31,10 +30,7 @@ class tco(object):
     http://mail.python.org/pipermail/python-ideas/2009-May/004486.html
     """
 
-    __slots__ = "func",
-
-    @contract()
-    def __init__(self, func: 'Callable'):
+    def __init__(self, func):
         self.func = func
 
     def __delete__(self, instance):
