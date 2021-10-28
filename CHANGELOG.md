@@ -1,5 +1,9 @@
 **unreleased**
 **v1.9.2**
+
+- 222ab03 break-if, continue-if, if statements. slightly less misleading syntax errors.
+
+
 **v1.9.1**
 
 - 48ad531 can now assign to slices
