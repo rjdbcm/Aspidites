@@ -1,5 +1,9 @@
 **unreleased**
 **v1.10.3**
+
+- 84b3a0c fix windows build
+
+
 **v1.10.2**
 
 - 9ffd8a5 fix windows build
