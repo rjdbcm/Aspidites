@@ -1,5 +1,9 @@
 **unreleased**
 **v1.10.1**
+
+- ad17eab -fno-wrapv added so we'll quit generating wraparound handling - major speedup
+
+
 **v1.10.0**
 
 - f38e1a9 add && and ||
