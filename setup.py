@@ -72,10 +72,10 @@ module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                 str(Path('Aspidites/woma/mathutils.py'))
                 ]
 
-# extensions = []
-# for i in module_paths:
-#     extensions.append(Extension(i.replace('.py', '').replace('/', '.'), sources=[i], extra_compile_args=['-funroll-loops', '-fgcse-sm']))
-ext_modules = cythonize(module_paths)
+extensions = []
+for i in module_paths:
+    extensions.append(Extension(i.replace('.py', '').replace('/', '.'), sources=[i], extra_compile_args=['-fno-wrapv']))
+ext_modules = cythonize(extensions)
 print('bootstrapping standard library in Aspidites/woma')
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
 from Aspidites.__main__ import get_cy_kwargs
