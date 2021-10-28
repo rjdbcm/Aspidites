@@ -1,4 +1,5 @@
 **unreleased**
+**v1.10.2**
 **v1.10.1**
 
 - ad17eab -fno-wrapv added so we'll quit generating wraparound handling - major speedup
