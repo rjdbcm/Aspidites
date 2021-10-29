@@ -1,5 +1,9 @@
 **unreleased**
 **v1.10.5**
+
+- 2b22a42 flatten now returns a pvector list set [$] now works
+
+
 **v1.10.4**
 
 - 0528fda fix windows build
