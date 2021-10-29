@@ -86,7 +86,6 @@ integer = Word(nums).setParseAction(cvt_int)
 real = Combine(Optional(Word(nums)) + "." + Word(nums))
 complex_ = Combine(real | integer + "+" + real | integer + "j")
 identifier = Word(alphas + "_", alphanums + "_") + ~bigf + Optional(persist)
-list_mul = list_str + identifier | integer
 operand = nullit | complex_ | real | bool_literal | integer | identifier | underscore | bigf
 arith_expr = Combine(
     infixNotation(
@@ -113,7 +112,6 @@ comp_expr = infixNotation(
 #  maximum recursion depth exceeded while getting the str of an object
 list_item = (  # Precedence important!!!
         slice_str
-        | list_set
         | list_index
         # | dict_items
         # | dict_keys
@@ -129,6 +127,7 @@ list_item = (  # Precedence important!!!
         | list_remove
         | dict_remove
         | set_remove
+        | list_set
         | comp_expr  # Expressions
         | arith_expr
         | identifier
@@ -159,7 +158,7 @@ list_count <<= (
 
 list_set <<= (
         identifier + set_add.setParseAction(
-    replaceWith('.set')) + identifier + ',' + list_item).setParseAction(
+    replaceWith('.set')) + identifier + ',' + identifier).setParseAction(
     cvt_list_index)
 
 list_append <<= (
@@ -208,7 +207,7 @@ set_remove <<= (
     cvt_list_index)
 
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
-assignable = func_call | list_item | lit_ellipse | list_mul
+assignable = func_call | list_item | lit_ellipse
 
 _contract_expression = contract_expression.copy()
 _contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")

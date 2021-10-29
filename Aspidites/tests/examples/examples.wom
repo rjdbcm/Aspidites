@@ -11,7 +11,8 @@
 
 (sieve(n = /0 -> int; limit = /0 -> int; is_prime = [/0] -> *)) *
     i<@>range(n*n, limit+1, n)
-        is_prime = is_prime[$]i,False
+        f = False
+        is_prime = is_prime[$]i,f
     <*>is_prime
 
 (primes_upto(limit = 4 -> int)) list(int)
