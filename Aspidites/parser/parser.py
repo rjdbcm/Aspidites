@@ -67,7 +67,7 @@ set_str = Forward()
 set_str_evolver = Forward()
 dict_str = Forward()
 dict_str_evolver = Forward()
-tuple_str = Forward()
+# tuple_str = Forward()
 slice_str = Forward()
 simple_assign = Forward()
 slice_assign = Forward()
@@ -142,7 +142,7 @@ list_item = (  # Precedence important!!!
         | dict_str_evolver
         | list_str
         | set_str
-        | tuple_str
+        # | tuple_str
         | dict_str
 )
 
@@ -217,7 +217,7 @@ contract_respect = respects + _contract_expression
 contract_assign = identifier + assign_eq + assignable + contract_respect
 contract_assign.setParseAction(cvt_contract_assign)
 
-tuple_str <<= (lparen + Optional(delimitedList(list_item)) + Optional(comma) + rparen).setParseAction(cvt_tuple)
+# tuple_str <<= (lparen + Optional(delimitedList(list_item)) + Optional(comma) + rparen).setParseAction(cvt_tuple)
 noclosure.setParseAction(replaceWith('.evolver()'))
 list_str <<= (lbrack + Optional(delimitedList(list_item) + Optional(comma)) + rbrack).setParseAction(cvt_list)
 list_str_evolver <<= ((lbrack + Optional(delimitedList(list_item) + Optional(comma)) + rbrack).setParseAction(
@@ -286,9 +286,9 @@ set_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none +
     cvt_for_loop_decl)
 set_loop_def = Group(set_loop_decl + loop_suite).setParseAction(lambda t: (nl_indent + indent).join(t[0]))
 
-tuple_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + tuple_str).setParseAction(
-    cvt_for_loop_decl)
-tuple_loop_def = Group(tuple_loop_decl + loop_suite).setParseAction(lambda t: (nl_indent + indent).join(t[0]))
+# tuple_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + tuple_str).setParseAction(
+#     cvt_for_loop_decl)
+# tuple_loop_def = Group(tuple_loop_decl + loop_suite).setParseAction(lambda t: (nl_indent + indent).join(t[0]))
 
 dict_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none + dict_str).setParseAction(
     cvt_for_loop_decl)
@@ -333,7 +333,7 @@ suite <<= IndentedBlock(
               | string_loop_def
               | list_loop_def
               | set_loop_def
-              | tuple_loop_def
+              # | tuple_loop_def
               | dict_loop_def
               | func_loop_def
               | match_def
