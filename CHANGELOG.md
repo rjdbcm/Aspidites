@@ -1,4 +1,5 @@
 **unreleased**
+**v1.11.0**
 **v1.10.5**
 
 - 2b22a42 flatten now returns a pvector list set [$] now works
