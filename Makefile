@@ -110,6 +110,7 @@ build-ext: clean
 	python setup.py build_ext --inplace
 
 quickbuild:
+	-cd Aspidites/tests/examples && $(MAKE) uninstall
 	python setup.py build_ext --inplace
 
 proftest: build-ext

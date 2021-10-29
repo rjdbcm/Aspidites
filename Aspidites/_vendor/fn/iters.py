@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 from collections import deque
 from functools import partial
 from itertools import (chain, combinations, cycle, dropwhile, islice, repeat,
@@ -9,7 +9,7 @@ from sys import version_info
 from .func import F
 from .op import flip
 from .uniform import filterfalse, zip_longest, Iterable
-
+from pyrsistent import pvector
 
 def take(limit, base):
     return islice(base, limit)
@@ -125,6 +125,7 @@ def grouper(n, iterable, fillvalue=None):
     args = [iter(iterable)] * n
     return zip_longest(*args, fillvalue=fillvalue)
 
+
 def group_by(keyfunc, iterable):
     """Returns a dict of the elements from given iterable keyed by result
     of keyfunc on each element. The value at each key will be a list of
@@ -187,7 +188,7 @@ def powerset(iterable):
     http://docs.python.org/3.4/library/itertools.html#itertools-recipes
     """
     s = list(iterable)
-    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+    return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
 
 
 def pairwise(iterable):
@@ -236,6 +237,10 @@ def iter_suppress(func, exception, first_=None):
 
 
 def flatten(items):
+    return pvector([i for i in _flatten(items)])
+
+
+def _flatten(items):
     """Flatten any level of nested iterables (not including strings, bytes or
     bytearrays).
     Reimplemented to work with all nested levels (not only one).

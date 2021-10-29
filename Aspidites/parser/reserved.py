@@ -65,6 +65,7 @@ assign_eq = Literal("=")
 noclosure = Literal("...")  # That's no closure
 index_items = Literal("[!]")
 keys = Literal("[@]")
+persist = Literal("[.]").setParseAction(replaceWith('.persistent()'))
 count_vals = Literal("[#]")
 set_add = Literal("[$]")
 discard = Literal("[%]")

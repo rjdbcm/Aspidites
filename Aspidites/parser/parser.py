@@ -75,7 +75,9 @@ func_call = Forward()
 suite = Forward()
 break_if = Forward()
 cont_if = Forward()
-if_stmt = Forward()
+if_slice = Forward()
+if_simple = Forward()
+if_func_call = Forward()
 rvalue = Forward()
 stmt = Forward()
 
@@ -83,7 +85,8 @@ quoted_str = quotedString().setParseAction(lambda t: t[0])
 integer = Word(nums).setParseAction(cvt_int)
 real = Combine(Optional(Word(nums)) + "." + Word(nums))
 complex_ = Combine(real | integer + "+" + real | integer + "j")
-identifier = Word(alphas + "_", alphanums + "_") + ~bigf
+identifier = Word(alphas + "_", alphanums + "_") + ~bigf + Optional(persist)
+list_mul = list_str + identifier | integer
 operand = nullit | complex_ | real | bool_literal | integer | identifier | underscore | bigf
 arith_expr = Combine(
     infixNotation(
@@ -108,9 +111,9 @@ comp_expr = infixNotation(
 ).setParseAction(lambda t: ''.join(t[0]))
 # TODO dict trigrams cause RecursionError:
 #  maximum recursion depth exceeded while getting the str of an object
-
 list_item = (  # Precedence important!!!
         slice_str
+        | list_set
         | list_index
         # | dict_items
         # | dict_keys
@@ -118,7 +121,6 @@ list_item = (  # Precedence important!!!
         # | dict_vals
         | dict_discard
         | set_discard
-        # | list_set
         | list_append
         # | dict_update
         # | set_update
@@ -155,10 +157,10 @@ list_count <<= (
     replaceWith('.count')) + list_item).setParseAction(
     cvt_list_index)
 
-# list_set <<= (
-#         (identifier | list_str | slice_str) + set_add.setParseAction(
-#     replaceWith('.set')) + integer | identifier +  + list_item).setParseAction(
-#     cvt_list_index)
+list_set <<= (
+        identifier + set_add.setParseAction(
+    replaceWith('.set')) + identifier + ',' + list_item).setParseAction(
+    cvt_list_index)
 
 list_append <<= (
         (identifier | list_str | slice_str) + append_update.setParseAction(
@@ -206,7 +208,7 @@ set_remove <<= (
     cvt_list_index)
 
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
-assignable = func_call | list_item | lit_ellipse
+assignable = func_call | list_item | lit_ellipse | list_mul
 
 _contract_expression = contract_expression.copy()
 _contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")
@@ -302,7 +304,9 @@ func_loop_decl = Group(identifier + Optional(lit_comma + identifier) + for_none 
 func_loop_def = Group(func_loop_decl + loop_suite).setParseAction(lambda t: (nl_indent + indent).join(t[0]))
 break_if <<= (break_stmt + rvalue).setParseAction(lambda t: 'if ' + t[1] + lit_colon + t[0])
 cont_if <<= (cont_stmt + rvalue).setParseAction(lambda t: 'if ' + t[1] + lit_colon + t[0])
-if_stmt <<= (rvalue + if_cond + func_call | simple_assign | slice_assign).setParseAction(lambda t: t[1] + t[0] + lit_colon + t[2])
+if_slice <<= (rvalue + if_cond + slice_assign).setParseAction(lambda t: t[1] + t[0] + lit_colon + t[2])
+if_simple <<= (rvalue + if_cond + simple_assign).setParseAction(lambda t: t[1] + t[0] + lit_colon + t[2])
+if_func_call <<= (rvalue + if_cond + func_call).setParseAction(lambda t: t[1] + t[0] + lit_colon + t[2])
 
 loop_suite <<= IndentedBlock(
     OneOrMore(pass_stmt
@@ -311,7 +315,9 @@ loop_suite <<= IndentedBlock(
               | cont_stmt
               | break_if
               | break_stmt
-              | if_stmt
+              | if_slice
+              | if_simple
+              | if_func_call
               | func_call
               | simple_assign
               | slice_assign
@@ -332,7 +338,9 @@ suite <<= IndentedBlock(
               | dict_loop_def
               | func_loop_def
               | match_def
-              | if_stmt
+              | if_slice
+              | if_simple
+              | if_func_call
               | slice_assign
               | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
