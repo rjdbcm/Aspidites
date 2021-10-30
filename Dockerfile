@@ -23,4 +23,3 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN ln -sf $VIRTUAL_ENV/lib/python3.9/site-packages/Aspidites/tests /workdir
 COPY README.md /usr/src/app
 ENTRYPOINT ["aspidites"]
-CMD ["-h"]
