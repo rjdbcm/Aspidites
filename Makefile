@@ -127,26 +127,26 @@ coverage:
 
 release:
 	git add CHANGELOG.md
-	bump2version release
+	bump2version --config-file ./dev/.bumpversion.cfg release
 
 prerel:
 	git add CHANGELOG.md
-	bump2version prerel
+	bump2version --config-file ./dev/.bumpversion.cfg prerel
 
 patch:
-	python -m Aspidites.scripts.bumpversion_hook patch
+	python -m dev.scripts.bumpversion_hook patch
 	git add CHANGELOG.md
 	git commit -m 'changelog updated'
-	bump2version patch
+	bump2version --config-file ./dev/.bumpversion.cfg patch
 
 minor:
-	python -m Aspidites.scripts.bumpversion_hook minor
+	python -m dev.scripts.bumpversion_hook minor
 	git add CHANGELOG.md
 	git commit -m 'changelog updated'
-	bump2version minor
+	bump2version --config-file ./dev/.bumpversion.cfg minor
 
 major:
-	python -m Aspidites.scripts.bumpversion_hook major
+	python -m dev.scripts.bumpversion_hook major
 	git add CHANGELOG.md
 	git commit -m 'changelog updated'
 	bump2version major

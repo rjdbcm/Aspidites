@@ -15,7 +15,7 @@ from __future__ import print_function
 from bisect import bisect_left
 from itertools import chain, islice
 import operator
-from pyrsistent import PSet
+from pyrsistent import PSet, s, pset
 
 try:
     from collections.abc import MutableSet
@@ -126,12 +126,12 @@ def complement(wrapped):
         return wrapped.complemented()
     if type(wrapped) is frozenset:
         return _ComplementSet(excluded=wrapped)
-    return _ComplementSet(excluded=set(wrapped))
+    return _ComplementSet(excluded=s(wrapped))
 
 
 def _norm_args_typeerror(other):
     '''normalize args and raise type-error if there is a problem'''
-    if type(other) in (set, frozenset):
+    if type(other) in (PSet, set, frozenset):
         inc, exc = other, None
     elif type(other) is _ComplementSet:
         inc, exc = other._included, other._excluded
@@ -142,7 +142,7 @@ def _norm_args_typeerror(other):
 
 def _norm_args_notimplemented(other):
     '''normalize args and return NotImplemented (for overloaded operators)'''
-    if type(other) in (set, frozenset):
+    if type(other) in (PSet, set, frozenset):
         inc, exc = other, None
     elif type(other) is _ComplementSet:
         inc, exc = other._included, other._excluded
@@ -151,7 +151,7 @@ def _norm_args_notimplemented(other):
     return inc, exc
 
 
-class _ComplementSet(object):
+class _ComplementSet(PSet):
     """
     helper class for complement() that implements the set methods
     """
@@ -159,9 +159,9 @@ class _ComplementSet(object):
 
     def __init__(self, included=None, excluded=None):
         if included is None:
-            assert type(excluded) in (set, frozenset, PSet)
+            assert type(excluded) in (PSet, set, frozenset,)
         elif excluded is None:
-            assert type(included) in (set, frozenset, PSet)
+            assert type(included) in (PSet, set, frozenset)
         else:
             raise ValueError('one of included or excluded must be a set')
         self._included, self._excluded = included, excluded
@@ -176,8 +176,8 @@ class _ComplementSet(object):
         if type(self._included) is frozenset or type(self._excluded) is frozenset:
             return _ComplementSet(included=self._excluded, excluded=self._included)
         return _ComplementSet(
-            included=None if self._excluded is None else set(self._excluded),
-            excluded=None if self._included is None else set(self._included))
+            included=None if self._excluded is None else s(self._excluded),
+            excluded=None if self._included is None else s(self._included))
 
     __invert__ = complemented
 
@@ -288,7 +288,7 @@ class _ComplementSet(object):
         return self
 
     def update(self, items):
-        if type(items) in (set, frozenset):
+        if type(items) in (PSet, set, frozenset):
             inc, exc = items, None
         elif type(items) is _ComplementSet:
             inc, exc = items._included, items._excluded
@@ -307,7 +307,7 @@ class _ComplementSet(object):
                 self._included.update(inc)
 
     def discard(self, items):
-        if type(items) in (set, frozenset):
+        if type(items) in (PSet, set, frozenset):
             inc, exc = items, None
         elif type(items) is _ComplementSet:
             inc, exc = items._included, items._excluded
@@ -521,7 +521,7 @@ class _ComplementSet(object):
                        type(self) is type(other)
                        and self._included == other._included
                        and self._excluded == other._excluded) or (
-                       type(other) in (set, frozenset) and self._included == other)
+                       type(other) in (PSet, set, frozenset) and self._included == other)
 
     def __hash__(self):
         return hash(self._included) ^ hash(self._excluded)
