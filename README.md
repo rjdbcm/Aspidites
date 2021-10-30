@@ -66,22 +66,12 @@ $ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
 - [`refinement-type system`](https://arxiv.org/pdf/2010.07763.pdf)
 - [`pragmatic`](https://www.adaic.org/resources/add_content/standards/05rm/html/RM-2-8.html)
 - [`functional`](https://towardsdatascience.com/why-developers-are-falling-in-love-with-functional-programming-13514df4048e?gi=3361de79dc98)
-- [`constrained logic`](https://www.cse.unsw.edu.au/~tw/brwhkr08.pdf)
 
-## Inspirations
-
-- [`Scala`](https://www.scala-lang.org/)
-- [`Prolog`](https://www.swi-prolog.org/features.html)
-- [`Curry`](https://curry.pages.ps.informatik.uni-kiel.de/curry-lang.org/)
-- [`Cobra`](http://cobra-language.com/)
-- [`ELI`](https://fastarray.appspot.com/index.html)
-
-## Motivation
+## Philosophy
 
 -  Words should be for the programmer and the data model not built-in language features.
 -  A programmers focus should be on the logic of the program not trying to remember methods and namespaces.
 -  The off-sides rule is sufficient to delineate scope, but should be limited in it's ability to nest.
-
 
 ## Goals
 
