@@ -24,6 +24,6 @@ class RestrictedUnpickler(pickle.Unpickler):
                                      (module, name))
 
 
-def restricted_loads(s):
+def pickle_loads(s):
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()

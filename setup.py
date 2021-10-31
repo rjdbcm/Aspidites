@@ -66,7 +66,6 @@ module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                 str(Path('Aspidites/__main__.py')),
                 str(Path('Aspidites/compiler.py')),
                 str(Path('Aspidites/woma/fileutils.py')),
-                str(Path('Aspidites/woma/setutils.py')),
                 str(Path('Aspidites/woma/gcutils.py')),
                 str(Path('Aspidites/woma/guiutils.py')),
                 str(Path('Aspidites/woma/mathutils.py'))
