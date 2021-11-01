@@ -14,10 +14,6 @@ The reference implementation of the [Woma programming language](https://www.gith
 
     - First and foremost it is for people wanting to write CPython extensions fast, like *really* fast. Traditionally these are written in C++, C. Though with the tool Cython, pure python modules can be statically compiled as well. Woma has the advantage of being shorthand for well constrained and type-checked pure python modules that readily compile using Cython.
 
-- What if just want to write some standalone programs?
-
-    - Our second priority is to create a simple bundler for applications that embeds a highly restricted CPython interpreter for portability. (currently experimental and not functioning)
-
 - Isn't this just Cython with extra steps? 
 
     - Well yes, but with totally different goals. Cython intends to be a syntactic superset of python where Woma syntax has taken inspiration from a variety of sources. You can think of Aspidites as a wrapper for Cython that parses Woma code into Cython's python superset. Cython does much of the "heavy lifting". The specifics of the Woma Programming Language are being standardized as a series of WEEPs ([Woma Extension and Evaluation Proposals](https://github.com/rjdbcm/woma/blob/main/QQ.md)).
