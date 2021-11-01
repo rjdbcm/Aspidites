@@ -14,3 +14,33 @@
 
 - 怎样才能真正学会Woma编程语言？
   - 使用 https://woma.rtfd.io 上的文档
+
+### 安装
+--------------
+
+[![PyPI](https://img.shields.io/pypi/v/aspidites?label=PyPI&logo=pypi)](https://pypi.org/project/Aspidites/)[![PyPI - Wheel](https://img.shields.io/pypi/wheel/Aspidites)](https://pypi.org/project/Aspidites/#files)![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Aspidites?label=CPython)![PyPI - Downloads](https://img.shields.io/pypi/dd/Aspidites)
+```
+$ pip install Aspidites
+```
+-----------
+![Docker Image Version (latest by date)](https://img.shields.io/docker/v/rjdbcm/aspidites?label=Docker&logo=docker)[![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/rjdbcm/aspidites)](https://hub.docker.com/r/rjdbcm/aspidites/tags?page=1&ordering=last_updated)![Docker Pulls](https://img.shields.io/docker/pulls/rjdbcm/aspidites)
+```
+$ docker pull ghcr.io/rjdbcm/aspidites:latest
+```
+-----------
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/rjdbcm/Aspidites?label=Github&logo=github&logoColor=black)![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/rjdbcm/Aspidites/latest/main)
+```
+$ gh repo clone rjdbcm/Aspidites
+```
+
+### 跑步
+这很简单，只需使用：
+```shell
+$ aspidites -h
+```
+
+或者使用码头工人：
+```shell
+$ docker run -v $PWD:/workdir rjdbcm/aspidites:latest -h
+```
+
