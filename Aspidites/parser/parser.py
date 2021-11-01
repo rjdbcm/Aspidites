@@ -120,7 +120,6 @@ list_item = (  # Precedence important!!!
         | dict_discard
         | set_discard
         | list_append
-        # | dict_update
         # | set_update
         | dict_copy
         | set_copy
@@ -178,10 +177,10 @@ dict_discard <<= (
         (dict_str) + discard.setParseAction(
     replaceWith('.discard')) + list_item).setParseAction(
     cvt_list_index)
-# dict_update <<= (
-#         (dict_str) + append_update.setParseAction(
-#     replaceWith('.append')) + list_item).setParseAction(
-#     cvt_list_index)
+dict_update <<= (
+        (identifier | dict_str) + update.setParseAction(
+    replaceWith('.update')) + list_item).setParseAction(
+    cvt_list_index)
 
 dict_copy <<= ((identifier | dict_str) + copy.setParseAction(replaceWith('.copy()')))
 
@@ -343,7 +342,7 @@ suite <<= IndentedBlock(
               | slice_assign
               | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
-rvalue <<= clos_call | func_call | list_item | lambda_def
+rvalue <<= dict_update | clos_call | func_call | list_item | lambda_def
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
 slice_assign << Group(slice_str + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
 stmt <<= (func_def | contract_define | simple_assign)

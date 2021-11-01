@@ -109,7 +109,7 @@ test-all:
 build-ext: clean
 	python setup.py build_ext --inplace
 
-quickbuild:
+quickbuild: clean-woma
 	-cd Aspidites/tests/examples && $(MAKE) uninstall
 	python setup.py build_ext --inplace
 
