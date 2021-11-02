@@ -78,6 +78,7 @@ cont_if = Forward()
 if_slice = Forward()
 if_simple = Forward()
 if_func_call = Forward()
+if_return = Forward()
 rvalue = Forward()
 stmt = Forward()
 
@@ -85,8 +86,8 @@ quoted_str = quotedString().setParseAction(lambda t: t[0])
 integer = Word(nums).setParseAction(cvt_int)
 real = Combine(Optional(Word(nums)) + "." + Word(nums))
 complex_ = Combine(real | integer + "+" + real | integer + "j")
-identifier = Word(alphas + "_", alphanums + "_") + ~bigf + Optional(persist)
-operand = nullit | complex_ | real | bool_literal | integer | identifier | underscore | bigf
+identifier = Word(alphas + "_", alphanums + "_") + Optional(persist)
+operand = nullit | complex_ | real | bool_literal | integer | identifier | underscore
 arith_expr = Combine(
     infixNotation(
         operand,
@@ -228,7 +229,7 @@ dict_entry = Group(list_item + colon + list_item)
 dict_str <<= (lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(cvt_dict)
 dict_str_evolver <<= ((lbrace + Optional(delimitedList(dict_entry) + Optional(comma)) + rbrace).setParseAction(
     cvt_dict) + noclosure).setParseAction(lambda t: ''.join(t))
-slice_str <<= identifier + lit_lbrack + (integer | identifier) + \
+slice_str <<= identifier + lit_lbrack + Optional(integer | identifier) + \
               Optional(lit_colon) + Optional(integer | identifier) +\
               Optional(lit_colon) + Optional(integer | identifier) + lit_rbrack
 slice_str.setParseAction(lambda t: ''.join(str(i) for i in t))
@@ -305,6 +306,7 @@ cont_if <<= (cont_stmt + rvalue).setParseAction(lambda t: 'if ' + t[1] + lit_col
 if_slice <<= (rvalue + if_cond + slice_assign).setParseAction(lambda t: t[1] + t[0] + lit_colon + t[2])
 if_simple <<= (rvalue + if_cond + simple_assign).setParseAction(lambda t: t[1] + t[0] + lit_colon + t[2])
 if_func_call <<= (rvalue + if_cond + func_call).setParseAction(lambda t: t[1] + t[0] + lit_colon + t[2])
+if_return <<= (rvalue + if_cond + return_value | return_none).setParseAction(lambda t: t[1] + t[0] + lit_colon + t[2] + t[3])
 
 loop_suite <<= IndentedBlock(
     OneOrMore(pass_stmt
@@ -316,6 +318,7 @@ loop_suite <<= IndentedBlock(
               | if_slice
               | if_simple
               | if_func_call
+              | if_return
               | func_call
               | simple_assign
               | slice_assign
@@ -339,6 +342,7 @@ suite <<= IndentedBlock(
               | if_slice
               | if_simple
               | if_func_call
+              | if_return
               | slice_assign
               | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))

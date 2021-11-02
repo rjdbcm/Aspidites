@@ -15,3 +15,6 @@
 
 (mod(x = 0 -> number; y = 0 -> number)) number
     <*> x % y
+
+(mul(x = 0 -> number; y = 0 -> number)) number
+	<*> x * y
