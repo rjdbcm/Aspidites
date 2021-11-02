@@ -6,16 +6,13 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/rjdbcm/Aspidites)
 ![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)
 [![Twitter Follow](https://img.shields.io/twitter/follow/WheelieTheWoma?style=social)](https://mobile.twitter.com/WheelieTheWoma )
+[中文自述文件](https://github.com/rjdbcm/Aspidites/blob/main/README_Zh_CN.md)
 ----------------
 The reference implementation of the [Woma programming language](https://www.github.com/rjdbcm/woma) compiler. 
 
 - Who is the Woma Programming Language for?  
 
     - First and foremost it is for people wanting to write CPython extensions fast, like *really* fast. Traditionally these are written in C++, C. Though with the tool Cython, pure python modules can be statically compiled as well. Woma has the advantage of being shorthand for well constrained and type-checked pure python modules that readily compile using Cython.
-
-- What if just want to write some standalone programs?
-
-    - Our second priority is to create a simple bundler for applications that embeds a highly restricted CPython interpreter for portability. (currently experimental and not functioning)
 
 - Isn't this just Cython with extra steps? 
 
