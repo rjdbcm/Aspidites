@@ -22,7 +22,7 @@ from dataclasses import dataclass
 from glob import glob
 import typing as t
 from .templates import woma_template, makefile_template, pyproject_template, setup_template, default_template
-from pyrsistent import pmap, v
+from Aspidites._vendor.pyrsistent import pmap, v
 from hashlib import sha256
 from pathlib import Path
 from ._vendor.semantic_version import Version

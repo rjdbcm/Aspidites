@@ -68,7 +68,7 @@ module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                 str(Path('Aspidites/woma/fileutils.py')),
                 str(Path('Aspidites/woma/gcutils.py')),
                 str(Path('Aspidites/woma/guiutils.py')),
-                str(Path('Aspidites/woma/mathutils.py'))
+                str(Path('Aspidites/woma/mathutils.py')),
                 ]
 if sys.platform == 'darwin' or sys.platform == 'linux':
     sep = '/'
@@ -78,6 +78,7 @@ extensions = []
 for i in module_paths:
     extensions.append(Extension(i.replace('.py', '').replace(sep, '.'), sources=[i], extra_compile_args=['-fno-wrapv']))
 ext_modules = cythonize(extensions)
+ext_modules += [Extension('Aspidites._vendor.pyrsistent.pvectorc', sources=['Aspidites/_vendor/pyrsistent/pvectorcmodule.c'])]
 print('bootstrapping standard library in Aspidites/woma')
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
 from Aspidites.__main__ import get_cy_kwargs

@@ -2,7 +2,7 @@ from . import good, fail
 import hypothesis
 import hypothesis.strategies as st
 import pytest as pt
-from pyrsistent import pvector, pmap, pset
+from Aspidites._vendor.pyrsistent import pvector, pmap, pset
 
 
 fail('Container', 1)

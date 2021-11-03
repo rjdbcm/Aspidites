@@ -160,7 +160,7 @@ from cython import (declare as decl, address as addr, sizeof, typeof, struct, cf
                     union, typedef, cast, char, short, int as cint, bint, short, double, long, longdouble,
                     longdoublecomplex, longlong, complex, float as cfloat)
 
-from pyrsistent import (
+from Aspidites._vendor.pyrsistent import (
     pset, 
     pmap, 
     pvector, 

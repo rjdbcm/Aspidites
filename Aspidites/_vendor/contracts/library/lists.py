@@ -2,7 +2,7 @@
 from ..interface import Contract, ContractNotRespected
 from ..syntax import (add_contract, W, contract_expression, O, S, add_keyword,
                       Keyword)
-from pyrsistent import PVector
+from Aspidites._vendor.pyrsistent import PVector
 
 
 class List(Contract):

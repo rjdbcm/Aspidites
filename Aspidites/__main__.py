@@ -10,7 +10,7 @@ from pathlib import Path
 
 from Cython import __version__ as cy_version
 from Cython.Compiler import Options
-from pyrsistent import v
+from Aspidites._vendor.pyrsistent import v
 
 import pytest
 

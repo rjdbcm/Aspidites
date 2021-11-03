@@ -28,7 +28,7 @@ from traceback import print_exc
 from typing import List, AnyStr, Union
 
 # noinspection PyUnresolvedReferences
-from pyrsistent import pvector, pmap, pset
+from Aspidites._vendor.pyrsistent import pvector, pmap, pset
 # noinspection PyUnresolvedReferences
 from Aspidites._vendor.contracts import contract, new_contract
 from Aspidites._vendor.pyparsing import ParseException, ParseResults

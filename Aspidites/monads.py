@@ -21,7 +21,7 @@ from contextlib import suppress
 from warnings import warn
 from typing import Any, AnyStr, Union, Tuple, Dict, Callable
 
-from pyrsistent import v, pvector
+from Aspidites._vendor.pyrsistent import v, pvector
 
 from .math import Undefined, Warn
 
@@ -145,12 +145,12 @@ class Maybe:
                 self.__instance__ = Surely(val)
                 # SURELY #
                 return self.__instance__
-            self.__instance__ = Undefined()
+            self.__instance__ = Undefined(self.func, self.args, self.kwargs)
         except Exception as e:
             if warn_undefined:
                 w = self._warn.create(e)
                 warn(w, category=RuntimeWarning, stacklevel=0)
             # UNDEFINED #
-            self.__instance__ = Undefined()
+            self.__instance__ = Undefined(self.func, self.args, self.kwargs)
             return self.__instance__
 

@@ -9,7 +9,7 @@ from sys import version_info
 from .func import F
 from .op import flip
 from .uniform import filterfalse, zip_longest, Iterable
-from pyrsistent import pvector
+from Aspidites._vendor.pyrsistent import pvector
 
 def take(limit, base):
     return islice(base, limit)
