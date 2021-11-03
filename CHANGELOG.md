@@ -1,4 +1,5 @@
 **unreleased**
+**v1.12.0**
 **v1.11.2**
 
 - d5c6a17 vendored pyrsistent
