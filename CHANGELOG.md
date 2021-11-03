@@ -1,5 +1,25 @@
 **unreleased**
 **v1.11.2**
+
+- d5c6a17 vendored pyrsistent
+- 793c7bd Merge remote-tracking branch 'origin/main'
+- 759bdfb slices should work like their python counterparts condition return working @ operator added
+- 3e46ade Update README_Zh_CN.md
+- 7884e67 Update README_Zh_CN.md
+- d1974d3 Update README.md
+- 8a0e69b Update README.md
+- 3b6bca2 Update and rename README_Zh_CN.txt to README_Zh_CN.md
+- 880b4db Update README_Zh_CN.txt
+- 24b06b4 Create README_Zh_CN.txt
+- 20c99a7 add dict update to parser.py
+- 7f45730 add neural network primitives to library.wom
+- 141fb26 yeeted setutils.py
+- 47fa2dc docker can now run the REPL
+- 99a0e2b Merge remote-tracking branch 'origin/main'
+- 91bf8dc logo update and minor dev scripts tweaks
+- c9947be Update README.md
+
+
 **v1.11.1**
 
 - 237d73e fix 1.11
