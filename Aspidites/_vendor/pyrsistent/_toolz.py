@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 """
 Functionality copied from the toolz package to avoid having
 to add toolz as a dependency.

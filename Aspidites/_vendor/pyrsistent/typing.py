@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 """Helpers for use with type annotation.
 
 Use the empty classes in this module when annotating the types of Pyrsistent

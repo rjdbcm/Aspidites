@@ -3,7 +3,7 @@ import importlib.util
 import sys
 from glob import glob
 from pathlib import Path
-
+import importlib
 import pkg_resources
 from setuptools import setup, find_packages, Extension
 from setuptools.dist import Distribution
@@ -13,6 +13,7 @@ import numpy
 from Cython.Build import cythonize
 from Cython.Compiler import Options
 from Cython.Build.Cythonize import cython_compile
+vendored = ['contracts', 'decorator', 'fn', 'pyparsing', 'pyrsistent', 'RestrictedPython', 'semantic_version']
 module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                 str(Path('Aspidites/_vendor/contracts/interface.py')),
                 str(Path('Aspidites/_vendor/contracts/syntax.py')),
@@ -69,15 +70,37 @@ module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                 str(Path('Aspidites/woma/gcutils.py')),
                 str(Path('Aspidites/woma/guiutils.py')),
                 str(Path('Aspidites/woma/mathutils.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/typing.py')),
+                # str(Path('Aspidites/_vendor/pyrsistent/_transformations.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_checked_types.py')),
+                # str(Path('Aspidites/_vendor/pyrsistent/_field_common.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_helpers.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_immutable.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_pclass.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_pbag.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_pdeque.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_plist.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_pmap.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_precord.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_pset.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_pvector.py')),
+                str(Path('Aspidites/_vendor/pyrsistent/_toolz.py')),
                 ]
 if sys.platform == 'darwin' or sys.platform == 'linux':
     sep = '/'
 else:
     sep = '\\'
 extensions = []
+
 for i in module_paths:
     extensions.append(Extension(i.replace('.py', '').replace(sep, '.'), sources=[i], extra_compile_args=['-fno-wrapv']))
-ext_modules = cythonize(extensions)
+
+print('compiling vendored extensions\n-----------------------------')
+for lib in vendored:
+    module = importlib.import_module('Aspidites._vendor.' + lib)
+    print(lib, getattr(module, '__version__'))
+
+ext_modules = cythonize(extensions, quiet=True)
 ext_modules += [Extension('Aspidites._vendor.pyrsistent.pvectorc', sources=['Aspidites/_vendor/pyrsistent/pvectorcmodule.c'])]
 print('bootstrapping standard library in Aspidites/woma')
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser

@@ -51,7 +51,7 @@ def test_create_ignore_extra_true():
 
 def test_evolve_pclass_instance():
     p = Point(x=1, y=2)
-    p2 = p.set(x=p.x+2)
+    p2 = p.set(x=p.x + 2)
 
     # Original remains
     assert p.x == 1
@@ -191,7 +191,7 @@ def test_repr():
 
 def test_global_invariant_check():
     class UnitCirclePoint(PClass):
-        __invariant__ = lambda cp: (0.99 < math.sqrt(cp.x*cp.x + cp.y*cp.y) < 1.01,
+        __invariant__ = lambda cp: (0.99 < math.sqrt(cp.x * cp.x + cp.y * cp.y) < 1.01,
                                     "Point not on unit circle")
         x = field(type=float)
         y = field(type=float)
@@ -334,6 +334,7 @@ def test_inherited_global_invariants():
 
 def test_diamond_inherited_global_invariants():
     counter = []
+
     class Base(object):
         def __invariant__(self):
             counter.append(None)
@@ -354,6 +355,7 @@ def test_diamond_inherited_global_invariants():
     except InvariantException as e:
         assert e.invariant_errors == (("base",),)
         assert counter == [None]
+
 
 def test_supports_weakref():
     import weakref

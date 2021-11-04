@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 from functools import wraps
 from Aspidites._vendor.pyrsistent._pmap import PMap, pmap
 from Aspidites._vendor.pyrsistent._pset import PSet, pset

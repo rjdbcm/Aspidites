@@ -11,7 +11,7 @@
 #
 ##############################################################################
 """RestrictedPython package."""
-
+__version__ = '5.1'
 # flake8: NOQA: E401
 
 # This is a file to define public API in the base namespace of the package.

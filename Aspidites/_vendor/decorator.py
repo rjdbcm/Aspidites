@@ -38,6 +38,7 @@ from typing import cast
 from inspect import signature, isgeneratorfunction, iscoroutinefunction
 from .decorator_extension import F, EMPTY, POS, fix
 
+__version__ = '5.1.0'
 
 def decorator(caller: F, _func: F = None, kwsyntax=False) -> F:
     """

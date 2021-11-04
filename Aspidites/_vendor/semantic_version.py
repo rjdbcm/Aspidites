@@ -6,6 +6,8 @@ import functools
 import re
 import warnings
 
+__version__ = '0.1.7'
+
 
 def _has_leading_zero(value):
     return (value

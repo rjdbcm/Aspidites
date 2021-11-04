@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 from collections.abc import Container, Iterable, Sized, Hashable
 from functools import reduce
 from Aspidites._vendor.pyrsistent._pmap import pmap

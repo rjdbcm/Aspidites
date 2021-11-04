@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 from Aspidites._vendor.pyrsistent._checked_types import CheckedType, _restore_pickle, InvariantException, store_invariants
 from Aspidites._vendor.pyrsistent._field_common import (
     set_fields, check_type, is_field_ignore_extra_complaint, PFIELD_NO_INITIAL, serialize, check_global_invariants

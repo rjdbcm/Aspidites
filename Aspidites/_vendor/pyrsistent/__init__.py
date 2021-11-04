@@ -31,6 +31,7 @@ from Aspidites._vendor.pyrsistent._transformations import inc, discard, rex, ny
 
 from Aspidites._vendor.pyrsistent._toolz import get_in
 
+__version__ = '0.18.0'
 
 __all__ = ('pmap', 'm', 'PMap',
            'pvector', 'v', 'PVector',

@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 from Aspidites._vendor.pyrsistent._checked_types import (InvariantException, CheckedType, _restore_pickle, store_invariants)
 from Aspidites._vendor.pyrsistent._field_common import (
     set_fields, check_type, is_field_ignore_extra_complaint, PFIELD_NO_INITIAL, serialize, check_global_invariants
@@ -21,6 +22,7 @@ class PClassMeta(type):
             dct['__slots__'] += ('__weakref__',)
 
         return super(PClassMeta, mcs).__new__(mcs, name, bases, dct)
+
 
 _MISSING_VALUE = object()
 

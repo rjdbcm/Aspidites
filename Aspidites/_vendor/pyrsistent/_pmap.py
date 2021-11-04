@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 from collections.abc import Mapping, Hashable
 from itertools import chain
 from Aspidites._vendor.pyrsistent._pvector import pvector
