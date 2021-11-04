@@ -1,9 +1,9 @@
-from typing import Union
+from typing import Union, Dict
 
 from .core import Aggregation
 
 
-class Histogram(Aggregation[dict]):
+class Histogram(Aggregation):
     def new(self) -> dict:
         return dict()
 

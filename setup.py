@@ -85,6 +85,18 @@ module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                 str(Path('Aspidites/_vendor/pyrsistent/_pset.py')),
                 str(Path('Aspidites/_vendor/pyrsistent/_pvector.py')),
                 str(Path('Aspidites/_vendor/pyrsistent/_toolz.py')),
+                str(Path('Aspidites/_vendor/apm/error.py')),
+                # str(Path('Aspidites/_vendor/apm/case_of.py')),
+                str(Path('Aspidites/_vendor/apm/patterns.py')),
+                str(Path('Aspidites/_vendor/apm/overload.py')),
+                str(Path('Aspidites/_vendor/apm/try_match.py')),
+                # str(Path('Aspidites/_vendor/apm/typefoo.py')),
+                # str(Path('Aspidites/_vendor/apm/core.py')),
+                str(Path('Aspidites/_vendor/apm/_util.py')),
+                # str(Path('Aspidites/_vendor/apm/agg.py')),
+                str(Path('Aspidites/_vendor/apm/generic.py')),
+                str(Path('Aspidites/_vendor/apm/no_value.py')),
+                str(Path('Aspidites/_vendor/apm/match.py')),
                 ]
 if sys.platform == 'darwin' or sys.platform == 'linux':
     sep = '/'
