@@ -84,6 +84,7 @@ stmt = Forward()
 
 quoted_str = quotedString().setParseAction(lambda t: t[0])
 integer = Word(nums).setParseAction(cvt_int)
+neg_integer = Combine(Literal('-') + integer)
 real = Combine(Optional(Word(nums)) + "." + Word(nums))
 complex_ = Combine(real | integer + "+" + real | integer + "j")
 identifier = Word(alphas + "_", alphanums + "_") + Optional(persist)
@@ -113,21 +114,6 @@ comp_expr = infixNotation(
 #  maximum recursion depth exceeded while getting the str of an object
 list_item = (  # Precedence important!!!
         slice_str
-        | list_index
-        # | dict_items
-        # | dict_keys
-        | list_count
-        # | dict_vals
-        | dict_discard
-        | set_discard
-        | list_append
-        # | set_update
-        | dict_copy
-        | set_copy
-        | list_remove
-        | dict_remove
-        | set_remove
-        | list_set
         | comp_expr  # Expressions
         | arith_expr
         | identifier
@@ -142,10 +128,20 @@ list_item = (  # Precedence important!!!
         | dict_str_evolver
         | list_str
         | set_str
-        # | tuple_str
         | dict_str
 )
-
+collection_trigrams = Forward()
+collection_trigrams <<= (list_set
+                         | list_index
+                         | list_count
+                         | dict_discard
+                         | set_discard
+                         | list_append
+                         | dict_copy
+                         | set_copy
+                         | list_remove
+                         | dict_remove
+                         | set_remove)
 list_index <<= (
         (identifier | list_str | slice_str) + index_items.setParseAction(
     replaceWith('.index')) + list_item).setParseAction(
@@ -162,7 +158,7 @@ list_set <<= (
     cvt_list_index)
 
 list_append <<= (
-        (identifier | list_str | slice_str) + append_update.setParseAction(
+        (identifier | list_str | slice_str) + append.setParseAction(
     replaceWith('.append')) + list_item).setParseAction(
     cvt_list_index)
 
@@ -195,19 +191,19 @@ dict_remove <<= (
 #     replaceWith('.discard')) + list_item).setParseAction(
 #     cvt_list_index)
 # set_update <<= (
-#         (identifier | set_str) + append_update.setParseAction(
+#         (identifier | set_str) + append.setParseAction(
 #     replaceWith('.append')) + list_item).setParseAction(
 #     cvt_list_index)
 
-set_copy <<= ((identifier | list_str) + copy.setParseAction(replaceWith('.copy()')))
+set_copy <<= ((identifier | set_str) + copy.setParseAction(replaceWith('.copy()')))
 
 set_remove <<= (
-        (identifier | list_str) + remove.setParseAction(
+        (identifier | set_str) + remove.setParseAction(
     replaceWith('.remove')) + list_item).setParseAction(
     cvt_list_index)
 
 lit_ellipse = Literal("...").setParseAction(replaceWith('...'))
-assignable = func_call | list_item | lit_ellipse
+assignable = collection_trigrams | func_call | list_item | lit_ellipse
 
 _contract_expression = contract_expression.copy()
 _contract_expression.setParseAction(lambda tks: f"'{''.join((str(t) for t in tks))}'")
@@ -346,7 +342,7 @@ suite <<= IndentedBlock(
               | slice_assign
               | contract_assign)).setParseAction(
     lambda t: (nl_indent.join(t.asList())))
-rvalue <<= dict_update | clos_call | func_call | list_item | lambda_def
+rvalue <<= collection_trigrams | clos_call | func_call | list_item | lambda_def
 simple_assign << Group(identifier + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
 slice_assign << Group(slice_str + assign_eq + rvalue).setParseAction(lambda t: " ".join(t[0]))
 stmt <<= (func_def | contract_define | simple_assign)

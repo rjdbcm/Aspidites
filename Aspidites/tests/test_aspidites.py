@@ -14,10 +14,9 @@ try:
 except ImportError:
     from math import inf, nan, isinf, isnan
 
-
 from .._vendor.contracts import ContractNotRespected
 from ..__main__ import get_cy_kwargs, main
-from ..parser.parser import parse_module, func_def, arith_expr
+from ..parser.parser import parse_module, func_def, arith_expr, list_item, collection_trigrams
 from ..templates import woma_template
 from ..monads import Maybe, Surely
 from ..math import SafeFloorDiv, SafeMod, SafeDiv, SafeExp, Undefined, SafeFactorial, SafeUnarySub, SafeUnaryAdd
@@ -62,7 +61,7 @@ def test_cli_help_exit():
 
 def test_cli_no_arg_exit():
     with pt.raises(SystemExit):
-        main(['Aspidites' , ''])
+        main(['Aspidites', ''])
 
 
 def test_cli_no_target_exit():
@@ -98,6 +97,63 @@ def test_parse_func_def(w, x, y, z):
     exec(''.join(func_def.parseString(f2)))
 
 
+@hypothesis.settings(deadline=None)
+@hypothesis.given(st.text([c for c in ascii_letters]),
+                  st.integers(),
+                  st.integers(min_value=0))
+def test_parse_literals(v, x, y):
+    assert ''.join(list_item.parseString(f"'{v}'")) == f"'{v}'"
+    assert ''.join(list_item.parseString(f'"{v}"')) == f'"{v}"'
+    assert ''.join(list_item.parseString('/0')) == 'Undefined()'
+    assert ''.join(list_item.parseString('True')) == 'True'
+    assert ''.join(list_item.parseString('False')) == 'False'
+    assert ''.join(list_item.parseString(f'{x}.{y}')) == f'{x}.{y}'
+    assert ''.join(list_item.parseString(f'{y}+{x}j')) == f'{y}+{x}j'
+
+
+@hypothesis.settings(deadline=None)
+@hypothesis.given(st.text([c for c in ascii_letters]),
+                  st.integers(),
+                  st.integers(min_value=0))
+def test_set_remove(v, x, y):
+    assert ''.join(collection_trigrams.parseString(f"{{{y},{x}}}[*]{y}")) == f"pset({{{y}, {x}}}).remove({y})"
+
+
+# @hypothesis.settings(deadline=None)
+# @hypothesis.given(st.text([c for c in ascii_letters], min_size=1),
+#                   st.integers(),
+#                   st.integers(min_value=0))
+# def test_list_set(v, x, y):
+#     assert ''.join(collection_trigrams.parseString(f"{v}[$]{x},{y}")) == f"{v}.set({x},{y})"
+#     assert ''.join(collection_trigrams.parseString(f"{v}[$]{x},{v}")) == f"{v}.set({x},{v})"
+
+
+@hypothesis.settings(deadline=None)
+@hypothesis.given(st.sets(st.integers()),
+                  st.lists(st.integers()),
+                  st.text([c for c in ascii_letters]),
+                  st.text([c for c in ascii_lowercase]),
+                  st.integers(),
+                  st.integers(min_value=0))
+def test_parse_collections(t, u, v, w, x, y):
+    assert ''.join(list_item.parseString(f"{{'a': ({y}+5), '{w}': 8, '{v}': True, {x}: None, 'd': 6**2*5+3}}")) \
+           == f"pmap({{'a': ({y}+5), '{w}': 8, '{v}': True, {x}: None, 'd': Maybe(SafeExp, 6, 2*5+3, )()}})"
+    assert ''.join(list_item.parseString(f"{{'{v}', '{w}'}}")) == f"pset({{'{v}', '{w}'}})"
+    assert ''.join(list_item.parseString(f"[{u}, 4, 6, {x}, {y}]")) == f"pvector([pvector({u}), 4, 6, {x}, {y}])"
+
+
+@hypothesis.settings(deadline=None)
+@hypothesis.given(st.text([c for c in ascii_letters]),
+                  st.text([c for c in ascii_lowercase]),
+                  st.integers(),
+                  st.integers(min_value=0))
+def test_parse_evolvers(w, x, y, z):
+    assert ''.join(list_item.parseString("{'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}...")) \
+           == "pmap({'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': Maybe(SafeExp, 6, 2*5+3, )()}).evolver()"
+    assert ''.join(list_item.parseString("{'a', 'b', 'c'}...")) == "pset({'a', 'b', 'c'}).evolver()"
+    assert ''.join(list_item.parseString("[2, 4, 6, 8, 10]...")) == "pvector([2, 4, 6, 8, 10]).evolver()"
+
+
 # TODO Stacking unary operators onto their respective positive/negative operands does not parse safely
 #  line 105, in test_parse_arith
 #     assert eval(stmt) == eval(''.join(arith_expr.parseString(stmt)))
@@ -128,9 +184,30 @@ def test_parse_func_def(w, x, y, z):
                   st.integers(min_value=1),
                   st.text(['/', '*', '%', '+', '-'], min_size=1, max_size=1),
                   st.text(['+', '-'], min_size=1, max_size=1))
-def test_parse_arith(p, q, binop, unop):
+def test_parse_arith_expr(p, q, binop, unop):
     stmt = str(p) + binop + str(q)
-    assert eval(stmt) == eval(''.join(arith_expr.parseString(stmt)))
+    assert eval(stmt) == eval(''.join(list_item.parseString(stmt)))
+
+
+@hypothesis.settings(deadline=None)
+@hypothesis.given(st.integers(min_value=1, max_value=255),  # exponent
+                  st.integers(min_value=1),
+                  st.text(['/', '*', '%', '+', '-'], min_size=1, max_size=1),
+                  st.text(['+', '-'], min_size=1, max_size=1),
+                  st.from_regex(">=|<=|>|<|==", fullmatch=True))
+def test_parse_comp_expr(p, q, binop, unop, compop):
+    stmt = str(p) + binop + str(q) + ' ' + compop + ' ' + str(p) + binop + str(q)
+    assert eval(stmt) == eval(''.join(list_item.parseString(stmt)))
+
+
+@hypothesis.settings(deadline=None)
+@hypothesis.given(st.integers(min_value=1, max_value=255),  # exponent
+                  st.integers(min_value=1),
+                  st.from_regex(r"<<|>>|&|\||\^", fullmatch=True),
+                  st.text(['+', '-'], min_size=1, max_size=1))
+def test_parse_bitwise(p, q, bitwise, unop):
+    stmt = str(p) + bitwise + str(q)
+    assert eval(stmt) == eval(''.join(list_item.parseString(stmt)))
 
 
 # @pt.mark.filterwarnings('ignore::RuntimeWarning')
