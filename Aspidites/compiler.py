@@ -151,6 +151,8 @@ class Compiler:
         self.args = compile_args
         self.file_stack = CheckedFileStack()
         self.fname = Path(self.args.fname)
+        if str(self.fname).endswith('.py'):
+            raise PendingDeprecationWarning('Pure python compilation is pending deprecation as of 1.13 and will be removed in 2.0')
         self.app_name = self.fname.parent / self.fname.stem
         self.project = self.app_name.stem
         self.module_name = str(self.app_name).replace("/", ".")
