@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import warnings
 from pathlib import Path
@@ -200,12 +201,14 @@ def test_parse_comp_expr(p, q, binop, unop, compop):
     assert eval(stmt) == eval(''.join(list_item.parseString(stmt)))
 
 
+bit_op = re.compile(r"<<|>>|&|\||\^")
+
+
 @hypothesis.settings(deadline=None)
 @hypothesis.given(st.integers(min_value=1, max_value=255),  # exponent
                   st.integers(min_value=1),
-                  st.from_regex(r"<<|>>|&|\||\^", fullmatch=True),
-                  st.text(['+', '-'], min_size=1, max_size=1))
-def test_parse_bitwise(p, q, bitwise, unop):
+                  st.from_regex(bit_op, fullmatch=True))
+def test_parse_bitwise(p, q, bitwise):
     stmt = str(p) + bitwise + str(q)
     assert eval(stmt) == eval(''.join(list_item.parseString(stmt)))
 
