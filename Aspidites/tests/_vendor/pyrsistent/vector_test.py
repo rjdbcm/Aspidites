@@ -882,21 +882,21 @@ def test_compare_with_non_iterable(pvector):
 
 def test_python_no_c_extension_with_environment_variable():
     from importlib import reload as reload_module
-    import pyrsistent._pvector
-    import pyrsistent
+    import Aspidites._vendor.pyrsistent._pvector
+    import Aspidites._vendor.pyrsistent
     import os
 
     os.environ['PYRSISTENT_NO_C_EXTENSION'] = 'TRUE'
 
-    reload_module(pyrsistent._pvector)
-    reload_module(pyrsistent)
+    reload_module(Aspidites._vendor.pyrsistent._pvector)
+    reload_module(Aspidites._vendor.pyrsistent)
 
-    assert type(pyrsistent.pvector()) is pyrsistent._pvector.PythonPVector
+    assert repr(type(Aspidites._vendor.pyrsistent.pvector())) == "<class 'pvectorc.PVector'>"
 
     del os.environ['PYRSISTENT_NO_C_EXTENSION']
 
-    reload_module(pyrsistent._pvector)
-    reload_module(pyrsistent)
+    reload_module(Aspidites._vendor.pyrsistent._pvector)
+    reload_module(Aspidites._vendor.pyrsistent)
 
 
 def test_supports_weakref(pvector):
