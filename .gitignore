@@ -10,3 +10,4 @@
 .coverage*
 /Aspidites.egg-info/
 /Pipfile.lock
+*.so

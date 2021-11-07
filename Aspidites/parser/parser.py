@@ -45,50 +45,55 @@ from .._vendor.pyparsing import (
 from .._vendor.contracts.syntax import contract_expression
 from ..parser.convert import *
 
-list_str = Forward()
-list_str_evolver = Forward()
-list_index = Forward()
-list_set = Forward()
-list_count = Forward()
-list_append = Forward()
-list_remove = Forward()
-dict_items = Forward()
-dict_keys = Forward()
-dict_vals = Forward()
-dict_discard = Forward()
-dict_update = Forward()
-dict_copy = Forward()
-dict_remove = Forward()
-set_discard = Forward()
-set_update = Forward()
-set_copy = Forward()
-set_remove = Forward()
-set_str = Forward()
-set_str_evolver = Forward()
-dict_str = Forward()
-dict_str_evolver = Forward()
+list_str = Forward().setName('list literal')
+list_str_evolver = Forward().setName('list evolver literal')
+list_index = Forward().setName('list index operation')
+list_set = Forward().setName('list set operation')
+list_count = Forward().setName('list count operation')
+list_append = Forward().setName('list append operation')
+list_remove = Forward().setName('list remove operation')
+dict_items = Forward().setName('dictionary items operation')
+dict_keys = Forward().setName('dictionary keys operation')
+dict_vals = Forward().setName('dictionary values operation')
+dict_discard = Forward().setName('dictionary discard operation')
+dict_update = Forward().setName('dictionary update operation')
+dict_copy = Forward().setName('dictionary copy operation')
+dict_remove = Forward().setName('dictionary remove operation')
+set_discard = Forward().setName('set discard operation')
+set_update = Forward().setName('set update operation')
+set_copy = Forward().setName('set copy operation')
+set_remove = Forward().setName('set remove operation')
+set_str = Forward().setName('set literal')
+set_str_evolver = Forward().setName('set evolver literal')
+dict_str = Forward().setName('dictionary literal')
+dict_str_evolver = Forward().setName('dictionary evolver literal')
 # tuple_str = Forward()
-slice_str = Forward()
-simple_assign = Forward()
-slice_assign = Forward()
-func_call = Forward()
-suite = Forward()
-break_if = Forward()
-cont_if = Forward()
-if_slice = Forward()
-if_simple = Forward()
-if_func_call = Forward()
-if_return = Forward()
-rvalue = Forward()
-stmt = Forward()
+slice_str = Forward().setName('list slice operation')
+simple_assign = Forward().setName('simple assignment')
+slice_assign = Forward().setName('slice assignment')
+func_call = Forward().setName('function call')
+suite = Forward().setName('indented block')
+break_if = Forward().setName('conditional break')
+cont_if = Forward().setName('conditional continue')
+if_slice = Forward().setName('conditional slice')
+if_simple = Forward().setName('conditional assignment')
+if_func_call = Forward().setName('conditional function call')
+if_return = Forward().setName('conditional return')
+rvalue = Forward().setName('return value')
+stmt = Forward().setName('statement')
 
 quoted_str = quotedString().setParseAction(lambda t: t[0])
+quoted_str.setName('string literal')
 integer = Word(nums).setParseAction(cvt_int)
-neg_integer = Combine(Literal('-') + integer)
+integer.setName('integer numeric literal')
 real = Combine(Optional(Word(nums)) + "." + Word(nums))
+real.setName('floating point numeric literal')
 complex_ = Combine(real | integer + "+" + real | integer + "j")
+complex_.setName('complex numeric literal')
 identifier = Word(alphas + "_", alphanums + "_") + Optional(persist)
+identifier.setName('identifier')
 operand = nullit | complex_ | real | bool_literal | integer | identifier | underscore
+operand.setName('operand')
 arith_expr = Combine(
     infixNotation(
         operand,
@@ -104,12 +109,14 @@ arith_expr = Combine(
         rpar=lit_rparen,
     )
 ).setParseAction(cvt_arith_expr)
+arith_expr.setName('arithmetic expression')
 comp_expr = infixNotation(
     arith_expr,
     [
         (comparisonop, 2, opAssoc.LEFT),
     ],
 ).setParseAction(lambda t: ''.join(t[0]))
+comp_expr.setName('comparison expression')
 # TODO dict trigrams cause RecursionError:
 #  maximum recursion depth exceeded while getting the str of an object
 list_item = (  # Precedence important!!!
@@ -129,19 +136,18 @@ list_item = (  # Precedence important!!!
         | list_str
         | set_str
         | dict_str
-)
-collection_trigrams = Forward()
-collection_trigrams <<= (list_set
-                         | list_index
-                         | list_count
-                         | dict_discard
-                         | set_discard
-                         | list_append
-                         | dict_copy
-                         | set_copy
-                         | list_remove
-                         | dict_remove
-                         | set_remove)
+).setName('list item')
+collection_trigrams = (list_set
+                       | list_index
+                       | list_count
+                       | dict_discard
+                       | set_discard
+                       | list_append
+                       | dict_copy
+                       | set_copy
+                       | list_remove
+                       | dict_remove
+                       | set_remove).setName('collections trigram')
 list_index <<= (
         (identifier | list_str | slice_str) + index_items.setParseAction(
     replaceWith('.index')) + list_item).setParseAction(
@@ -242,6 +248,7 @@ func_decl = Group(
     Optional(OneOrMore(bool_pragmas) | OneOrMore(pragmas)) +
     private_def_decl + identifier + def_args + _contract_expression).setParseAction(
     lambda t: "\n@contract()\n" + "".join(*t) + lit_colon)
+func_decl.setName('function declaration')
 comment_line = (Combine(Regex(r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`").setParseAction(
     lambda t: t[0]).setParseAction(cvt_comment_line))
 
