@@ -1,4 +1,5 @@
 **unreleased**
+**v1.13.0**
 **v1.12.0**
 
 - 4bb37d2 minify templates
