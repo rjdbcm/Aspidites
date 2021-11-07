@@ -1,5 +1,25 @@
 **unreleased**
 **v1.12.0**
+
+- 4bb37d2 minify templates
+- f7d8804 prepare for Cython 3.0
+- 55dc40b add pending deprecation for pure python compilation
+- ac6ead4 hide implementations in compiled code
+- 60efb49 Add names for most parser symbols
+- e6101e3 Add ASPIDITES_SOURCE_MODE environment variable for CI/CD
+- d59f003 skip vectorc test for now
+- a112c63 fix incorrect import
+- aecd5e7 try to fix bitwise tests
+- 73b365a try to fix bitwise tests
+- 398224b make testing verbose
+- f8349f8 fix dependencies
+- ea4449f Merge remote-tracking branch 'origin/main'
+- 5117bc1 added some unit tests and moved collection trigrams out of the list_item construct
+- 08b920b vendored apm mostly static
+- 43a5d3c vendored pyrsistent
+- 59dc622 Update README.md
+
+
 **v1.11.2**
 
 - d5c6a17 vendored pyrsistent
