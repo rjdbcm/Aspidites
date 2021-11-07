@@ -49,7 +49,7 @@ args_end = Group(Literal(")") + Literal(")")).setParseAction(replaceWith(") -> "
 underscore = Literal("_").setName("lambda variable")
 lparen, rparen, lbrack, rbrack, lbrace, rbrace, colon, comma = map(Suppress, "()[]{}:,")
 lit_lparen, lit_rparen, lit_lbrack, lit_rbrack, lit_lbrace, lit_rbrace, lit_colon, lit_comma = map(str, "()[]{}:,")
-bool_literal = oneOf("True False", asKeyword=True).setParseAction(lambda t: t[0] == "True").setName('boolean literal')
+bool_literal = oneOf("True False", asKeyword=True).setParseAction(lambda s, l, t: t[0] == "True").setName('boolean literal')
 nullit = oneOf("/0 ø Ø").setParseAction(replaceWith("__undefined()")).setName('nullity')
 signop = Literal("+") | Literal("-")
 multop = Literal("*") | oneOf("/ //") | Literal("%") | Literal("@")
@@ -81,7 +81,7 @@ pass_stmt = Literal("<#>").setParseAction(replaceWith('pass')).setName('pass tri
 cont_stmt = Literal("<$>").setParseAction(replaceWith('continue')).setName('continue trigram')
 break_stmt = Literal("<%>").setParseAction(replaceWith('break')).setName('break trigram')
 if_cond = Literal('<?>').setParseAction(replaceWith('if ')).setName('conditional trigram')
-respects = Keyword("->").setParseAction(lambda t: ":").setName('contract assignment')
-imposes = Keyword("<-").setParseAction(lambda t: "__new_contract").setName('contract imposition')
+respects = Keyword("->").setParseAction(lambda s, l, t: ":").setName('contract assignment')
+imposes = Keyword("<-").setParseAction(lambda s, l, t: "__new_contract").setName('contract imposition')
 struct_main = Keyword("main:").setParseAction(replaceWith('if __name__ == "__main__":'))
 

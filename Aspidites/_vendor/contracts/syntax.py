@@ -58,12 +58,12 @@ point = Literal('.')
 e = CaselessLiteral('E')
 plusorminus = Literal('+') | Literal('-')
 integer = Combine(O(plusorminus) + basenumber)
-integer.setParseAction(lambda tokens: SimpleRValue(int(tokens[0])))
+integer.setParseAction(lambda x, y, tokens: SimpleRValue(int(tokens[0])))
 floatnumber = Combine(
     O(plusorminus) + integer + (point + O(basenumber)) ^ (e + integer))
-floatnumber.setParseAction(lambda tokens: SimpleRValue(float(tokens[0])))
+floatnumber.setParseAction(lambda x, y, tokens: SimpleRValue(float(tokens[0])))
 pi = Keyword('pi').setParseAction(
-    lambda tokens: SimpleRValue(math.pi, 'pi'))  # @UnusedVariable
+    lambda x, y, tokens: SimpleRValue(math.pi, 'pi'))  # @UnusedVariable
 
 np_ = False
 

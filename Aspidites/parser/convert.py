@@ -3,12 +3,11 @@ import re
 
 from .reserved import *
 
-base_parse_action = lambda t: nl_indent.join(t[0])
 pmap_re = re.compile(r"(pmap\(\{.*\}\))")
 
 
-def cvt_arith_expr(tks):
-    expr = "".join((str(t) for t in tks))
+def cvt_arith_expr(s, loc, t):
+    expr = "".join((str(i) for i in t))
     end = lit_rparen + lit_lparen + lit_rparen
     substr = ['!', '**', '//', '/', '%']
     while any([s in expr for s in substr]):
@@ -58,20 +57,20 @@ def cvt_arith_expr(tks):
     return expr
 
 
-def cvt_pragma(tks):
-    t: list = tks.asList()
+def cvt_pragma(s, loc, t):
+    t: list = t.asList()
     return '\n'.join(t) + '\n'
 
 
-def cvt_int(t):
+def cvt_int(s, loc, t):
     return int(t[0])
 
 
-def cvt_real(t):
+def cvt_real(s, loc, t):
     return float(t[0])
 
 
-def cvt_tuple(t):
+def cvt_tuple(s, loc, t):
     return "(" + ", ".join(t.asList()) + ")"
 
 
@@ -79,7 +78,7 @@ def cvt_comment_line(s, loc, t):
     return "# comment_line %s:" % (len([c for c in s[:loc] if c == "\n"]) + 1) + t[0]
 
 
-def cvt_for_loop_decl(t):
+def cvt_for_loop_decl(s, loc, t):
     t = t[0]
     if len(t) == 5:
         r = pmap_re.match(t[4])
@@ -93,7 +92,7 @@ def cvt_for_loop_decl(t):
     return s.decode('UTF-8')
 
 
-def cvt_dict(t):
+def cvt_dict(s, loc, t):
     t: list = t.asList()
     s: bytes
     for i, v in enumerate(t):
@@ -106,7 +105,7 @@ def cvt_dict(t):
     return f"__pmap({{{s.decode('UTF-8')}}})"
 
 
-def cvt_list(t):
+def cvt_list(s, loc, t):
     t: list = t.asList()
     s: bytes
     for i, v in enumerate(t):
@@ -118,7 +117,7 @@ def cvt_list(t):
     return f"__pvector([{s.decode('UTF-8')}])"
 
 
-def cvt_list_index(t):
+def cvt_list_index(s, loc, t):
     t = t.asList()
     t.insert(2, lit_lparen)
     t[3] = str(t[3])
@@ -126,7 +125,7 @@ def cvt_list_index(t):
     return ''.join(t)
 
 
-def cvt_set(t):
+def cvt_set(s, loc, t):
     t: list = t.asList()
     s: bytes
     for i, v in enumerate(t):
@@ -138,7 +137,7 @@ def cvt_set(t):
     return f"__pset({{{s.decode('UTF-8')}}})"
 
 
-def cvt_contract_assign(t):
+def cvt_contract_assign(s, loc, t):
     t: list = t.asList()
     s: str
     i: str
@@ -148,7 +147,7 @@ def cvt_contract_assign(t):
     return s
 
 
-def cvt_contract_define(t):
+def cvt_contract_define(s, loc, t):
     t[0], t[1] = t[1], t[0]
     t[1] = "'" + t[1] + "'"
     args = f"({', '.join(t[1:])})"
@@ -164,9 +163,9 @@ def swap_val_to_idx(lst: list, val, idx: int) -> list:
     return lst
 
 
-def cvt_clos_call(t):
+def cvt_clos_call(s, loc, t):
     return "__maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1]
 
 
-def cvt_func_call(t):
+def cvt_func_call(s, loc, t):
     return "__maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1] + lit_lparen + lit_rparen

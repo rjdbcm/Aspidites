@@ -133,6 +133,7 @@ def parse_from_dummy(argv: list,
             cy_kwargs[k] = args.__getattribute__(k)
     else:
         args, other_args = asp_parser.parse_known_args()
+        cy_kwargs = cy_parser.parse_known_args()
     return args, other_args, cy_kwargs
 
 
@@ -150,6 +151,7 @@ def main(argv=None) -> None:
     argv = sys.argv if not argv else argv
     # any failure results in falling back to the `Cython.Compiler.Options` API
     args, other_args, cy_kwargs = parse_from_dummy(argv, ap.ArgumentParser(add_help=False))
+    # TODO: Cython 3.0 arguments clash with Aspidites' ArgumentParser
     args.target, args.output, code = parse_code(args.target, args.output)
     cy_kwargs.update({  # pragma: no cover
         'code': code,

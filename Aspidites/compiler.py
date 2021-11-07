@@ -18,6 +18,7 @@ import inspect
 import os
 import py_compile
 import sys
+import warnings
 from dataclasses import dataclass
 from glob import glob
 import typing as t
@@ -152,7 +153,8 @@ class Compiler:
         self.file_stack = CheckedFileStack()
         self.fname = Path(self.args.fname)
         if str(self.fname).endswith('.py'):
-            raise PendingDeprecationWarning('Pure python compilation is pending deprecation as of 1.13 and will be removed in 2.0')
+            warnings.warn('Pure python compilation is pending deprecation as of 1.13 and will be removed in 2.0',
+                          PendingDeprecationWarning)
         self.app_name = self.fname.parent / self.fname.stem
         self.project = self.app_name.stem
         self.module_name = str(self.app_name).replace("/", ".")
@@ -188,6 +190,8 @@ class Compiler:
 
         if self.args.bytecode:
             self.bytecode_compile()
+            warnings.warn('Bytecode compilation is pending deprecation as of 1.13 and will be removed in 2.0',
+                          PendingDeprecationWarning)
 
         if self.args.c:
             # self.compile_c()
