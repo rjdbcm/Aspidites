@@ -42,6 +42,7 @@ def setup_code(inject_config):
         try:
             code_ = parse_module(open(str(Path("Aspidites/tests") / woma_file), 'r').read())
             warnings.warn("Aspidites is being tested in source mode")
+            os.environ['ASPIDITES_SOURCE_MODE'] = True
         except FileNotFoundError:
             code_ = parse_module(open(Path(inject_config) / woma_file, 'r').read())
     return code_
