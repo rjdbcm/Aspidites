@@ -209,8 +209,7 @@ bit_op = re.compile(r"<<|>>|&|\||\^")
                   st.integers(min_value=1),
                   st.from_regex(bit_op, fullmatch=True))
 def test_parse_bitwise(p, q, bitwise):
-    stmt = str(p) + bitwise + str(q)
-    assert eval(stmt) == eval(''.join(list_item.parseString(stmt)))
+    assert str(p) + bitwise + str(q) == ''.join(list_item.parseString(str(p) + bitwise + str(q)))
 
 
 # @pt.mark.filterwarnings('ignore::RuntimeWarning')
