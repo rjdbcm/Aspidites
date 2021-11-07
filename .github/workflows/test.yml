@@ -40,7 +40,7 @@ jobs:
               pip install -U pip pipenv wheel cython dearpygui
               pipenv lock
               pipenv sync -d
-              pipenv run pytest -x --cov=Aspidites --cov-report=xml --profile --profile-svg
+              pipenv run pytest -v -x --cov=Aspidites --cov-report=xml --profile --profile-svg
               rm -rf Pipfile.lock
 
       - name: Archive production artifacts
@@ -83,7 +83,7 @@ jobs:
               pip install -U pip pipenv wheel cython dearpygui
               pipenv lock
               pipenv sync -d
-              pipenv run pytest -x --profile
+              pipenv run pytest -v -x --profile
               rm -rf Pipfile.lock
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
