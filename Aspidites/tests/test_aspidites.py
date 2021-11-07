@@ -8,7 +8,7 @@ from string import ascii_letters, digits, ascii_lowercase
 import hypothesis
 import pytest as pt
 from hypothesis import given, assume, strategies as st
-from Aspidites._vendor.contracts import contract
+from Aspidites._vendor.contracts import contract as __contract
 
 try:
     from numpy import inf, nan, isinf, isnan
@@ -19,8 +19,8 @@ from .._vendor.contracts import ContractNotRespected
 from ..__main__ import get_cy_kwargs, main
 from ..parser.parser import parse_module, func_def, arith_expr, list_item, collection_trigrams
 from ..templates import woma_template
-from ..monads import Maybe, Surely
-from ..math import SafeFloorDiv, SafeMod, SafeDiv, SafeExp, Undefined, SafeFactorial, SafeUnarySub, SafeUnaryAdd
+from ..monads import Maybe as __maybe, Surely
+from ..math import Undefined as __undefined, SafeDiv as __safeDiv, SafeExp as __safeExp, SafeMod as __safeMod, SafeFloorDiv as __safeFloorDiv, SafeUnaryAdd as __safeUnaryAdd, SafeUnarySub as __safeUnarySub, SafeFactorial as __safeFactorial
 from ..compiler import Compiler, CompilerArgs
 
 docker = os.getenv("ASPIDITES_DOCKER_BUILD")
@@ -106,7 +106,7 @@ def test_parse_func_def(w, x, y, z):
 def test_parse_literals(v, x, y):
     assert ''.join(list_item.parseString(f"'{v}'")) == f"'{v}'"
     assert ''.join(list_item.parseString(f'"{v}"')) == f'"{v}"'
-    assert ''.join(list_item.parseString('/0')) == 'Undefined()'
+    assert ''.join(list_item.parseString('/0')) == '__undefined()'
     assert ''.join(list_item.parseString('True')) == 'True'
     assert ''.join(list_item.parseString('False')) == 'False'
     assert ''.join(list_item.parseString(f'{x}.{y}')) == f'{x}.{y}'
@@ -118,7 +118,7 @@ def test_parse_literals(v, x, y):
                   st.integers(),
                   st.integers(min_value=0))
 def test_set_remove(v, x, y):
-    assert ''.join(collection_trigrams.parseString(f"{{{y},{x}}}[*]{y}")) == f"pset({{{y}, {x}}}).remove({y})"
+    assert ''.join(collection_trigrams.parseString(f"{{{y},{x}}}[*]{y}")) == f"__pset({{{y}, {x}}}).remove({y})"
 
 
 # @hypothesis.settings(deadline=None)
@@ -139,9 +139,9 @@ def test_set_remove(v, x, y):
                   st.integers(min_value=0))
 def test_parse_collections(t, u, v, w, x, y):
     assert ''.join(list_item.parseString(f"{{'a': ({y}+5), '{w}': 8, '{v}': True, {x}: None, 'd': 6**2*5+3}}")) \
-           == f"pmap({{'a': ({y}+5), '{w}': 8, '{v}': True, {x}: None, 'd': Maybe(SafeExp, 6, 2*5+3, )()}})"
-    assert ''.join(list_item.parseString(f"{{'{v}', '{w}'}}")) == f"pset({{'{v}', '{w}'}})"
-    assert ''.join(list_item.parseString(f"[{u}, 4, 6, {x}, {y}]")) == f"pvector([pvector({u}), 4, 6, {x}, {y}])"
+           == f"__pmap({{'a': ({y}+5), '{w}': 8, '{v}': True, {x}: None, 'd': __maybe(__safeExp, 6, 2*5+3, )()}})"
+    assert ''.join(list_item.parseString(f"{{'{v}', '{w}'}}")) == f"__pset({{'{v}', '{w}'}})"
+    assert ''.join(list_item.parseString(f"[{u}, 4, 6, {x}, {y}]")) == f"__pvector([__pvector({u}), 4, 6, {x}, {y}])"
 
 
 @hypothesis.settings(deadline=None)
@@ -151,9 +151,9 @@ def test_parse_collections(t, u, v, w, x, y):
                   st.integers(min_value=0))
 def test_parse_evolvers(w, x, y, z):
     assert ''.join(list_item.parseString("{'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}...")) \
-           == "pmap({'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': Maybe(SafeExp, 6, 2*5+3, )()}).evolver()"
-    assert ''.join(list_item.parseString("{'a', 'b', 'c'}...")) == "pset({'a', 'b', 'c'}).evolver()"
-    assert ''.join(list_item.parseString("[2, 4, 6, 8, 10]...")) == "pvector([2, 4, 6, 8, 10]).evolver()"
+           == "__pmap({'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': __maybe(__safeExp, 6, 2*5+3, )()}).evolver()"
+    assert ''.join(list_item.parseString("{'a', 'b', 'c'}...")) == "__pset({'a', 'b', 'c'}).evolver()"
+    assert ''.join(list_item.parseString("[2, 4, 6, 8, 10]...")) == "__pvector([2, 4, 6, 8, 10]).evolver()"
 
 
 # TODO Stacking unary operators onto their respective positive/negative operands does not parse safely
@@ -161,10 +161,10 @@ def test_parse_evolvers(w, x, y, z):
 #     assert eval(stmt) == eval(''.join(arith_expr.parseString(stmt)))
 # AssertionError: assert 1 == -1
 #  +  where 1 = eval('--1-0//-1')
-#  +  and   -1 = eval('Maybe(SafeFloorDiv, --1-0, -1)()')
-#  +    where 'Maybe(SafeFloorDiv, --1-0, -1)()' = <built-in method join of str object at 0x1033f0030>((['Maybe(SafeFloorDiv, --1-0, -1)()'], {}))
+#  +  and   -1 = eval('__maybe(__safeFloorDiv, --1-0, -1)()')
+#  +    where '__maybe(__safeFloorDiv, --1-0, -1)()' = <built-in method join of str object at 0x1033f0030>((['__maybe(__safeFloorDiv, --1-0, -1)()'], {}))
 #  +      where <built-in method join of str object at 0x1033f0030> = ''.join
-#  +      and   (['Maybe(SafeFloorDiv, --1-0, -1)()'], {}) = <bound method ParserElement.parseString of Combine:(Forward: bitwise operator term)>('--1-0//-1')
+#  +      and   (['__maybe(__safeFloorDiv, --1-0, -1)()'], {}) = <bound method ParserElement.parseString of Combine:(Forward: bitwise operator term)>('--1-0//-1')
 #  +        where <bound method ParserElement.parseString of Combine:(Forward: bitwise operator term)> = arith_expr.parseString
 #
 # Falsifying example: test_parse_arith(
@@ -174,12 +174,12 @@ def test_parse_evolvers(w, x, y, z):
 # TODO Stacking division and floor division does not parse safely
 #  line 120, in test_parse_arith
 #     assert eval(stmt) == eval(''.join(arith_expr.parseString(stmt)))
-# AssertionError: assert -1.0 == Undefined(None, (), {})
+# AssertionError: assert -1.0 == __undefined(None, (), {})
 #  +  where -1.0 = eval('-1/1//1')
-#  +  and   Undefined(None, (), {}) = eval('Maybe(SafeDiv, Maybe(SafeFloorDiv, -1, 1, 1)())()')
-#  +    where 'Maybe(SafeDiv, Maybe(SafeFloorDiv, -1, 1, 1)())()' = <built-in method join of str object at 0x10ac04030>((['Maybe(SafeDiv, Maybe(SafeFloorDiv, -1, 1, 1)())()'], {}))
+#  +  and   __undefined(None, (), {}) = eval('__maybe(__safeDiv, __maybe(__safeFloorDiv, -1, 1, 1)())()')
+#  +    where '__maybe(__safeDiv, __maybe(__safeFloorDiv, -1, 1, 1)())()' = <built-in method join of str object at 0x10ac04030>((['__maybe(__safeDiv, __maybe(__safeFloorDiv, -1, 1, 1)())()'], {}))
 #  +      where <built-in method join of str object at 0x10ac04030> = ''.join
-#  +      and   (['Maybe(SafeDiv, Maybe(SafeFloorDiv, -1, 1, 1)())()'], {}) = <bound method ParserElement.parseString of Combine:(Forward: bitwise operator term)>('-1/1//1')
+#  +      and   (['__maybe(__safeDiv, __maybe(__safeFloorDiv, -1, 1, 1)())()'], {}) = <bound method ParserElement.parseString of Combine:(Forward: bitwise operator term)>('-1/1//1')
 #  +        where <bound method ParserElement.parseString of Combine:(Forward: bitwise operator term)> = arith_expr.parseString
 @hypothesis.settings(deadline=None)
 @hypothesis.given(st.integers(min_value=1, max_value=255),  # exponent
@@ -243,14 +243,14 @@ def test_compile_to_shared_object(inject_config):
         Add(x=6.5, y=12)
 
     assert [1, 2, 3] == [i for i in Yield123()]
-    assert Maybe(Add, 6.5, 12)() == Undefined()
+    assert __maybe(Add, 6.5, 12)() == __undefined()
     assert x() == 6
-    assert y() == Undefined()
-    assert nullity == Undefined()
+    assert y() == __undefined()
+    assert nullity == __undefined()
     assert z == 9
     assert Add(x=3, y=2) == 5
-    assert val() == Undefined()
-    assert div_by_zero == Undefined()
+    assert val() == __undefined()
+    assert div_by_zero == __undefined()
 
 #
 # def teardown_function():

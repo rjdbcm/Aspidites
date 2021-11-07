@@ -247,7 +247,7 @@ pragmas = Combine(pragma + oneOf(' '.join(available_pragmas))).setParseAction(cv
 func_decl = Group(
     Optional(OneOrMore(bool_pragmas) | OneOrMore(pragmas)) +
     private_def_decl + identifier + def_args + _contract_expression).setParseAction(
-    lambda t: "\n@contract()\n" + "".join(*t) + lit_colon)
+    lambda t: "\n@__contract()\n" + "".join(*t) + lit_colon)
 func_decl.setName('function declaration')
 comment_line = (Combine(Regex(r"`(?:[^`\n\r\\]|(?:``)|(?:\\(?:[^x]|x[0-9a-fA-F]+)))*") + "`").setParseAction(
     lambda t: t[0]).setParseAction(cvt_comment_line))

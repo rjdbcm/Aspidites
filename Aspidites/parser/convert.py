@@ -13,47 +13,47 @@ def cvt_arith_expr(tks):
     substr = ['!', '**', '//', '/', '%']
     while any([s in expr for s in substr]):
         if "!" in expr:
-            expr = "Maybe(SafeFactorial, " + expr.replace('!', '', 1) + end
+            expr = "__maybe(__safeFactorial, " + expr.replace('!', '', 1) + end
             if expr.count(end) > 1:
-                expr = "Maybe(SafeFactorial, " + expr
+                expr = "__maybe(__safeFactorial, " + expr
             continue
         elif "**" in expr:
             a, op, b = expr.partition('**')
             expr = a + op + b.replace('**', end, 1) + sep
-            expr = "Maybe(SafeExp, " + expr.replace("**", sep, 1) + end
+            expr = "__maybe(__safeExp, " + expr.replace("**", sep, 1) + end
             if expr.count(end) > 1:
-                expr = "Maybe(SafeExp, " + expr
+                expr = "__maybe(__safeExp, " + expr
             continue
         elif "//" in expr:
             a, op, b = expr.partition('//')
             expr = a + op + b.replace('//', end, 1) + sep
-            expr = "Maybe(SafeFloorDiv, " + expr.replace("//", sep, 1) + end
+            expr = "__maybe(__safeFloorDiv, " + expr.replace("//", sep, 1) + end
             if expr.count(end) > 1:
-                expr = "Maybe(SafeFloorDiv, " + expr
+                expr = "__maybe(__safeFloorDiv, " + expr
             continue
         elif "/" in expr:
             a, op, b = expr.partition('/')
             expr = a + op + b.replace('/', end + sep, 1)
-            expr = "Maybe(SafeDiv, " + expr.replace("/", sep, 1) + end
+            expr = "__maybe(__safeDiv, " + expr.replace("/", sep, 1) + end
             if expr.count(end) > 1:
-                expr = "Maybe(SafeDiv, " + expr
+                expr = "__maybe(__safeDiv, " + expr
             continue
         elif "%" in expr:
             a, op, b = expr.partition('%')
             expr = a + op + b.replace('%', end, 1) + sep
-            expr = "Maybe(SafeMod, " + expr.replace("%", sep, 1) + end
+            expr = "__maybe(__safeMod, " + expr.replace("%", sep, 1) + end
             if expr.count(end) > 1:
-                expr = "Maybe(SafeMod, " + expr
+                expr = "__maybe(__safeMod, " + expr
             continue
         # TODO Unary ops don't get caught during parsing.
         elif '-' in expr and expr.count('-') % 2 == 0:
-            expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", '') + end
+            expr = "__maybe(__safeUnaryAdd, " + expr.replace("+", '') + end
             continue
         elif '-' in expr and expr.count('-') % 2 == 1:
-            expr = "Maybe(SafeUnarySub, " + expr.replace("-", '') + end
+            expr = "__maybe(__safeUnarySub, " + expr.replace("-", '') + end
             continue
         elif '+' in expr:
-            expr = "Maybe(SafeUnaryAdd, " + expr.replace("+", '') + end
+            expr = "__maybe(__safeUnaryAdd, " + expr.replace("+", '') + end
             continue
     return expr
 
@@ -103,7 +103,7 @@ def cvt_dict(t):
         else:  # integer key
             t[i] = f"{key}: {val}"
     s = f'{", ".join(t)}'.encode('UTF-8')
-    return f"pmap({{{s.decode('UTF-8')}}})"
+    return f"__pmap({{{s.decode('UTF-8')}}})"
 
 
 def cvt_list(t):
@@ -115,7 +115,7 @@ def cvt_list(t):
         else:  # integer key
             t[i] = int(v)
     s = f'{", ".join(t)}'.encode('UTF-8')
-    return f"pvector([{s.decode('UTF-8')}])"
+    return f"__pvector([{s.decode('UTF-8')}])"
 
 
 def cvt_list_index(t):
@@ -135,7 +135,7 @@ def cvt_set(t):
         else:  # integer key
             t[i] = int(v)
     s = f'{", ".join(t)}'.encode('UTF-8')
-    return f"pset({{{s.decode('UTF-8')}}})"
+    return f"__pset({{{s.decode('UTF-8')}}})"
 
 
 def cvt_contract_assign(t):
@@ -165,8 +165,8 @@ def swap_val_to_idx(lst: list, val, idx: int) -> list:
 
 
 def cvt_clos_call(t):
-    return "Maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1]
+    return "__maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1]
 
 
 def cvt_func_call(t):
-    return "Maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1] + lit_lparen + lit_rparen
+    return "__maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1] + lit_lparen + lit_rparen

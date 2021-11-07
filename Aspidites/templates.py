@@ -161,14 +161,13 @@ from cython import (declare as decl, address as addr, sizeof, typeof, struct, cf
                     longdoublecomplex, longlong, complex, float as cfloat)
 
 from Aspidites._vendor.pyrsistent import (
-    pset, 
-    pmap, 
-    pvector, 
+    pset as __pset, 
+    pmap as __pmap, 
+    pvector as __pvector, 
     s, v, m
 )
 from Aspidites.woma import *
 from Aspidites._vendor import (
-    F,
     take,
     drop,
     takelast,
@@ -227,19 +226,18 @@ from Aspidites._vendor import (
     match as __match,
     _,
 )
-from Aspidites.monads import Maybe, Surely
-from Aspidites.math import Undefined, SafeDiv, SafeExp, SafeMod, SafeFloorDiv, SafeUnaryAdd, SafeUnarySub, SafeFactorial
-from Aspidites._vendor.contracts import contract, new_contract
-from Aspidites._vendor.RestrictedPython import safe_builtins
-safe_builtins['F'] = F 
-safe_builtins['print'] = print
+from Aspidites.monads import Maybe as __maybe, Surely as __surely
+from Aspidites.math import Undefined as __undefined, SafeDiv as __safeDiv, SafeExp as __safeExp, SafeMod as __safeMod, SafeFloorDiv as __safeFloorDiv, SafeUnaryAdd as __safeUnaryAdd, SafeUnarySub as __safeUnarySub, SafeFactorial as __safeFactorial
+from Aspidites._vendor.contracts import contract as __contract, new_contract as __new_contract
+from Aspidites._vendor.RestrictedPython import safe_builtins as __safe_builtins
+__safe_builtins['print'] = print
 from Aspidites._vendor.RestrictedPython import compile_restricted as compile
-safe_builtins['compile'] = compile
+__safe_builtins['compile'] = compile
 # DECLARATIONS TO ALLOW CONTRACTS TO TYPE CHECK #
 procedure: None
 coroutine: Generator
 number: Any
-globals().update(dict(__builtins__=safe_builtins))  # add all imports to globals
+globals().update(dict(__builtins__=__pmap(__safe_builtins)))  # add all imports to globals
 
 $code
 
