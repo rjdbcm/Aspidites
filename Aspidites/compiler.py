@@ -200,6 +200,7 @@ class Compiler:
             self.setup(compile_args)
 
         self.file_stack.finalize()
+        os.remove(self.file_c)
 
     def bytecode_compile(self) -> None:
         fname_pyc = str(self.app_name) + ".pyc"

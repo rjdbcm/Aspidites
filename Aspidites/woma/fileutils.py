@@ -9,16 +9,22 @@ from __future__ import print_function
 
 import os
 import re
+import shutil
 import sys
 import stat
 import errno
 import fnmatch
-from shutil import copy2, copystat, Error
+import warnings
+from glob import iglob
+from shutil import copy2, copystat, Error, copytree
 
 
-__all__ = ['mkdir_p', 'atomic_save', 'AtomicSaver',
-           'iter_find_files', 'copytree']
+__all__ = ['mkdir_p', 'atomic_save', 'AtomicSaver', 'iter_find_files', 'copytree']
 
+
+def iter_find_files(*args, **kwargs):
+    warnings.warn('iter_find_files will be deprecated in 1.14 in favor of iglob', PendingDeprecationWarning)
+    return iglob(*args, **kwargs)
 
 FULL_PERMS = 511  # 0777 that both Python 2 and 3 can digest
 RW_PERMS = 438
@@ -312,131 +318,8 @@ class AtomicSaver(object):
         return
 
 
-def iter_find_files(directory, patterns, ignored=None, include_dirs=False):
-    """Returns a generator that yields file paths under a *directory*,
-    matching *patterns* using `glob`_ syntax (e.g., ``*.txt``). Also
-    supports *ignored* patterns.
-
-    Args:
-        directory (str): Path that serves as the root of the
-            search. Yielded paths will include this as a prefix.
-        patterns (str or list): A single pattern or list of
-            glob-formatted patterns to find under *directory*.
-        ignored (str or list): A single pattern or list of
-            glob-formatted patterns to ignore.
-        include_dirs (bool): Whether to include directories that match
-           patterns, as well. Defaults to ``False``.
-
-    For example, finding Python files in the current directory:
-
-    >>> _CUR_DIR = os.path.dirname(os.path.abspath(__file__))
-    >>> filenames = sorted(iter_find_files(_CUR_DIR, '*.py'))
-    >>> os.path.basename(filenames[-1])
-    'urlutils.py'
-
-    Or, Python files while ignoring emacs lockfiles:
-
-    >>> filenames = iter_find_files(_CUR_DIR, '*.py', ignored='.#*')
-
-    .. _glob: https://en.wikipedia.org/wiki/Glob_%28programming%29
-
-    """
-    if isinstance(patterns, basestring):
-        patterns = [patterns]
-    pats_re = re.compile('|'.join([fnmatch.translate(p) for p in patterns]))
-
-    if not ignored:
-        ignored = []
-    elif isinstance(ignored, basestring):
-        ignored = [ignored]
-    ign_re = re.compile('|'.join([fnmatch.translate(p) for p in ignored]))
-    for root, dirs, files in os.walk(directory):
-        if include_dirs:
-            for basename in dirs:
-                if pats_re.match(basename):
-                    if ignored and ign_re.match(basename):
-                        continue
-                    filename = os.path.join(root, basename)
-                    yield filename
-
-        for basename in files:
-            if pats_re.match(basename):
-                if ignored and ign_re.match(basename):
-                    continue
-                filename = os.path.join(root, basename)
-                yield filename
-    return
-
-
-def copy_tree(src, dst, symlinks=False, ignore=None):
-    """The ``copy_tree`` function is an exact copy of the built-in
-    :func:`shutil.copytree`, with one key difference: it will not
-    raise an exception if part of the tree already exists. It achieves
-    this by using :func:`mkdir_p`.
-
-    Args:
-        src (str): Path of the source directory to copy.
-        dst (str): Destination path. Existing directories accepted.
-        symlinks (bool): If ``True``, copy symlinks rather than their
-            contents.
-        ignore (callable): A callable that takes a path and directory
-            listing, returning the files within the listing to be ignored.
-
-    For more details, check out :func:`shutil.copytree` and
-    :func:`shutil.copy2`.
-
-    """
-    names = os.listdir(src)
-    if ignore is not None:
-        ignored_names = ignore(src, names)
-    else:
-        ignored_names = set()
-
-    mkdir_p(dst)
-    errors = []
-    for name in names:
-        if name in ignored_names:
-            continue
-        srcname = os.path.join(src, name)
-        dstname = os.path.join(dst, name)
-        try:
-            if symlinks and os.path.islink(srcname):
-                linkto = os.readlink(srcname)
-                os.symlink(linkto, dstname)
-            elif os.path.isdir(srcname):
-                copytree(srcname, dstname, symlinks, ignore)
-            else:
-                # Will raise a SpecialFileError for unsupported file types
-                copy2(srcname, dstname)
-        # catch the Error from the recursive copytree so that we can
-        # continue with other files
-        except Error as e:
-            errors.extend(e.args[0])
-        except EnvironmentError as why:
-            errors.append((srcname, dstname, str(why)))
-    try:
-        copystat(src, dst)
-    except OSError as why:  # pragma: no cover
-        if WindowsError is not None and isinstance(why, WindowsError):
-            # Copying file access times may fail on Windows
-            pass
-        else:
-            errors.append((src, dst, str(why)))
-    if errors:
-        raise Error(errors)
-
-
-copytree = copy_tree  # alias for drop-in replacement of shutil
-
-
-try:
-    file
-except NameError:
-    file = object
-
-
 # like open(os.devnull) but with even fewer side effects
-class DummyFile(file):
+class DummyFile(object):
     # TODO: raise ValueErrors on closed for all methods?
     # TODO: enforce read/write
     def __init__(self, path, mode='r', buffering=None):

@@ -20,6 +20,7 @@ import threading
 import os
 import curses
 import re
+import ast
 import warnings
 from contextlib import suppress
 import time
@@ -80,160 +81,20 @@ class Spinner:  # pragma: no cover
 single_arg_help = re.compile(r'(?:help[\(])(\w+)(?:[\)])')
 
 
-class ReadEvalParse:  # pragma: no cover
-    intro = "Welcome to the Woma Interactive Shell. Use the 'help()' or '?' command to see a list of commands.\nThis is experimental and mainly aims to help developers to sandbox " \
-            "Woma without compilation."
-    ruler = "┉"
-    doc_leader = ""
-    nohelp = "*** No help on %s"
-    doc_header = "Documented commands (type help <topic>):"
-    misc_header = "Miscellaneous help topics:"
-    undoc_header = "Undocumented commands:"
-    _globals = globals().copy()
+class Help:
+    def __init__(self, names, stdout, ruler):
+        """
+        >>> h = Help(dir(__class__), sys.stdout)
+        >>> h('help')
+        """
+        self.names = names
+        self.stdout = stdout
+        self.ruler = ruler
+        self.cmds_doc = []
+        self.cmds_undoc = []
 
-    def __init__(self, stdout=None):
-        if stdout is not None:
-            self.stdout = stdout
-        else:
-            self.stdout = sys.stdout
-        self.warn = lambda x: sys.stderr.write(x) and sys.stderr.flush()
-        self.__locals__ = dict(locals(), **globals())
-
-    def input(self):
-        self.stdout.flush()
-
-        line = input(START_PROMPT)
-        if ';' in line:
-            line = line.replace(';', '\n    ')
-            self.stdout.write(line + '\n')
-            self.stdout.flush()
-        return line
-
-    def get_names(self):
-        # This method used to pull in base class attributes
-        # at a time dir() didn't do it yet.
-        return dir(self.__class__)
-
-    def find_token(self, token: str, text: str) -> bool:
-        return text.find(token) != -1
-
-    def displayhook(self, text):
-        if text is None:
-            return
-        try:
-            self.stdout.write(str(text))
-        except UnicodeEncodeError:
-            bytes = text.encode(sys.stdout.encoding, 'backslashreplace')
-            if hasattr(self.stdout, 'buffer'):
-                self.stdout.buffer.write(bytes)
-            else:
-                text = bytes.decode(sys.stdout.encoding, 'strict')
-                self.stdout.write(text)
-        self.stdout.write("\n")
-
-    def eval_exec(self, x: Union[List, AnyStr]):
-        # noinspection PyBroadException
-        if isinstance(x, ParseResults):
-            x = x[0]
-        # noinspection PyBroadException
-        warnings.resetwarnings()
-        try:
-            out = eval(compile(x, filename='<inline code>', mode='eval'),
-                       self.__locals__,
-                       self.__locals__)
-        except Exception:
-            out = exec(compile(x, filename='<inline code>', mode='exec'), self.__locals__, self.__locals__)
-            self.stdout.write('\n')
-            # if out is not None:
-            #     print(out)
-        self.displayhook(out)
-
-    def preloop(self):
-        if readline and Path(histfile).exists():
-            readline.read_history_file(histfile)
-
-    def postloop(self):
-        if readline:
-            readline.set_history_length(histfile_size)
-            readline.write_history_file(histfile)
-
-    def loop(self) -> None:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        self.stdout.write(self.intro + '\n')
-        try:
-            while True:
-                self.postloop()
-                self.preloop()
-                try:
-                    line = self.input()
-                    if line == '':
-                        continue
-                    if line == 'exit()':
-                        raise SystemExit
-                    if self.find_token('?', line):
-                        self.do_help(line.lstrip('? '))
-                        continue
-                    if self.find_token('help ', line):
-                        self.do_help(line.split(' ')[1])
-                        continue
-                    if single_arg_help.match(line):
-                        self.do_help(single_arg_help.search(line).group(1))
-                        continue
-                    if hasattr(self, 'do_' + line):
-                        getattr(self, 'do_' + line)()
-                        continue
-                    if str(line).isidentifier():
-                        self.eval_exec(line)
-                        continue
-                    try:
-                        with Spinner():
-                            p = Aspidites.parser.parser.parse_module(line)
-                    except ParseException:
-                        self.warn(f'Warning: Failed to parse "{line}" as Woma.\n'
-                              f'Remember that Woma does not allow literal evaluation, try assigning to a variable.\n'
-                              f'Falling back to python with suppressed exceptions.\n')
-                        with suppress(Exception):
-                            self.eval_exec(line)
-                        continue
-                    else:
-                        self.eval_exec(p)
-                        continue
-
-                except Exception as e:
-                    self.stdout.write(f"Error: {e}\n")
-                    continue
-        except KeyboardInterrupt as e:
-            self.do_exit()
-
-    def do_exit(self, arg=None):
-        """Exit the woma interactive interpreter."""
-        self.stdout.write("\nExiting...")
-        raise SystemExit
-
-    def do_copyright(self):
-        """Copyright Ross J. Duff 2021 licensed under the GNU Public License v3."""
-        pass
-
-    def do_locals(self, arg=None):
-        """Print local variables"""
-        hidden = ['self', 'stdout', 'ReadEvalParse', '__warningregistry__']
-        visible = dict()
-        for k, v in self.__locals__.items():
-            if k in self._globals.keys() or k in hidden:
-                continue
-            else:
-                visible[k] = v
-
-        self.stdout.write(_format_locals(visible).decode('UTF-8'))
-
-    def do_flush(self):
-        """forcibly flush stdout"""
-        self.stdout.flush()
-
-    def do_help(self, arg=None):
-        """List available commands with "help" or detailed help with "help cmd"."""
+    def __call__(self, arg):
         if arg:
-            # XXX check arg syntax
             try:
                 func = getattr(self, 'help_' + arg)
             except AttributeError:
@@ -248,33 +109,29 @@ class ReadEvalParse:  # pragma: no cover
                 return
             func()
         else:
-            names = self.get_names()
-            cmds_doc = []
-            cmds_undoc = []
-            help = {}
+            self.help = {}
             for name in names:
                 if name[:5] == 'help_':
-                    help[name[5:]] = 1
+                    self.help[name[5:]] = 1
             names.sort()
             # There can be duplicates if routines overridden
-            prevname = ''
-            for name in names:
-                if name[:3] == 'do_':
-                    if name == prevname:
-                        continue
-                    prevname = name
-                    cmd = name[3:]
-                    if cmd in help:
-                        cmds_doc.append(cmd)
-                        del help[cmd]
-                    elif getattr(self, name).__doc__:
-                        cmds_doc.append(cmd)
-                    else:
-                        cmds_undoc.append(cmd)
-            self.stdout.write("%s\n" % str(self.doc_leader))
-            self.print_topics(self.doc_header, cmds_doc, 15, 80)
-            self.print_topics(self.misc_header, list(help.keys()), 15, 80)
-            self.print_topics(self.undoc_header, cmds_undoc, 15, 80)
+            self.handle_names()
+
+    def handle_names(self):
+        prevname = ''
+        for name in self.names:
+            if name[:3] == 'do_':
+                if name == prevname:
+                    continue
+                prevname = name
+                cmd = name[3:]
+                if cmd in self.help:
+                    self.cmds_doc.append(cmd)
+                    del self.help[cmd]
+                elif getattr(self, name).__doc__:
+                    self.cmds_doc.append(cmd)
+                else:
+                    self.cmds_undoc.append(cmd)
 
     def print_topics(self, header, cmds, cmdlen, maxcol):
         if cmds:
@@ -340,6 +197,159 @@ class ReadEvalParse:  # pragma: no cover
             for col in range(len(texts)):
                 texts[col] = texts[col].ljust(colwidths[col])
             self.stdout.write(" %s\n" % str("  ".join(texts)))
+
+
+class ReadEvalParse:  # pragma: no cover
+    intro = "Welcome to the Woma Interactive Shell. Use the 'help()' or '?' command to see a list of commands.\nThis is experimental and mainly aims to help developers to sandbox " \
+            "Woma without compilation."
+    ruler = "┉"
+    doc_leader = ""
+    nohelp = "*** No help on %s"
+    doc_header = "Documented commands (type help <topic>):"
+    misc_header = "Miscellaneous help topics:"
+    undoc_header = "Undocumented commands:"
+    _globals = globals().copy()
+
+    def __init__(self, stdout=None):
+        if stdout is not None:
+            self.stdout = stdout
+        else:
+            self.stdout = sys.stdout
+        self.warn = lambda x: sys.stderr.write(x) and sys.stderr.flush()
+        self.__locals__ = dict(locals(), **globals())
+
+    def input(self):
+        self.stdout.flush()
+
+        line = input(START_PROMPT)
+        if ';' in line:
+            line = line.replace(';', '\n    ')
+            self.stdout.write(line + '\n')
+            self.stdout.flush()
+        return line
+
+    def get_names(self):
+        # This method used to pull in base class attributes
+        # at a time dir() didn't do it yet.
+        return dir(self.__class__)
+
+    def find_token(self, token: str, text: str) -> bool:
+        return text.find(token) != -1
+
+    def displayhook(self, text):
+        if text is None:
+            return
+        try:
+            self.stdout.write(str(text))
+        except UnicodeEncodeError:
+            bytes = text.encode(sys.stdout.encoding, 'backslashreplace')
+            if hasattr(self.stdout, 'buffer'):
+                self.stdout.buffer.write(bytes)
+            else:
+                text = bytes.decode(sys.stdout.encoding, 'strict')
+                self.stdout.write(text)
+        self.stdout.write("\n")
+
+    def eval_exec(self, x: Union[List, AnyStr]):
+        # noinspection PyBroadException
+        if isinstance(x, ParseResults):
+            x = x[0]
+        # noinspection PyBroadException
+        warnings.resetwarnings()
+        try:
+            out = eval(compile(x, filename='<inline code>', mode='eval'), self.__locals__, self.__locals__)
+        except Exception:
+            out = exec(compile(x, filename='<inline code>', mode='exec'), self.__locals__, self.__locals__)
+            self.stdout.write('\n')
+            # if out is not None:
+            #     print(out)
+        self.displayhook(out)
+
+    def preloop(self):
+        if readline and Path(histfile).exists():
+            readline.read_history_file(histfile)
+
+    def postloop(self):
+        if readline:
+            readline.set_history_length(histfile_size)
+            readline.write_history_file(histfile)
+
+    def loop(self) -> None:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        self.stdout.write(self.intro + '\n')
+        try:
+            while True:
+                self.postloop()
+                self.preloop()
+                try:
+                    line = self.input()
+                    if line == '':
+                        continue
+                    if line == 'exit()':
+                        raise SystemExit
+                    if self.find_token('?', line):
+                        self.do_help(line.lstrip('? '))
+                        continue
+                    if self.find_token('help ', line):
+                        self.do_help(line.split(' ')[1])
+                        continue
+                    if single_arg_help.match(line):
+                        self.do_help(single_arg_help.search(line).group(1))
+                        continue
+                    if hasattr(self, 'do_' + line):
+                        getattr(self, 'do_' + line)()
+                        continue
+                    if str(line).isidentifier():
+                        self.eval_exec(line)
+                        continue
+                    try:
+                        with Spinner():
+                            p = Aspidites.parser.parser.parse_module(line)
+                    except ParseException:
+                        self.warn(f'Warning: Failed to parse "{line}" as Woma.\n'
+                              f'Remember that Woma does not allow literal evaluation, try assigning to a variable.\n'
+                              f'Falling back to python with suppressed exceptions.\n')
+                        with suppress(Exception):
+                            self.eval_exec(line)
+                        continue
+                    else:
+                        self.eval_exec(p)
+                        continue
+
+                except Exception as e:
+                    self.stdout.write(f"Error: {e}\n")
+                    continue
+        except KeyboardInterrupt as e:
+            self.do_exit()
+
+    def do_help(self, arg=None):
+        h = Help(dir(self.__class__), self.stdout, self.ruler)
+        h(arg)
+
+    def do_exit(self, arg=None):
+        """Exit the woma interactive interpreter."""
+        self.stdout.write("\nExiting...")
+        raise SystemExit
+
+    def do_copyright(self):
+        """Copyright Ross J. Duff 2021 licensed under the GNU Public License v3."""
+        pass
+
+    def do_locals(self, arg=None):
+        """Print local variables"""
+        hidden = ['self', 'stdout', 'ReadEvalParse', '__warningregistry__']
+        visible = dict()
+        for k, v in self.__locals__.items():
+            if k in self._globals.keys() or k in hidden:
+                continue
+            else:
+                visible[k] = v
+
+        self.stdout.write(_format_locals(visible).decode('UTF-8'))
+
+    def do_flush(self):
+        """forcibly flush stdout"""
+        self.stdout.flush()
 
 
 if __name__ == "__main__":

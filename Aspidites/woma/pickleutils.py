@@ -8,8 +8,9 @@ def _print(text):
     print(text)
 
 
-compile = compile_restricted
 print = _print
+safe_builtins['print'] = print
+safe_builtins['compile'] = compile_restricted
 globals().update(dict(__builtins__=safe_builtins))
 
 

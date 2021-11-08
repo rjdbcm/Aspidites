@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import importlib.util
+import os
 import sys
 from glob import glob
 from pathlib import Path
@@ -8,6 +9,7 @@ import pkg_resources
 from setuptools import setup, find_packages, Extension
 from setuptools.dist import Distribution
 from setuptools.command.install import install
+from setuptools.command.build_ext import build_ext
 import numpy
 # ~#~ # Build static libs # ~#~ #
 from Cython.Build import cythonize
@@ -161,16 +163,36 @@ class InstallWrapper(install):
 
     def preinstall(self):
         """preinstall hook"""
-        # target = Path('build/lib/Aspidites/woma/library.wom')
-        # output = Path('build/lib/Aspidites/woma/library.pyx')
-        # c = "Aspidites %s -c -o %s --embed=True" % (target, output)
-        # os.popen(c)
-        # print(c)
         pass
 
     def postinstall(self):
         """postinstall hook"""
         pass
+
+
+class BuildExtWrapper(build_ext):
+    """Provides a build_ext wrapper for native woma
+    extensions. These don't really belong in the
+    Python package."""
+
+    def run(self):
+        # Run this first so the install stops in case
+        # these fail otherwise the Python package is
+        # successfully installed
+        print("running prebuild hooks")
+        self.prebuild()
+        build_ext.run(self)  # pip install
+        print("running postbuild hooks")
+        self.postbuild()
+
+    def prebuild(self):
+        """prebuild hook"""
+        pass
+
+    def postbuild(self):
+        """postbuild hook"""
+        for i in module_paths:
+            os.remove(i.replace('.py', '.c'))
 
 
 setup(
@@ -202,7 +224,7 @@ setup(
     entry_points={'console_scripts': ['aspidites = Aspidites.__main__:main']},
     package_data={'': ["*.wom", "*.pyx", "*.pyi", "*.so", "*.c", "Aspidites/py.typed"]},  # add any native *.wom files
     long_description=read('README.md'),
-    cmdclass={'install': InstallWrapper},
+    cmdclass={'install': InstallWrapper, 'build_ext': BuildExtWrapper},
     long_description_content_type='text/markdown',
     classifiers=[
         "Operating System :: POSIX :: Linux",
