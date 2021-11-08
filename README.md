@@ -28,7 +28,7 @@ The reference implementation of the [Woma programming language](https://www.gith
 
 - How do I actually learn the Woma Programming Language?
     
-    - Use the docs found at [Aspidites.org/docs](https://aspidites.org/docs)
+    - Use the docs found at [Aspidites.org/docs](http://aspidites.org/docs)
 
 ### Installing
 ---------
