@@ -1,4 +1,5 @@
 **unreleased**
+**v1.13.1**
 **v1.13.0**
 
 - c4c7b46 setup builds a lot smaller now
