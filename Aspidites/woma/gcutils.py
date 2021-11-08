@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 # -*- coding: utf-8 -*-
 """The Python Garbage Collector (`GC`_) doesn't usually get too much
 attention, probably because:

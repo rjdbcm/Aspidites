@@ -179,6 +179,7 @@ Table of Contents
    limits
    indepth
    builtins
+   troubleshooting
    api
    devinfo
 

@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 # -*- coding: utf-8 -*-
 """Virtually every Python programmer has used Python for wrangling
 disk contents, and ``fileutils`` collects solutions to some of the
