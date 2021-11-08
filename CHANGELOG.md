@@ -1,5 +1,13 @@
 **unreleased**
 **v1.13.0**
+
+- c4c7b46 setup builds a lot smaller now
+- 0461864 fix changed library.wom
+- 8bfd419 add the beginning of troubleshooting docs
+- b985634 Merge remote-tracking branch 'origin/main'
+- 07e29b6 Update README.md
+
+
 **v1.12.0**
 
 - 4bb37d2 minify templates
