@@ -7,7 +7,8 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/WheelieTheWoma?style=social)](https://mobile.twitter.com/WheelieTheWoma )
 [中文自述文件](https://github.com/rjdbcm/Aspidites/blob/main/README_Zh_CN.md)
 
-</br>
+
+* * *
 
 - Who is the [Woma programming language](https://www.github.com/rjdbcm/woma) for?  
 
