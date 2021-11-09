@@ -93,6 +93,10 @@ single_arg_help = re.compile(r'(?:help[\(])(\w+)(?:[\)])')
 
 
 class Help:
+    doc_leader = ""
+    doc_header = "Documented commands (type help <topic>):"
+    misc_header = "Miscellaneous help topics:"
+    undoc_header = "Undocumented commands:"
     nohelp = "*** No help on %s"
     ruler = "┉"
 
@@ -130,6 +134,10 @@ class Help:
             self.names.sort()
             # There can be duplicates if routines overridden
             self.handle_names()
+        self.stdout.write("%s\n" % str(self.doc_leader))
+        self.print_topics(self.doc_header, cmds_doc, 15, 80)
+        self.print_topics(self.misc_header, list(help.keys()), 15, 80)
+        self.print_topics(self.undoc_header, cmds_undoc, 15, 80)
 
     def handle_names(self):
         prevname = ''
@@ -216,10 +224,6 @@ class Help:
 class ReadEvalParse:  # pragma: no cover
     intro = "Welcome to the Woma Interactive Shell. Use the 'help()' or '?' command to see a list of commands.\nThis is experimental and mainly aims to help developers to sandbox " \
             "Woma without compilation."
-    doc_leader = ""
-    doc_header = "Documented commands (type help <topic>):"
-    misc_header = "Miscellaneous help topics:"
-    undoc_header = "Undocumented commands:"
     _globals = globals().copy()
 
     def __init__(self, stdout=None):
