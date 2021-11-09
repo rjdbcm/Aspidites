@@ -18,7 +18,7 @@
 
 - Isn't this just Cython with extra steps? 
 
-    - Well yes, but with totally different goals. Cython intends to be a syntactic superset of python where Woma syntax has taken inspiration from a variety of sources. You can think of Aspidites as a wrapper for Cython that parses Woma code into Cython's python superset. Cython does much of the "heavy lifting". The specifics of the Woma Programming Language are being standardized as a series of WEEPs ([Woma Extension and Evaluation Proposals](https://github.com/rjdbcm/woma/blob/main/QQ.md)).
+    - Well yes, but with totally different goals. Cython intends to be a syntactic superset of python where Woma syntax has taken inspiration from a variety of sources. You can think of Aspidites as a wrapper for Cython that parses Woma code into Cython's python superset. Cython does much of the "heavy lifting". The specifics of the Woma Programming Language are being standardized as a series of WEEPs ([Woma Extension and Evaluation Proposals](http://aspidites.org/woma/QQ.md)).
     
  - Why use the name _Aspidites_? What's a Woma?
  
