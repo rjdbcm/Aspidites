@@ -4,6 +4,7 @@ import re
 from .reserved import *
 
 pmap_re = re.compile(r"(pmap\(\{.*\}\))")
+end = lit_rparen + lit_lparen + lit_rparen
 
 
 def factorial(expr):
@@ -59,7 +60,6 @@ def single_negation(expr):
 
 def cvt_arith_expr(s, loc, t):
     expr = "".join((str(i) for i in t))
-    end = lit_rparen + lit_lparen + lit_rparen
     substr = ['!', '**', '//', '/', '%']
 
     # TODO Unary ops don't get caught during parsing.
