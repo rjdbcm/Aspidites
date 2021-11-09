@@ -8,8 +8,7 @@
 
 * * *
 
-| English | [中文自述文件](https://github.com/rjdbcm/Aspidites/blob/main/README_Zh_CN.md) |
-|---|---|
+| English | [中文自述文件](https://aspidites.org/README_Zh_CN.html) |
 
 * * *
 
