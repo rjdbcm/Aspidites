@@ -10,50 +10,68 @@ def cvt_arith_expr(s, loc, t):
     expr = "".join((str(i) for i in t))
     end = lit_rparen + lit_lparen + lit_rparen
     substr = ['!', '**', '//', '/', '%']
+
+    def factorial(expr):
+        expr = "__maybe(__safeFactorial, " + expr.replace('!', '', 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeFactorial, " + expr
+        return expr
+
+    def expon(expr):
+        a, op, b = expr.partition('**')
+        expr = a + op + b.replace('**', end, 1) + sep
+        expr = "__maybe(__safeExp, " + expr.replace("**", sep, 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeExp, " + expr
+        return expr
+
+    def floordiv(expr):
+        a, op, b = expr.partition('//')
+        expr = a + op + b.replace('//', end, 1) + sep
+        expr = "__maybe(__safeFloorDiv, " + expr.replace("//", sep, 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeFloorDiv, " + expr
+        return expr
+
+    def div(expr):
+        a, op, b = expr.partition('/')
+        expr = a + op + b.replace('/', end + sep, 1)
+        expr = "__maybe(__safeDiv, " + expr.replace("/", sep, 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeDiv, " + expr
+        return expr
+
+    def mod(expr):
+        a, op, b = expr.partition('%')
+        expr = a + op + b.replace('%', end, 1) + sep
+        expr = "__maybe(__safeMod, " + expr.replace("%", sep, 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeMod, " + expr
+        return expr
+
+    def double_negation(expr):
+        return "__maybe(__safeUnaryAdd, " + expr.replace("+", '') + end
+
+    def single_negation(expr):
+        return "__maybe(__safeUnarySub, " + expr.replace("-", '') + end
+
+    # TODO Unary ops don't get caught during parsing.
     while any([s in expr for s in substr]):
-        if "!" in expr:
-            expr = "__maybe(__safeFactorial, " + expr.replace('!', '', 1) + end
-            if expr.count(end) > 1:
-                expr = "__maybe(__safeFactorial, " + expr
-            continue
-        elif "**" in expr:
-            a, op, b = expr.partition('**')
-            expr = a + op + b.replace('**', end, 1) + sep
-            expr = "__maybe(__safeExp, " + expr.replace("**", sep, 1) + end
-            if expr.count(end) > 1:
-                expr = "__maybe(__safeExp, " + expr
-            continue
-        elif "//" in expr:
-            a, op, b = expr.partition('//')
-            expr = a + op + b.replace('//', end, 1) + sep
-            expr = "__maybe(__safeFloorDiv, " + expr.replace("//", sep, 1) + end
-            if expr.count(end) > 1:
-                expr = "__maybe(__safeFloorDiv, " + expr
-            continue
-        elif "/" in expr:
-            a, op, b = expr.partition('/')
-            expr = a + op + b.replace('/', end + sep, 1)
-            expr = "__maybe(__safeDiv, " + expr.replace("/", sep, 1) + end
-            if expr.count(end) > 1:
-                expr = "__maybe(__safeDiv, " + expr
-            continue
-        elif "%" in expr:
-            a, op, b = expr.partition('%')
-            expr = a + op + b.replace('%', end, 1) + sep
-            expr = "__maybe(__safeMod, " + expr.replace("%", sep, 1) + end
-            if expr.count(end) > 1:
-                expr = "__maybe(__safeMod, " + expr
-            continue
-        # TODO Unary ops don't get caught during parsing.
-        elif '-' in expr and expr.count('-') % 2 == 0:
-            expr = "__maybe(__safeUnaryAdd, " + expr.replace("+", '') + end
-            continue
-        elif '-' in expr and expr.count('-') % 2 == 1:
-            expr = "__maybe(__safeUnarySub, " + expr.replace("-", '') + end
-            continue
-        elif '+' in expr:
-            expr = "__maybe(__safeUnaryAdd, " + expr.replace("+", '') + end
-            continue
+        handler = {
+            lambda x: '!' in x: factorial,
+            lambda x: '**' in x: expon,
+            lambda x: '//' in x: floordiv,
+            lambda x: '/' in x: div,
+            lambda x: '%' in x: mod,
+            lambda x: '-' in x and x.count('-') % 2 == 0: double_negation,
+            lambda x: '-' in x and x.count('-') % 2 == 1: single_negation,
+            lambda x: '+' in x: double_negation
+
+                   }
+        for k, v in handler.items():
+            if k(expr):
+                expr = v(expr)
+                break
     return expr
 
 
