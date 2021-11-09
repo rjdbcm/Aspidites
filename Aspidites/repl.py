@@ -96,23 +96,24 @@ class Help:
     nohelp = "*** No help on %s"
     ruler = "┉"
 
-    def __init__(self, names, stdout):
+    def __init__(self, parent):
         """
-        >>> h = Help(dir(__class__), sys.stdout)
+        >>> h = Help(self)
         >>> h('help')
         """
-        self.names = names
-        self.stdout = stdout
+        self.parent = parent
+        self.names = dir(self.parent.__class__)
+        self.stdout = self.parent.stdout
         self.cmds_doc = []
         self.cmds_undoc = []
 
     def __call__(self, arg):
         if arg:
             try:
-                func = getattr(self, 'help_' + arg)
+                func = getattr(self.parent, 'help_' + arg)
             except AttributeError:
                 try:
-                    doc = getattr(self, 'do_' + arg).__doc__
+                    doc = getattr(self.parent, 'do_' + arg).__doc__
                     if doc:
                         self.stdout.write("%s\n" % str(doc))
                         return
@@ -141,7 +142,7 @@ class Help:
                 if cmd in self.help:
                     self.cmds_doc.append(cmd)
                     del self.help[cmd]
-                elif getattr(self, name).__doc__:
+                elif getattr(self.parent, name).__doc__:
                     self.cmds_doc.append(cmd)
                 else:
                     self.cmds_undoc.append(cmd)
@@ -334,7 +335,7 @@ class ReadEvalParse:  # pragma: no cover
             self.do_exit()
 
     def do_help(self, arg=None):
-        h = Help(dir(self.__class__), self.stdout)
+        h = Help(self)
         h(arg)
 
     def do_exit(self, arg=None):
