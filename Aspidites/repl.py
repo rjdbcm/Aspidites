@@ -18,9 +18,7 @@ import sys
 from itertools import cycle
 import threading
 import os
-import curses
 import re
-import ast
 import warnings
 from contextlib import suppress
 import time
@@ -29,14 +27,27 @@ from traceback import print_exc
 from typing import List, AnyStr, Union
 
 # noinspection PyUnresolvedReferences
-from Aspidites._vendor.pyrsistent import pvector, pmap, pset
-# noinspection PyUnresolvedReferences
-from Aspidites._vendor.contracts import contract, new_contract
+from cython import declare as decl, address as addr, sizeof, typeof, struct, cfunc, ccall, nogil, no_gc, inline, union, \
+    typedef, cast, char, short, int as cint, bint, short, double, long, longdouble, longdoublecomplex, longlong, \
+    complex, float as cfloat
+from Aspidites._vendor.pyrsistent import pset as __pset, pmap as __pmap, pvector as __pvector, s, v, m
+from Aspidites.woma import *
+from Aspidites._vendor import take, drop, takelast, droplast, consume, nth, first_true, iterate, padnone, ncycles, \
+    repeatfunc, grouper, group_by, roundrobin, partition, splitat, splitby, powerset, pairwise, iter_suppress, flatten, \
+    accumulate, reduce, filterfalse, zip_longest, call, apply, flip, curry, curried, zipwith, foldl, foldr, unfold, \
+    Capture, Strict, OneOf, AllOf, NoneOf, Not, Each, EachItem, Some, Between, Length, Contains, Regex, Check, \
+    InstanceOf, SubclassOf, Arguments, Returns, Transformed, At, Object, match as __match, _
+from Aspidites.monads import Maybe as __maybe, Surely as __surely
+from Aspidites.math import Undefined as __undefined, SafeDiv as __safeDiv, SafeExp as __safeExp, SafeMod as __safeMod, \
+    SafeFloorDiv as __safeFloorDiv, SafeUnaryAdd as __safeUnaryAdd, SafeUnarySub as __safeUnarySub, \
+    SafeFactorial as __safeFactorial
+from Aspidites._vendor.contracts import contract as __contract, new_contract as __new_contract
+from Aspidites._vendor.RestrictedPython import safe_builtins as __safe_builtins
+
 from Aspidites._vendor.pyparsing import ParseException, ParseResults
 # noinspection PyUnresolvedReferences
 from cmath import inf
 # noinspection PyUnresolvedReferences
-from Aspidites import *
 import Aspidites.parser.parser
 from Aspidites.api import _format_locals
 
@@ -307,8 +318,8 @@ class ReadEvalParse:  # pragma: no cover
                             p = Aspidites.parser.parser.parse_module(line)
                     except ParseException:
                         self.warn(f'Warning: Failed to parse "{line}" as Woma.\n'
-                              f'Remember that Woma does not allow literal evaluation, try assigning to a variable.\n'
-                              f'Falling back to python with suppressed exceptions.\n')
+                                  f'Remember that Woma does not allow literal evaluation, try assigning to a variable.\n'
+                                  f'Falling back to python with suppressed exceptions.\n')
                         with suppress(Exception):
                             self.eval_exec(line)
                         continue
