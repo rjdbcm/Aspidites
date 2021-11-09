@@ -1,5 +1,25 @@
 **unreleased**
 **v1.13.1**
+
+- ae05584 fix names not defined
+- da2cb6c make ruler a class attribute of Help
+- dbb648c fix missing nohelp attribute in repr.py
+- 65f6879 fix typo in convert.py
+- a073fe2 improve readability of cvt_arith_expr
+- f99727f Merge remote-tracking branch 'origin/main'
+- 6913a75 improve readability of cvt_arith_expr
+- a1bacae Update README.md
+- 220f3d3 Update README.md
+- 208b038 Update README.md
+- 70add03 Update README.md
+- 16f2fd4 Set theme jekyll-theme-hacker
+- ced1ad7 Update README.md
+- e1cdb38 Update README.md
+- de54df7 Delete index.html
+- c91366e Create index.html
+- 841dc17 Set theme jekyll-theme-modernist
+
+
 **v1.13.0**
 
 - c4c7b46 setup builds a lot smaller now
