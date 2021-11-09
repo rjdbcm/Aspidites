@@ -83,6 +83,7 @@ single_arg_help = re.compile(r'(?:help[\(])(\w+)(?:[\)])')
 
 class Help:
     nohelp = "*** No help on %s"
+    ruler = "┉"
 
     def __init__(self, names, stdout, ruler):
         """
@@ -91,7 +92,6 @@ class Help:
         """
         self.names = names
         self.stdout = stdout
-        self.ruler = ruler
         self.cmds_doc = []
         self.cmds_undoc = []
 
@@ -204,7 +204,6 @@ class Help:
 class ReadEvalParse:  # pragma: no cover
     intro = "Welcome to the Woma Interactive Shell. Use the 'help()' or '?' command to see a list of commands.\nThis is experimental and mainly aims to help developers to sandbox " \
             "Woma without compilation."
-    ruler = "┉"
     doc_leader = ""
     doc_header = "Documented commands (type help <topic>):"
     misc_header = "Miscellaneous help topics:"
