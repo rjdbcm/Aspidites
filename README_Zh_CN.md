@@ -1,5 +1,8 @@
 # 自述文件
 
+| 中文自述文件 | [English](https://github.com/rjdbcm/Aspidites/blob/main/README.md) |
+|---|---|
+
 - Woma 编程语言适合哪些人？
   - 首先，它适用于想要为 CPython 编写扩展的人。 传统上，这些是用 C++ 和 C 编写的。Cython 工具用于静态编译纯 Python 模块。Woma 的优点是它是纯 python 模块的简写，这些模块具有良好的约束和类型检查，并且这些模块可以使用 Cython 轻松编译。
 
