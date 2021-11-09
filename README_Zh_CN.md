@@ -1,6 +1,6 @@
 # 自述文件
 
-| 中文 | [English](https://github.com/rjdbcm/Aspidites/blob/main/README.md) |
+| 中文 | [English](http://aspidites.org) |
 
 * * *
 
