@@ -148,6 +148,8 @@ from Aspidites.math import Undefined as __undefined,SafeDiv as __safeDiv,SafeExp
 from Aspidites._vendor.contracts import contract as __contract,new_contract as __new_contract
 from Aspidites._vendor.RestrictedPython import safe_builtins as __safe_builtins
 from Aspidites._vendor.RestrictedPython import compile_restricted as compile
+from Aspidites.type_guard import safer_type as type
+__safe_builtins['type'] = type
 __safe_builtins['compile'] = compile
 __safe_builtins['print'] = print
 __safe_builtins['take']=take
