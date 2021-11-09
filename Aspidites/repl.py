@@ -96,7 +96,7 @@ class Help:
     nohelp = "*** No help on %s"
     ruler = "┉"
 
-    def __init__(self, names, stdout, ruler):
+    def __init__(self, names, stdout):
         """
         >>> h = Help(dir(__class__), sys.stdout)
         >>> h('help')
@@ -334,7 +334,7 @@ class ReadEvalParse:  # pragma: no cover
             self.do_exit()
 
     def do_help(self, arg=None):
-        h = Help(dir(self.__class__), self.stdout, self.ruler)
+        h = Help(dir(self.__class__), self.stdout)
         h(arg)
 
     def do_exit(self, arg=None):
