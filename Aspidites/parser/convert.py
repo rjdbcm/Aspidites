@@ -6,54 +6,61 @@ from .reserved import *
 pmap_re = re.compile(r"(pmap\(\{.*\}\))")
 
 
+def factorial(expr):
+    expr = "__maybe(__safeFactorial, " + expr.replace('!', '', 1) + end
+    if expr.count(end) > 1:
+        expr = "__maybe(__safeFactorial, " + expr
+    return expr
+
+
+def expon(expr):
+    a, op, b = expr.partition('**')
+    expr = a + op + b.replace('**', end, 1) + sep
+    expr = "__maybe(__safeExp, " + expr.replace("**", sep, 1) + end
+    if expr.count(end) > 1:
+        expr = "__maybe(__safeExp, " + expr
+    return expr
+
+
+def floordiv(expr):
+    a, op, b = expr.partition('//')
+    expr = a + op + b.replace('//', end, 1) + sep
+    expr = "__maybe(__safeFloorDiv, " + expr.replace("//", sep, 1) + end
+    if expr.count(end) > 1:
+        expr = "__maybe(__safeFloorDiv, " + expr
+    return expr
+
+
+def div(expr):
+    a, op, b = expr.partition('/')
+    expr = a + op + b.replace('/', end + sep, 1)
+    expr = "__maybe(__safeDiv, " + expr.replace("/", sep, 1) + end
+    if expr.count(end) > 1:
+        expr = "__maybe(__safeDiv, " + expr
+    return expr
+
+
+def mod(expr):
+    a, op, b = expr.partition('%')
+    expr = a + op + b.replace('%', end, 1) + sep
+    expr = "__maybe(__safeMod, " + expr.replace("%", sep, 1) + end
+    if expr.count(end) > 1:
+        expr = "__maybe(__safeMod, " + expr
+    return expr
+
+
+def double_negation(expr):
+    return "__maybe(__safeUnaryAdd, " + expr.replace("+", '') + end
+
+
+def single_negation(expr):
+    return "__maybe(__safeUnarySub, " + expr.replace("-", '') + end
+
+
 def cvt_arith_expr(s, loc, t):
     expr = "".join((str(i) for i in t))
     end = lit_rparen + lit_lparen + lit_rparen
     substr = ['!', '**', '//', '/', '%']
-
-    def factorial(expr):
-        expr = "__maybe(__safeFactorial, " + expr.replace('!', '', 1) + end
-        if expr.count(end) > 1:
-            expr = "__maybe(__safeFactorial, " + expr
-        return expr
-
-    def expon(expr):
-        a, op, b = expr.partition('**')
-        expr = a + op + b.replace('**', end, 1) + sep
-        expr = "__maybe(__safeExp, " + expr.replace("**", sep, 1) + end
-        if expr.count(end) > 1:
-            expr = "__maybe(__safeExp, " + expr
-        return expr
-
-    def floordiv(expr):
-        a, op, b = expr.partition('//')
-        expr = a + op + b.replace('//', end, 1) + sep
-        expr = "__maybe(__safeFloorDiv, " + expr.replace("//", sep, 1) + end
-        if expr.count(end) > 1:
-            expr = "__maybe(__safeFloorDiv, " + expr
-        return expr
-
-    def div(expr):
-        a, op, b = expr.partition('/')
-        expr = a + op + b.replace('/', end + sep, 1)
-        expr = "__maybe(__safeDiv, " + expr.replace("/", sep, 1) + end
-        if expr.count(end) > 1:
-            expr = "__maybe(__safeDiv, " + expr
-        return expr
-
-    def mod(expr):
-        a, op, b = expr.partition('%')
-        expr = a + op + b.replace('%', end, 1) + sep
-        expr = "__maybe(__safeMod, " + expr.replace("%", sep, 1) + end
-        if expr.count(end) > 1:
-            expr = "__maybe(__safeMod, " + expr
-        return expr
-
-    def double_negation(expr):
-        return "__maybe(__safeUnaryAdd, " + expr.replace("+", '') + end
-
-    def single_negation(expr):
-        return "__maybe(__safeUnarySub, " + expr.replace("-", '') + end
 
     # TODO Unary ops don't get caught during parsing.
     while any([s in expr for s in substr]):
