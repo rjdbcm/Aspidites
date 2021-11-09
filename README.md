@@ -5,8 +5,10 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/rjdbcm/Aspidites)
 ![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey)
 [![Twitter Follow](https://img.shields.io/twitter/follow/WheelieTheWoma?style=social)](https://mobile.twitter.com/WheelieTheWoma )
-[中文自述文件](https://github.com/rjdbcm/Aspidites/blob/main/README_Zh_CN.md)
 
+* * *
+
+[中文自述文件](https://github.com/rjdbcm/Aspidites/blob/main/README_Zh_CN.md)
 
 * * *
 
