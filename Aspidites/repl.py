@@ -112,10 +112,10 @@ class Help:
             func()
         else:
             self.help = {}
-            for name in names:
+            for name in self.names:
                 if name[:5] == 'help_':
                     self.help[name[5:]] = 1
-            names.sort()
+            self.names.sort()
             # There can be duplicates if routines overridden
             self.handle_names()
 
