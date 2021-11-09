@@ -82,6 +82,8 @@ single_arg_help = re.compile(r'(?:help[\(])(\w+)(?:[\)])')
 
 
 class Help:
+    nohelp = "*** No help on %s"
+
     def __init__(self, names, stdout, ruler):
         """
         >>> h = Help(dir(__class__), sys.stdout)
@@ -204,7 +206,6 @@ class ReadEvalParse:  # pragma: no cover
             "Woma without compilation."
     ruler = "┉"
     doc_leader = ""
-    nohelp = "*** No help on %s"
     doc_header = "Documented commands (type help <topic>):"
     misc_header = "Miscellaneous help topics:"
     undoc_header = "Undocumented commands:"
