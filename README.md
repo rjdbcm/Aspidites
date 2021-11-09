@@ -8,7 +8,7 @@
 
 * * *
 
-[中文自述文件](https://github.com/rjdbcm/Aspidites/blob/main/README_Zh_CN.md)
+| English | [中文](http://aspidites.org/README_Zh_CN.html) |
 
 * * *
 
@@ -30,7 +30,7 @@
 
 - How do I actually learn the Woma Programming Language?
     
-    - Use the docs found at [Aspidites.org/docs](http://aspidites.org/docs)
+    - Use the docs found at [docs.aspidites.org](http://docs.aspidites.org/)
 
 ### Installing
 ---------
