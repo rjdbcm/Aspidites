@@ -1,5 +1,10 @@
 **unreleased**
 **v1.14.1**
+
+- 8f71a6c update Dockerfile
+- 6463a92 repl now properly parses match trigrams
+
+
 **v1.14.0**
 
 - c3ee7bc repl now properly parses function definitions
