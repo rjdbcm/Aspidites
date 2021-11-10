@@ -42,6 +42,7 @@ from Aspidites.math import Undefined as __undefined, SafeDiv as __safeDiv, SafeE
     SafeFloorDiv as __safeFloorDiv, SafeUnaryAdd as __safeUnaryAdd, SafeUnarySub as __safeUnarySub, \
     SafeFactorial as __safeFactorial
 from Aspidites._vendor.contracts import contract as __contract, new_contract as __new_contract
+from Aspidites._vendor.contracts.library.extensions import Extension
 from Aspidites._vendor.RestrictedPython import safe_builtins as __safe_builtins
 
 from Aspidites._vendor.pyparsing import ParseException, ParseResults
@@ -238,10 +239,13 @@ class ReadEvalParse:  # pragma: no cover
         self.stdout.flush()
 
         line = input(START_PROMPT)
-        if ';' in line:
-            line = line.replace(';', '\n    ')
-            self.stdout.write(line + '\n')
-            self.stdout.flush()
+        if '))' in line and line.endswith(tuple(Extension.registrar.keys()) + ('*',)):
+            line += '\n    '
+            while True:
+                line2 = input(CONTINUE_PROMPT)
+                line += line2 + '\n    '
+                if line.endswith('\n    \n    '):
+                    break
         return line
 
     def get_names(self):
