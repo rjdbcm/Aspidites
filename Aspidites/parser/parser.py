@@ -356,6 +356,7 @@ stmt <<= (func_def | contract_define | simple_assign)
 module_body = OneOrMore(stmt) + Optional(
     struct_main + OneOrMore(stmt).setParseAction(lambda s, l, t: indent + nl_indent.join(t)))
 module_body.ignore(comment_line)
+module_body.setName('module')
 
 
 def parse_module(module):

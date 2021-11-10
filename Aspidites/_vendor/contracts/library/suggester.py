@@ -104,8 +104,7 @@ def create_suggester(get_options, get_message=default_message,
                 loc += length
             else:
                 msg += '\nI know: %r.\n' % (options)
-        pe = ParseException(s, loc, msg, pattern)
-        raise ParseSyntaxException(pe)
+        raise ParseSyntaxException(s, loc, msg, pattern)
 
     pattern.setParseAction(parse_action)
 

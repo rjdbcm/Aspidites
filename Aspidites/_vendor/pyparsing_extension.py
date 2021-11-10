@@ -892,9 +892,7 @@ class ParseResults(object):
         return ret
 
 
-def _collapse_string_to_ranges(
-        s: Union[str, Iterable[str]], re_escape: bool = True
-) -> str:
+def _collapse_string_to_ranges(s: Union[str, Iterable], re_escape: bool = True) -> str:
     def is_consecutive(c):
         c_int = ord(c)
         is_consecutive.prev, prev = c_int, is_consecutive.prev
@@ -982,7 +980,6 @@ class ParseBaseException(Exception):
         exception's stack trace.
         """
         import inspect
-        from .core import ParserElement
 
         if depth is None:
             depth = sys.getrecursionlimit()
