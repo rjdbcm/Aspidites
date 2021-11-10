@@ -1,5 +1,9 @@
 **unreleased**
 **v1.14.0**
+
+- c3ee7bc repl now properly parses function definitions
+
+
 **v1.13.5**
 
 - 16f49c0 deprecate iter_find_files
