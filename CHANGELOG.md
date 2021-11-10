@@ -1,4 +1,5 @@
 **unreleased**
+**v1.14.2**
 **v1.14.1**
 
 - 8f71a6c update Dockerfile
