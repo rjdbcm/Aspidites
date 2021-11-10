@@ -17,7 +17,7 @@ This should allow for some semblance of backwards compatibility.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from .gcutils import get_all
-from .fileutils import mkdir_p, atomic_save, iter_find_files, copytree
+from .fileutils import mkdir_p, atomic_save, iglob, iter_find_files, copytree
 from .pickleutils import pickle_loads
 from .guiutils import *
 from .mathutils import clamp, ceil, floor

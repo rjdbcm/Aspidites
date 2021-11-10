@@ -19,12 +19,11 @@ from glob import iglob
 from shutil import copy2, copystat, Error, copytree
 
 
-__all__ = ['mkdir_p', 'atomic_save', 'AtomicSaver', 'iter_find_files', 'copytree']
+__all__ = ['mkdir_p', 'atomic_save', 'AtomicSaver', 'iglob', 'iter_find_files', 'copytree']
 
 
 def iter_find_files(*args, **kwargs):
-    warnings.warn('iter_find_files will be deprecated in 1.14 in favor of iglob', PendingDeprecationWarning)
-    return iglob(*args, **kwargs)
+    raise DeprecationWarning('iter_find_files is deprecated as of 1.14')
 
 FULL_PERMS = 511  # 0777 that both Python 2 and 3 can digest
 RW_PERMS = 438
