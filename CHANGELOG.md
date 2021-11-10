@@ -1,5 +1,17 @@
 **unreleased**
 **v1.13.5**
+
+- 16f49c0 deprecate iter_find_files
+- 30613ca Parsing now happens line by line to avoid loading whole modules into memory.
+- 6f5064f switch to pyparsing 3.x style exceptions
+- f1f575a switch to pyparsing 3.x style exceptions
+- faaa0e8 persistent types are now creatable
+- cb3cafd add field import to templates.py
+- 6d567bc added safer type implementation for dealing with classes
+- 1abcc0f added safer type implementation for dealing with classes
+- 947f414 fix missing doc prints
+
+
 **v1.13.4**
 
 - 2bb68e3 repl Help class is now fully a mixin
