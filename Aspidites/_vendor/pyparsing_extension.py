@@ -1,15 +1,18 @@
-#cython: language_level=3
+# cython: language_level=3
 import collections
 import copy
+import itertools
 import pprint
 import re
 import string
 import sys
 import types
 import warnings
+from typing import Optional, Union
 from operator import itemgetter
 from weakref import ref as wkref
 import sre_constants
+from .pyparsing_unicode import pyparsing_unicode as ppu
 
 _generatorType = type((y for y in range(1)))
 
@@ -73,6 +76,8 @@ def _enable_all_warnings():  # pragma: no cover
     __diag__.warn_ungrouped_named_tokens_in_collection = True
     __diag__.warn_name_set_on_empty_Forward = True
     __diag__.warn_on_multiple_string_args_to_oneof = True
+
+
 __diag__.enable_all_warnings = _enable_all_warnings
 
 
@@ -887,13 +892,71 @@ class ParseResults(object):
         return ret
 
 
+def _collapse_string_to_ranges(
+        s: Union[str, Iterable[str]], re_escape: bool = True
+) -> str:
+    def is_consecutive(c):
+        c_int = ord(c)
+        is_consecutive.prev, prev = c_int, is_consecutive.prev
+        if c_int - prev > 1:
+            is_consecutive.value = next(is_consecutive.counter)
+        return is_consecutive.value
+
+    is_consecutive.prev = 0
+    is_consecutive.counter = itertools.count()
+    is_consecutive.value = -1
+
+    def escape_re_range_char(c):
+        return "\\" + c if c in r"\^-][" else c
+
+    def no_escape_re_range_char(c):
+        return c
+
+    if not re_escape:
+        escape_re_range_char = no_escape_re_range_char
+
+    ret = []
+    s = "".join(sorted(set(s)))
+    if len(s) > 3:
+        for _, chars in itertools.groupby(s, key=is_consecutive):
+            first = last = next(chars)
+            last = collections.deque(
+                itertools.chain(iter([last]), chars), maxlen=1
+            ).pop()
+            if first == last:
+                ret.append(escape_re_range_char(first))
+            else:
+                ret.append(
+                    "{}-{}".format(
+                        escape_re_range_char(first), escape_re_range_char(last)
+                    )
+                )
+    else:
+        ret = [escape_re_range_char(c) for c in s]
+
+    return "".join(ret)
+
+
+class ExceptionWordUnicode(ppu.Latin1, ppu.LatinA, ppu.LatinB, ppu.Greek, ppu.Cyrillic):
+    pass
+
+
+_extract_alphanums = _collapse_string_to_ranges(ExceptionWordUnicode.alphanums)
+_exception_word_extractor = re.compile("([" + _extract_alphanums + "]{1,16})|.")
+
+
 class ParseBaseException(Exception):
     """base exception class for all parsing runtime exceptions"""
-    __slots__ = ("loc", "msg", "pstr", "parserElement", "args")
 
     # Performance tuning: we construct a *lot* of these, so keep this
     # constructor as small and fast as possible
-    def __init__(self, pstr, loc=0, msg=None, elem=None):
+    def __init__(
+            self,
+            pstr: str,
+            loc: int = 0,
+            msg: Optional[str] = None,
+            elem=None,
+    ):
         self.loc = loc
         if msg is None:
             self.msg = pstr
@@ -901,8 +964,71 @@ class ParseBaseException(Exception):
         else:
             self.msg = msg
             self.pstr = pstr
-        self.parserElement = elem
+        self.parser_element = self.parserElement = elem
         self.args = (pstr, loc, msg)
+
+    @staticmethod
+    def explain_exception(exc, depth=16):
+        """
+        Method to take an exception and translate the Python internal traceback into a list
+        of the pyparsing expressions that caused the exception to be raised.
+        Parameters:
+        - exc - exception raised during parsing (need not be a ParseException, in support
+          of Python exceptions that might be raised in a parse action)
+        - depth (default=16) - number of levels back in the stack trace to list expression
+          and function names; if None, the full stack trace names will be listed; if 0, only
+          the failing input line, marker, and exception string will be shown
+        Returns a multi-line string listing the ParserElements and/or function names in the
+        exception's stack trace.
+        """
+        import inspect
+        from .core import ParserElement
+
+        if depth is None:
+            depth = sys.getrecursionlimit()
+        ret = []
+        if isinstance(exc, ParseBaseException):
+            ret.append(exc.line)
+            ret.append(" " * (exc.column - 1) + "^")
+        ret.append("{}: {}".format(type(exc).__name__, exc))
+
+        if depth > 0:
+            callers = inspect.getinnerframes(exc.__traceback__, context=depth)
+            seen = set()
+            for i, ff in enumerate(callers[-depth:]):
+                frm = ff[0]
+
+                f_self = frm.f_locals.get("self", None)
+                if isinstance(f_self, ParserElement):
+                    if frm.f_code.co_name not in ("parseImpl", "_parseNoCache"):
+                        continue
+                    if id(f_self) in seen:
+                        continue
+                    seen.add(id(f_self))
+
+                    self_type = type(f_self)
+                    ret.append(
+                        "{}.{} - {}".format(
+                            self_type.__module__, self_type.__name__, f_self
+                        )
+                    )
+
+                elif f_self is not None:
+                    self_type = type(f_self)
+                    ret.append("{}.{}".format(self_type.__module__, self_type.__name__))
+
+                else:
+                    code = frm.f_code
+                    if code.co_name in ("wrapper", "<module>"):
+                        continue
+
+                    ret.append("{}".format(code.co_name))
+
+                depth -= 1
+                if not depth:
+                    break
+
+        return "\n".join(ret)
 
     @classmethod
     def _from_exception(cls, pe):
@@ -912,181 +1038,145 @@ class ParseBaseException(Exception):
         """
         return cls(pe.pstr, pe.loc, pe.msg, pe.parserElement)
 
-    def __getattr__(self, aname):
-        """supported attributes by name are:
-           - lineno - returns the line number of the exception text
-           - col - returns the column number of the exception text
-           - line - returns the line containing the exception text
+    @property
+    def line(self) -> str:
         """
-        if aname == "lineno":
-            return lineno(self.loc, self.pstr)
-        elif aname in ("col", "column"):
-            return col(self.loc, self.pstr)
-        elif aname == "line":
-            return line(self.loc, self.pstr)
-        else:
-            raise AttributeError(aname)
+        Return the line of text where the exception occurred.
+        """
+        return line(self.loc, self.pstr)
 
-    def __str__(self):
+    @property
+    def lineno(self) -> int:
+        """
+        Return the 1-based line number of text where the exception occurred.
+        """
+        return lineno(self.loc, self.pstr)
+
+    @property
+    def col(self) -> int:
+        """
+        Return the 1-based column on the line of text where the exception occurred.
+        """
+        return col(self.loc, self.pstr)
+
+    @property
+    def column(self) -> int:
+        """
+        Return the 1-based column on the line of text where the exception occurred.
+        """
+        return col(self.loc, self.pstr)
+
+    def __str__(self) -> str:
         if self.pstr:
             if self.loc >= len(self.pstr):
-                foundstr = ', found end of text'
+                foundstr = ", found end of text"
             else:
-                foundstr = (', found in %r' % self.pstr[self.loc:self.loc + 20] + '...').replace(r'\\', '\\')
+                # pull out next word at error location
+                found_match = _exception_word_extractor.match(self.pstr, self.loc)
+                if found_match is not None:
+                    found = found_match.group(0)
+                else:
+                    found = self.pstr[self.loc: self.loc + 1]
+                foundstr = (", found %r" % found).replace(r"\\", "\\")
         else:
-            foundstr = ''
-        return ("%s%s  (at char %d), (line:%d, col:%d)" %
-                (self.msg, foundstr, self.loc, self.lineno, self.column))
+            foundstr = ""
+        return "{}{}  (at char {}), (line:{}, col:{})".format(
+            self.msg, foundstr, self.loc, self.lineno, self.column
+        )
 
     def __repr__(self):
         return str(self)
 
-    def markInputline(self, markerString=">!<"):
-        """Extracts the exception line from the input string, and marks
-           the location of the exception with a special symbol.
+    def mark_input_line(self, marker_string: str = None, *, markerString=">!<") -> str:
         """
+        Extracts the exception line from the input string, and marks
+        the location of the exception with a special symbol.
+        """
+        markerString = marker_string if marker_string is not None else markerString
         line_str = self.line
         line_column = self.column - 1
         if markerString:
-            line_str = "".join((line_str[:line_column],
-                                markerString, line_str[line_column:]))
+            line_str = "".join(
+                (line_str[:line_column], markerString, line_str[line_column:])
+            )
         return line_str.strip()
 
-    def __dir__(self):
-        return "lineno col line".split() + dir(type(self))
+    def explain(self, depth=16) -> str:
+        """
+        Method to translate the Python internal traceback into a list
+        of the pyparsing expressions that caused the exception to be raised.
+        Parameters:
+        - depth (default=16) - number of levels back in the stack trace to list expression
+          and function names; if None, the full stack trace names will be listed; if 0, only
+          the failing input line, marker, and exception string will be shown
+        Returns a multi-line string listing the ParserElements and/or function names in the
+        exception's stack trace.
+        Example::
+            expr = pp.Word(pp.nums) * 3
+            try:
+                expr.parse_string("123 456 A789")
+            except pp.ParseException as pe:
+                print(pe.explain(depth=0))
+        prints::
+            123 456 A789
+                    ^
+            ParseException: Expected W:(0-9), found 'A'  (at char 8), (line:1, col:9)
+        Note: the diagnostic output will include string representations of the expressions
+        that failed to parse. These representations will be more helpful if you use `set_name` to
+        give identifiable names to your expressions. Otherwise they will use the default string
+        forms, which may be cryptic to read.
+        Note: pyparsing's default truncation of exception tracebacks may also truncate the
+        stack of expressions that are displayed in the ``explain`` output. To get the full listing
+        of parser expressions, you may have to set ``ParserElement.verbose_stacktrace = True``
+        """
+        return self.explain_exception(self, depth)
+
+    markInputline = mark_input_line
 
 
 class ParseException(ParseBaseException):
     """
-    Exception thrown when parse expressions don't match class;
-    supported attributes by name are:
-    - lineno - returns the line number of the exception text
-    - col - returns the column number of the exception text
-    - line - returns the line containing the exception text
-
+    Exception thrown when a parse expression doesn't match the input string
     Example::
-
         try:
-            Word(nums).setName("integer").parseString("ABC")
+            Word(nums).set_name("integer").parse_string("ABC")
         except ParseException as pe:
             print(pe)
-            print("column: {}".format(pe.col))
-
+            print("column: {}".format(pe.column))
     prints::
-
        Expected integer (at char 0), (line:1, col:1)
         column: 1
-
     """
-
-    @staticmethod
-    def explain(exc, depth=16):
-        """
-        Method to take an exception and translate the Python internal traceback into a list
-        of the pyparsing expressions that caused the exception to be raised.
-
-        Parameters:
-
-         - exc - exception raised during parsing (need not be a ParseException, in support
-           of Python exceptions that might be raised in a parse action)
-         - depth (default=16) - number of levels back in the stack trace to list expression
-           and function names; if None, the full stack trace names will be listed; if 0, only
-           the failing input line, marker, and exception string will be shown
-
-        Returns a multi-line string listing the ParserElements and/or function names in the
-        exception's stack trace.
-
-        Note: the diagnostic output will include string representations of the expressions
-        that failed to parse. These representations will be more helpful if you use `setName` to
-        give identifiable names to your expressions. Otherwise they will use the default string
-        forms, which may be cryptic to read.
-
-        explain() is only supported under Python 3.
-        """
-        import inspect
-
-        if depth is None:
-            depth = sys.getrecursionlimit()
-        ret = []
-        if isinstance(exc, ParseBaseException):
-            ret.append(exc.line)
-            ret.append(' ' * (exc.col - 1) + '^')
-        ret.append("{0}: {1}".format(type(exc).__name__, exc))
-
-        if depth > 0:
-            callers = inspect.getinnerframes(exc.__traceback__, context=depth)
-            seen = set()
-            for i, ff in enumerate(callers[-depth:]):
-                frm = ff[0]
-
-                f_self = frm.f_locals.get('self', None)
-                if isinstance(f_self, ParserElement):
-                    if frm.f_code.co_name not in ('parseImpl', '_parseNoCache'):
-                        continue
-                    if f_self in seen:
-                        continue
-                    seen.add(f_self)
-
-                    self_type = type(f_self)
-                    ret.append("{0}.{1} - {2}".format(self_type.__module__,
-                                                      self_type.__name__,
-                                                      f_self))
-                elif f_self is not None:
-                    self_type = type(f_self)
-                    ret.append("{0}.{1}".format(self_type.__module__,
-                                                self_type.__name__))
-                else:
-                    code = frm.f_code
-                    if code.co_name in ('wrapper', '<module>'):
-                        continue
-
-                    ret.append("{0}".format(code.co_name))
-
-                depth -= 1
-                if not depth:
-                    break
-
-        return '\n'.join(ret)
 
 
 class ParseFatalException(ParseBaseException):
-    """user-throwable exception thrown when inconsistent parse content
-       is found; stops all parsing immediately"""
-    pass
+    """
+    User-throwable exception thrown when inconsistent parse content
+    is found; stops all parsing immediately
+    """
 
 
 class ParseSyntaxException(ParseFatalException):
-    """just like :class:`ParseFatalException`, but thrown internally
+    """
+    Just like :class:`ParseFatalException`, but thrown internally
     when an :class:`ErrorStop<And._ErrorStop>` ('-' operator) indicates
     that parsing is to stop immediately because an unbacktrackable
     syntax error has been found.
     """
-    pass
 
-
-# ~ class ReparseException(ParseBaseException):
-# ~ """Experimental class - parse actions can raise this exception to cause
-# ~ pyparsing to reparse the input string:
-# ~ - with a modified input string, and/or
-# ~ - with a modified start location
-# ~ Set the values of the ReparseException in the constructor, and raise the
-# ~ exception in a parse action to cause pyparsing to use the new string/location.
-# ~ Setting the values as None causes no change to be made.
-# ~ """
-# ~ def __init_( self, newstring, restartLoc ):
-# ~ self.newParseText = newstring
-# ~ self.reparseLoc = restartLoc
 
 class RecursiveGrammarException(Exception):
-    """exception thrown by :class:`ParserElement.validate` if the
-    grammar could be improperly recursive
+    """
+    Exception thrown by :class:`ParserElement.validate` if the
+    grammar could be left-recursive; parser may need to enable
+    left recursion using :class:`ParserElement.enable_left_recursion<ParserElement.enable_left_recursion>`
     """
 
     def __init__(self, parseElementList):
         self.parseElementTrace = parseElementList
 
-    def __str__(self):
-        return "RecursiveGrammarException: %s" % self.parseElementTrace
+    def __str__(self) -> str:
+        return "RecursiveGrammarException: {}".format(self.parseElementTrace)
 
 
 class ParserElement(object):
@@ -2670,7 +2760,7 @@ class ParseExpression(ParserElement):
                         name,
                         type(self).__name__,
                         e.resultsName),
-                                  stacklevel=3)
+                        stacklevel=3)
 
         return super(ParseExpression, self)._setResultsName(name, listAllMatches)
 
@@ -4500,7 +4590,7 @@ class _MultipleMatch(ParseElementEnhance):
                         name,
                         type(self).__name__,
                         e.resultsName),
-                                  stacklevel=3)
+                        stacklevel=3)
 
         return super(_MultipleMatch, self)._setResultsName(name, listAllMatches)
 
@@ -5064,6 +5154,7 @@ class Suppress(TokenConverter):
 class OnlyOnce(object):
     """Wrapper for parse actions, to ensure they are only called once.
     """
+
     def __init__(self, methodCall):
         from .pyparsing import _trim_arity
         self.callable = _trim_arity(methodCall)
