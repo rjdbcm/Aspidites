@@ -1,4 +1,5 @@
 **unreleased**
+**v1.14.1**
 **v1.14.0**
 
 - c3ee7bc repl now properly parses function definitions
