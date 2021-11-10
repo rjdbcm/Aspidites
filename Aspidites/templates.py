@@ -140,7 +140,7 @@ from typing import Any
 from collections.abc import Generator
 import cython  # type: ignore
 from cython import declare as decl,address as addr,sizeof,typeof,struct,cfunc,ccall,nogil,no_gc,inline,union,typedef,cast,char,short,int as cint,bint,short,double,long,longdouble,longdoublecomplex,longlong,complex,float as cfloat
-from Aspidites._vendor.pyrsistent import pset as __pset,pmap as __pmap,pvector as __pvector,s,v,m,field
+from Aspidites._vendor.pyrsistent import pset as __pset,pmap as __pmap,pvector as __pvector,s,v,m,field,pvector_field as vfield,pmap_field as mfield,pset_field as sfield
 from Aspidites.woma import *
 from Aspidites._vendor import take,drop,takelast,droplast,consume,nth,first_true,iterate,padnone,ncycles,repeatfunc,grouper,group_by,roundrobin,partition,splitat,splitby,powerset,pairwise,iter_suppress,flatten,accumulate,reduce,filterfalse,zip_longest,call,apply,flip,curry,curried,zipwith,foldl,foldr,unfold,Capture,Strict,OneOf,AllOf,NoneOf,Not,Each,EachItem,Some,Between,Length,Contains,Regex,Check,InstanceOf,SubclassOf,Arguments,Returns,Transformed,At,Object,match as __match,_
 from Aspidites.monads import Maybe as __maybe,Surely as __surely

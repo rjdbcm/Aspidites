@@ -1,4 +1,4 @@
-from _vendor.pyrsistent import PClass
+from ._vendor.pyrsistent import PClass
 
 
 def safer_type(*args):
@@ -14,4 +14,4 @@ def safer_type(*args):
         name, bases, attributes = args
         bases = (PClass,) + bases
 
-    return type(name, bases, attributes)
+    return type(name, bases, dict(attributes))
