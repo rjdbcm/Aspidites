@@ -1,4 +1,5 @@
 **unreleased**
+**v1.14.0**
 **v1.13.5**
 
 - 16f49c0 deprecate iter_find_files
