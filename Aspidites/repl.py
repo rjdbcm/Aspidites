@@ -243,7 +243,10 @@ class ReadEvalParse:  # pragma: no cover
             line += '\n    '
             while True:
                 line2 = input(CONTINUE_PROMPT)
-                line += line2 + '\n    '
+                if '(!)' in line2:
+                    line += line2 + '\n        '
+                else:
+                    line += line2 + '\n    '
                 if line.endswith('\n    \n    '):
                     break
         return line
