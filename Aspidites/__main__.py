@@ -16,7 +16,7 @@ import pytest
 
 from ._vendor.semantic_version import Version
 from .compiler import Compiler, CompilerArgs
-from .parser import parse_module
+from .parser import parse_statement
 from . import __description__
 
 cy_version = Version.coerce(cy_version)
@@ -140,7 +140,10 @@ def parse_from_dummy(argv: list,
 def parse_code(target, output):
     if target == "Aspidites/tests" or target == "Aspidites\\tests":  # pragma: no cover
         raise SystemExit()
-    code = parse_module(open(target, 'r').read())  # pragma: no cover
+    code = []
+    with open(target, 'r') as f:
+        for stmt in f.readlines():
+            code.extend(parse_statement(stmt))  # pragma: no cover
     if output is None:  # pragma: no cover
         output = Path(target).parent / 'compiled.py'
     return target, output, code

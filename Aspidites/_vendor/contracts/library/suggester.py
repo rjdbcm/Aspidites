@@ -61,7 +61,6 @@ def create_suggester(get_options, get_message=default_message,
     if pattern is None:
         pattern = Combine(oneOf(list(alphas)) + Word('_' + alphanums))
 
-
     pattern = pattern.copy()
 
     def find_match(identifier, options, local_string):

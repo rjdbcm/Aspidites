@@ -1074,7 +1074,12 @@ class ParseBaseException(Exception):
                     found = found_match.group(0)
                 else:
                     found = self.pstr[self.loc: self.loc + 1]
-                foundstr = (", found %r" % found).replace(r"\\", "\\")
+
+                if found == '(':
+                    found = self.pstr[self.loc: self.loc + 20] + '...'
+                    foundstr = (", found %r, you might have made typo in this declaration." % found).replace(r"\\", "\\")
+                else:
+                    foundstr = (", found %r" % found).replace(r"\\", "\\")
         else:
             foundstr = ""
         return "{}{}  (at char {}), (line:{}, col:{})".format(

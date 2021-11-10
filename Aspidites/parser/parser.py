@@ -43,6 +43,7 @@ from .._vendor.pyparsing import (
 )
 
 from .._vendor.contracts.syntax import contract_expression
+from .._vendor.contracts.library.suggester import create_suggester
 from ..parser.convert import *
 
 list_str = Forward().setName('list literal')
