@@ -136,9 +136,9 @@ class Help:
             # There can be duplicates if routines overridden
             self.handle_names()
         self.stdout.write("%s\n" % str(self.doc_leader))
-        self.print_topics(self.doc_header, cmds_doc, 15, 80)
+        self.print_topics(self.doc_header, self.cmds_doc, 15, 80)
         self.print_topics(self.misc_header, list(help.keys()), 15, 80)
-        self.print_topics(self.undoc_header, cmds_undoc, 15, 80)
+        self.print_topics(self.undoc_header, self.cmds_undoc, 15, 80)
 
     def handle_names(self):
         prevname = ''
