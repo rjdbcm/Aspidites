@@ -1,5 +1,9 @@
 **unreleased**
 **v1.14.3**
+
+- 05d6a30 fix Error: '_Helper' object has no attribute 'keys'
+
+
 **v1.14.2**
 
 - b5f2bd1 fix typo in repl
