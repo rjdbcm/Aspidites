@@ -12,7 +12,7 @@
 
 * * *
 
-- Who is the [Woma programming language](http://aspidites.org/woma/README.html) for?  
+- Who is the [Woma programming language](http://aspidites.org/woma) for?  
 
     - First and foremost it is for people wanting to write CPython extensions fast, like *really* fast. Traditionally these are written in C++, C. Though with the tool Cython, pure python modules can be statically compiled as well. Woma has the advantage of being shorthand for well constrained and type-checked pure python modules that readily compile using Cython.
 
