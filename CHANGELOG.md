@@ -1,4 +1,5 @@
 **unreleased**
+**v1.15.0**
 **v1.14.4**
 
 - 65768d9 update usage.rst
