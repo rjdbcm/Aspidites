@@ -108,13 +108,11 @@ def parse_from_dummy(argv: list,
                                    )
     asp_parser.add_argument('-pt', '--pytest',
                             help="run pytest with args", metavar='ARGS')
-    asp_parser.add_argument("target",
-                            help="source to compile")
+    asp_parser.add_argument("target", help="source to compile")
+    asp_parser.add_argument('outpyx', help='filename to compile to', required=False),
     # Compatible with Cython 0.X:
     # 3.0 switched to using the argparse module
     if cy_version.major == 0 or cy3_fallback_mode:
-        asp_parser.add_argument('-o', '--output', metavar='PATH/TO/FILE',
-                                help='filename to compile to'),
         asp_parser.add_argument('-f', '--force', action='store_true',
                                 help='forcibly overwrite existing files')
         asp_parser.add_argument("-p", "--compile-pyc", action="store_true",
@@ -140,12 +138,9 @@ def parse_from_dummy(argv: list,
 def parse_code(target, output):
     if target == "Aspidites/tests" or target == "Aspidites\\tests":  # pragma: no cover
         raise SystemExit()
-    code = []
-    with open(target, 'r') as f:
-        for stmt in f.readlines():
-            code.extend(parse_statement(stmt))  # pragma: no cover
+    code = parse_module(open(target, 'r').read())  # pragma: no cover
     if output is None:  # pragma: no cover
-        output = Path(target).parent / 'compiled.py'
+        output = Path(target).parent / 'compiled.pyx'
     return target, output, code
 
 
@@ -155,10 +150,10 @@ def main(argv=None) -> None:
     # any failure results in falling back to the `Cython.Compiler.Options` API
     args, other_args, cy_kwargs = parse_from_dummy(argv, ap.ArgumentParser(add_help=False))
     # TODO: Cython 3.0 arguments clash with Aspidites' ArgumentParser
-    args.target, args.output, code = parse_code(args.target, args.output)
+    args.target, args.outpyx, code = parse_code(args.target, args.outpyx)
     cy_kwargs.update({  # pragma: no cover
         'code': code,
-        'fname': args.output or "compiled.py",
+        'fname': args.outpyx or "compiled.pyx",
         'force': args.force or False,
         'bytecode': args.compile_pyc,
         'c': args.compile_c,
