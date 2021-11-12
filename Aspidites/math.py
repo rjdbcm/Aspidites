@@ -6,10 +6,13 @@ from inspect import getouterframes
 from math import inf, isinf, nan, isnan
 from math import factorial
 import numbers
-import numpy as np
-from .api import Warn
+try:
+    import numpy as np
+    Numeric = Union[int, float, complex, np.number]
+except ModuleNotFoundError:
+    Numeric = Union[int, float, complex]
 
-Numeric = Union[int, float, complex, np.number]
+from .api import Warn
 
 
 class Undefined:

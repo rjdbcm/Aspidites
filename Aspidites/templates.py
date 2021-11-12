@@ -108,7 +108,11 @@ from pathlib import Path
 from setuptools import setup, Extension
 from Cython.Build import cythonize, BuildExecutable
 from Cython.Compiler import Options
-import numpy
+try:
+    from numpy import get_include
+except:
+    def get_include():
+        return sysconfig.get_config_vars()['CONFINCLUDEPY']
 Options.annotate=$annotate
 Options.annotate_coverage_xml=$annotate_coverage_xml
 Options.buffer_max_dims=$buffer_max_dims
@@ -128,7 +132,7 @@ Options.gcc_branch_hints=$gcc_branch_hints
 Options.lookup_module_cpdef=$lookup_module_cpdef
 Options.embed=$embed
 exts=[Extension('$app_name',['$src_file'],include_dirs=$inc_dirs,libraries=$libs,extra_compile_args=['-Wall','-O2'],library_dirs=$lib_dirs),]
-setup(name='$app_name',ext_modules=cythonize(exts,include_path=[numpy.get_include()]))
+setup(name='$app_name',ext_modules=cythonize(exts,include_path=[get_include()]))
 if Options.embed: BuildExecutable.build('$src_file')
 
 """)

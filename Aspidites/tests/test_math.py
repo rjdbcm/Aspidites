@@ -93,9 +93,13 @@ def test_undefined_sanity():
     with pytest.raises(TypeError):
         from math import isnan
         assert isnan(complex(Undefined())) == isnan(complex(nan))
-    from numpy import isnan
-    assert isnan(complex(Undefined())) == isnan(complex(nan))
-    del isnan
+    try:
+        from numpy import isnan
+    except:
+        pass
+    else:
+        assert isnan(complex(Undefined())) == isnan(complex(nan))
+        del isnan
     from math import isnan
     assert isnan(float(Undefined())) == isnan(float(nan))
     assert Surely() == Surely()
