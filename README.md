@@ -12,7 +12,7 @@
 
 * * *
 
-- Who is the [Woma programming language](https://www.github.com/rjdbcm/woma) for?  
+- Who is the [Woma programming language](http://aspidites.org/woma) for?  
 
     - First and foremost it is for people wanting to write CPython extensions fast, like *really* fast. Traditionally these are written in C. Woma has the advantage of being shorthand for well constrained and type-checked Python Extensions.
 
