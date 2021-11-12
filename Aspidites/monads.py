@@ -105,6 +105,8 @@ class Maybe:
         self._stack = pvector(getouterframes(sys._getframe(0), 1))
         self._warn = Warn(self._stack, self._func, self._args, self._kwargs)
         self.__instance__ = Undefined()
+        with suppress(Exception):
+            self.__instance__ = _apply(self.func, self.args, self.kwargs)
 
     def __repr__(self) -> str:
         maybe = self.__class__.__name__
@@ -140,7 +142,7 @@ class Maybe:
     def __call__(self, warn_undefined=True) -> Union[Surely, Undefined, Any]:
         try:
             with suppress(ValueError):
-                val = _apply(self.func, self.args, self.kwargs)
+                val = self.__instance__ or _apply(self.func, self.args, self.kwargs)
             with suppress(UnboundLocalError):
                 self.__instance__ = Surely(val)
                 # SURELY #
