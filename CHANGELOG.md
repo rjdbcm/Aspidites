@@ -1,5 +1,20 @@
 **unreleased**
 **v1.14.4**
+
+- 65768d9 update usage.rst
+- 410ee58 fix major commandline error
+- 5eed8ac fix major commandline error
+- 60275a4 Maybe now attempts to call during __init__
+- 87dbdb5 add useful itertools functions to builtin whitelist add missing import sysconfig to templates.py:setup_template
+- 9cc390a update readme
+- 3ce6d08 Merge remote-tracking branch 'origin/main'
+- dd753aa update readme
+- 356d162 Update README.md
+- a793dc7 Update README.md
+- e7b14c7 update readme to reflect optional nature of numpy
+- 7cb64dc made numpy an optional install
+
+
 **v1.14.3**
 
 - 05d6a30 fix Error: '_Helper' object has no attribute 'keys'
