@@ -24,6 +24,15 @@ __all__ = ["F",  # BEGIN func.py
             "iter_suppress",
             "flatten",
             "accumulate",  # END iters.py
+            "chain",
+            "combinations",
+            "cycle",
+            "dropwhile",
+            "islice",
+            "repeat",
+            "starmap",
+            "takewhile",
+            "tee",
             "call",  # BEGIN op.py
             "apply",
             "flip",

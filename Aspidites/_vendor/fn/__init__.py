@@ -23,7 +23,16 @@ from .iters import (
     pairwise,
     iter_suppress,
     flatten,
-    accumulate
+    accumulate,
+    chain,
+    combinations,
+    cycle,
+    dropwhile,
+    islice,
+    repeat,
+    starmap,
+    takewhile,
+    tee
 )
 from .op import (
     call,
@@ -88,5 +97,14 @@ __all__ = [
     "_",
     "reduce",
     "filterfalse",
-    "zip_longest"
+    "zip_longest",
+    "chain",
+    "combinations",
+    "cycle",
+    "dropwhile",
+    "islice",
+    "repeat",
+    "starmap",
+    "takewhile",
+    "tee"
     ]

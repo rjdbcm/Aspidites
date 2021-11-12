@@ -104,6 +104,7 @@ $tb
 
 setup_template = Template("""
 # THIS FILE IS GENERATED - DO NOT EDIT #
+import sysconfig
 from pathlib import Path
 from setuptools import setup, Extension
 from Cython.Build import cythonize, BuildExecutable
@@ -146,7 +147,7 @@ import cython  # type: ignore
 from cython import declare as decl,address as addr,sizeof,typeof,struct,cfunc,ccall,nogil,no_gc,inline,union,typedef,cast,char,short,int as cint,bint,short,double,long,longdouble,longdoublecomplex,longlong,complex,float as cfloat
 from Aspidites._vendor.pyrsistent import pset as __pset,pmap as __pmap,pvector as __pvector,s,v,m,field,pvector_field as vfield,pmap_field as mfield,pset_field as sfield
 from Aspidites.woma import *
-from Aspidites._vendor import take,drop,takelast,droplast,consume,nth,first_true,iterate,padnone,ncycles,repeatfunc,grouper,group_by,roundrobin,partition,splitat,splitby,powerset,pairwise,iter_suppress,flatten,accumulate,reduce,filterfalse,zip_longest,call,apply,flip,curry,curried,zipwith,foldl,foldr,unfold,Capture,Strict,OneOf,AllOf,NoneOf,Not,Each,EachItem,Some,Between,Length,Contains,Regex,Check,InstanceOf,SubclassOf,Arguments,Returns,Transformed,At,Object,match as __match,_
+from Aspidites._vendor import take,drop,takelast,droplast,consume,nth,first_true,iterate,padnone,ncycles,repeatfunc,grouper,group_by,roundrobin,partition,splitat,splitby,powerset,pairwise,iter_suppress,flatten,accumulate,reduce,filterfalse,zip_longest,chain,combinations,cycle,dropwhile,islice,repeat,starmap,takewhile,tee,call,apply,flip,curry,curried,zipwith,foldl,foldr,unfold,Capture,Strict,OneOf,AllOf,NoneOf,Not,Each,EachItem,Some,Between,Length,Contains,Regex,Check,InstanceOf,SubclassOf,Arguments,Returns,Transformed,At,Object,match as __match,_
 from Aspidites.monads import Maybe as __maybe,Surely as __surely
 from Aspidites.math import Undefined as __undefined,SafeDiv as __safeDiv,SafeExp as __safeExp,SafeMod as __safeMod,SafeFloorDiv as __safeFloorDiv,SafeUnaryAdd as __safeUnaryAdd,SafeUnarySub as __safeUnarySub,SafeFactorial as __safeFactorial
 from Aspidites._vendor.contracts import contract as __contract,new_contract as __new_contract
@@ -181,6 +182,15 @@ __safe_builtins['accumulate']=accumulate
 __safe_builtins['reduce']=reduce
 __safe_builtins['filterfalse']=filterfalse
 __safe_builtins['zip_longest']=zip_longest
+__safe_builtins['chain']=chain
+__safe_builtins['combinations']=combinations
+__safe_builtins['cycle']=cycle
+__safe_builtins['dropwhile']=dropwhile
+__safe_builtins['islice']=islice
+__safe_builtins['repeat']=repeat
+__safe_builtins['starmap']=starmap
+__safe_builtins['takewhile']=takewhile
+__safe_builtins['tee']=tee
 __safe_builtins['call']=call
 __safe_builtins['apply']=apply
 __safe_builtins['flip']=flip

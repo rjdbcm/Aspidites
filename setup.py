@@ -186,7 +186,6 @@ else:
                     str(Path('Aspidites/_vendor/apm/match.py')),
                     ]
 
-
 # ~#~ # Build static libs # ~#~ #
 from Cython.Build import cythonize
 from Cython.Compiler import Options

@@ -21,3 +21,16 @@
 
 (neg(x = 0 -> number)) number
     <*> -x
+
+(iterate(f = /0 -> Callable; x = /0 -> *)) coroutine
+    i<@>iter(int, 1)
+        x = f(x)
+        <^>f(x)
+
+(partition(predictor = /0 -> Callable; iterable = /0 -> Iterable)) list
+    t = tee(iterable) -> tuple
+    t1 = t[0] -> Iterable
+    t2 = t[1] -> Iterable
+    p1 = filterfalse(predictor, t1) -> Iterable
+    p2 = filter(predictor, t2) -> Iterable
+    <*>[p1,p2]
