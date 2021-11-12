@@ -113,10 +113,14 @@ If you'd like to help out financially, Aspidites' maintainer accepts donations.
 [![libraries.io](https://img.shields.io/badge/Libraries.io--inactive)](https://libraries.io/github/rjdbcm/Aspidites)
 
 ## Core Dependencies
-Aspidites has just 3 core dependencies, all licensed under a compatible OSI approved license. In general, dependencies are vendored unless they are commonly-used libraries. 
+Aspidites has just 3 core dependencies, two required and one optional, one all licensed under a compatible OSI approved license. In general, dependencies are vendored unless they are commonly-used libraries. 
+
+Required:
 - cython
-- numpy
 - future
+
+Optional:
+- numpy
 
 In addition to the core dependencies are the 4 optional dependencies, all licensed under a compatible OSI approved license, needed to run the canned test-suite.
 - pytest
