@@ -1,19 +1,38 @@
-
 from pytest import raises
 from Aspidites.woma.mathutils import clamp, ceil, floor
 import math
 
-INF, NAN = float('inf'), float('nan')
+INF, NAN = float("inf"), float("nan")
 
-OPTIONS = [1618, 1378, 166, 1521, 2347, 2016, 879, 2123,
-           269.3, 1230, 66, 425.2, 250, 2399, 2314, 439,
-           247, 208, 379, 1861]
+OPTIONS = [
+    1618,
+    1378,
+    166,
+    1521,
+    2347,
+    2016,
+    879,
+    2123,
+    269.3,
+    1230,
+    66,
+    425.2,
+    250,
+    2399,
+    2314,
+    439,
+    247,
+    208,
+    379,
+    1861,
+]
 OPTIONS_SORTED = sorted(OPTIONS)
 OUT_OF_RANGE_LOWER = 60
 OUT_OF_RANGE_UPPER = 2500
 VALID_LOWER = 247
 VALID_UPPER = 2314
 VALID_BETWEEN = 248.5
+
 
 def test_clamp_examples():
     """some examples for clamp()"""
@@ -24,11 +43,12 @@ def test_clamp_examples():
     assert 0.5 == clamp(7, upper=0.5)
     assert 1 == clamp(7.7, upper=1)
 
+
 def test_clamp_transparent():
     """clamp(x) should equal x because both limits are omitted"""
     assert clamp(0) == 0
     assert clamp(1) == 1
-    assert clamp(10**100) == 10**100
+    assert clamp(10 ** 100) == 10 ** 100
     assert clamp(INF) == INF
     assert clamp(-INF) == -INF
     assert math.isnan(clamp(NAN))

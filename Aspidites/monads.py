@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 # Aspidites
 # Copyright (C) 2021 Ross J. Duff
 
@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import sys
+
 # ~ do not used the vendored version of getouterframes ~
 from inspect import getouterframes
 from contextlib import suppress
@@ -93,7 +94,7 @@ class Surely:
 
 class Maybe:
     """Sandboxes a :class:`Aspidites.monads.Surely` call and handles ContractNotRespected by returning an instance of
-     :class:`Aspidites.math.Undefined`"""
+    :class:`Aspidites.math.Undefined`"""
 
     __slots__ = v("_func", "_args", "_kwargs", "_stack", "_warn", "__instance__")
 
@@ -112,8 +113,8 @@ class Maybe:
         maybe = self.__class__.__name__
         inst = self.__instance__
         inst_undef = inst == Undefined()
-        debug = (" -> %s" % Undefined() if inst_undef else " -> %s" % str(inst))
-        if hasattr(self._func, '__name__'):
+        debug = " -> %s" % Undefined() if inst_undef else " -> %s" % str(inst)
+        if hasattr(self._func, "__name__"):
             fname = str(self._func.__name__)
         else:
             fname = type(self._func).__name__
@@ -155,4 +156,3 @@ class Maybe:
             # UNDEFINED #
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
             return self.__instance__
-

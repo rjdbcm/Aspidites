@@ -10,7 +10,7 @@
 
 from Aspidites._vendor.pyparsing import *
 
-all_names = '''
+all_names = """
 integer
 meta_identifier
 terminal_string
@@ -24,28 +24,35 @@ single_definition
 definitions_list
 syntax_rule
 syntax
-'''.split()
+""".split()
 
 integer = Word(nums)
-meta_identifier = Word(alphas, alphanums + '_')
-terminal_string = Suppress("'") + CharsNotIn("'") + Suppress("'") ^ \
-                  Suppress('"') + CharsNotIn('"') + Suppress('"')
+meta_identifier = Word(alphas, alphanums + "_")
+terminal_string = Suppress("'") + CharsNotIn("'") + Suppress("'") ^ Suppress(
+    '"'
+) + CharsNotIn('"') + Suppress('"')
 definitions_list = Forward()
-optional_sequence = Suppress('[') + definitions_list + Suppress(']')
-repeated_sequence = Suppress('{') + definitions_list + Suppress('}')
-grouped_sequence = Suppress('(') + definitions_list + Suppress(')')
-syntactic_primary = optional_sequence ^ repeated_sequence ^ \
-                    grouped_sequence ^ meta_identifier ^ terminal_string
-syntactic_factor = Optional(integer + Suppress('*')) + syntactic_primary
-syntactic_term = syntactic_factor + Optional(Suppress('-') + syntactic_factor)
-single_definition = delimitedList(syntactic_term, ',')
-definitions_list << delimitedList(single_definition, '|')
-syntax_rule = meta_identifier + Suppress('=') + definitions_list + \
-              Suppress(';')
+optional_sequence = Suppress("[") + definitions_list + Suppress("]")
+repeated_sequence = Suppress("{") + definitions_list + Suppress("}")
+grouped_sequence = Suppress("(") + definitions_list + Suppress(")")
+syntactic_primary = (
+    optional_sequence
+    ^ repeated_sequence
+    ^ grouped_sequence
+    ^ meta_identifier
+    ^ terminal_string
+)
+syntactic_factor = Optional(integer + Suppress("*")) + syntactic_primary
+syntactic_term = syntactic_factor + Optional(Suppress("-") + syntactic_factor)
+single_definition = delimitedList(syntactic_term, ",")
+definitions_list << delimitedList(single_definition, "|")
+syntax_rule = meta_identifier + Suppress("=") + definitions_list + Suppress(";")
 
-ebnfComment = ("(*" +
-               ZeroOrMore(CharsNotIn("*") | ("*" + ~Literal(")"))) +
-               "*)").streamline().setName("ebnfComment")
+ebnfComment = (
+    ("(*" + ZeroOrMore(CharsNotIn("*") | ("*" + ~Literal(")"))) + "*)")
+    .streamline()
+    .setName("ebnfComment")
+)
 
 syntax = OneOrMore(syntax_rule)
 syntax.ignore(ebnfComment)
@@ -145,7 +152,7 @@ class forward_count:
 forward_count.value = 0
 for name in all_names:
     expr = vars()[name]
-    action = vars()['do_' + name]
+    action = vars()["do_" + name]
     expr.setName(name)
     expr.setParseAction(action)
     # ~ expr.setDebug()

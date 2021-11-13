@@ -6,8 +6,10 @@ from inspect import getouterframes
 from math import inf, isinf, nan, isnan
 from math import factorial
 import numbers
+
 try:
     import numpy as np
+
     Numeric = Union[int, float, complex, np.number]
 except ModuleNotFoundError:
     Numeric = Union[int, float, complex]
@@ -72,8 +74,11 @@ class Undefined:
         return 0
 
     def __repr__(self):
-        if hasattr(self.func, '__name__'):
-            r = self.__class__.__name__ + f"({self.func.__name__}, {self.args}, {self.kwargs})"
+        if hasattr(self.func, "__name__"):
+            r = (
+                self.__class__.__name__
+                + f"({self.func.__name__}, {self.args}, {self.kwargs})"
+            )
         else:
             r = self.__class__.__name__ + f"({None}, {self.args}, {self.kwargs})"
         return r
@@ -132,7 +137,9 @@ def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
 def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
-    if (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0):  # pragma: no cover
+    if (
+        (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0)
+    ):  # pragma: no cover
         return Undefined(SafeExp, a, b)
     try:
         return a ** b

@@ -4,7 +4,15 @@ import re
 from typing import Callable, Optional, Dict, Any
 
 from ._util import get_arg_types, get_return_type, get_kwarg_types
-from .core import Pattern, MatchContext, MatchResult, StringPattern, OneOf, Nested, Underscore
+from .core import (
+    Pattern,
+    MatchContext,
+    MatchResult,
+    StringPattern,
+    OneOf,
+    Nested,
+    Underscore,
+)
 
 
 class Check(Pattern):
@@ -16,7 +24,9 @@ class Check(Pattern):
 
 
 class Regex(Pattern, StringPattern):
-    def __init__(self, regex, *, bind_groups: bool = True, capture_wildcards: bool = False):
+    def __init__(
+        self, regex, *, bind_groups: bool = True, capture_wildcards: bool = False
+    ):
         self._regex: re.Pattern = re.compile(regex)
         self._bind_groups = bind_groups
         if capture_wildcards:
@@ -65,21 +75,29 @@ class SubclassOf(Pattern):
 
 
 class Between(Pattern):
-    def __init__(self, lower, upper, *, lower_bound_exclusive=False, upper_bound_exclusive=False):
+    def __init__(
+        self, lower, upper, *, lower_bound_exclusive=False, upper_bound_exclusive=False
+    ):
         self.lower = lower
         self.upper = upper
         self.op_lower = ops.gt if lower_bound_exclusive else ops.ge
         self.op_upper = ops.lt if upper_bound_exclusive else ops.le
 
     def match(self, value, *, ctx: MatchContext, strict=False) -> MatchResult:
-        return ctx.match_if(self.op_lower(value, self.lower) and self.op_upper(value, self.upper))
+        return ctx.match_if(
+            self.op_lower(value, self.lower) and self.op_upper(value, self.upper)
+        )
 
 
 class Length(Pattern):
-    def __init__(self, *, exactly: int = None, at_least: int = None, at_most: int = None):
+    def __init__(
+        self, *, exactly: int = None, at_least: int = None, at_most: int = None
+    ):
         if exactly is not None:
             if at_least is not None or at_most is not None:
-                raise ValueError("If length is given, 'at_least' or 'at_most' must not be given.")
+                raise ValueError(
+                    "If length is given, 'at_least' or 'at_most' must not be given."
+                )
             self._at_least = exactly
             self._at_most = exactly
         else:
@@ -88,8 +106,10 @@ class Length(Pattern):
 
     def match(self, value, *, ctx: MatchContext, strict: bool) -> MatchResult:
         length = len(value)
-        return ctx.match_if((self._at_least is None or length >= self._at_least)
-                            and (self._at_most is None or length <= self._at_most))
+        return ctx.match_if(
+            (self._at_least is None or length >= self._at_least)
+            and (self._at_most is None or length <= self._at_most)
+        )
 
 
 class Contains(Pattern):
@@ -153,7 +173,6 @@ class Returns(Pattern, Nested):
 
 
 class Each(Pattern, Nested):
-
     def __init__(self, pattern, *, at_least: int = 0):
         self._pattern = pattern
         self._at_least = at_least
@@ -195,7 +214,9 @@ class EachItem(Pattern, Nested):
         return ctx.matches()
 
     def descend(self, f):
-        return EachItem(key_pattern=f(self._key_pattern), value_pattern=f(self._value_pattern))
+        return EachItem(
+            key_pattern=f(self._key_pattern), value_pattern=f(self._value_pattern)
+        )
 
 
 class At(Pattern, Nested):
@@ -261,5 +282,9 @@ def Maybe(pattern) -> Pattern:
 
 
 IsTruish = Check(lambda x: bool(x))
-IsNumber = (InstanceOf(int) & ~InstanceOf(bool)) | InstanceOf(float) | InstanceOf(decimal.Decimal)
+IsNumber = (
+    (InstanceOf(int) & ~InstanceOf(bool))
+    | InstanceOf(float)
+    | InstanceOf(decimal.Decimal)
+)
 IsString = InstanceOf(str)

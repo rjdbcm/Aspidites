@@ -2,9 +2,11 @@ from Aspidites._vendor.pyrsistent import pset, s
 import pytest
 import pickle
 
+
 def test_key_is_tuple():
     with pytest.raises(KeyError):
-        pset().remove((1,1))
+        pset().remove((1, 1))
+
 
 def test_literalish_works():
     assert s() is pset()
@@ -124,6 +126,7 @@ def test_evolver_simple_add():
     assert x2 == s(1, 2, 3, 4)
     assert x == s(1, 2, 3)
 
+
 def test_evolver_simple_remove():
     x = s(1, 2, 3)
     e = x.evolver()
@@ -161,6 +164,7 @@ def test_pickling_non_empty_map():
 
 def test_supports_weakref():
     import weakref
+
     weakref.ref(s(1))
 
 

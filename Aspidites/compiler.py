@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 # Aspidites
 # Copyright (C) 2021 Ross J. Duff
 
@@ -23,7 +23,13 @@ import warnings
 from dataclasses import dataclass
 from glob import glob
 import typing as t
-from .templates import woma_template, makefile_template, pyproject_template, setup_template, default_template
+from .templates import (
+    woma_template,
+    makefile_template,
+    pyproject_template,
+    setup_template,
+    default_template,
+)
 from Aspidites._vendor.pyrsistent import pmap, v
 from hashlib import sha256
 from pathlib import Path
@@ -36,7 +42,7 @@ class CheckedFileStack:
 
     """A convenience class for reading and checksumming file data streams."""
 
-    __slots__ = v('all_files', 'pre_size')
+    __slots__ = v("all_files", "pre_size")
 
     def __init__(self, initial=None, pre_size=128):
         pre_size: cython.int
@@ -56,7 +62,9 @@ class CheckedFileStack:
         else:
             curr_hash = hash_func()
         while chunk:
-            curr_hash and curr_hash.update(chunk)  # Short-circuits to nop if called without hash_func
+            curr_hash and curr_hash.update(
+                chunk
+            )  # Short-circuits to nop if called without hash_func
             chunk = data.read(self.pre_size)
         return curr_hash
 
@@ -95,11 +103,11 @@ class CheckedFileStack:
         """Registers a filename to a checksum of its contents."""
         self.all_files.set(*self._write_checksum(fname))
 
-    def create_file(self, fname, mode, root='', text=default_template) -> None:
+    def create_file(self, fname, mode, root="", text=default_template) -> None:
         """API for creating and registering checked files"""
         if len(str(root)) > 0:
             root = Path(root)
-            file = root/fname
+            file = root / fname
         else:
             file = fname
         try:
@@ -119,23 +127,34 @@ class CheckedFileStack:
             try:
                 all_file_checksums.get(digest)
             except AttributeError:
-                raise RuntimeError("\nfor file %s\n%s\n  did not match cached digest\n%s")
+                raise RuntimeError(
+                    "\nfor file %s\n%s\n  did not match cached digest\n%s"
+                )
 
 
 class CompilerArgs(dict):
 
-    __slots__ = ("code", "fname", "force", "bytecode", "c", "build_requires", "verbose", "embed")
+    __slots__ = (
+        "code",
+        "fname",
+        "force",
+        "bytecode",
+        "c",
+        "build_requires",
+        "verbose",
+        "embed",
+    )
 
     def __init__(self, **kwargs):
         super(CompilerArgs, self).__init__(**kwargs)
-        self.code: ParseResults = kwargs['code']
-        self.fname: Path = kwargs['fname']
-        self.force: bool = kwargs['force']
-        self.bytecode: bool = kwargs['bytecode']
-        self.c: bool = kwargs['c']
-        self.build_requires: t.Union[t.List, str] = kwargs['build_requires']
-        self.verbose: int = kwargs['verbose']
-        self.embed: t.Union[str, None] = kwargs['embed']
+        self.code: ParseResults = kwargs["code"]
+        self.fname: Path = kwargs["fname"]
+        self.force: bool = kwargs["force"]
+        self.bytecode: bool = kwargs["bytecode"]
+        self.c: bool = kwargs["c"]
+        self.build_requires: t.Union[t.List, str] = kwargs["build_requires"]
+        self.verbose: int = kwargs["verbose"]
+        self.embed: t.Union[str, None] = kwargs["embed"]
 
     def __repr__(self) -> str:
         return self.__class__.__name__
@@ -146,9 +165,11 @@ class Compiler:
         self.args = compile_args
         self.file_stack = CheckedFileStack()
         self.fname = Path(self.args.fname)
-        if str(self.fname).endswith('.py'):
-            warnings.warn('Pure python compilation is pending deprecation as of 1.13 and will be removed in 2.0',
-                          PendingDeprecationWarning)
+        if str(self.fname).endswith(".py"):
+            warnings.warn(
+                "Pure python compilation is pending deprecation as of 1.13 and will be removed in 2.0",
+                PendingDeprecationWarning,
+            )
         self.app_name = self.fname.parent / self.fname.stem
         self.project = self.app_name.stem
         self.module_name = str(self.app_name).replace("/", ".")
@@ -158,23 +179,31 @@ class Compiler:
         files = {
             self.fname: (
                 self.mode,
-                dict(root='', text=woma_template.substitute(code="\n".join(self.args.code)))
+                dict(
+                    root="",
+                    text=woma_template.substitute(code="\n".join(self.args.code)),
+                ),
             ),
-            '__init__.py': (
+            "__init__.py": (
                 self.mode,
-                dict(root=self.root, text=f'__metadata__ = "{self.__dict__}"')
+                dict(root=self.root, text=f'__metadata__ = "{self.__dict__}"'),
             ),
-            'py.typed': (
+            "py.typed": (self.mode, dict(root=self.root)),
+            "pyproject.toml": (
                 self.mode,
-                dict(root=self.root)
+                dict(
+                    root=self.root,
+                    text=pyproject_template.substitute(
+                        build_requires=self.args.build_requires
+                    ),
+                ),
             ),
-            'pyproject.toml': (
+            "Makefile": (
                 self.mode,
-                dict(root=self.root, text=pyproject_template.substitute(build_requires=self.args.build_requires))
-            ),
-            'Makefile': (
-                self.mode,
-                dict(root=self.root, text=makefile_template.substitute(project=self.project))
+                dict(
+                    root=self.root,
+                    text=makefile_template.substitute(project=self.project),
+                ),
             ),
         }
 
@@ -184,12 +213,14 @@ class Compiler:
 
         if self.args.bytecode:
             self.bytecode_compile()
-            warnings.warn('Bytecode compilation is pending deprecation as of 1.13 and will be removed in 2.0',
-                          PendingDeprecationWarning)
+            warnings.warn(
+                "Bytecode compilation is pending deprecation as of 1.13 and will be removed in 2.0",
+                PendingDeprecationWarning,
+            )
 
         if self.args.c:
             # self.compile_c()
-            if self.args.embed and 'main' in self.args.embed:
+            if self.args.embed and "main" in self.args.embed:
                 pass  # maybe write a wrapper or something idk?
             self.setup(compile_args)
 
@@ -199,9 +230,11 @@ class Compiler:
 
     def bytecode_compile(self) -> None:
         fname_pyc = str(self.app_name) + ".pyc"
-        quiet = tuple(reversed(range(3))).index(self.args.verbose if self.args.verbose < 2 else 2)
+        quiet = tuple(reversed(range(3))).index(
+            self.args.verbose if self.args.verbose < 2 else 2
+        )
         major, minor, patch, *_ = sys.version_info
-        if Version(major=major, minor=minor, patch=patch) < Version('3.8.0'):
+        if Version(major=major, minor=minor, patch=patch) < Version("3.8.0"):
             py_compile.compile(str(self.fname), fname_pyc)
         else:
             py_compile.compile(str(self.fname), fname_pyc, quiet=quiet)
@@ -210,29 +243,31 @@ class Compiler:
     def setup(self, kwargs) -> None:
         module_name = str(self.app_name).replace("/", ".")
         text = setup_template.substitute(
-           app_name=module_name,
-           src_file=kwargs['fname'],
-           quiet=not kwargs.verbose,
-           # inc_dirs=[],
-           # libs=[],
-           # exe_name=self.app_name,
-           # lib_dirs=[],
-           **kwargs
+            app_name=module_name,
+            src_file=kwargs["fname"],
+            quiet=not kwargs.verbose,
+            # inc_dirs=[],
+            # libs=[],
+            # exe_name=self.app_name,
+            # lib_dirs=[],
+            **kwargs,
         )
-        self.file_stack.create_file('setup.py', self.mode, root=str(self.root), text=text)
+        self.file_stack.create_file(
+            "setup.py", self.mode, root=str(self.root), text=text
+        )
         self.compile_object()
 
     def compile_object(self) -> None:
         glob_so = str(self.app_name) + ".*.so"
-        opt = '-q' if not self.args.verbose else ''
-        setup_py = str(Path(self.root) / 'setup.py')
+        opt = "-q" if not self.args.verbose else ""
+        setup_py = str(Path(self.root) / "setup.py")
         setup_runner = f"{sys.executable} {setup_py} {opt} build_ext -b ."
         if self.args.verbose:
             print("running", setup_runner)
         with os.popen(setup_runner) as p:
             chunk = p.read(64)
             while chunk:
-                print(chunk, sep='', end='')
+                print(chunk, sep="", end="")
                 chunk = p.read(64)
         self.file_stack.register(self.file_c)
         for i in glob(glob_so):

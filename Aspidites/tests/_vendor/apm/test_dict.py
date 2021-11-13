@@ -6,7 +6,6 @@ from Aspidites._vendor.apm import *
 
 
 class DictionaryMatchingTests(unittest.TestCase):
-
     def test_empty_dict(self):
         self.assertTrue(match({}, {}))
 
@@ -26,13 +25,18 @@ class DictionaryMatchingTests(unittest.TestCase):
         self.assertTrue(match({"user": "id"}, {_: "id"}))
 
     def test_pattern_dict(self):
-        self.assertTrue(match({
-            "i9": 17,
-            "f17": 3.0,
-        }, {
-            Regex(r"i[0-9]+"): InstanceOf(int),
-            Regex(r"f[0-9]+"): InstanceOf(float),
-        }))
+        self.assertTrue(
+            match(
+                {
+                    "i9": 17,
+                    "f17": 3.0,
+                },
+                {
+                    Regex(r"i[0-9]+"): InstanceOf(int),
+                    Regex(r"f[0-9]+"): InstanceOf(float),
+                },
+            )
+        )
 
     def test_pattern_dict_unknown_key(self):
         value = {
@@ -48,30 +52,49 @@ class DictionaryMatchingTests(unittest.TestCase):
         self.assertFalse(match(value, Strict(pattern)))
 
     def test_pattern_dict_mismatching_value_for_pattern_key(self):
-        self.assertFalse(match({
-            "i9": 17,
-            "i81": 9.8,
-        }, {
-            Regex(r"i[0-9]+"): InstanceOf(int),
-            Regex(r"f[0-9]+"): InstanceOf(float),
-        }))
+        self.assertFalse(
+            match(
+                {
+                    "i9": 17,
+                    "i81": 9.8,
+                },
+                {
+                    Regex(r"i[0-9]+"): InstanceOf(int),
+                    Regex(r"f[0-9]+"): InstanceOf(float),
+                },
+            )
+        )
 
-    def test_pattern_dict_mismatching_value_for_pattern_key_with_more_general_match(self):
-        self.assertTrue(match({
-            "i9": 17,
-            "i81": "9.8",
-        }, {
-            Regex(r"i[0-9]+"): InstanceOf(int),
-            Regex(r"f[0-9]+"): InstanceOf(float),
-            _: InstanceOf(str),
-        }))
+    def test_pattern_dict_mismatching_value_for_pattern_key_with_more_general_match(
+        self,
+    ):
+        self.assertTrue(
+            match(
+                {
+                    "i9": 17,
+                    "i81": "9.8",
+                },
+                {
+                    Regex(r"i[0-9]+"): InstanceOf(int),
+                    Regex(r"f[0-9]+"): InstanceOf(float),
+                    _: InstanceOf(str),
+                },
+            )
+        )
 
-    def test_pattern_dict_mismatching_value_for_pattern_key_with_mismatching_more_general_match(self):
-        self.assertFalse(match({
-            "i9": 17,
-            "i81": "9.8",
-        }, {
-            Regex(r"i[0-9]+"): InstanceOf(int),
-            Regex(r"f[0-9]+"): InstanceOf(float),
-            _: InstanceOf(bool),
-        }))
+    def test_pattern_dict_mismatching_value_for_pattern_key_with_mismatching_more_general_match(
+        self,
+    ):
+        self.assertFalse(
+            match(
+                {
+                    "i9": 17,
+                    "i81": "9.8",
+                },
+                {
+                    Regex(r"i[0-9]+"): InstanceOf(int),
+                    Regex(r"f[0-9]+"): InstanceOf(float),
+                    _: InstanceOf(bool),
+                },
+            )
+        )

@@ -27,7 +27,6 @@ class CaseExpr:
 
 
 class CaseExprEnd(CaseExpr):
-
     def of(self, pattern, then, **kwargs) -> CaseExpr:
         return self
 

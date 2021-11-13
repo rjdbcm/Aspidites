@@ -11,7 +11,7 @@
 #
 ##############################################################################
 """RestrictedPython package."""
-__version__ = '5.1'
+__version__ = "5.1"
 # flake8: NOQA: E401
 
 # This is a file to define public API in the base namespace of the package.
@@ -20,10 +20,18 @@ __version__ = '5.1'
 
 # compile_restricted methods:
 from Aspidites._vendor.RestrictedPython.compile import compile_restricted  # isort:skip
-from Aspidites._vendor.RestrictedPython.compile import compile_restricted_eval  # isort:skip
-from Aspidites._vendor.RestrictedPython.compile import compile_restricted_exec  # isort:skip
-from Aspidites._vendor.RestrictedPython.compile import compile_restricted_function  # isort:skip
-from Aspidites._vendor.RestrictedPython.compile import compile_restricted_single  # isort:skip
+from Aspidites._vendor.RestrictedPython.compile import (
+    compile_restricted_eval,
+)  # isort:skip
+from Aspidites._vendor.RestrictedPython.compile import (
+    compile_restricted_exec,
+)  # isort:skip
+from Aspidites._vendor.RestrictedPython.compile import (
+    compile_restricted_function,
+)  # isort:skip
+from Aspidites._vendor.RestrictedPython.compile import (
+    compile_restricted_single,
+)  # isort:skip
 
 # predefined builtins
 from Aspidites._vendor.RestrictedPython.Guards import safe_builtins  # isort:skip
@@ -32,11 +40,15 @@ from Aspidites._vendor.RestrictedPython.Limits import limited_builtins  # isort:
 from Aspidites._vendor.RestrictedPython.Utilities import utility_builtins  # isort:skip
 
 # Helper Methods
-from Aspidites._vendor.RestrictedPython.PrintCollector import PrintCollector  # isort:skip
+from Aspidites._vendor.RestrictedPython.PrintCollector import (
+    PrintCollector,
+)  # isort:skip
 from Aspidites._vendor.RestrictedPython.compile import CompileResult  # isort:skip
 
 # Policy
-from Aspidites._vendor.RestrictedPython.transformer import RestrictingNodeTransformer  # isort:skip
+from Aspidites._vendor.RestrictedPython.transformer import (
+    RestrictingNodeTransformer,
+)  # isort:skip
 
 #
 from Aspidites._vendor.RestrictedPython.Eval import RestrictionCapableEval

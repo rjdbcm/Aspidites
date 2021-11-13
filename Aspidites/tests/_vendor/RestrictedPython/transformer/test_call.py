@@ -4,12 +4,12 @@ from Aspidites.tests._vendor.RestrictedPython.helper import restricted_exec
 
 def test_RestrictingNodeTransformer__visit_Call__1():
     """It compiles a function call successfully and returns the used name."""
-    result = compile_restricted_exec('a = max([1, 2, 3])')
+    result = compile_restricted_exec("a = max([1, 2, 3])")
     assert result.errors == ()
     loc = {}
     exec(result.code, {}, loc)
-    assert loc['a'] == 3
-    assert result.used_names == {'max': True}
+    assert loc["a"] == 3
+    assert result.used_names == {"max": True}
 
 
 # def f(a, b, c): pass
@@ -51,58 +51,55 @@ def test_RestrictingNodeTransformer__visit_Call__2(mocker):
     _apply_ = mocker.stub()
     _apply_.side_effect = lambda func, *args, **kwargs: func(*args, **kwargs)
 
-    glb = {
-        '_apply_': _apply_,
-        'foo': lambda *args, **kwargs: (args, kwargs)
-    }
+    glb = {"_apply_": _apply_, "foo": lambda *args, **kwargs: (args, kwargs)}
 
     restricted_exec(FUNCTIONC_CALLS, glb)
 
-    ret = glb['positional_args']()
+    ret = glb["positional_args"]()
     assert ((1, 2), {}) == ret
     assert _apply_.called is False
     _apply_.reset_mock()
 
-    ret = glb['star_args']()
+    ret = glb["star_args"]()
     ref = ((3, 4), {})
     assert ref == ret
-    _apply_.assert_called_once_with(glb['foo'], *ref[0])
+    _apply_.assert_called_once_with(glb["foo"], *ref[0])
     _apply_.reset_mock()
 
-    ret = glb['positional_and_star_args']()
+    ret = glb["positional_and_star_args"]()
     ref = ((1, 2, 3, 4), {})
     assert ref == ret
-    _apply_.assert_called_once_with(glb['foo'], *ref[0])
+    _apply_.assert_called_once_with(glb["foo"], *ref[0])
     _apply_.reset_mock()
 
-    ret = glb['kw_args']()
-    ref = ((), {'x': 5, 'y': 6})
+    ret = glb["kw_args"]()
+    ref = ((), {"x": 5, "y": 6})
     assert ref == ret
-    _apply_.assert_called_once_with(glb['foo'], **ref[1])
+    _apply_.assert_called_once_with(glb["foo"], **ref[1])
     _apply_.reset_mock()
 
-    ret = glb['star_and_kw']()
-    ref = ((3, 4), {'x': 5, 'y': 6})
+    ret = glb["star_and_kw"]()
+    ref = ((3, 4), {"x": 5, "y": 6})
     assert ref == ret
-    _apply_.assert_called_once_with(glb['foo'], *ref[0], **ref[1])
+    _apply_.assert_called_once_with(glb["foo"], *ref[0], **ref[1])
     _apply_.reset_mock()
 
-    ret = glb['positional_and_star_and_kw_args']()
-    ref = ((1, 3, 4), {'x': 5, 'y': 6})
+    ret = glb["positional_and_star_and_kw_args"]()
+    ref = ((1, 3, 4), {"x": 5, "y": 6})
     assert ref == ret
-    _apply_.assert_called_once_with(glb['foo'], *ref[0], **ref[1])
+    _apply_.assert_called_once_with(glb["foo"], *ref[0], **ref[1])
     _apply_.reset_mock()
 
-    ret = glb['positional_and_star_and_keyword_and_kw_args']()
-    ref = ((1, 2, 3, 4), {'x': 5, 'y': 6, 'r': 9})
+    ret = glb["positional_and_star_and_keyword_and_kw_args"]()
+    ref = ((1, 2, 3, 4), {"x": 5, "y": 6, "r": 9})
     assert ref == ret
-    _apply_.assert_called_once_with(glb['foo'], *ref[0], **ref[1])
+    _apply_.assert_called_once_with(glb["foo"], *ref[0], **ref[1])
     _apply_.reset_mock()
 
 
 def test_visit_Call__private_function():
     """Calling private functions is forbidden."""
-    result = compile_restricted_exec('__init__(1)')
+    result = compile_restricted_exec("__init__(1)")
     assert result.errors == (
         'Line 1: "__init__" is an invalid variable name because it starts with "_"',  # NOQA: E501
     )
@@ -110,7 +107,7 @@ def test_visit_Call__private_function():
 
 def test_visit_Call__private_method():
     """Calling private methods is forbidden."""
-    result = compile_restricted_exec('Int.__init__(1)')
+    result = compile_restricted_exec("Int.__init__(1)")
     assert result.errors == (
         'Line 1: "__init__" is an invalid attribute name because it starts with "_".',  # NOQA: E501
     )

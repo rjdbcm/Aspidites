@@ -6,8 +6,18 @@ from Aspidites._vendor.fn import op
 
 def test_unfold():
     doubler = op.unfold(lambda x: (x * 2, x * 2))
-    assert list(itertools.islice(doubler(10), 0, 10)) == [20, 40, 80, 160, 320, 640,
-                                                          1280, 2560, 5120, 10240]
+    assert list(itertools.islice(doubler(10), 0, 10)) == [
+        20,
+        40,
+        80,
+        160,
+        320,
+        640,
+        1280,
+        2560,
+        5120,
+        10240,
+    ]
 
 
 def test_currying():
@@ -21,18 +31,18 @@ def test_currying():
 
 
 def test_apply():
-     assert 10, op.apply(operator.add, [2, 8])
+    assert 10, op.apply(operator.add, [2, 8])
 
 
 def test_flip():
-     assert 10 == op.flip(operator.sub)(2, 12)
-     assert -10 == op.flip(op.flip(operator.sub))(2, 12)
+    assert 10 == op.flip(operator.sub)(2, 12)
+    assert -10 == op.flip(op.flip(operator.sub))(2, 12)
     # flipping of flipped function should use optimization
-     assert bool(operator.sub is op.flip(op.flip(operator.sub))) is True
+    assert bool(operator.sub is op.flip(op.flip(operator.sub))) is True
 
 
 def test_flip_with_shortcut():
-     assert 10 == op.flip(_ - _)(2, 12)
+    assert 10 == op.flip(_ - _)(2, 12)
 
 
 def test_zipwith():

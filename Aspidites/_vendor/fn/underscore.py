@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 import operator
 import random
 import re
@@ -26,10 +26,9 @@ def fmap(f, format):
                 (f, self, other),
                 fmt.replace("other", other._format),
                 dict(
-                    list(self._format_args.items()) +
-                    list(other._format_args.items())
+                    list(self._format_args.items()) + list(other._format_args.items())
                 ),
-                self._arity + other._arity
+                self._arity + other._arity,
             )
         else:
             call = F(flip(f), other) << F(self)
@@ -38,7 +37,8 @@ def fmap(f, format):
                 call,
                 fmt.replace("other", "%%(%s)r" % name),
                 dict(list(self._format_args.items()) + [(name, other)]),
-                self._arity)
+                self._arity,
+            )
 
     return applier
 
@@ -51,9 +51,7 @@ class ArityError(TypeError):
 def unary_fmap(f, format):
     def applier(self):
         fmt = "(%s)" % format.replace("self", self._format)
-        return self.__class__(
-            F(self) << f, fmt, self._format_args, self._arity
-        )
+        return self.__class__(F(self) << f, fmt, self._format_args, self._arity)
 
     return applier
 
@@ -67,10 +65,13 @@ class _Callable(object):
     # see https://github.com/kachayev/fn.py/issues/23
     __flipback__ = None
 
-    def __init__(self, callback: Callable = identity,
-                 format: AnyStr = "_",
-                 format_args: object = None,
-                 arity: int = 1):
+    def __init__(
+        self,
+        callback: Callable = identity,
+        format: AnyStr = "_",
+        format_args: object = None,
+        arity: int = 1,
+    ):
         self._callback = callback
         self._format = format
         self._format_args = format_args or {}
@@ -79,21 +80,18 @@ class _Callable(object):
     def call(self, name, *args, **kwargs):
         """Call method from _ object by given name and arguments"""
         return self.__class__(
-            F(lambda f:
-              apply(f, args, kwargs)) << operator.attrgetter(name) << F(self)
+            F(lambda f: apply(f, args, kwargs)) << operator.attrgetter(name) << F(self)
         )
 
     def __getattr__(self, name):
-        if name == '__wrapped__':  # Guard for recursive call by doctest
+        if name == "__wrapped__":  # Guard for recursive call by doctest
             raise AttributeError
         attr_name = _random_name()
         return self.__class__(
             F(operator.attrgetter(name)) << F(self),
             "getattr(%s, %%(%s)r)" % (self._format, attr_name),
-            dict(
-                list(self._format_args.items()) + [(attr_name, name)]
-            ),
-            self._arity
+            dict(list(self._format_args.items()) + [(attr_name, name)]),
+            self._arity,
         )
 
     def __getitem__(self, k):
@@ -102,18 +100,15 @@ class _Callable(object):
             return self.__class__(
                 (operator.getitem, self, k),
                 "%s[%s]" % (self._format, k._format),
-                dict(
-                    list(self._format_args.items()) +
-                    list(k._format_args.items())
-                ),
-                self._arity + k._arity
+                dict(list(self._format_args.items()) + list(k._format_args.items())),
+                self._arity + k._arity,
             )
         item_name = _random_name()
         return self.__class__(
             F(operator.itemgetter(k)) << F(self),
             "%s[%%(%s)r]" % (self._format, item_name),
             dict(list(self._format_args.items()) + [(item_name, k)]),
-            self._arity
+            self._arity,
         )
 
     def __str__(self):
@@ -149,7 +144,7 @@ class _Callable(object):
             return self._callback(*args)
 
         f, left, right = self._callback
-        return f(left(*args[:left._arity]), right(*args[left._arity:]))
+        return f(left(*args[: left._arity]), right(*args[left._arity :]))
 
     __add__ = fmap(operator.add, "self + other")
     __iadd__ = fmap(operator.iadd, "self += other")

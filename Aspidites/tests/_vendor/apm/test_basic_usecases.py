@@ -8,27 +8,21 @@ from Aspidites._vendor.apm import *
 
 
 class BasicUseCases(unittest.TestCase):
-
     def test_dict(self):
-        self.assertTrue(match(
-            {"foo": 1, "bar": 2, "baz": 3, "quux": 4},
-            {"foo": 1}
-        ))
-        self.assertFalse(match(
-            {"foo": 1, "bar": 2, "baz": 3, "quux": 4},
-            Strict({"foo": 1})
-        ))
+        self.assertTrue(match({"foo": 1, "bar": 2, "baz": 3, "quux": 4}, {"foo": 1}))
+        self.assertFalse(
+            match({"foo": 1, "bar": 2, "baz": 3, "quux": 4}, Strict({"foo": 1}))
+        )
         positive_number = InstanceOf(int) & Check(lambda v: v >= 0)
-        self.assertTrue(match(
-            {"foo": 1, "bar": 2},
-            Strict({"foo": positive_number, "bar": positive_number})
-        ))
+        self.assertTrue(
+            match(
+                {"foo": 1, "bar": 2},
+                Strict({"foo": positive_number, "bar": positive_number}),
+            )
+        )
 
     def test_tuple(self):
-        self.assertTrue(match(
-            (1, 2),
-            (..., ...)
-        ))
+        self.assertTrue(match((1, 2), (..., ...)))
 
     def test_strict(self):
         self.assertTrue(match(1, 1.0))
@@ -43,67 +37,66 @@ class BasicUseCases(unittest.TestCase):
 
     def test_length(self):
         self.assertTrue(match([], Length(exactly=0)))
-        self.assertTrue(match(('abc',), Length(exactly=1)))
-        self.assertTrue(match('abc', Length(exactly=3)))
-        self.assertTrue(match('abc', Length(at_least=1, at_most=4)))
-        self.assertFalse(match('abc', Length(at_least=4, at_most=10)))
-        self.assertTrue(match('abcde', Length(at_least=4, at_most=5)))
-        self.assertFalse(match('abcdef', Length(at_least=4, at_most=5)))
+        self.assertTrue(match(("abc",), Length(exactly=1)))
+        self.assertTrue(match("abc", Length(exactly=3)))
+        self.assertTrue(match("abc", Length(at_least=1, at_most=4)))
+        self.assertFalse(match("abc", Length(at_least=4, at_most=10)))
+        self.assertTrue(match("abcde", Length(at_least=4, at_most=5)))
+        self.assertFalse(match("abcdef", Length(at_least=4, at_most=5)))
 
     def test_contains(self):
         self.assertTrue(match([1, 2, 3], Contains(2) & Contains(3)))
         self.assertTrue(match((1, 2, 3), Contains(2) & Contains(3)))
         self.assertTrue(match({1, 2, 3}, Contains(2) & Contains(3)))
-        self.assertTrue(match({1: 'a', 2: 'b', 3: 'c'}, Contains(2) & Contains(3)))
-        self.assertTrue(match("quux", Contains('uu')))
+        self.assertTrue(match({1: "a", 2: "b", 3: "c"}, Contains(2) & Contains(3)))
+        self.assertTrue(match("quux", Contains("uu")))
 
     def test_regex(self):
-        self.assertTrue(match(
-            "Hello, World!",
-            Regex("[A-Z][a-z]+, [A-Z][a-z]+!")
-        ))
-        self.assertFalse(match(
-            "Hello, World! How are you today?",
-            Regex("[A-Z][a-z]+, [A-Z][a-z]+!")
-        ))
-        self.assertTrue(match(
-            "Hello, World! How are you today?",
-            Regex("[A-Z][a-z]+, [A-Z][a-z]+!.*")
-        ))
+        self.assertTrue(match("Hello, World!", Regex("[A-Z][a-z]+, [A-Z][a-z]+!")))
+        self.assertFalse(
+            match(
+                "Hello, World! How are you today?", Regex("[A-Z][a-z]+, [A-Z][a-z]+!")
+            )
+        )
+        self.assertTrue(
+            match(
+                "Hello, World! How are you today?", Regex("[A-Z][a-z]+, [A-Z][a-z]+!.*")
+            )
+        )
 
     def test_remaining(self):
-        self.assertTrue(match(
-            [1, 2, 3, 4],
-            [1, 2, 3, Remaining(InstanceOf(int), at_least=1)]))
-        self.assertTrue(match(
-            [1, 2, 3],
-            [1, 2, 3, Remaining(InstanceOf(int))]))
-        self.assertTrue(match(
-            [1, 2, 3, 4, 5],
-            [1, 2, 3, Remaining(InstanceOf(int) & Between(1, 10))]))
-        self.assertFalse(match(
-            [1, 2, 3, 4, 5],
-            [1, 2, 3, Remaining(InstanceOf(int) & Between(1, 3))]))
-        self.assertFalse(match(
-            [1, 2, 3, 4],
-            [1, 2, 3, Remaining(InstanceOf(int), at_least=2)]))
+        self.assertTrue(
+            match([1, 2, 3, 4], [1, 2, 3, Remaining(InstanceOf(int), at_least=1)])
+        )
+        self.assertTrue(match([1, 2, 3], [1, 2, 3, Remaining(InstanceOf(int))]))
+        self.assertTrue(
+            match(
+                [1, 2, 3, 4, 5], [1, 2, 3, Remaining(InstanceOf(int) & Between(1, 10))]
+            )
+        )
+        self.assertFalse(
+            match(
+                [1, 2, 3, 4, 5], [1, 2, 3, Remaining(InstanceOf(int) & Between(1, 3))]
+            )
+        )
+        self.assertFalse(
+            match([1, 2, 3, 4], [1, 2, 3, Remaining(InstanceOf(int), at_least=2)])
+        )
 
     def test_remaining_with_range(self):
-        self.assertTrue(match(
-            range(1, 5),
-            [1, 2, 3, Remaining(InstanceOf(int), at_least=1)]))
-        self.assertTrue(match(
-            range(1, 4),
-            [1, 2, 3, Remaining(InstanceOf(int))]))
-        self.assertTrue(match(
-            range(1, 5),
-            [1, 2, 3, Remaining(InstanceOf(int) & Between(1, 10))]))
-        self.assertFalse(match(
-            range(1, 5),
-            [1, 2, 3, Remaining(InstanceOf(int) & Between(1, 3))]))
-        self.assertFalse(match(
-            range(1, 5),
-            [1, 2, 3, Remaining(InstanceOf(int), at_least=2)]))
+        self.assertTrue(
+            match(range(1, 5), [1, 2, 3, Remaining(InstanceOf(int), at_least=1)])
+        )
+        self.assertTrue(match(range(1, 4), [1, 2, 3, Remaining(InstanceOf(int))]))
+        self.assertTrue(
+            match(range(1, 5), [1, 2, 3, Remaining(InstanceOf(int) & Between(1, 10))])
+        )
+        self.assertFalse(
+            match(range(1, 5), [1, 2, 3, Remaining(InstanceOf(int) & Between(1, 3))])
+        )
+        self.assertFalse(
+            match(range(1, 5), [1, 2, 3, Remaining(InstanceOf(int), at_least=2)])
+        )
 
     def test_capture(self):
         result = match(
@@ -114,69 +107,42 @@ class BasicUseCases(unittest.TestCase):
                     "UserId": 102384,
                     "FirstName": "Jane",
                     "LastName": "Doe",
-                }
+                },
             },
             {
-                "User": Capture({
-                    "FirstName": Capture(..., name="first_name"),
-                    "LastName": Capture(..., name="last_name"),
-                }, name="user")
-            }
+                "User": Capture(
+                    {
+                        "FirstName": Capture(..., name="first_name"),
+                        "LastName": Capture(..., name="last_name"),
+                    },
+                    name="user",
+                )
+            },
         )
         self.assertTrue(result)
-        self.assertEqual("Jane", result['first_name'])
-        self.assertEqual("Doe", result['last_name'])
-        self.assertEqual(102384, result['user']['UserId'])
+        self.assertEqual("Jane", result["first_name"])
+        self.assertEqual("Doe", result["last_name"])
+        self.assertEqual(102384, result["user"]["UserId"])
 
     def test_remaining_with_capture(self):
-        result = match(
-            [1, 2, 3, 4],
-            [1, 2, Capture(Remaining(...), name="tail")]
-        )
+        result = match([1, 2, 3, 4], [1, 2, Capture(Remaining(...), name="tail")])
         self.assertTrue(result)
-        self.assertEqual([3, 4], result['tail'])
+        self.assertEqual([3, 4], result["tail"])
 
     def test_and(self):
-        self.assertFalse(match(
-            0,
-            Between(0, 1) & Between(1, 2)
-        ))
-        self.assertTrue(match(
-            1,
-            Between(0, 1) & Between(1, 2)
-        ))
-        self.assertFalse(match(
-            2,
-            Between(0, 1) & Between(1, 2)
-        ))
+        self.assertFalse(match(0, Between(0, 1) & Between(1, 2)))
+        self.assertTrue(match(1, Between(0, 1) & Between(1, 2)))
+        self.assertFalse(match(2, Between(0, 1) & Between(1, 2)))
 
     def test_or(self):
-        self.assertTrue(match(
-            0,
-            Between(0, 1) | Between(1, 2)
-        ))
-        self.assertTrue(match(
-            1,
-            Between(0, 1) | Between(1, 2)
-        ))
-        self.assertTrue(match(
-            2,
-            Between(0, 1) | Between(1, 2)
-        ))
+        self.assertTrue(match(0, Between(0, 1) | Between(1, 2)))
+        self.assertTrue(match(1, Between(0, 1) | Between(1, 2)))
+        self.assertTrue(match(2, Between(0, 1) | Between(1, 2)))
 
     def test_xor(self):
-        self.assertTrue(match(
-            0,
-            Between(0, 1) ^ Between(1, 2)
-        ))
-        self.assertFalse(match(
-            1,
-            Between(0, 1) ^ Between(1, 2)
-        ))
-        self.assertTrue(match(
-            2,
-            Between(0, 1) ^ Between(1, 2)
-        ))
+        self.assertTrue(match(0, Between(0, 1) ^ Between(1, 2)))
+        self.assertFalse(match(1, Between(0, 1) ^ Between(1, 2)))
+        self.assertTrue(match(2, Between(0, 1) ^ Between(1, 2)))
 
     def test_each(self):
         self.assertTrue(match([1, 2, 3], Each(InstanceOf(int))))
@@ -230,61 +196,63 @@ class BasicUseCases(unittest.TestCase):
         self.assertFalse(match(f, Returns(float)))
 
     def test_at(self):
-        record = {
-            "foo": {
-                "bar": {
-                    "quux": {
-                        "value": "deeply nested"
-                    }
-                }
-            }
-        }
+        record = {"foo": {"bar": {"quux": {"value": "deeply nested"}}}}
 
-        result = match(record, At("foo.bar.quux", {"value": Capture(..., name="value")}))
+        result = match(
+            record, At("foo.bar.quux", {"value": Capture(..., name="value")})
+        )
         self.assertTrue(result)
-        self.assertEqual("deeply nested", result['value'])
+        self.assertEqual("deeply nested", result["value"])
 
-        result = match(record, At(['foo', 'bar', 'quux'], {"value": Capture(..., name="value")}))
+        result = match(
+            record, At(["foo", "bar", "quux"], {"value": Capture(..., name="value")})
+        )
         self.assertTrue(result)
-        self.assertEqual("deeply nested", result['value'])
+        self.assertEqual("deeply nested", result["value"])
 
         self.assertFalse(match(record, At("foo.bar.quux.baz", InstanceOf(int))))
 
     def test_string(self):
         path = "https://somehost/foo=1/bar=2/"
-        result = match(path, String(
-            Capture(OneOf("https", "http"), name="protocol"),
-            "://",
-            Capture(Regex("[a-zA-Z_-]+"), name="host"),
-            Regex("/+"),
-            "foo=",
-            Capture(Regex("[^=/]+"), name="foo"),
-            "/",
-            "bar=",
-            Capture(Regex("[^=/]+"), name="bar"),
-            Regex("/*"),
-        ))
+        result = match(
+            path,
+            String(
+                Capture(OneOf("https", "http"), name="protocol"),
+                "://",
+                Capture(Regex("[a-zA-Z_-]+"), name="host"),
+                Regex("/+"),
+                "foo=",
+                Capture(Regex("[^=/]+"), name="foo"),
+                "/",
+                "bar=",
+                Capture(Regex("[^=/]+"), name="bar"),
+                Regex("/*"),
+            ),
+        )
         self.assertTrue(result)
-        self.assertEqual("https", result['protocol'])
-        self.assertEqual("somehost", result['host'])
-        self.assertEqual("1", result['foo'])
-        self.assertEqual("2", result['bar'])
+        self.assertEqual("https", result["protocol"])
+        self.assertEqual("somehost", result["host"])
+        self.assertEqual("1", result["foo"])
+        self.assertEqual("2", result["bar"])
 
     def test_string_argresult(self):
         path = "https://somehost/foo=1/bar=2/"
 
-        result = match(path, String(
-            Capture(OneOf("https", "http"), name="protocol"),
-            "://",
-            Capture(Regex("[a-zA-Z_-]+"), name="host"),
-            Regex("/+"),
-            "foo=",
-            Capture(Regex("[^=/]+"), name="foo"),
-            "/",
-            "bar=",
-            Capture(Regex("[^=/]+"), name="bar"),
-            Regex("/*"),
-        ))
+        result = match(
+            path,
+            String(
+                Capture(OneOf("https", "http"), name="protocol"),
+                "://",
+                Capture(Regex("[a-zA-Z_-]+"), name="host"),
+                Regex("/+"),
+                "foo=",
+                Capture(Regex("[^=/]+"), name="foo"),
+                "/",
+                "bar=",
+                Capture(Regex("[^=/]+"), name="bar"),
+                Regex("/*"),
+            ),
+        )
         self.assertTrue(result)
         self.assertEqual("https", result.protocol)
         self.assertEqual("somehost", result.host)
@@ -294,18 +262,21 @@ class BasicUseCases(unittest.TestCase):
     def test_string_with_at_capture(self):
         path = "https://somehost/foo=1/bar=2/"
 
-        result = match(path, String(
-            'protocol' @ OneOf("https", "http"),
-            "://",
-            'host' @ Regex("[a-zA-Z_-]+"),
-            Regex("/+"),
-            "foo=",
-            'foo' @ Regex("[^=/]+"),
-            "/",
-            "bar=",
-            'bar' @ Regex("[^=/]+"),
-            Regex("/*"),
-        ))
+        result = match(
+            path,
+            String(
+                "protocol" @ OneOf("https", "http"),
+                "://",
+                "host" @ Regex("[a-zA-Z_-]+"),
+                Regex("/+"),
+                "foo=",
+                "foo" @ Regex("[^=/]+"),
+                "/",
+                "bar=",
+                "bar" @ Regex("[^=/]+"),
+                Regex("/*"),
+            ),
+        )
         self.assertTrue(result)
         self.assertEqual("https", result.protocol)
         self.assertEqual("somehost", result.host)
@@ -323,23 +294,27 @@ class BasicUseCases(unittest.TestCase):
             "job": {
                 "run_at": "2020-08-27 14:09:30",
                 "command": "echo 'booya'",
-            }
+            },
         }
 
         # noinspection PyUnresolvedReferences
-        result = match(request, Items(
-            api_version="v1",
-            job=Items(
-                run_at=Transformed(datetime.fromisoformat, 'time' @ _),
-            ) & OneOf(
-                Items(command='command' @ InstanceOf(str)),
-                Items(spawn='container' @ InstanceOf(str)),
-            )
-        ))
+        result = match(
+            request,
+            Items(
+                api_version="v1",
+                job=Items(
+                    run_at=Transformed(datetime.fromisoformat, "time" @ _),
+                )
+                & OneOf(
+                    Items(command="command" @ InstanceOf(str)),
+                    Items(spawn="container" @ InstanceOf(str)),
+                ),
+            ),
+        )
         self.assertTrue(result)
-        self.assertFalse('container' in result)
-        self.assertEqual(result['time'], datetime(2020, 8, 27, 14, 9, 30))
-        self.assertEqual(result['command'], "echo 'booya'")
+        self.assertFalse("container" in result)
+        self.assertEqual(result["time"], datetime(2020, 8, 27, 14, 9, 30))
+        self.assertEqual(result["command"], "echo 'booya'")
 
     def test_attrs(self):
         @dataclass
@@ -347,10 +322,17 @@ class BasicUseCases(unittest.TestCase):
             foo: str
             bar: int
 
-        self.assertTrue(match(Thing('xyz', 4711), Attrs(foo='xyz')))
-        self.assertFalse(match(Thing('xyz', 4711), Strict(Attrs(foo='xyz'))))
-        self.assertTrue(match(Thing('xyz', 4711), Attrs(foo=InstanceOf(str), bar=InstanceOf(int))))
-        self.assertTrue(match(Thing('xyz', 4711), Strict(Attrs(foo=InstanceOf(str), bar=InstanceOf(int)))))
+        self.assertTrue(match(Thing("xyz", 4711), Attrs(foo="xyz")))
+        self.assertFalse(match(Thing("xyz", 4711), Strict(Attrs(foo="xyz"))))
+        self.assertTrue(
+            match(Thing("xyz", 4711), Attrs(foo=InstanceOf(str), bar=InstanceOf(int)))
+        )
+        self.assertTrue(
+            match(
+                Thing("xyz", 4711),
+                Strict(Attrs(foo=InstanceOf(str), bar=InstanceOf(int))),
+            )
+        )
 
     def test_transformed_exception(self):
         request = {
@@ -358,15 +340,20 @@ class BasicUseCases(unittest.TestCase):
             "job": {
                 "run_at": "junk",
                 "command": "echo 'booya'",
-            }
+            },
         }
 
         # noinspection PyUnresolvedReferences
-        self.assertFalse(match(request, Items(
-            job=Items(
-                run_at=Transformed(datetime.fromisoformat, 'time' @ _),
+        self.assertFalse(
+            match(
+                request,
+                Items(
+                    job=Items(
+                        run_at=Transformed(datetime.fromisoformat, "time" @ _),
+                    )
+                ),
             )
-        )))
+        )
 
     def test_splat_result(self):
         def f(**kwargs):
@@ -375,21 +362,23 @@ class BasicUseCases(unittest.TestCase):
                 dct[k] = v
             return dct
 
-        result = match({'a': 1, 'b': 2, 'c': 3}, Items(a=_ >> 'x', b=_ >> 'y', c=_ >> 'z'))
+        result = match(
+            {"a": 1, "b": 2, "c": 3}, Items(a=_ >> "x", b=_ >> "y", c=_ >> "z")
+        )
         self.assertTrue(result)
         r = f(**result)
-        self.assertEqual({'x': 1, 'y': 2, 'z': 3}, r)
+        self.assertEqual({"x": 1, "y": 2, "z": 3}, r)
 
     def test_maybe(self):
-        pattern = Items(a=...) & Maybe(Items(b=_ >> 'capture'))
+        pattern = Items(a=...) & Maybe(Items(b=_ >> "capture"))
 
-        result = match({'a': 3}, pattern)
+        result = match({"a": 3}, pattern)
         self.assertTrue(result)
-        self.assertFalse('capture' in result)
-        result = match({'a': 3, 'b': 5}, pattern)
+        self.assertFalse("capture" in result)
+        result = match({"a": 3, "b": 5}, pattern)
         self.assertTrue(result)
-        self.assertTrue('capture' in result)
-        self.assertEqual(5, result['capture'])
+        self.assertTrue("capture" in result)
+        self.assertEqual(5, result["capture"])
 
     def test_dataclasses(self):
         @dataclass
@@ -401,19 +390,21 @@ class BasicUseCases(unittest.TestCase):
         class LoggedInUser(User):
             display_name: str
 
-        result = match(User("Jane", "Doe"), User("Jane", _ >> 'last_name'))
+        result = match(User("Jane", "Doe"), User("Jane", _ >> "last_name"))
         self.assertTrue(result)
-        self.assertEqual("Doe", result['last_name'])
+        self.assertEqual("Doe", result["last_name"])
 
-        result = match(LoggedInUser("John", "Doe", "johndoe"), User(_, _ >> 'last_name'))
+        result = match(
+            LoggedInUser("John", "Doe", "johndoe"), User(_, _ >> "last_name")
+        )
         self.assertTrue(result)
-        self.assertEqual("Doe", result['last_name'])
+        self.assertEqual("Doe", result["last_name"])
 
     def test_bind(self):
         result = {}
-        if match({'a': 1, 'b': 2}, {'a': _ >> 'foo'}).bind(result):
-            self.assertEqual(1, result['foo'])
-        self.assertEqual({'foo': 1}, result)
+        if match({"a": 1, "b": 2}, {"a": _ >> "foo"}).bind(result):
+            self.assertEqual(1, result["foo"])
+        self.assertEqual({"foo": 1}, result)
 
     def test_extract(self):
         # noinspection PyUnusedLocal
@@ -425,7 +416,9 @@ class BasicUseCases(unittest.TestCase):
             pass
 
         # noinspection PyUnresolvedReferences
-        result = match(f, Arguments('arg_types' @ Many(...)) & Returns('return_type' @ _))
+        result = match(
+            f, Arguments("arg_types" @ Many(...)) & Returns("return_type" @ _)
+        )
         self.assertTrue(result)
         self.assertEqual([str], result.arg_types)
         self.assertEqual(float, result.return_type)
@@ -436,15 +429,15 @@ class BasicUseCases(unittest.TestCase):
         self.assertTrue(match(g, Arguments(_, _)))
 
     def test_strict_match(self):
-        self.assertTrue(match({'a': 3}, {'a': 3.0}))
-        self.assertFalse(match({'a': 3}, {'a': 3.0}, strict=True))
+        self.assertTrue(match({"a": 3}, {"a": 3.0}))
+        self.assertFalse(match({"a": 3}, {"a": 3.0}, strict=True))
 
     def test_groups(self):
         # noinspection PyUnresolvedReferences
-        result = match([1, 2, 3], ['a' @ _, 'b' @ _, 'c' @ _])
+        result = match([1, 2, 3], ["a" @ _, "b" @ _, "c" @ _])
         self.assertTrue(result)
         self.assertEqual(3, len(result))
-        self.assertEqual({'a': 1, 'b': 2, 'c': 3}, result.groups())
+        self.assertEqual({"a": 1, "b": 2, "c": 3}, result.groups())
 
     def test_subclass_of(self):
         result = match(bool, SubclassOf(int))

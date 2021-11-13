@@ -19,11 +19,19 @@ from glob import iglob
 from shutil import copy2, copystat, Error, copytree
 
 
-__all__ = ['mkdir_p', 'atomic_save', 'AtomicSaver', 'iglob', 'iter_find_files', 'copytree']
+__all__ = [
+    "mkdir_p",
+    "atomic_save",
+    "AtomicSaver",
+    "iglob",
+    "iter_find_files",
+    "copytree",
+]
 
 
 def iter_find_files(*args, **kwargs):
-    raise DeprecationWarning('iter_find_files is deprecated as of 1.14')
+    raise DeprecationWarning("iter_find_files is deprecated as of 1.14")
+
 
 FULL_PERMS = 511  # 0777 that both Python 2 and 3 can digest
 RW_PERMS = 438
@@ -55,22 +63,26 @@ def mkdir_p(path):
 
 
 _TEXT_OPENFLAGS = os.O_RDWR | os.O_CREAT | os.O_EXCL
-if hasattr(os, 'O_NOINHERIT'):
+if hasattr(os, "O_NOINHERIT"):
     _TEXT_OPENFLAGS |= os.O_NOINHERIT
-if hasattr(os, 'O_NOFOLLOW'):
+if hasattr(os, "O_NOFOLLOW"):
     _TEXT_OPENFLAGS |= os.O_NOFOLLOW
 _BIN_OPENFLAGS = _TEXT_OPENFLAGS
-if hasattr(os, 'O_BINARY'):
+if hasattr(os, "O_BINARY"):
     _BIN_OPENFLAGS |= os.O_BINARY
 
 
 try:
     import fcntl as fcntl
 except ImportError:
+
     def set_cloexec(fd):
         "Dummy set_cloexec for platforms without fcntl support"
         pass
+
+
 else:
+
     def set_cloexec(fd):
         """Does a best-effort :func:`fcntl.fcntl` call to set a fd to be
         automatically closed by any future child processes.
@@ -102,14 +114,13 @@ def path_to_unicode(path):
     return path.decode(encoding)
 
 
-if os.name == 'nt':  # pragma: no cover
+if os.name == "nt":  # pragma: no cover
     import ctypes
     from ctypes import c_wchar_p
     from ctypes.wintypes import DWORD, LPVOID
 
     _ReplaceFile = ctypes.windll.kernel32.ReplaceFile
-    _ReplaceFile.argtypes = [c_wchar_p, c_wchar_p, c_wchar_p,
-                             DWORD, LPVOID, LPVOID]
+    _ReplaceFile.argtypes = [c_wchar_p, c_wchar_p, c_wchar_p, DWORD, LPVOID, LPVOID]
 
     def replace(src, dst):
         # argument names match stdlib docs, docstring below
@@ -126,10 +137,9 @@ if os.name == 'nt':  # pragma: no cover
 
         src = path_to_unicode(src)
         dst = path_to_unicode(dst)
-        res = _ReplaceFile(c_wchar_p(dst), c_wchar_p(src),
-                           None, 0, None, None)
+        res = _ReplaceFile(c_wchar_p(dst), c_wchar_p(src), None, 0, None, None)
         if not res:
-            raise OSError('failed to replace %r with %r' % (dst, src))
+            raise OSError("failed to replace %r with %r" % (dst, src))
         return
 
     def atomic_rename(src, dst, overwrite=False):
@@ -139,6 +149,8 @@ if os.name == 'nt':  # pragma: no cover
         else:
             os.rename(src, dst)
         return
+
+
 else:
     # wrapper func for cross compat + docs
     def replace(src, dst):
@@ -214,28 +226,29 @@ class AtomicSaver(object):
     .. _umask: https://en.wikipedia.org/wiki/Umask
 
     """
+
     _default_file_perms = RW_PERMS
 
     # TODO: option to abort if target file modify date has changed since start?
     def __init__(self, dest_path, **kwargs):
         self.dest_path = dest_path
-        self.overwrite = kwargs.pop('overwrite', True)
-        self.file_perms = kwargs.pop('file_perms', None)
-        self.overwrite_part = kwargs.pop('overwrite_part', False)
-        self.part_filename = kwargs.pop('part_file', None)
-        self.rm_part_on_exc = kwargs.pop('rm_part_on_exc', True)
-        self.text_mode = kwargs.pop('text_mode', False)  # for windows
-        self.buffering = kwargs.pop('buffering', -1)
+        self.overwrite = kwargs.pop("overwrite", True)
+        self.file_perms = kwargs.pop("file_perms", None)
+        self.overwrite_part = kwargs.pop("overwrite_part", False)
+        self.part_filename = kwargs.pop("part_file", None)
+        self.rm_part_on_exc = kwargs.pop("rm_part_on_exc", True)
+        self.text_mode = kwargs.pop("text_mode", False)  # for windows
+        self.buffering = kwargs.pop("buffering", -1)
         if kwargs:
-            raise TypeError('unexpected kwargs: %r' % (kwargs.keys(),))
+            raise TypeError("unexpected kwargs: %r" % (kwargs.keys(),))
 
         self.dest_path = os.path.abspath(self.dest_path)
         self.dest_dir = os.path.dirname(self.dest_path)
         if not self.part_filename:
-            self.part_path = dest_path + '.part'
+            self.part_path = dest_path + ".part"
         else:
             self.part_path = os.path.join(self.dest_dir, self.part_filename)
-        self.mode = 'w+' if self.text_mode else 'w+b'
+        self.mode = "w+" if self.text_mode else "w+b"
         self.open_flags = _TEXT_OPENFLAGS if self.text_mode else _BIN_OPENFLAGS
 
         self.part_file = None
@@ -283,9 +296,11 @@ class AtomicSaver(object):
         """
         if os.path.lexists(self.dest_path):
             if not self.overwrite:
-                raise OSError(errno.EEXIST,
-                              'Overwrite disabled and file already exists',
-                              self.dest_path)
+                raise OSError(
+                    errno.EEXIST,
+                    "Overwrite disabled and file already exists",
+                    self.dest_path,
+                )
         if self.overwrite_part and os.path.lexists(self.part_path):
             os.unlink(self.part_path)
         self._open_part_file()
@@ -305,8 +320,7 @@ class AtomicSaver(object):
                     pass  # avoid masking original error
             return
         try:
-            atomic_rename(self.part_path, self.dest_path,
-                          overwrite=self.overwrite)
+            atomic_rename(self.part_path, self.dest_path, overwrite=self.overwrite)
         except OSError:
             if self.rm_part_on_exc:
                 try:
@@ -321,7 +335,7 @@ class AtomicSaver(object):
 class DummyFile(object):
     # TODO: raise ValueErrors on closed for all methods?
     # TODO: enforce read/write
-    def __init__(self, path, mode='r', buffering=None):
+    def __init__(self, path, mode="r", buffering=None):
         self.name = path
         self.mode = mode
         self.closed = False
@@ -339,7 +353,7 @@ class DummyFile(object):
 
     def flush(self):
         if self.closed:
-            raise ValueError('I/O operation on a closed file')
+            raise ValueError("I/O operation on a closed file")
         return
 
     def next(self):
@@ -347,42 +361,42 @@ class DummyFile(object):
 
     def read(self, size=0):
         if self.closed:
-            raise ValueError('I/O operation on a closed file')
-        return ''
+            raise ValueError("I/O operation on a closed file")
+        return ""
 
     def readline(self, size=0):
         if self.closed:
-            raise ValueError('I/O operation on a closed file')
-        return ''
+            raise ValueError("I/O operation on a closed file")
+        return ""
 
     def readlines(self, size=0):
         if self.closed:
-            raise ValueError('I/O operation on a closed file')
+            raise ValueError("I/O operation on a closed file")
         return []
 
     def seek(self):
         if self.closed:
-            raise ValueError('I/O operation on a closed file')
+            raise ValueError("I/O operation on a closed file")
         return
 
     def tell(self):
         if self.closed:
-            raise ValueError('I/O operation on a closed file')
+            raise ValueError("I/O operation on a closed file")
         return 0
 
     def truncate(self):
         if self.closed:
-            raise ValueError('I/O operation on a closed file')
+            raise ValueError("I/O operation on a closed file")
         return
 
     def write(self, string):
         if self.closed:
-            raise ValueError('I/O operation on a closed file')
+            raise ValueError("I/O operation on a closed file")
         return
 
     def writelines(self, list_of_strings):
         if self.closed:
-            raise ValueError('I/O operation on a closed file')
+            raise ValueError("I/O operation on a closed file")
         return
 
     def __next__(self):
@@ -390,7 +404,7 @@ class DummyFile(object):
 
     def __enter__(self):
         if self.closed:
-            raise ValueError('I/O operation on a closed file')
+            raise ValueError("I/O operation on a closed file")
         return
 
     def __exit__(self, exc_type, exc_val, exc_tb):

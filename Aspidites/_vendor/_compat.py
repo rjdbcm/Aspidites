@@ -31,8 +31,8 @@ else:  # pragma: PY3
     basestring = str
 
 if IS_PY2:  # pragma: no cover
-    unicode = unicode # NOQA: F821  # Python 2 only built-in function
+    unicode = unicode  # NOQA: F821  # Python 2 only built-in function
 else:
     unicode = str
 
-IS_CPYTHON = platform.python_implementation() == 'CPython'
+IS_CPYTHON = platform.python_implementation() == "CPython"

@@ -4,16 +4,28 @@ from hypothesis import given, assume
 import hypothesis.strategies as st
 import pytest as pt
 from ..monads import Maybe, Surely
-from ..math import SafeFloorDiv, SafeMod, SafeDiv, SafeExp, Undefined, SafeFactorial, SafeUnarySub, SafeUnaryAdd
+from ..math import (
+    SafeFloorDiv,
+    SafeMod,
+    SafeDiv,
+    SafeExp,
+    Undefined,
+    SafeFactorial,
+    SafeUnarySub,
+    SafeUnaryAdd,
+)
 from math import inf, nan, isinf, isnan, factorial
 
 MAX = 100000
 MIN = -MAX
 
-@given(x=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
-       y=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False))
+
+@given(
+    x=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
+    y=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
+)
 @hypothesis.settings(deadline=None)
-@pt.mark.filterwarnings('ignore::RuntimeWarning')
+@pt.mark.filterwarnings("ignore::RuntimeWarning")
 def test_safe_div(x, y):
     # TODO SafeDiv/SafeExp/SafeMod: the specific edge case x=1 y=1 is slow
     assert SafeDiv(x, 0) == Undefined()
@@ -29,10 +41,12 @@ def test_safe_div(x, y):
         assert SafeFloorDiv(x, y) == x // y
 
 
-@given(x=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
-       y=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False))
+@given(
+    x=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
+    y=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
+)
 @hypothesis.settings(deadline=None)
-@pt.mark.filterwarnings('ignore::RuntimeWarning')
+@pt.mark.filterwarnings("ignore::RuntimeWarning")
 def test_safe_exp(x, y):
     assert SafeExp(0, 0) == Undefined()
     assert SafeExp(0, inf) == Undefined()
@@ -46,10 +60,12 @@ def test_safe_exp(x, y):
         assert SafeExp(x, y) == x ** y
 
 
-@given(x=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
-       y=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False))
+@given(
+    x=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
+    y=st.integers(min_value=MIN, max_value=MAX) | st.floats(allow_nan=False),
+)
 @hypothesis.settings(deadline=None)
-@pt.mark.filterwarnings('ignore::RuntimeWarning')
+@pt.mark.filterwarnings("ignore::RuntimeWarning")
 def test_safe_mod(x, y):
     assert SafeMod(x, 0) == Undefined()
     assert SafeMod(inf, x) == Undefined()
@@ -60,7 +76,7 @@ def test_safe_mod(x, y):
 
 @given(x=st.integers(min_value=0, max_value=MAX))
 @hypothesis.settings(deadline=None)
-@pt.mark.filterwarnings('ignore::RuntimeWarning')
+@pt.mark.filterwarnings("ignore::RuntimeWarning")
 def test_safe_factorial(x):
     assert SafeFactorial(inf) == Undefined()
     assert SafeFactorial(nan) == Undefined()
@@ -71,7 +87,7 @@ def test_safe_factorial(x):
 
 @given(x=st.integers(min_value=MIN, max_value=MAX))
 @hypothesis.settings(deadline=None)
-@pt.mark.filterwarnings('ignore::RuntimeWarning')
+@pt.mark.filterwarnings("ignore::RuntimeWarning")
 def test_safe_unary(x):
     assert SafeUnarySub(x) == -x
     assert SafeUnarySub(nan) == Undefined()
@@ -92,6 +108,7 @@ def test_undefined_sanity():
     # noinspection PyTypeChecker
     with pytest.raises(TypeError):
         from math import isnan
+
         assert isnan(complex(Undefined())) == isnan(complex(nan))
     try:
         from numpy import isnan
@@ -101,6 +118,7 @@ def test_undefined_sanity():
         assert isnan(complex(Undefined())) == isnan(complex(nan))
         del isnan
     from math import isnan
+
     assert isnan(float(Undefined())) == isnan(float(nan))
     assert Surely() == Surely()
     assert Surely() + Surely() == Surely()
@@ -111,16 +129,16 @@ def test_undefined_sanity():
 
 @given(x=st.integers(min_value=MIN, max_value=MAX) | st.floats() | st.complex_numbers())
 def test_number_undefined_sanity(x):
-    assert Undefined() + x  == Undefined()
-    assert Undefined() - x  == Undefined()
-    assert Undefined() * x  == Undefined()
-    assert Undefined() / x  == Undefined()
+    assert Undefined() + x == Undefined()
+    assert Undefined() - x == Undefined()
+    assert Undefined() * x == Undefined()
+    assert Undefined() / x == Undefined()
     assert Undefined() // x == Undefined()
-    assert Surely() + x     == Surely()
-    assert Surely() - x     == Surely()
-    assert Surely() * x     == Surely()
-    assert Surely() / x     == Surely()
-    assert Undefined(x)     != Surely(x)
+    assert Surely() + x == Surely()
+    assert Surely() - x == Surely()
+    assert Surely() * x == Surely()
+    assert Surely() / x == Surely()
+    assert Undefined(x) != Surely(x)
 
 
 @given(x=st.text() | st.characters())

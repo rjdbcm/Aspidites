@@ -8,7 +8,9 @@ from pyparsing import *
 import urllib.request, urllib.parse, urllib.error
 
 # read in a bunch of genomic data
-datafile = urllib.request.urlopen("http://toxodb.org/common/downloads/release-6.0/Tgondii/TgondiiApicoplastORFsNAs_ToxoDB-6.0.fasta")
+datafile = urllib.request.urlopen(
+    "http://toxodb.org/common/downloads/release-6.0/Tgondii/TgondiiApicoplastORFsNAs_ToxoDB-6.0.fasta"
+)
 fastasrc = datafile.read()
 datafile.close()
 
@@ -16,11 +18,17 @@ datafile.close()
 Sample header:
 >NC_001799-6-2978-2778 | organism=Toxoplasma_gondii_RH | location=NC_001799:2778-2978(-) | length=201
 """
-integer = Word(nums).setParseAction(lambda t:int(t[0]))
-genebit = Group(">" + Word(alphanums.upper()+"-_") + "|" +
-                Word(printables)("id") + SkipTo("length=", include=True) +
-                integer("genelen") + LineEnd() +
-                Combine(OneOrMore(Word("ACGTN")),adjacent=False)("gene"))
+integer = Word(nums).setParseAction(lambda t: int(t[0]))
+genebit = Group(
+    ">"
+    + Word(alphanums.upper() + "-_")
+    + "|"
+    + Word(printables)("id")
+    + SkipTo("length=", include=True)
+    + integer("genelen")
+    + LineEnd()
+    + Combine(OneOrMore(Word("ACGTN")), adjacent=False)("gene")
+)
 
 # read gene data from .fasta file - takes just a few seconds
 genedata = OneOrMore(genebit).parseString(fastasrc)
@@ -28,10 +36,11 @@ genedata = OneOrMore(genebit).parseString(fastasrc)
 
 class CloseMatch(Token):
     """A special subclass of Token that does *close* matches. For each
-       close match of the given string, a tuple is returned giving the
-       found close match, and a list of mismatch positions."""
+    close match of the given string, a tuple is returned giving the
+    found close match, and a list of mismatch positions."""
+
     def __init__(self, seq, maxMismatches=1):
-        super(CloseMatch,self).__init__()
+        super(CloseMatch, self).__init__()
         self.name = seq
         self.sequence = seq
         self.maxMismatches = maxMismatches
@@ -39,7 +48,7 @@ class CloseMatch(Token):
         self.mayIndexError = False
         self.mayReturnEmpty = False
 
-    def parseImpl( self, instring, loc, doActions=True ):
+    def parseImpl(self, instring, loc, doActions=True):
         start = loc
         instrlen = len(instring)
         maxloc = start + len(self.sequence)
@@ -67,20 +76,26 @@ class CloseMatch(Token):
             exc.pstr = instring
             raise exc
 
-        return loc, (instring[start:loc],mismatches)
+        return loc, (instring[start:loc], mismatches)
+
 
 # using the genedata extracted above, look for close matches of a gene sequence
 searchseq = CloseMatch("TTAAATCTAGAAGAT", 3)
 for g in genedata:
     print("%s (%d)" % (g.id, g.genelen))
-    print("-"*24)
-    for t,startLoc,endLoc in searchseq.scanString(g.gene, overlap=True):
+    print("-" * 24)
+    for t, startLoc, endLoc in searchseq.scanString(g.gene, overlap=True):
         matched, mismatches = t[0]
         print("MATCH:", searchseq.sequence)
         print("FOUND:", matched)
         if mismatches:
-            print("      ", ''.join(' ' if i not in mismatches else '*'
-                            for i,c in enumerate(searchseq.sequence)))
+            print(
+                "      ",
+                "".join(
+                    " " if i not in mismatches else "*"
+                    for i, c in enumerate(searchseq.sequence)
+                ),
+            )
         else:
             print("<exact match>")
         print("at location", startLoc)

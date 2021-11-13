@@ -14,7 +14,6 @@ class Record:
 
 
 class GenericTests(unittest.TestCase):
-
     def test_elements(self):
         self.assertEqual([1, 2, 3], [x for x in elements([1, 2, 3])])
         self.assertEqual([1, tuple([2]), 3], [x for x in elements([1, [2], 3])])
@@ -23,7 +22,6 @@ class GenericTests(unittest.TestCase):
         self.assertEqual([1], [x for x in elements(1)])
 
     def test_auto_eq(self):
-
         class X(AutoEqHash):
             def __init__(self, a, b):
                 self.a = a

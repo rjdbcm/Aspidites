@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 import operator
 
 
@@ -17,8 +17,8 @@ def longest_match(a, b):
     assert False  # pragma: no cover
 
 
-assert ('float64', 6) == find_longest_match('float6', ['float32', 'float64'])
-assert 2 == find_longest_match('fl6', ['float32', 'float64'])[1]
+assert ("float64", 6) == find_longest_match("float6", ["float32", "float64"])
+assert 2 == find_longest_match("fl6", ["float32", "float64"])[1]
 
 
 # http://hetland.org/coding/python/levenshtein.py
@@ -44,22 +44,29 @@ def levenshtein(a, b):
 
 
 def find_best_match(s, options):
-    matches = [(x, levenshtein(s[:len(x)], x) - len(x)) for x in options]
+    matches = [(x, levenshtein(s[: len(x)], x) - len(x)) for x in options]
     best = min(matches, key=operator.itemgetter(1))
     return best
 
 
 def default_message(identifier):
-    return 'Unknown identifier %r. ' % identifier
+    return "Unknown identifier %r. " % identifier
 
 
-def create_suggester(get_options, get_message=default_message,
-            pattern=None):
+def create_suggester(get_options, get_message=default_message, pattern=None):
 
-    from ..syntax import (Combine, Word, alphas, alphanums, oneOf,
-                      ParseSyntaxException, ParseException)
+    from ..syntax import (
+        Combine,
+        Word,
+        alphas,
+        alphanums,
+        oneOf,
+        ParseSyntaxException,
+        ParseException,
+    )
+
     if pattern is None:
-        pattern = Combine(oneOf(list(alphas)) + Word('_' + alphanums))
+        pattern = Combine(oneOf(list(alphas)) + Word("_" + alphanums))
 
     pattern = pattern.copy()
 
@@ -79,30 +86,29 @@ def create_suggester(get_options, get_message=default_message,
     def parse_action(s, loc, tokens):
         identifier = tokens[0]
         options = get_options()
-        
-        msg = 'Bug in syntax: I was not supposed to match %r.' % identifier
-        msg += '(options: %s)' % options
-        
-        msg += ''' Suggestions on the cause:
+
+        msg = "Bug in syntax: I was not supposed to match %r." % identifier
+        msg += "(options: %s)" % options
+
+        msg += """ Suggestions on the cause:
             1) Use add_keyword(), always.
             
             2) Use:
                 Keyword('attr') - attrs_spec
                instead of 
                 Keyword('attr') + attrs_spec
-        '''
+        """
         assert not (identifier in options), msg
         msg = get_message(identifier)
 
         if options:
             local_string = s[loc:]
-            confident, match, length = find_match(identifier, options,
-                                                  local_string)
+            confident, match, length = find_match(identifier, options, local_string)
             if confident:
-                msg += 'Did you mean %r?' % match
+                msg += "Did you mean %r?" % match
                 loc += length
             else:
-                msg += '\nI know: %r.\n' % (options)
+                msg += "\nI know: %r.\n" % (options)
         raise ParseSyntaxException(s, loc, msg, pattern)
 
     pattern.setParseAction(parse_action)

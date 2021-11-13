@@ -11,7 +11,6 @@ from Aspidites._vendor.fn import recur
 
 # no fuzzing just tested at 10x the recursion limit
 def test_tco_decorator(limit=sys.getrecursionlimit() * 10):
-
     def recur_accumulate(origin, f=operator.add, acc=0):
         n = next(origin, None)
         if n is None:
@@ -49,15 +48,15 @@ def test_tco_different_functions(i: int):
     def recur_inc2(curr, acc=0):
         if curr == 0:
             return False, acc
-        return recur_dec, (curr-1, acc+2)
+        return recur_dec, (curr - 1, acc + 2)
 
     @recur.tco
     def recur_dec(curr, acc=0):
         if curr == 0:
             return False, acc
-        return recur_inc2, (curr-1, acc-1)
+        return recur_inc2, (curr - 1, acc - 1)
 
-    assert i/2 == recur_inc2(i)
+    assert i / 2 == recur_inc2(i)
 
 
 def test_stackless():
@@ -70,4 +69,5 @@ def test_stackless():
             yield 1
             return
         yield (yield fib.call(n - 1)) + (yield fib.call(n - 2))
+
     assert fib(9) == 55

@@ -86,7 +86,9 @@ class MatchContext:
 
                 if not issubclass(type(value), pattern_type):
                     return self.no_match()
-                return _match_mapping(value.__dict__, pattern_dict, ctx=self, strict=strict)
+                return _match_mapping(
+                    value.__dict__, pattern_dict, ctx=self, strict=strict
+                )
 
             if type(pattern) == dict:
                 return _match_mapping(value, pattern, ctx=self, strict=strict)
@@ -117,13 +119,19 @@ class MatchContext:
                 finalizer()
 
     def matches(self) -> MatchResult:
-        return MatchResult(matches=True, context=self, match_stack=copy(self._match_stack))
+        return MatchResult(
+            matches=True, context=self, match_stack=copy(self._match_stack)
+        )
 
     def no_match(self) -> MatchResult:
-        return MatchResult(matches=False, context=self, match_stack=copy(self._match_stack))
+        return MatchResult(
+            matches=False, context=self, match_stack=copy(self._match_stack)
+        )
 
     def match_if(self, condition: bool) -> MatchResult:
-        return MatchResult(matches=bool(condition), context=self, match_stack=copy(self._match_stack))
+        return MatchResult(
+            matches=bool(condition), context=self, match_stack=copy(self._match_stack)
+        )
 
     def record(self, for_pattern, value):
         id_ = id(for_pattern)
@@ -140,7 +148,9 @@ class MatchContext:
 
 
 class MatchResult(abc.Mapping):
-    def __init__(self, *, matches: bool, context: MatchContext, match_stack: List[Tuple]):
+    def __init__(
+        self, *, matches: bool, context: MatchContext, match_stack: List[Tuple]
+    ):
         self._matches: bool = matches
         self._context: MatchContext = context
         self._match_stack: List[Tuple] = match_stack
@@ -184,8 +194,10 @@ class MatchResult(abc.Mapping):
         if self._matches:
             return "The pattern matches the given value."
         if not self._match_stack:
-            return "Don't really know why this pattern did not match." \
-                   " Please report an issue about this at https://github.com/scravy/awesome-pattern-matching/issues"
+            return (
+                "Don't really know why this pattern did not match."
+                " Please report an issue about this at https://github.com/scravy/awesome-pattern-matching/issues"
+            )
         reasons = []
         match_stack: List[Tuple] = self._match_stack
         if short:
@@ -282,7 +294,7 @@ class String(Pattern, Nested):
         if isinstance(pattern, Capture):
             captures, pattern = pattern.get_capture_pattern_chain()
         if isinstance(pattern, str):
-            if remaining[:len(pattern)] == pattern:
+            if remaining[: len(pattern)] == pattern:
                 for capture in captures:
                     capture.capture(pattern, ctx=ctx)
                 return pattern
@@ -299,7 +311,7 @@ class String(Pattern, Nested):
         for p in self._patterns:
             matched = self.match_pattern(remaining=remaining, pattern=p, ctx=ctx)
             if matched is not None:
-                remaining = remaining[len(matched):]
+                remaining = remaining[len(matched) :]
             else:
                 return ctx.no_match()
         return ctx.match_if(not remaining)
@@ -308,7 +320,7 @@ class String(Pattern, Nested):
         return String(*(f(p) for p in self._patterns))
 
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class Aggregation(Generic[T], ABC):
@@ -340,7 +352,9 @@ class Aggregation(Generic[T], ABC):
 
 
 class Capture(Pattern, Nested):
-    def __init__(self, pattern, *, name: str, target=None, agg: Optional[Aggregation] = None):
+    def __init__(
+        self, pattern, *, name: str, target=None, agg: Optional[Aggregation] = None
+    ):
         self._pattern = pattern
         self._name: str = name
         self._target = target
@@ -379,17 +393,27 @@ class Capture(Pattern, Nested):
 
 
 class Many(Capturable, Nested, AutoEqHash, AutoRepr):
-    def __init__(self, pattern, *,
-                 at_least: Optional[int] = None,
-                 at_most: Optional[int] = None,
-                 exactly: Optional[int] = None):
+    def __init__(
+        self,
+        pattern,
+        *,
+        at_least: Optional[int] = None,
+        at_most: Optional[int] = None,
+        exactly: Optional[int] = None,
+    ):
 
         if at_most and at_least and at_most < at_least:
-            raise ValueError(f"conflicting spec: at_most={at_most} < at_least={at_least}")
+            raise ValueError(
+                f"conflicting spec: at_most={at_most} < at_least={at_least}"
+            )
         if exactly and at_most:
-            raise ValueError(f"conflicting spec: exactly and at_most set at the same_time")
+            raise ValueError(
+                f"conflicting spec: exactly and at_most set at the same_time"
+            )
         if exactly and at_least:
-            raise ValueError(f"conflicting spec: exactly and at_least set at the same_time")
+            raise ValueError(
+                f"conflicting spec: exactly and at_least set at the same_time"
+            )
         if exactly:
             at_least = exactly
             at_most = exactly
@@ -412,7 +436,9 @@ class Many(Capturable, Nested, AutoEqHash, AutoRepr):
         return True
 
     def descend(self, f):
-        return Many(pattern=f(self.pattern), at_least=self.at_least, at_most=self.at_most)
+        return Many(
+            pattern=f(self.pattern), at_least=self.at_least, at_most=self.at_most
+        )
 
 
 class Strict(Pattern, Nested):
@@ -501,7 +527,9 @@ class Not(Pattern, Nested):
         return Not(pattern=f(self._pattern))
 
 
-def _match_mapping(value, pattern: dict, *, ctx: MatchContext, strict: bool) -> MatchResult:
+def _match_mapping(
+    value, pattern: dict, *, ctx: MatchContext, strict: bool
+) -> MatchResult:
     to_be_matched = {}
     try:
         items = value.items()
@@ -540,10 +568,14 @@ def _match_mapping(value, pattern: dict, *, ctx: MatchContext, strict: bool) -> 
                         possibly_mismatching_keys.add(key)
         for key in keys_to_remove:
             del to_be_matched[key]
-    return ctx.match_if(not possibly_mismatching_keys and (not strict or not to_be_matched))
+    return ctx.match_if(
+        not possibly_mismatching_keys and (not strict or not to_be_matched)
+    )
 
 
-def _match_sequence(value, pattern: Union[tuple, list], *, ctx: MatchContext) -> MatchResult:
+def _match_sequence(
+    value, pattern: Union[tuple, list], *, ctx: MatchContext
+) -> MatchResult:
     try:
         it = iter(value)
     except TypeError:

@@ -22,10 +22,14 @@ def _autopattern(pattern):
     return pattern
 
 
-def match(value, pattern=NoValue, *extra,
-          multimatch: bool = False,
-          strict: bool = False,
-          captureall: Optional[dict] = None) -> Union[MatchResult, Any]:
+def match(
+    value,
+    pattern=NoValue,
+    *extra,
+    multimatch: bool = False,
+    strict: bool = False,
+    captureall: Optional[dict] = None,
+) -> Union[MatchResult, Any]:
     """Matches the given value. Three different call styles are possible:
 
     (1) match(value, pattern, **kwargs)
@@ -92,7 +96,9 @@ def match(value, pattern=NoValue, *extra,
             count += 1
             return f"n{count}"
 
-        pattern = transform(pattern, lambda x: Capture(x, name=generate_name(), target=captureall))
+        pattern = transform(
+            pattern, lambda x: Capture(x, name=generate_name(), target=captureall)
+        )
 
     result = ctx.match(value, pattern, strict=strict)
     return result

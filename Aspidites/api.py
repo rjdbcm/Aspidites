@@ -41,7 +41,7 @@ def _wrap(text, width, pad, padchar):
     line instead. This way list formatting is not mangled by textwrap.wrap.
     """
     pad = pad or True
-    padchar = padchar or ' '.encode('UTF-8')
+    padchar = padchar or " ".encode("UTF-8")
     width = width or 160
 
     wrapped_lines = []
@@ -69,24 +69,25 @@ def bordered(text, width=160) -> str:
 
 
 def _format_locals(lokals: dict):
-    d = {k: v for k, v in lokals.items() if not str(k).startswith('@')}
+    d = {k: v for k, v in lokals.items() if not str(k).startswith("@")}
     str_locals = _format_items(d)
     return str_locals
 
 
 def _format_items(x):
-    str_locals = ''.encode('UTF-8')
+    str_locals = "".encode("UTF-8")
     for k, v in x.items():
         if isfunction(v):
             s = str(signature(v)).replace("'", "")
-            str_locals += f"{k}: {s}\n".encode('UTF-8')
+            str_locals += f"{k}: {s}\n".encode("UTF-8")
         else:
-            str_locals += f"{k}: {str(v)}\n".encode('UTF-8')
+            str_locals += f"{k}: {str(v)}\n".encode("UTF-8")
     return str_locals
 
 
 class Warn:
     """Creates a nice human-readable warning with a fancy border."""
+
     sig: cython.p_char
     name: Union[_Callable, cython.p_char]
     local_items: ItemsView
@@ -113,18 +114,24 @@ class Warn:
         fkwargs = str(self.format_kwargs()).lstrip("b'").rstrip("'")
         name = self.func.__name__ if hasattr(self.func, "__name__") else str(self.func)
         sig = f"{name}({str(self.args).strip('()')}{fkwargs})"
-        at_fault = str(name).encode('UTF-8') if isinstance(exc, TypeError) else sig.encode('UTF-8')
+        at_fault = (
+            str(name).encode("UTF-8")
+            if isinstance(exc, TypeError)
+            else sig.encode("UTF-8")
+        )
         return warning_template.safe_substitute(
             file=fname,
             lineno=lineno,
             func=bordered(func_name),
-            atfault=bordered(at_fault.decode('UTF-8')),
-            bound=bordered(str_locals.decode('UTF-8')),
+            atfault=bordered(at_fault.decode("UTF-8")),
+            bound=bordered(str_locals.decode("UTF-8")),
             tb=bordered(str(exc)),
         )
 
     def format_kwargs(self, sep: str = ", ") -> bytes:
-        return f'{sep}{str(self.kwargs).strip("{} ").replace(":", "=") if len(self.kwargs) else ""}'.encode('UTF-8')
+        return f'{sep}{str(self.kwargs).strip("{} ").replace(":", "=") if len(self.kwargs) else ""}'.encode(
+            "UTF-8"
+        )
 
         # noinspection PyMethodMayBeStatic
 
@@ -132,6 +139,4 @@ class Warn:
         OrderedDict(itertools.islice(local_vars, 10))
         lokals: dict = dict(filter(lambda x: x[1] != str(exc), local_vars))
         str_locals: bytes = _format_locals(lokals)
-        return str_locals.rstrip("\n".encode('UTF-8'))
-
-
+        return str_locals.rstrip("\n".encode("UTF-8"))

@@ -8,6 +8,7 @@ def test_curried():
     @curried
     def sum5(a, b, c, d, e):
         return a + b + c + d + e
+
     assert sum5(1)(2)(3)(4)(5) == sum5(1, 2, 3)(4, 5)
 
 
@@ -23,6 +24,7 @@ def test_composition(x):
 
     def z(x_):
         return x_ * 20
+
     assert ((x * 20) + 10) * 2 == (F(f) << F(g) << F(z))(x)
 
 

@@ -8,7 +8,7 @@ import time
 from test import support
 
 
-#=======================================================================
+# =======================================================================
 # Threading support to prevent reporting refleaks when running regrtest.py -R
 
 # NOTE: we use thread._count() rather than threading.enumerate() (or the
@@ -36,10 +36,12 @@ def threading_cleanup(*original_values):
             # Display a warning at the first iteration
             support.environment_altered = True
             dangling_threads = values[1]
-            support.print_warning(f"threading_cleanup() failed to cleanup "
-                                  f"{values[0] - original_values[0]} threads "
-                                  f"(count: {values[0]}, "
-                                  f"dangling: {len(dangling_threads)})")
+            support.print_warning(
+                f"threading_cleanup() failed to cleanup "
+                f"{values[0] - original_values[0]} threads "
+                f"(count: {values[0]}, "
+                f"dangling: {len(dangling_threads)})"
+            )
             for thread in dangling_threads:
                 support.print_warning(f"Dangling thread: {thread!r}")
 
@@ -55,6 +57,7 @@ def reap_threads(func):
     """Use this function when threads are being used.  This will
     ensure that the threads are cleaned up even when the test fails.
     """
+
     @functools.wraps(func)
     def decorator(*args):
         key = threading_setup()
@@ -62,6 +65,7 @@ def reap_threads(func):
             return func(*args)
         finally:
             threading_cleanup(*key)
+
     return decorator
 
 
@@ -94,9 +98,11 @@ def wait_threads_exit(timeout=None):
                 break
             if time.monotonic() > deadline:
                 dt = time.monotonic() - start_time
-                msg = (f"wait_threads() failed to cleanup {count - old_count} "
-                       f"threads after {dt:.1f} seconds "
-                       f"(count: {count}, old count: {old_count})")
+                msg = (
+                    f"wait_threads() failed to cleanup {count - old_count} "
+                    f"threads after {dt:.1f} seconds "
+                    f"(count: {count}, old count: {old_count})"
+                )
                 raise AssertionError(msg)
             time.sleep(0.010)
             support.gc_collect()
@@ -117,6 +123,7 @@ def join_thread(thread, timeout=None):
 @contextlib.contextmanager
 def start_threads(threads, unlock=None):
     import faulthandler
+
     threads = list(threads)
     started = []
     try:
@@ -126,8 +133,10 @@ def start_threads(threads, unlock=None):
                 started.append(t)
         except:
             if support.verbose:
-                print("Can't start %d threads, only %d threads started" %
-                      (len(threads), len(started)))
+                print(
+                    "Can't start %d threads, only %d threads started"
+                    % (len(threads), len(started))
+                )
             raise
         yield
     finally:
@@ -143,13 +152,15 @@ def start_threads(threads, unlock=None):
                 if not started:
                     break
                 if support.verbose:
-                    print('Unable to join %d threads during a period of '
-                          '%d minutes' % (len(started), timeout))
+                    print(
+                        "Unable to join %d threads during a period of "
+                        "%d minutes" % (len(started), timeout)
+                    )
         finally:
             started = [t for t in started if t.is_alive()]
             if started:
                 faulthandler.dump_traceback(sys.stdout)
-                raise AssertionError('Unable to join %d threads' % len(started))
+                raise AssertionError("Unable to join %d threads" % len(started))
 
 
 class catch_threading_exception:

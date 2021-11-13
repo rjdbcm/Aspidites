@@ -38,7 +38,8 @@ from typing import cast
 from inspect import signature, isgeneratorfunction, iscoroutinefunction
 from .decorator_extension import F, EMPTY, POS, fix
 
-__version__ = '5.1.0'
+__version__ = "5.1.0"
+
 
 def decorator(caller: F, _func: F = None, kwsyntax=False) -> F:
     """
@@ -53,19 +54,20 @@ def decorator(caller: F, _func: F = None, kwsyntax=False) -> F:
 
     def dec(func=None, *args, **kw):
         na = len(args) + 1
-        extras = args + tuple(kw.get(p.name, p.default)
-                              for p in dec_params[na:]
-                              if p.default is not EMPTY)
+        extras = args + tuple(
+            kw.get(p.name, p.default) for p in dec_params[na:] if p.default is not EMPTY
+        )
         if func is None:
             return lambda func: decorate(func, caller, extras, kwsyntax)
         else:
             return decorate(func, caller, extras, kwsyntax)
+
     dec.__signature__ = sig.replace(parameters=dec_params)
     dec.__name__ = caller.__name__
     dec.__doc__ = caller.__doc__
     dec.__wrapped__ = caller
     dec.__qualname__ = caller.__qualname__
-    dec.__kwdefaults__ = getattr(caller, '__kwdefaults__', None)
+    dec.__kwdefaults__ = getattr(caller, "__kwdefaults__", None)
     dec.__dict__.update(caller.__dict__)
     return cast(F, dec)
 
@@ -82,6 +84,7 @@ class ContextManager(_GeneratorContextManager):
         def caller(f, *a, **k):
             with self:
                 return f(*a, **k)
+
         return decorate(func, caller)
 
 
@@ -103,21 +106,27 @@ def decorate(func: F, caller, extras=(), kwsyntax=False) -> F:
     """
     sig = signature(func)
     if iscoroutinefunction(caller):
+
         async def fun(*args, **kw):
             if not kwsyntax:
                 args, kw = fix(args, kw, sig)
             return await caller(func, *(extras + args), **kw)
+
     elif isgeneratorfunction(caller):
+
         def fun(*args, **kw):
             if not kwsyntax:
                 args, kw = fix(args, kw, sig)
             for res in caller(func, *(extras + args), **kw):
                 yield res
+
     else:
+
         def fun(*args, **kw):
             if not kwsyntax:
                 args, kw = fix(args, kw, sig)
             return caller(func, *(extras + args), **kw)
+
     fun.__name__ = func.__name__
     fun.__doc__ = func.__doc__
     fun.__wrapped__ = func

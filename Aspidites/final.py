@@ -17,12 +17,12 @@
 from ._vendor.contracts import check, contract, new_contract, ContractsMeta
 from typing import NewType
 
-heritable = NewType('heritable', ContractsMeta)
+heritable = NewType("heritable", ContractsMeta)
 
 
 @new_contract
 @contract
-def heritable(bases: 'tuple') -> 'bool':
+def heritable(bases: "tuple") -> "bool":
     """Convenience clause for a tuple of heritable bases"""
     return not bool(len(tuple(b for b in bases if isinstance(b, _Final))))
 
@@ -30,12 +30,13 @@ def heritable(bases: 'tuple') -> 'bool':
 # noinspection PyPep8Naming
 class _Final(type):
     """Non public metaclass implementation for final classes"""
+
     def __new__(mcs, name, bases, classdict):
-        check('heritable', bases)
+        check("heritable", bases)
         return type.__new__(mcs, name, bases, dict(classdict))
 
 
-Final = NewType('Final', _Final)
+Final = NewType("Final", _Final)
 
 
 def final(_final: Final = _Final):  # This is 100% a hack: but it works.
@@ -61,4 +62,5 @@ def final(_final: Final = _Final):  # This is 100% a hack: but it works.
         __dict["__wrapped__"] = mcs
 
         return _final(__name, __bases, __dict)
+
     return wrapper

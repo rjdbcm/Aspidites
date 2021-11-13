@@ -73,6 +73,7 @@ def find_unused_port(family=socket.AF_INET, socktype=socket.SOCK_STREAM):
     del tempsock
     return port
 
+
 def bind_port(sock, host=HOST):
     """Bind the socket to a free port and return the port number.  Relies on
     ephemeral ports in order to ensure we are using an unbound port.  This is
@@ -89,28 +90,33 @@ def bind_port(sock, host=HOST):
     """
 
     if sock.family == socket.AF_INET and sock.type == socket.SOCK_STREAM:
-        if hasattr(socket, 'SO_REUSEADDR'):
+        if hasattr(socket, "SO_REUSEADDR"):
             if sock.getsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR) == 1:
-                raise support.TestFailed("tests should never set the "
-                                         "SO_REUSEADDR socket option on "
-                                         "TCP/IP sockets!")
-        if hasattr(socket, 'SO_REUSEPORT'):
+                raise support.TestFailed(
+                    "tests should never set the "
+                    "SO_REUSEADDR socket option on "
+                    "TCP/IP sockets!"
+                )
+        if hasattr(socket, "SO_REUSEPORT"):
             try:
                 if sock.getsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT) == 1:
-                    raise support.TestFailed("tests should never set the "
-                                             "SO_REUSEPORT socket option on "
-                                             "TCP/IP sockets!")
+                    raise support.TestFailed(
+                        "tests should never set the "
+                        "SO_REUSEPORT socket option on "
+                        "TCP/IP sockets!"
+                    )
             except OSError:
                 # Python's socket module was compiled using modern headers
                 # thus defining SO_REUSEPORT but this process is running
                 # under an older kernel that does not support SO_REUSEPORT.
                 pass
-        if hasattr(socket, 'SO_EXCLUSIVEADDRUSE'):
+        if hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
 
     sock.bind((host, 0))
     port = sock.getsockname()[1]
     return port
+
 
 def bind_unix_socket(sock, addr):
     """Bind a unix socket, raising SkipTest if PermissionError is raised."""
@@ -119,7 +125,8 @@ def bind_unix_socket(sock, addr):
         sock.bind(addr)
     except PermissionError:
         sock.close()
-        raise unittest.SkipTest('cannot bind AF_UNIX sockets')
+        raise unittest.SkipTest("cannot bind AF_UNIX sockets")
+
 
 def _is_ipv6_enabled():
     """Check whether IPv6 is enabled on this host."""
@@ -136,17 +143,21 @@ def _is_ipv6_enabled():
                 sock.close()
     return False
 
+
 IPV6_ENABLED = _is_ipv6_enabled()
 
 
 _bind_nix_socket_error = None
+
+
 def skip_unless_bind_unix_socket(test):
     """Decorator for tests requiring a functional bind() for unix sockets."""
-    if not hasattr(socket, 'AF_UNIX'):
-        return unittest.skip('No UNIX Sockets')(test)
+    if not hasattr(socket, "AF_UNIX"):
+        return unittest.skip("No UNIX Sockets")(test)
     global _bind_nix_socket_error
     if _bind_nix_socket_error is None:
         from .os_helper import TESTFN, unlink
+
         path = TESTFN + "can_bind_unix_socket"
         with socket.socket(socket.AF_UNIX) as sock:
             try:
@@ -157,7 +168,7 @@ def skip_unless_bind_unix_socket(test):
             finally:
                 unlink(path)
     if _bind_nix_socket_error:
-        msg = 'Requires a functional unix bind(): %s' % _bind_nix_socket_error
+        msg = "Requires a functional unix bind(): %s" % _bind_nix_socket_error
         return unittest.skip(msg)(test)
     else:
         return test
@@ -169,14 +180,14 @@ def get_socket_conn_refused_errs():
     when a connection is refused.
     """
     errors = [errno.ECONNREFUSED]
-    if hasattr(errno, 'ENETUNREACH'):
+    if hasattr(errno, "ENETUNREACH"):
         # On Solaris, ENETUNREACH is returned sometimes instead of ECONNREFUSED
         errors.append(errno.ENETUNREACH)
-    if hasattr(errno, 'EADDRNOTAVAIL'):
+    if hasattr(errno, "EADDRNOTAVAIL"):
         # bpo-31910: socket.create_connection() fails randomly
         # with EADDRNOTAVAIL on Travis CI
         errors.append(errno.EADDRNOTAVAIL)
-    if hasattr(errno, 'EHOSTUNREACH'):
+    if hasattr(errno, "EHOSTUNREACH"):
         # bpo-37583: The destination host cannot be reached
         errors.append(errno.EHOSTUNREACH)
     if not IPV6_ENABLED:
@@ -186,54 +197,59 @@ def get_socket_conn_refused_errs():
 
 _NOT_SET = object()
 
+
 @contextlib.contextmanager
 def transient_internet(resource_name, *, timeout=_NOT_SET, errnos=()):
     """Return a context manager that raises ResourceDenied when various issues
     with the internet connection manifest themselves as exceptions."""
     import nntplib
     import urllib.error
+
     if timeout is _NOT_SET:
         timeout = support.INTERNET_TIMEOUT
 
     default_errnos = [
-        ('ECONNREFUSED', 111),
-        ('ECONNRESET', 104),
-        ('EHOSTUNREACH', 113),
-        ('ENETUNREACH', 101),
-        ('ETIMEDOUT', 110),
+        ("ECONNREFUSED", 111),
+        ("ECONNRESET", 104),
+        ("EHOSTUNREACH", 113),
+        ("ENETUNREACH", 101),
+        ("ETIMEDOUT", 110),
         # socket.create_connection() fails randomly with
         # EADDRNOTAVAIL on Travis CI.
-        ('EADDRNOTAVAIL', 99),
+        ("EADDRNOTAVAIL", 99),
     ]
     default_gai_errnos = [
-        ('EAI_AGAIN', -3),
-        ('EAI_FAIL', -4),
-        ('EAI_NONAME', -2),
-        ('EAI_NODATA', -5),
+        ("EAI_AGAIN", -3),
+        ("EAI_FAIL", -4),
+        ("EAI_NONAME", -2),
+        ("EAI_NODATA", -5),
         # Encountered when trying to resolve IPv6-only hostnames
-        ('WSANO_DATA', 11004),
+        ("WSANO_DATA", 11004),
     ]
 
     denied = support.ResourceDenied("Resource %r is not available" % resource_name)
     captured_errnos = errnos
     gai_errnos = []
     if not captured_errnos:
-        captured_errnos = [getattr(errno, name, num)
-                           for (name, num) in default_errnos]
-        gai_errnos = [getattr(socket, name, num)
-                      for (name, num) in default_gai_errnos]
+        captured_errnos = [getattr(errno, name, num) for (name, num) in default_errnos]
+        gai_errnos = [getattr(socket, name, num) for (name, num) in default_gai_errnos]
 
     def filter_error(err):
-        n = getattr(err, 'errno', None)
-        if (isinstance(err, TimeoutError) or
-            (isinstance(err, socket.gaierror) and n in gai_errnos) or
-            (isinstance(err, urllib.error.HTTPError) and
-             500 <= err.code <= 599) or
-            (isinstance(err, urllib.error.URLError) and
-                 (("ConnectionRefusedError" in err.reason) or
-                  ("TimeoutError" in err.reason) or
-                  ("EOFError" in err.reason))) or
-            n in captured_errnos):
+        n = getattr(err, "errno", None)
+        if (
+            isinstance(err, TimeoutError)
+            or (isinstance(err, socket.gaierror) and n in gai_errnos)
+            or (isinstance(err, urllib.error.HTTPError) and 500 <= err.code <= 599)
+            or (
+                isinstance(err, urllib.error.URLError)
+                and (
+                    ("ConnectionRefusedError" in err.reason)
+                    or ("TimeoutError" in err.reason)
+                    or ("EOFError" in err.reason)
+                )
+            )
+            or n in captured_errnos
+        ):
             if not support.verbose:
                 sys.stderr.write(denied.args[0] + "\n")
             raise denied from err

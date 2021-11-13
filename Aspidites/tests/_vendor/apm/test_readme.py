@@ -5,14 +5,15 @@ from Aspidites._vendor.apm import *
 
 
 class ReadmeExamples(unittest.TestCase):
-
     def test_first_example(self):
         # noinspection PyUnresolvedReferences
-        result = match([1, 2, 3, 4, 5], [1, '2nd' @ _, '3rd' @ _, 'tail' @ Remaining(...)])
+        result = match(
+            [1, 2, 3, 4, 5], [1, "2nd" @ _, "3rd" @ _, "tail" @ Remaining(...)]
+        )
         if result:
-            self.assertEqual(2, result['2nd'])
-            self.assertEqual(3, result['3rd'])
-            self.assertEqual([4, 5], result['tail'])
+            self.assertEqual(2, result["2nd"])
+            self.assertEqual(3, result["3rd"])
+            self.assertEqual([4, 5], result["tail"])
 
     def test_styles(self):
         value = 7
@@ -33,10 +34,9 @@ class ReadmeExamples(unittest.TestCase):
             check("It's not between 1 and 20")
 
         # The expression style
-        case(value) \
-            .of(Between(1, 10), lambda: check("It's between 1 and 10")) \
-            .of(Between(11, 20), lambda: check("It's between 11 and 20")) \
-            .otherwise(lambda: check("It's not between 1 and 20"))
+        case(value).of(Between(1, 10), lambda: check("It's between 1 and 10")).of(
+            Between(11, 20), lambda: check("It's between 11 and 20")
+        ).otherwise(lambda: check("It's not between 1 and 20"))
 
         # The statement style
         try:
@@ -57,53 +57,64 @@ class ReadmeExamples(unittest.TestCase):
             "Last-Name": "Doe",
         }
 
-        result = match(record, {"First-Name": Capture(Regex("[A-Z][a-z]*"), name="name")})
+        result = match(
+            record, {"First-Name": Capture(Regex("[A-Z][a-z]*"), name="name")}
+        )
         self.assertTrue(result)
-        self.assertEqual("Jane", result['name'])
+        self.assertEqual("Jane", result["name"])
 
     def test_records_example(self):
-        records = [
-            {
-                "Foo": 1,
-                "Bar": "Quux"
-            },
-            {
-                "Foo": 2,
-                "Bar": "Baz"
-            }
-        ]
+        records = [{"Foo": 1, "Bar": "Quux"}, {"Foo": 2, "Bar": "Baz"}]
 
         self.assertTrue(
-            match(records, Each(Strict({"Foo": InstanceOf(int), "Bar": InstanceOf(str) & Regex("[A-Z][a-z]+")}))))
+            match(
+                records,
+                Each(
+                    Strict(
+                        {
+                            "Foo": InstanceOf(int),
+                            "Bar": InstanceOf(str) & Regex("[A-Z][a-z]+"),
+                        }
+                    )
+                ),
+            )
+        )
 
         records = [
-            {
-                "Foo": 1,
-                "Bar": "Quux"
-            },
-            {
-                "Foo": 2,
-                "Bar": "Baz",
-                "Strict": "Does not allow unknown keys"
-            }
+            {"Foo": 1, "Bar": "Quux"},
+            {"Foo": 2, "Bar": "Baz", "Strict": "Does not allow unknown keys"},
         ]
 
         self.assertFalse(
-            match(records, Each(Strict({"Foo": InstanceOf(int), "Bar": InstanceOf(str) & Regex("[A-Z][a-z]+")}))))
+            match(
+                records,
+                Each(
+                    Strict(
+                        {
+                            "Foo": InstanceOf(int),
+                            "Bar": InstanceOf(str) & Regex("[A-Z][a-z]+"),
+                        }
+                    )
+                ),
+            )
+        )
 
         records = [
-            {
-                "Foo": 1,
-                "Bar": "Quux"
-            },
-            {
-                "Foo": 2,
-                "Bar": "Baz",
-                "No Problem": "When Not Strict"
-            }
+            {"Foo": 1, "Bar": "Quux"},
+            {"Foo": 2, "Bar": "Baz", "No Problem": "When Not Strict"},
         ]
 
-        self.assertTrue(match(records, Each({"Foo": InstanceOf(int), "Bar": InstanceOf(str) & Regex("[A-Z][a-z]+")})))
+        self.assertTrue(
+            match(
+                records,
+                Each(
+                    {
+                        "Foo": InstanceOf(int),
+                        "Bar": InstanceOf(str) & Regex("[A-Z][a-z]+"),
+                    }
+                ),
+            )
+        )
 
     def test_user_guide_examples(self):
         some_very_complex_object = {
@@ -123,9 +134,11 @@ class ReadmeExamples(unittest.TestCase):
         self.assertTrue(match(ls, Each(InstanceOf(int) & Between(1, 3))))
         self.assertTrue(match(ls, [1, Remaining(..., at_least=2)]))
 
-        result = match([1, 2, 3, 4], [1, 2, Capture(Remaining(InstanceOf(int)), name='tail')])
+        result = match(
+            [1, 2, 3, 4], [1, 2, Capture(Remaining(InstanceOf(int)), name="tail")]
+        )
         self.assertTrue(result)
-        self.assertEqual([3, 4], result['tail'])
+        self.assertEqual([3, 4], result["tail"])
         self.assertTrue(match(range(1, 10), Each(Between(1, 9))))
         self.assertTrue(match("quux", OneOf("bar", "baz", "quux")))
 
@@ -143,10 +156,18 @@ class ReadmeExamples(unittest.TestCase):
 
         def sha256(v: str) -> str:
             import hashlib
-            return hashlib.new('sha256', v.encode('utf8')).hexdigest()
+
+            return hashlib.new("sha256", v.encode("utf8")).hexdigest()
 
         self.assertTrue(
-            match("hello", Transformed(sha256, "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824")))
+            match(
+                "hello",
+                Transformed(
+                    sha256,
+                    "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
+                ),
+            )
+        )
 
         self.assertTrue(match({"a": 3, "b": 7}, {"a": ...}))
         self.assertTrue(match(3.0, 3))
@@ -172,21 +193,33 @@ class ReadmeExamples(unittest.TestCase):
 
     # noinspection PyUnresolvedReferences
     def test_multimatch(self):
-        result = match([{'foo': 5}, 3, {'foo': 7}], Each(OneOf({'foo': 'item' @ _}, ...)), multimatch=True)
+        result = match(
+            [{"foo": 5}, 3, {"foo": 7}],
+            Each(OneOf({"foo": "item" @ _}, ...)),
+            multimatch=True,
+        )
         if result:
-            self.assertEqual([5, 7], result['item'])
-        result = match([{'foo': 5}, 3, {'quux': 7, 'bar': 9}], Each(OneOf({'foo': 'item' @ _}, ...)), multimatch=True)
+            self.assertEqual([5, 7], result["item"])
+        result = match(
+            [{"foo": 5}, 3, {"quux": 7, "bar": 9}],
+            Each(OneOf({"foo": "item" @ _}, ...)),
+            multimatch=True,
+        )
         if result:
-            self.assertEqual([5], result['item'])
-        result = match([{'foo': 5}, 3, {'foo': 7, 'bar': 9}], Each(OneOf({'foo': 'item' @ _}, ...)))
+            self.assertEqual([5], result["item"])
+        result = match(
+            [{"foo": 5}, 3, {"foo": 7, "bar": 9}], Each(OneOf({"foo": "item" @ _}, ...))
+        )
         if result:
-            self.assertEqual(7, result['item'])
+            self.assertEqual(7, result["item"])
 
     def test_simple_style_example(self):
         value = {"a": 7, "b": "foo", "c": "bar"}
-        result = match(value, EachItem(_, 'value' @ InstanceOf(str) | ...), multimatch=True)
+        result = match(
+            value, EachItem(_, "value" @ InstanceOf(str) | ...), multimatch=True
+        )
         if result:
-            self.assertEqual(["foo", "bar"], result['value'])
+            self.assertEqual(["foo", "bar"], result["value"])
 
     def test_declarative_style_example(self):
         @case_distinction
@@ -223,10 +256,10 @@ class ReadmeExamples(unittest.TestCase):
     # noinspection PyUnresolvedReferences
     def test_statement_example(self):
         try:
-            match({'user': 'some-user-id', 'first_name': "Jane", 'last_name': "Doe"})
-        except Case({'first_name': 'first' @ _, 'last_name': 'last' @ _}) as result:
+            match({"user": "some-user-id", "first_name": "Jane", "last_name": "Doe"})
+        except Case({"first_name": "first" @ _, "last_name": "last" @ _}) as result:
             user = f"{result['first']} {result['last']}"
-        except Case({'user': 'user_id' @ _}) as result:
+        except Case({"user": "user_id" @ _}) as result:
             user = f"#{result['user_id']}"
         except Default:
             user = "anonymous"
@@ -236,7 +269,7 @@ class ReadmeExamples(unittest.TestCase):
     def test_contains(self):
         self.assertTrue(match("hello there, world", Contains("there")))
         self.assertTrue(match([1, 2, 3], Contains(2) & Contains(3)))
-        self.assertTrue(match({'foo': 1, 'bar': 2}, Contains('quux') | Contains('bar')))
+        self.assertTrue(match({"foo": 1, "bar": 2}, Contains("quux") | Contains("bar")))
 
     def test_dataclasses(self):
         @dataclass

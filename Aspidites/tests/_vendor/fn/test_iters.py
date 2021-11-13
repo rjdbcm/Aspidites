@@ -89,6 +89,7 @@ def test_ncycles():
     with pytest.raises(StopIteration):
         next(it)
 
+
 @given(st.integers())
 def test_repeatfunc(x):
     def f():
@@ -123,7 +124,7 @@ def test_grouper():
 
 
 def test_roundrobin():
-    r = iters.roundrobin('ABC', 'D', 'EF')
+    r = iters.roundrobin("ABC", "D", "EF")
     assert ["A", "D", "E", "B", "F", "C"] == list(r)
 
 
@@ -181,8 +182,8 @@ def test_flatten():
     assert [1, 2, 3] == list(iters.flatten([1, 2, 3]))
     # Don't flatten strings, bytes, or bytearrays
     assert [2, "abc", 1] == list(iters.flatten([2, "abc", 1]))
-    assert [2, b'abc', 1] == list(iters.flatten([2, b'abc', 1]))
-    assert [2, bytearray(b'abc'), 1] == list(iters.flatten([2, bytearray(b'abc'), 1]))
+    assert [2, b"abc", 1] == list(iters.flatten([2, b"abc", 1]))
+    assert [2, bytearray(b"abc"), 1] == list(iters.flatten([2, bytearray(b"abc"), 1]))
 
 
 def test_accumulate():

@@ -4,7 +4,7 @@ import sys
 import time
 
 
-if '__pypy__' not in sys.builtin_module_names:
+if "__pypy__" not in sys.builtin_module_names:
     # pypy's gc really is different
 
     from Aspidites.woma.gcutils import get_all, GCToggler

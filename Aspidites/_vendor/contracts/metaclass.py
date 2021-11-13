@@ -1,10 +1,10 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 from abc import ABCMeta
 from types import FunctionType
 import traceback
 
 
-__all__ = ['ContractsMeta']
+__all__ = ["ContractsMeta"]
 
 
 def is_function_or_static(f):
@@ -16,10 +16,11 @@ def is_function_or_static(f):
 
 class ContractsMeta(ABCMeta):
     """
-        This metaclass lets the subclasses inherit the specifications.
-        Very useful for abstract commands.
+    This metaclass lets the subclasses inherit the specifications.
+    Very useful for abstract commands.
 
     """
+
     # TODO check that the contracts are a subtype of ContractsMeta
     def __init__(cls, clsname, bases, clsdict):  # @UnusedVariable @NoSelf
         ABCMeta.__init__(cls, clsname, bases, clsdict)
@@ -32,7 +33,7 @@ class ContractsMeta(ABCMeta):
             if not (is_normal_function or is_staticmethod or is_classmethod):
                 # print('skipping %s:%s, %s' % (clsname, k, f))
                 continue
-            if k == '__init__':
+            if k == "__init__":
                 continue
 
             # this_function = '%s:%s()' % (clsname, k)  # @UnusedVariable
@@ -51,23 +52,30 @@ class ContractsMeta(ABCMeta):
                             pass
                         else:
                             assert isinstance(f0, FunctionType)
-                            if '__contracts__' in f0.__dict__:
+                            if "__contracts__" in f0.__dict__:
                                 spec = f0.__contracts__
                                 # msg = 'inherit contracts for %s:%s() from %s' % (clsname, k, b.__name__)
                                 # print(msg)
-                                from Aspidites._vendor.contracts import ContractException
+                                from Aspidites._vendor.contracts import (
+                                    ContractException,
+                                )
+
                                 try:
                                     from .main import contracts_decorate
+
                                     f1 = contracts_decorate(f, **spec)
                                 except ContractException as e:
                                     from .utils import indent
-                                    msg = 'Error while applying ContractsMeta magic.\n'
-                                    msg += '  subclass:  %s\n' % clsname
-                                    msg += '      base:  %s\n' % b.__name__
-                                    msg += '  function:  %s()\n' % k
-                                    msg += 'Exception:\n'
-                                    msg += indent(traceback.format_exc(), '| ') + '\n'
-                                    msg += '(most likely parameters names are different?)'
+
+                                    msg = "Error while applying ContractsMeta magic.\n"
+                                    msg += "  subclass:  %s\n" % clsname
+                                    msg += "      base:  %s\n" % b.__name__
+                                    msg += "  function:  %s()\n" % k
+                                    msg += "Exception:\n"
+                                    msg += indent(traceback.format_exc(), "| ") + "\n"
+                                    msg += (
+                                        "(most likely parameters names are different?)"
+                                    )
                                     raise ContractException(msg)
                                 setattr(cls, k, f1)
                                 break
@@ -76,7 +84,6 @@ class ContractsMeta(ABCMeta):
                 else:
                     # print(' X not found in %s' % b.__name__)
                     pass
-
 
             else:
                 pass
@@ -99,5 +106,5 @@ def with_metaclass(meta, *bases):
     class metaclass(meta):
         def __new__(cls, name, this_bases, d):
             return meta(name, bases, d)
-    return type.__new__(metaclass, 'temporary_class', (), {})
 
+    return type.__new__(metaclass, "temporary_class", (), {})

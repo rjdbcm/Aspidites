@@ -43,25 +43,28 @@ def get_cy_kwargs() -> dict:
         "lookup_module_cpdef",
         "embed",
     )
-    cy_kwargs = dict(
-        zip(cy_opt,
-            map(lambda x: getattr(Options, x), cy_opt)))
+    cy_kwargs = dict(zip(cy_opt, map(lambda x: getattr(Options, x), cy_opt)))
     return cy_kwargs
 
 
-def get_cython_parser(dummy: ap.ArgumentParser) -> t.Tuple[ap.ArgumentParser, dict, ap.ArgumentParser, bool]:
+def get_cython_parser(
+    dummy: ap.ArgumentParser,
+) -> t.Tuple[ap.ArgumentParser, dict, ap.ArgumentParser, bool]:
     cy3_fallback_mode: bool = False
     cy_kwargs = get_cy_kwargs()
     if cy_version.major == 3:  # pragma: no cover
         try:
             # noinspection PyUnresolvedReferences
             from Cython.Compiler.CmdLine import create_cython_argparser
+
             cy_parser = create_cython_argparser()
         except Exception as e:
             warnings.warn(
-                '\n' + ''.join(traceback.format_tb(
-                    e.__traceback__)) + 'Falling back to Cython 0.X Options API',
-                ImportWarning)
+                "\n"
+                + "".join(traceback.format_tb(e.__traceback__))
+                + "Falling back to Cython 0.X Options API",
+                ImportWarning,
+            )
             cy3_fallback_mode = True
             cy_parser = dummy
     else:
@@ -70,9 +73,11 @@ def get_cython_parser(dummy: ap.ArgumentParser) -> t.Tuple[ap.ArgumentParser, di
 
 
 def setup_test_env(argv):
-    if len(argv) >= 2 and argv[1] == "--pytest" or argv[1] == '-pt':  # pragma: no cover
+    if len(argv) >= 2 and argv[1] == "--pytest" or argv[1] == "-pt":  # pragma: no cover
         if not os.getenv("ASPIDITES_DOCKER_BUILD"):
-            argv = [str(Path(__file__).absolute().parent / Path('tests/test_aspidites.py'))] + argv[2:]
+            argv = [
+                str(Path(__file__).absolute().parent / Path("tests/test_aspidites.py"))
+            ] + argv[2:]
         else:
             argv = argv[2:]
         sys.exit(pytest.main(argv))
@@ -81,6 +86,7 @@ def setup_test_env(argv):
 def check_noargs(argv, __test):
     if len(argv) == 1:
         from .repl import ReadEvalParse
+
         rep = ReadEvalParse()
         rep.loop()
 
@@ -91,40 +97,58 @@ def add_pre_cy3_args(parser: ap.ArgumentParser, kwargs) -> None:  # pragma: no c
         cy_arg_group.add_argument(
             f'--{k.replace("_", "-")}',
             default=v,
-            action='store_true' if isinstance(v, (bool,)) else 'store'
+            action="store_true" if isinstance(v, (bool,)) else "store",
         )
 
 
-def parse_from_dummy(argv: list,
-                     dummy: ap.ArgumentParser,
-                     __test: bool = False) -> t.Tuple[ap.Namespace, list, dict]:
+def parse_from_dummy(
+    argv: list, dummy: ap.ArgumentParser, __test: bool = False
+) -> t.Tuple[ap.Namespace, list, dict]:
     dummy, cy_kwargs, cy_parser, cy3_fallback_mode = get_cython_parser(dummy)
     check_noargs(argv, __test)
     setup_test_env(argv)
-    asp_parser = ap.ArgumentParser(prog='aspidites',
-                                   description=__description__,
-                                   parents=[cy_parser],
-                                   add_help=not bool(cy_version.major)
-                                   )
-    asp_parser.add_argument('-pt', '--pytest',
-                            help="run pytest with args", metavar='ARGS')
+    asp_parser = ap.ArgumentParser(
+        prog="aspidites",
+        description=__description__,
+        parents=[cy_parser],
+        add_help=not bool(cy_version.major),
+    )
+    asp_parser.add_argument(
+        "-pt", "--pytest", help="run pytest with args", metavar="ARGS"
+    )
     asp_parser.add_argument("target", help="source to compile")
-    asp_parser.add_argument('outpyx', help='filename to compile to'),
+    asp_parser.add_argument("outpyx", help="filename to compile to"),
     # Compatible with Cython 0.X:
     # 3.0 switched to using the argparse module
     if cy_version.major == 0 or cy3_fallback_mode:
-        asp_parser.add_argument('-f', '--force', action='store_true',
-                                help='forcibly overwrite existing files')
-        asp_parser.add_argument("-p", "--compile-pyc", action="store_true",
-                                help="compile to python bytecode")
-        asp_parser.add_argument('-c', '--compile-c', action="store_true",
-                                help="compile to C and run setup")
-        asp_parser.add_argument('--build-requires', default='', metavar='',
-                                help='additional requirements needed to run setup (default: %(default)s)')
-        asp_parser.add_argument('-v', "--verbose",
-                                default=0,
-                                action='count',
-                                help="increase output verbosity (default: %(default)s) e.g. -v, -vv, -vvv ")
+        asp_parser.add_argument(
+            "-f",
+            "--force",
+            action="store_true",
+            help="forcibly overwrite existing files",
+        )
+        asp_parser.add_argument(
+            "-p",
+            "--compile-pyc",
+            action="store_true",
+            help="compile to python bytecode",
+        )
+        asp_parser.add_argument(
+            "-c", "--compile-c", action="store_true", help="compile to C and run setup"
+        )
+        asp_parser.add_argument(
+            "--build-requires",
+            default="",
+            metavar="",
+            help="additional requirements needed to run setup (default: %(default)s)",
+        )
+        asp_parser.add_argument(
+            "-v",
+            "--verbose",
+            default=0,
+            action="count",
+            help="increase output verbosity (default: %(default)s) e.g. -v, -vv, -vvv ",
+        )
         add_pre_cy3_args(asp_parser, cy_kwargs)
         args, other_args = asp_parser.parse_known_args()
         for k in cy_kwargs.keys():
@@ -138,9 +162,9 @@ def parse_from_dummy(argv: list,
 def parse_code(target, output):
     if target == "Aspidites/tests" or target == "Aspidites\\tests":  # pragma: no cover
         raise SystemExit()
-    code = parse_module(open(target, 'r').read())  # pragma: no cover
+    code = parse_module(open(target, "r").read())  # pragma: no cover
     if output is None:  # pragma: no cover
-        output = Path(target).parent / 'compiled.pyx'
+        output = Path(target).parent / "compiled.pyx"
     return target, output, code
 
 
@@ -148,17 +172,21 @@ def main(argv=None) -> None:
     # TODO change pyx to pyz on windows
     argv = sys.argv if not argv else argv
     # any failure results in falling back to the `Cython.Compiler.Options` API
-    args, other_args, cy_kwargs = parse_from_dummy(argv, ap.ArgumentParser(add_help=False))
+    args, other_args, cy_kwargs = parse_from_dummy(
+        argv, ap.ArgumentParser(add_help=False)
+    )
     # TODO: Cython 3.0 arguments clash with Aspidites' ArgumentParser
     args.target, args.outpyx, code = parse_code(args.target, args.outpyx)
-    cy_kwargs.update({  # pragma: no cover
-        'code': code,
-        'fname': args.outpyx or "compiled.pyx",
-        'force': args.force or False,
-        'bytecode': args.compile_pyc,
-        'c': args.compile_c,
-        'build_requires': args.build_requires,
-        'verbose': args.verbose
-    })
+    cy_kwargs.update(
+        {  # pragma: no cover
+            "code": code,
+            "fname": args.outpyx or "compiled.pyx",
+            "force": args.force or False,
+            "bytecode": args.compile_pyc,
+            "c": args.compile_c,
+            "build_requires": args.build_requires,
+            "verbose": args.verbose,
+        }
+    )
     compile_args = CompilerArgs(**cy_kwargs)
     Compiler(compile_args)  # pragma: no cover

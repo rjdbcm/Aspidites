@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 from functools import partial, update_wrapper, wraps
 from sys import version_info
 
@@ -24,7 +24,7 @@ class F:
     15
     """
 
-    __slots__ = "f",
+    __slots__ = ("f",)
 
     def __init__(self, f=identity, *args, **kwargs):
         self.f = partial(f, *args, **kwargs) if any([args, kwargs]) else f
@@ -76,9 +76,11 @@ def curried(func):
     def _args_len(func):
         if _has_type_hint_support:
             from inspect import signature
+
             args = signature(func).parameters
         else:  # pragma: no cover
             from inspect import getargspec
+
             args = getargspec(func).args
 
         return len(args)

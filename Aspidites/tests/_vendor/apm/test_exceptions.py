@@ -6,12 +6,9 @@ from Aspidites._vendor.apm import *
 
 
 class ExceptionsTest(unittest.TestCase):
-
     def test_match_error_in_terse_syntax(self):
         with self.assertRaises(MatchError):
-            match(7,
-                  0, "zero",
-                  1, "one")
+            match(7, 0, "zero", 1, "one")
 
     def test_match_error_in_declarative_syntax(self):
         @case_distinction

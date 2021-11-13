@@ -6,7 +6,6 @@ from Aspidites._vendor.apm import *
 
 
 class CaseDistinctionTest(unittest.TestCase):
-
     def test_case_distinction(self):
         @case_distinction
         def fib(n: Match(OneOf(0, 1))):

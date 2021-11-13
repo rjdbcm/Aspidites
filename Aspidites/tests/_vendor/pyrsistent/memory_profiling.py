@@ -32,15 +32,20 @@ def detect_memory_leak(samples):
 
 
 def profile_tests():
-    test_functions = [fn for fn in inspect.getmembers(vector_test, inspect.isfunction)
-                      if fn[0].startswith('test_')]
+    test_functions = [
+        fn
+        for fn in inspect.getmembers(vector_test, inspect.isfunction)
+        if fn[0].startswith("test_")
+    ]
 
     for name, fn in test_functions:
         # There are a couple of tests that are not run for the C implementation, skip those
         fn_args = inspect.getfullargspec(fn)[0]
-        if 'pvector' in fn_args:
-            print('Executing %s' % name)
-            result = memory_profiler.memory_usage((run_function, (fn,), {}), interval=.1)
+        if "pvector" in fn_args:
+            print("Executing %s" % name)
+            result = memory_profiler.memory_usage(
+                (run_function, (fn,), {}), interval=0.1
+            )
             assert not detect_memory_leak(result), (name, result)
 
 

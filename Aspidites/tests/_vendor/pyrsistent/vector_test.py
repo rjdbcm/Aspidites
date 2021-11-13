@@ -6,19 +6,20 @@ import pytest
 from Aspidites._vendor.pyrsistent._pvector import python_pvector
 
 
-@pytest.fixture(scope='session', params=['pyrsistent._pvector', 'pvectorc'])
+@pytest.fixture(scope="session", params=["pyrsistent._pvector", "pvectorc"])
 def pvector(request):
-    if request.param == 'pvectorc' and os.environ.get('PYRSISTENT_NO_C_EXTENSION'):
-        pytest.skip('Configured to not run tests for C extension')
+    if request.param == "pvectorc" and os.environ.get("PYRSISTENT_NO_C_EXTENSION"):
+        pytest.skip("Configured to not run tests for C extension")
 
     m = pytest.importorskip(request.param)
-    if request.param == 'pyrsistent._pvector':
+    if request.param == "pyrsistent._pvector":
         return m.python_pvector
     return m.pvector
 
 
 def test_literalish_works():
     from Aspidites._vendor.pyrsistent import pvector, v
+
     assert v() is pvector()
     assert v(1, 2) == pvector([1, 2])
 
@@ -29,7 +30,7 @@ def test_empty_initialization(pvector):
 
     with pytest.raises(IndexError) as error:
         x = seq[0]
-    assert str(error.value) == 'Index out of range: 0'
+    assert str(error.value) == "Index out of range: 0"
 
 
 def test_initialization_with_one_element(pvector):
@@ -123,7 +124,7 @@ def test_insert_beyond_end(pvector):
     with pytest.raises(IndexError) as error:
         seq2.set(19, 4)
 
-    assert str(error.value) == 'Index out of range: 19'
+    assert str(error.value) == "Index out of range: 19"
 
 
 def test_insert_with_index_from_the_end(pvector):
@@ -233,7 +234,7 @@ def test_slicing_reverse(pvector):
     assert seq2[1] == 8
     assert len(seq2) == 10
 
-    seq3 = seq[-3: -7: -1]
+    seq3 = seq[-3:-7:-1]
     assert seq3[0] == 7
     assert seq3[3] == 4
     assert len(seq3) == 4
@@ -258,7 +259,7 @@ def test_delete_index_out_of_bounds(pvector):
 
 def test_delete_index_malformed(pvector):
     with pytest.raises(TypeError):
-        pvector([]).delete('a')
+        pvector([]).delete("a")
 
 
 def test_delete_slice(pvector):
@@ -285,7 +286,7 @@ def test_remove_index_out_of_bounds(pvector):
     seq = pvector(range(5))
     with pytest.raises(ValueError) as err:
         seq.remove(5)
-    assert 'not in' in str(err.value)
+    assert "not in" in str(err.value)
 
 
 def test_addition(pvector):
@@ -342,10 +343,11 @@ def test_repr_when_contained_object_contains_reference_to_self(pvector):
     x = [1, 2, 3]
     v = pvector([1, 2, x])
     x.append(v)
-    assert str(v) == 'pvector([1, 2, [1, 2, 3, pvector([1, 2, [...]])]])'
+    assert str(v) == "pvector([1, 2, [1, 2, 3, pvector([1, 2, [...]])]])"
 
     # Run a GC to provoke any potential misbehavior
     import gc
+
     gc.collect()
 
 
@@ -372,7 +374,7 @@ def test_compare_same_vectors(pvector):
 
 
 def test_compare_with_other_type_of_object(pvector):
-    assert pvector([1, 2]) != 'foo'
+    assert pvector([1, 2]) != "foo"
 
 
 def test_compare_equal_vectors(pvector):
@@ -431,9 +433,10 @@ def test_transform_nested_vectors(pvector):
 
 def test_transform_when_appending(pvector):
     from Aspidites._vendor.pyrsistent import m
+
     x = pvector([1, 2])
 
-    assert x.transform([2, 'd'], 999) == pvector([1, 2, m(d=999)])
+    assert x.transform([2, "d"], 999) == pvector([1, 2, m(d=999)])
 
 
 def test_transform_index_error_out_range(pvector):
@@ -447,7 +450,7 @@ def test_transform_index_error_wrong_type(pvector):
     x = pvector([1, 2, pvector([3, 4]), 5])
 
     with pytest.raises(TypeError):
-        x.transform([2, 'foo'], 999)
+        x.transform([2, "foo"], 999)
 
 
 def test_transform_non_setable_type(pvector):
@@ -507,7 +510,7 @@ def test_pickling_empty_vector(pvector):
 
 
 def test_pickling_non_empty_vector(pvector):
-    assert pickle.loads(pickle.dumps(pvector([1, 'a']), -1)) == pvector([1, 'a'])
+    assert pickle.loads(pickle.dumps(pvector([1, "a"]), -1)) == pvector([1, "a"])
 
 
 def test_mset_basic_assignments(pvector):
@@ -570,6 +573,7 @@ def test_evolver_set_out_of_range(pvector):
         e[10] = 1
     assert str(error.value) == "Index out of range: 10"
 
+
 def test_evolver_multi_level_multi_update_in_tree(pvector):
     # This test is mostly to detect memory/ref count issues in the native implementation
     v = pvector(range(3500))
@@ -597,6 +601,7 @@ def test_evolver_multi_level_multi_update_in_tree(pvector):
 
     # Run a GC to provoke any potential misbehavior
     import gc
+
     gc.collect()
 
     v2 = e.persistent()
@@ -676,14 +681,14 @@ def test_evolver_non_integral_access(pvector):
     e = pvector([1]).evolver()
 
     with pytest.raises(TypeError):
-        x = e['foo']
+        x = e["foo"]
 
 
 def test_evolver_non_integral_assignment(pvector):
     e = pvector([1]).evolver()
 
     with pytest.raises(TypeError):
-        e['foo'] = 1
+        e["foo"] = 1
 
 
 def test_evolver_out_of_bounds_access(pvector):
@@ -791,7 +796,9 @@ def test_evolver_with_no_updates_returns_same_pvector(pvector):
 def test_evolver_returns_itself_on_evolving_operations(pvector):
     # Does this to be able to chain operations
     v = pvector([1, 2])
-    assert v.evolver().append(3).extend([4, 5]).set(1, 6).persistent() == pvector([1, 6, 3, 4, 5])
+    assert v.evolver().append(3).extend([4, 5]).set(1, 6).persistent() == pvector(
+        [1, 6, 3, 4, 5]
+    )
 
 
 def test_evolver_delete_by_index(pvector):
@@ -880,21 +887,24 @@ def test_compare_with_non_iterable(pvector):
     assert not (pvector([1, 2, 3]) == 5)
 
 
-@pytest.mark.skip('currently fails in source mode')
+@pytest.mark.skip("currently fails in source mode")
 def test_python_no_c_extension_with_environment_variable():
     from importlib import reload as reload_module
     import Aspidites._vendor.pyrsistent._pvector
     import Aspidites._vendor.pyrsistent
     import os
 
-    os.environ['PYRSISTENT_NO_C_EXTENSION'] = 'TRUE'
+    os.environ["PYRSISTENT_NO_C_EXTENSION"] = "TRUE"
 
     reload_module(Aspidites._vendor.pyrsistent._pvector)
     reload_module(Aspidites._vendor.pyrsistent)
 
-    assert repr(type(Aspidites._vendor.pyrsistent.pvector())) == "<class 'Aspidites._vendor.pyrsistent._pvector.PythonPVector'>"
+    assert (
+        repr(type(Aspidites._vendor.pyrsistent.pvector()))
+        == "<class 'Aspidites._vendor.pyrsistent._pvector.PythonPVector'>"
+    )
 
-    del os.environ['PYRSISTENT_NO_C_EXTENSION']
+    del os.environ["PYRSISTENT_NO_C_EXTENSION"]
 
     reload_module(Aspidites._vendor.pyrsistent._pvector)
     reload_module(Aspidites._vendor.pyrsistent)
@@ -902,15 +912,18 @@ def test_python_no_c_extension_with_environment_variable():
 
 def test_supports_weakref(pvector):
     import weakref
+
     weakref.ref(pvector())
+
 
 def test_get_evolver_referents(pvector):
     """The C implementation of the evolver should expose the original PVector
     to the gc only once.
     """
-    if pvector.__module__ == 'pyrsistent._pvector':
+    if pvector.__module__ == "pyrsistent._pvector":
         pytest.skip("This test only applies to pvectorc")
     import gc
+
     v = pvector([1, 2, 3])
     e = v.evolver()
     assert len([x for x in gc.get_referents(e) if x is v]) == 1
@@ -920,7 +933,7 @@ def test_failing_repr(pvector):
     # See https://github.com/tobgu/pyrsistent/issues/84
     class A(object):
         def __repr__(self):
-            raise ValueError('oh no!')
+            raise ValueError("oh no!")
 
     with pytest.raises(ValueError):
         repr(pvector([A()]))

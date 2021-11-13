@@ -1,7 +1,11 @@
 import unittest
 
-from Aspidites._vendor.contracts import (decorate, contract,
-                                         ContractException, ContractNotRespected)
+from Aspidites._vendor.contracts import (
+    decorate,
+    contract,
+    ContractException,
+    ContractNotRespected,
+)
 
 from Aspidites._vendor.contracts.interface import MissingContract
 
@@ -30,7 +34,7 @@ def assertRaises(etype):
     except etype:
         pass
     else:
-        raise Exception('Expected %s' % etype.__name__)
+        raise Exception("Expected %s" % etype.__name__)
 
 
 @decorator
@@ -50,8 +54,8 @@ class CoroutineTestCase(unittest.TestCase):
             return x
 
         self.assertTrue(inspect.iscoroutinefunction(coro))
-        out = get_event_loop().run_until_complete(coro('x'))
-        self.assertEqual(out, '<before>x<after>')
+        out = get_event_loop().run_until_complete(coro("x"))
+        self.assertEqual(out, "<before>x<after>")
 
     def test_coro_to_func(self):
         @coro_to_func
@@ -59,7 +63,7 @@ class CoroutineTestCase(unittest.TestCase):
             return x
 
         self.assertFalse(inspect.iscoroutinefunction(coro))
-        self.assertEqual(coro('x'), 'x')
+        self.assertEqual(coro("x"), "x")
 
 
 def gen123():
@@ -209,7 +213,7 @@ class GeneratorCallerTestCase(unittest.TestCase):
 
 # ################### test dispatch_on ############################# #
 # adapted from test_functools in Python 3.5
-singledispatch = dispatch_on('obj')
+singledispatch = dispatch_on("obj")
 
 
 class TestSingleDispatch(unittest.TestCase):
@@ -536,13 +540,12 @@ class TestSingleDispatch(unittest.TestCase):
 
 
 class DecoratorTests(unittest.TestCase):
-
     def test_malformed(self):
         def f():
             """
-                Wrong syntax
+            Wrong syntax
 
-                :rtype okok
+            :rtype okok
             """
             pass
 
@@ -551,16 +554,16 @@ class DecoratorTests(unittest.TestCase):
     def test_malformed2(self):
         def f():
             """
-                Wrong syntax
+            Wrong syntax
 
-                :rtype: okok
+            :rtype: okok
             """
             pass
 
         self.assertRaises(ContractException, decorate, f)
 
     def test_not_specified1(self):
-        """ No docstring specified """
+        """No docstring specified"""
 
         def f():
             pass
@@ -569,7 +572,7 @@ class DecoratorTests(unittest.TestCase):
 
     def test_not_specified2(self):
         def f():
-            """ No types specified in the docstring """
+            """No types specified in the docstring"""
             pass
 
         self.assertRaises(ContractException, decorate, f)
@@ -577,9 +580,9 @@ class DecoratorTests(unittest.TestCase):
     def test_too_many(self):
         def f():
             """
-                Too many rtype clauses.
-                :rtype: int
-                :rtype: int
+            Too many rtype clauses.
+            :rtype: int
+            :rtype: int
             """
             pass
 
@@ -587,9 +590,9 @@ class DecoratorTests(unittest.TestCase):
 
     def test_invalid1(self):
         def f(a):
-            """ Unknown b.
-                :type a: int
-                :type b: int
+            """Unknown b.
+            :type a: int
+            :type b: int
             """
             pass
 
@@ -597,9 +600,9 @@ class DecoratorTests(unittest.TestCase):
 
     def test_parse_error1(self):
         def f(a, b):
-            """ Same with optional
-                :type a: in
-                :type b: int
+            """Same with optional
+            :type a: in
+            :type b: int
             """
             pass
 
@@ -607,36 +610,36 @@ class DecoratorTests(unittest.TestCase):
 
     def test_parse_error2(self):
         def f(a, b):
-            """ Same with optional
-                :type a: int
-                :type b: int
-                :rtype: in
+            """Same with optional
+            :type a: int
+            :type b: int
+            :rtype: in
             """
             pass
 
         self.assertRaises(ContractException, decorate, f)
 
     def not_supported1(self):
-        """ Support of *args """
+        """Support of *args"""
 
         def f(a, *b):  # @UnusedVariable
             """
-                :type a: int
-                :type b: tuple(int)
-                :rtype: int
+            :type a: int
+            :type b: tuple(int)
+            :rtype: int
             """
             pass
 
             decorate(f)
 
     def not_supported2(self):
-        """ Support of **args """
+        """Support of **args"""
 
         def f(a, **b):
             """
-                :type a: int
-                :type b: dict(int:int)
-                :rtype: int
+            :type a: int
+            :type b: dict(int:int)
+            :rtype: int
             """
             pass
 
@@ -645,31 +648,31 @@ class DecoratorTests(unittest.TestCase):
     def test_ok1(self):
         @contract
         def f(a, b):
-            """ This is good
-                :type a: int
-                :type b: int
-                :rtype: int
+            """This is good
+            :type a: int
+            :type b: int
+            :rtype: int
             """
             pass
 
     def test_ok3(self):
-        """ Trying the quoting thing. """
+        """Trying the quoting thing."""
 
         @contract
         def f(a, b):
-            """ This is good
-                :type a: ``int``
-                :type b: ``int``
-                :rtype: ``int``
+            """This is good
+            :type a: ``int``
+            :type b: ``int``
+            :rtype: ``int``
             """
             pass
 
     def test_bad_quoting(self):
         def f(a, b):
             """
-                :type a: ``int``
-                :type b: ``int``
-                :rtype: ``int`
+            :type a: ``int``
+            :type b: ``int``
+            :rtype: ``int`
             """
             pass
 
@@ -678,16 +681,16 @@ class DecoratorTests(unittest.TestCase):
     def test_bad_quoting2(self):
         def f(a, b):
             """
-                :type a: ``int``
-                :type b: `int``
-                :rtype: ``int``
+            :type a: ``int``
+            :type b: `int``
+            :rtype: ``int``
             """
             pass
 
         self.assertRaises(ContractException, decorate, f)
 
     def test_ok2(self):
-        @contract(a='int', returns='int')
+        @contract(a="int", returns="int")
         def f(a, b):
             pass
 
@@ -700,7 +703,7 @@ class DecoratorTests(unittest.TestCase):
         self.assertRaises(ContractException, f)
 
     def test_invalid_args2(self):
-        """ unknown parameter """
+        """unknown parameter"""
 
         def f():
             @contract(c=2)
@@ -710,14 +713,14 @@ class DecoratorTests(unittest.TestCase):
         self.assertRaises(ContractException, f)
 
     def test_check_it_works1(self):
-        @contract(a='int', b='int', returns='int')
+        @contract(a="int", b="int", returns="int")
         def f(a, b):  # @UnusedVariable
             return 2.0
 
         self.assertRaises(ContractNotRespected, f, 1, 2)
 
     def test_check_it_works2(self):
-        @contract(a='int', b='int', returns='int')
+        @contract(a="int", b="int", returns="int")
         def f(a, b):  # @UnusedVariable
             return a + b
 
@@ -726,9 +729,9 @@ class DecoratorTests(unittest.TestCase):
         self.assertRaises(ContractNotRespected, f, 1, 2.0)
 
     def test_check_it_works2b(self):
-        """ Nothing for b """
+        """Nothing for b"""
 
-        @contract(a='int', returns='int')
+        @contract(a="int", returns="int")
         def f(a, b):  # @UnusedVariable
             return int(a + b)
 
@@ -736,12 +739,12 @@ class DecoratorTests(unittest.TestCase):
         f(1, 2.0)
 
     def test_check_it_works2c(self):
-        """ Nothing for b """
+        """Nothing for b"""
 
         def f1(a, b):  # @UnusedVariable
             return int(a + b)
 
-        f = decorate(f1, a='int', returns='int')
+        f = decorate(f1, a="int", returns="int")
 
         f(1, 2)
         f(1, 2.0)
@@ -759,10 +762,10 @@ class DecoratorTests(unittest.TestCase):
     def test_check_it_works3(self):
         @contract
         def f(a, b):
-            """ This is good
-                :type a: int
-                :type b: int
-                :rtype: int
+            """This is good
+            :type a: int
+            :type b: int
+            :rtype: int
             """
             return a + b
 
@@ -773,10 +776,10 @@ class DecoratorTests(unittest.TestCase):
     def test_inline_docstring_format_works(self):
         @contract
         def f(a, b):
-            """ This is good
-                :param int,>0 a: Description
-                :param int,>0 b: Description
-                :returns int,>0: Description
+            """This is good
+            :param int,>0 a: Description
+            :param int,>0 b: Description
+            :returns int,>0: Description
             """
             return a + b
 
@@ -786,10 +789,10 @@ class DecoratorTests(unittest.TestCase):
 
     def test_check_docstring_maintained(self):
         def f1(a, b):
-            """ This is good
-                :type a: int
-                :type b: int
-                :rtype: int
+            """This is good
+            :type a: int
+            :type b: int
+            :rtype: int
             """
             return a + b
 
@@ -801,7 +804,7 @@ class DecoratorTests(unittest.TestCase):
         self.assertEqual(f1.__name__, f1_dec.__name__)
         self.assertEqual(f1.__module__, f1_dec.__module__)
 
-        f2_dec = decorate(f2, string='str')
+        f2_dec = decorate(f2, string="str")
         self.assertNotEqual(f2.__doc__, f2_dec.__doc__)
         self.assertEqual(f2.__name__, f2_dec.__name__)
         self.assertEqual(f2.__module__, f2_dec.__module__)
@@ -809,32 +812,32 @@ class DecoratorTests(unittest.TestCase):
         f1_dec_p = decorate(f1, modify_docstring=False)
         self.assertEqual(f1_dec_p.__doc__, f1.__doc__)
 
-        f2_dec_p = decorate(f2, modify_docstring=False, string='str')
+        f2_dec_p = decorate(f2, modify_docstring=False, string="str")
         self.assertEqual(f2.__doc__, f2_dec_p.__doc__)
 
         @contract
         def f1b(a, b):
-            """ This is good
-                :type a: int
-                :type b: int
-                :rtype: int
+            """This is good
+            :type a: int
+            :type b: int
+            :rtype: int
             """
             return a + b
 
-        @contract(string='str')
+        @contract(string="str")
         def f2b(string):
             pass
 
         @contract(modify_docstring=False)
         def f1b_p(a, b):
-            """ This is good
-                :type a: int
-                :type b: int
-                :rtype: int
+            """This is good
+            :type a: int
+            :type b: int
+            :rtype: int
             """
             return a + b
 
-        @contract(modify_docstring=False, string='str')
+        @contract(modify_docstring=False, string="str")
         def f2b_p(string):
             pass
 
@@ -845,10 +848,10 @@ class DecoratorTests(unittest.TestCase):
 
     def test_kwargs(self):
         def f(a, b, c=7):  # @UnusedVariable
-            """ Same with optional
-                :type a: int
-                :type b: int
-                :type c: int
+            """Same with optional
+            :type a: int
+            :type b: int
+            :type c: int
             """
             if c != b:
                 raise Exception()
@@ -861,10 +864,10 @@ class DecoratorTests(unittest.TestCase):
 
     def test_varargs(self):
         def f(a, b, *c):
-            """ Same with optional
-                :type a: int
-                :type b: int
-                :type c: tuple
+            """Same with optional
+            :type a: int
+            :type b: int
+            :type c: tuple
             """
             assert c == (a, b)
 
@@ -873,13 +876,13 @@ class DecoratorTests(unittest.TestCase):
 
     def test_keywords(self):
         def f(A, B, **c):
-            """ Same with optional
-                :type A: int
-                :type B: int
-                :type c: dict
+            """Same with optional
+            :type A: int
+            :type B: int
+            :type c: dict
             """
-            assert c['a'] == A
-            assert c['b'] == B
+            assert c["a"] == A
+            assert c["b"] == B
 
         f2 = decorate(f)
         f(0, 7, a=0, b=7)
@@ -893,7 +896,7 @@ class DecoratorTests(unittest.TestCase):
         def f(a):
             return a
 
-        @contract(a='int')
+        @contract(a="int")
         def f2(a):
             return a
 

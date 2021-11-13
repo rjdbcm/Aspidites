@@ -33,30 +33,130 @@ from pathlib import Path
 from traceback import print_exc
 from typing import List, AnyStr, Union
 
-import pyximport; pyximport.install()
+import pyximport
+
+pyximport.install()
 from Cython.Compiler import Options
+
 # noinspection PyUnresolvedReferences
-from cython import declare as decl, address as addr, sizeof, typeof, struct, cfunc, ccall, nogil, no_gc, inline, union, \
-    typedef, cast, char, short, int as cint, bint, short, double, long, longdouble, longdoublecomplex, longlong, \
-    complex, float as cfloat
-from Aspidites._vendor.pyrsistent import pset as __pset, pmap as __pmap, pvector as __pvector, s, v, m
+from cython import (
+    declare as decl,
+    address as addr,
+    sizeof,
+    typeof,
+    struct,
+    cfunc,
+    ccall,
+    nogil,
+    no_gc,
+    inline,
+    union,
+    typedef,
+    cast,
+    char,
+    short,
+    int as cint,
+    bint,
+    short,
+    double,
+    long,
+    longdouble,
+    longdoublecomplex,
+    longlong,
+    complex,
+    float as cfloat,
+)
+from Aspidites._vendor.pyrsistent import (
+    pset as __pset,
+    pmap as __pmap,
+    pvector as __pvector,
+    s,
+    v,
+    m,
+)
 from Aspidites.woma import *
-from Aspidites._vendor import take, drop, takelast, droplast, consume, nth, first_true, iterate, padnone, ncycles, \
-    repeatfunc, grouper, group_by, roundrobin, partition, splitat, splitby, powerset, pairwise, iter_suppress, flatten, \
-    accumulate, reduce, filterfalse, zip_longest, call, apply, flip, curry, curried, zipwith, foldl, foldr, unfold, \
-    Capture, Strict, OneOf, AllOf, NoneOf, Not, Each, EachItem, Some, Between, Length, Contains, Regex, Check, \
-    InstanceOf, SubclassOf, Arguments, Returns, Transformed, At, Object, match as __match, _
+from Aspidites._vendor import (
+    take,
+    drop,
+    takelast,
+    droplast,
+    consume,
+    nth,
+    first_true,
+    iterate,
+    padnone,
+    ncycles,
+    repeatfunc,
+    grouper,
+    group_by,
+    roundrobin,
+    partition,
+    splitat,
+    splitby,
+    powerset,
+    pairwise,
+    iter_suppress,
+    flatten,
+    accumulate,
+    reduce,
+    filterfalse,
+    zip_longest,
+    call,
+    apply,
+    flip,
+    curry,
+    curried,
+    zipwith,
+    foldl,
+    foldr,
+    unfold,
+    Capture,
+    Strict,
+    OneOf,
+    AllOf,
+    NoneOf,
+    Not,
+    Each,
+    EachItem,
+    Some,
+    Between,
+    Length,
+    Contains,
+    Regex,
+    Check,
+    InstanceOf,
+    SubclassOf,
+    Arguments,
+    Returns,
+    Transformed,
+    At,
+    Object,
+    match as __match,
+    _,
+)
 from Aspidites.monads import Maybe as __maybe, Surely as __surely
-from Aspidites.math import Undefined as __undefined, SafeDiv as __safeDiv, SafeExp as __safeExp, SafeMod as __safeMod, \
-    SafeFloorDiv as __safeFloorDiv, SafeUnaryAdd as __safeUnaryAdd, SafeUnarySub as __safeUnarySub, \
-    SafeFactorial as __safeFactorial
-from Aspidites._vendor.contracts import contract as __contract, new_contract as __new_contract
+from Aspidites.math import (
+    Undefined as __undefined,
+    SafeDiv as __safeDiv,
+    SafeExp as __safeExp,
+    SafeMod as __safeMod,
+    SafeFloorDiv as __safeFloorDiv,
+    SafeUnaryAdd as __safeUnaryAdd,
+    SafeUnarySub as __safeUnarySub,
+    SafeFactorial as __safeFactorial,
+)
+from Aspidites._vendor.contracts import (
+    contract as __contract,
+    new_contract as __new_contract,
+)
 from Aspidites._vendor.contracts.library.extensions import Extension
 from Aspidites._vendor.RestrictedPython import safe_builtins as __safe_builtins
 
 from Aspidites._vendor.pyparsing import ParseException, ParseResults
+
 # noinspection PyUnresolvedReferences
 from cmath import inf
+
 # noinspection PyUnresolvedReferences
 import Aspidites.parser.parser
 from Aspidites.compiler import Compiler, CompilerArgs
@@ -66,10 +166,10 @@ try:
     import readline
 except ImportError:
     readline = None
-histfile = Path('~/.woma_shell_history').expanduser()
+histfile = Path("~/.woma_shell_history").expanduser()
 histfile_size = 1000
-START_PROMPT = '>>> '
-CONTINUE_PROMPT = '... '
+START_PROMPT = ">>> "
+CONTINUE_PROMPT = "... "
 
 
 class Spinner:  # pragma: no cover
@@ -77,16 +177,17 @@ class Spinner:  # pragma: no cover
     delay = 0.25
 
     def __init__(self, delay=None, stdout=sys.stdout):
-        self.spinner_generator = (i for i in cycle('|/-\\'))
+        self.spinner_generator = (i for i in cycle("|/-\\"))
         self.stdout = stdout
-        if delay and float(delay): self.delay = delay
+        if delay and float(delay):
+            self.delay = delay
 
     def spinner_task(self):
         while self.busy:
             self.stdout.write(next(self.spinner_generator))
             self.stdout.flush()
             time.sleep(self.delay)
-            self.stdout.write('\b')
+            self.stdout.write("\b")
             self.stdout.flush()
 
     def __enter__(self):
@@ -100,7 +201,7 @@ class Spinner:  # pragma: no cover
             return False
 
 
-single_arg_help = re.compile(r'(?:help[\(])(\w+)(?:[\)])')
+single_arg_help = re.compile(r"(?:help[\(])(\w+)(?:[\)])")
 
 cy_opt = v(
     "annotate",
@@ -122,9 +223,8 @@ cy_opt = v(
     "lookup_module_cpdef",
     "embed",
 )
-cy_kwargs = dict(
-    zip(cy_opt,
-        map(lambda x: getattr(Options, x), cy_opt)))
+cy_kwargs = dict(zip(cy_opt, map(lambda x: getattr(Options, x), cy_opt)))
+
 
 class Help:
     doc_leader = ""
@@ -148,10 +248,10 @@ class Help:
     def __call__(self, arg):
         if arg:
             try:
-                func = getattr(self.parent, 'help_' + arg)
+                func = getattr(self.parent, "help_" + arg)
             except AttributeError:
                 try:
-                    doc = getattr(self.parent, 'do_' + arg).__doc__
+                    doc = getattr(self.parent, "do_" + arg).__doc__
                     if doc:
                         self.stdout.write("%s\n" % str(doc))
                         return
@@ -163,7 +263,7 @@ class Help:
         else:
             self.help = {}
             for name in self.names:
-                if name[:5] == 'help_':
+                if name[:5] == "help_":
                     self.help[name[5:]] = 1
             self.names.sort()
             # There can be duplicates if routines overridden
@@ -174,9 +274,9 @@ class Help:
         self.print_topics(self.undoc_header, self.cmds_undoc, 15, 80)
 
     def handle_names(self):
-        prevname = ''
+        prevname = ""
         for name in self.names:
-            if name[:3] == 'do_':
+            if name[:3] == "do_":
                 if name == prevname:
                     continue
                 prevname = name
@@ -207,14 +307,14 @@ class Help:
             self.stdout.write("<empty>\n")
             return
 
-        nonstrings = [i for i in range(len(list))
-                      if not isinstance(list[i], str)]
+        nonstrings = [i for i in range(len(list)) if not isinstance(list[i], str)]
         if nonstrings:
-            raise TypeError("list[i] not a string for i in %s"
-                            % ", ".join(map(str, nonstrings)))
+            raise TypeError(
+                "list[i] not a string for i in %s" % ", ".join(map(str, nonstrings))
+            )
         size = len(list)
         if size == 1:
-            self.stdout.write(' %s\n' % str(list[0]))
+            self.stdout.write(" %s\n" % str(list[0]))
             return
         # Try every row count from 1 upwards
         for nrows in range(1, len(list)):
@@ -256,8 +356,10 @@ class Help:
 
 
 class ReadEvalParse:  # pragma: no cover
-    intro = "Welcome to the Woma Interactive Shell. Use the 'help()' or '?' command to see a list of commands.\nThis is experimental and mainly aims to help developers to sandbox " \
-            "Woma without compilation."
+    intro = (
+        "Welcome to the Woma Interactive Shell. Use the 'help()' or '?' command to see a list of commands.\nThis is experimental and mainly aims to help developers to sandbox "
+        "Woma without compilation."
+    )
     _globals = globals().copy()
 
     def __init__(self, stdout=None):
@@ -266,22 +368,22 @@ class ReadEvalParse:  # pragma: no cover
         else:
             self.stdout = sys.stdout
         self.warn = lambda x: sys.stderr.write(x) and sys.stderr.flush()
-        self.tmpdir = pathlib.Path('tmp')
+        self.tmpdir = pathlib.Path("tmp")
         self.__locals__ = dict(locals(), **globals())
 
     def input(self):
         self.stdout.flush()
 
         line = input(START_PROMPT)
-        if '))' in line and line.endswith(tuple(Extension.registrar.keys()) + ('*',)):
-            line += '\n    '
+        if "))" in line and line.endswith(tuple(Extension.registrar.keys()) + ("*",)):
+            line += "\n    "
             while True:
                 line2 = input(CONTINUE_PROMPT)
-                if '(!)' in line2:
-                    line += line2 + '\n        '
+                if "(!)" in line2:
+                    line += line2 + "\n        "
                 else:
-                    line += line2 + '\n    '
-                if line.endswith('\n    \n    '):
+                    line += line2 + "\n    "
+                if line.endswith("\n    \n    "):
                     break
         return line
 
@@ -299,11 +401,11 @@ class ReadEvalParse:  # pragma: no cover
         try:
             self.stdout.write(str(text))
         except UnicodeEncodeError:
-            bytes = text.encode(sys.stdout.encoding, 'backslashreplace')
-            if hasattr(self.stdout, 'buffer'):
+            bytes = text.encode(sys.stdout.encoding, "backslashreplace")
+            if hasattr(self.stdout, "buffer"):
                 self.stdout.buffer.write(bytes)
             else:
-                text = bytes.decode(sys.stdout.encoding, 'strict')
+                text = bytes.decode(sys.stdout.encoding, "strict")
                 self.stdout.write(text)
         self.stdout.write("\n")
 
@@ -314,9 +416,17 @@ class ReadEvalParse:  # pragma: no cover
         # noinspection PyBroadException
         warnings.resetwarnings()
         try:
-            out = eval(compile(x, filename='<inline code>', mode='eval'), self.__locals__, self.__locals__)
+            out = eval(
+                compile(x, filename="<inline code>", mode="eval"),
+                self.__locals__,
+                self.__locals__,
+            )
         except Exception:
-            out = exec(compile(x, filename='<inline code>', mode='exec'), self.__locals__, self.__locals__)
+            out = exec(
+                compile(x, filename="<inline code>", mode="exec"),
+                self.__locals__,
+                self.__locals__,
+            )
             # if out is not None:
             #     print(out)
         self.displayhook(out)
@@ -333,8 +443,8 @@ class ReadEvalParse:  # pragma: no cover
             readline.write_history_file(histfile)
 
     def loop(self) -> None:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        self.stdout.write(self.intro + '\n')
+        os.system("cls" if os.name == "nt" else "clear")
+        self.stdout.write(self.intro + "\n")
         count = 0
         try:
             while True:
@@ -342,46 +452,64 @@ class ReadEvalParse:  # pragma: no cover
                 self.preloop()
                 try:
                     line = self.input()
-                    if line == '':
+                    if line == "":
                         continue
-                    if line == 'exit()':
+                    if line == "exit()":
                         raise SystemExit
-                    if self.find_token('?', line):
-                        self.do_help(line.lstrip('? '))
+                    if self.find_token("?", line):
+                        self.do_help(line.lstrip("? "))
                         continue
-                    if self.find_token('help ', line):
-                        self.do_help(line.split(' ')[1])
+                    if self.find_token("help ", line):
+                        self.do_help(line.split(" ")[1])
                         continue
                     if single_arg_help.match(line):
                         self.do_help(single_arg_help.search(line).group(1))
                         continue
-                    if hasattr(self, 'do_' + line):
-                        getattr(self, 'do_' + line)()
+                    if hasattr(self, "do_" + line):
+                        getattr(self, "do_" + line)()
                         continue
                     if str(line).isidentifier():
                         self.eval_exec(line)
                         continue
                     try:
-                            p = Aspidites.parser.parser.parse_module(line)
+                        p = Aspidites.parser.parser.parse_module(line)
                     except ParseException:
-                        self.warn(f'Warning: Failed to parse "{line}" as Woma.\n'
-                                  f'Remember that Woma does not allow literal evaluation, try assigning to a variable.\n'
-                                  f'Falling back to python with suppressed exceptions.\n')
+                        self.warn(
+                            f'Warning: Failed to parse "{line}" as Woma.\n'
+                            f"Remember that Woma does not allow literal evaluation, try assigning to a variable.\n"
+                            f"Falling back to python with suppressed exceptions.\n"
+                        )
                         with suppress(Exception):
                             self.eval_exec(line)
                         continue
                     else:
                         num = randint(1, 10000000000000000000)
-                        file = self.tmpdir / f'module{num}.pyx'
-                        args = CompilerArgs(fname=file, code=p, force=True, bytecode=False, c=False, build_requires='',
-                                            verbose=0, **cy_kwargs)
+                        file = self.tmpdir / f"module{num}.pyx"
+                        args = CompilerArgs(
+                            fname=file,
+                            code=p,
+                            force=True,
+                            bytecode=False,
+                            c=False,
+                            build_requires="",
+                            verbose=0,
+                            **cy_kwargs,
+                        )
                         with suppress(ResourceWarning):
                             Compiler(args)
                         with suppress(Exception):
                             try:
-                                module = __import__(f'tmp.module{num}', locals=globals(), fromlist=['*'])
-                                all_names = [name for name in dir(module) if not name.startswith('_')]
-                                self.__locals__.update({name: getattr(module, name) for name in all_names})
+                                module = __import__(
+                                    f"tmp.module{num}", locals=globals(), fromlist=["*"]
+                                )
+                                all_names = [
+                                    name
+                                    for name in dir(module)
+                                    if not name.startswith("_")
+                                ]
+                                self.__locals__.update(
+                                    {name: getattr(module, name) for name in all_names}
+                                )
                             except Exception:
                                 self.eval_exec(p)
                         continue
@@ -410,7 +538,7 @@ class ReadEvalParse:  # pragma: no cover
 
     def do_locals(self, arg=None):
         """Print local variables"""
-        hidden = ['self', 'stdout', 'ReadEvalParse', '__warningregistry__']
+        hidden = ["self", "stdout", "ReadEvalParse", "__warningregistry__"]
         visible = dict()
         for k, v in self.__locals__.items():
             if k in self._globals.keys() or k in hidden:
@@ -418,7 +546,7 @@ class ReadEvalParse:  # pragma: no cover
             else:
                 visible[k] = v
 
-        self.stdout.write(_format_locals(visible).decode('UTF-8'))
+        self.stdout.write(_format_locals(visible).decode("UTF-8"))
 
     def do_flush(self):
         """forcibly flush stdout"""

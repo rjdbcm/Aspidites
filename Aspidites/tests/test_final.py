@@ -14,6 +14,7 @@ class B:
 
 def test_final_classes():
     with pt.raises(ContractNotRespected):
+
         class C(A):
             pass
 

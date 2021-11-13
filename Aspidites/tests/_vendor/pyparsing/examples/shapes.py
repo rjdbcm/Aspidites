@@ -17,37 +17,45 @@ class Shape(object):
     def __str__(self):
         return "<{0}>: {1}".format(self.__class__.__name__, self.__dict__)
 
+
 class Square(Shape):
     def area(self):
-        return self.side**2
+        return self.side ** 2
+
 
 class Rectangle(Shape):
     def area(self):
         return self.width * self.height
 
+
 class Circle(Shape):
     def area(self):
-        return 3.14159 * self.radius**2
+        return 3.14159 * self.radius ** 2
 
 
 from pyparsing import *
 
-number = Regex(r'-?\d+(\.\d*)?').setParseAction(lambda t:float(t[0]))
+number = Regex(r"-?\d+(\.\d*)?").setParseAction(lambda t: float(t[0]))
 
 # Shape expressions:
 #   square : S <centerx> <centery> <side>
 #   rectangle: R <centerx> <centery> <width> <height>
 #   circle : C <centerx> <centery> <diameter>
 
-squareDefn = "S" + number('centerx') + number('centery') + number('side')
-rectDefn = "R" + number('centerx') + number('centery') + number('width') + number('height')
-circleDefn = "C" + number('centerx') + number('centery') + number('diameter')
+squareDefn = "S" + number("centerx") + number("centery") + number("side")
+rectDefn = (
+    "R" + number("centerx") + number("centery") + number("width") + number("height")
+)
+circleDefn = "C" + number("centerx") + number("centery") + number("diameter")
 
 squareDefn.setParseAction(Square)
 rectDefn.setParseAction(Rectangle)
 
+
 def computeRadius(tokens):
-    tokens['radius'] = tokens.diameter/2.0
+    tokens["radius"] = tokens.diameter / 2.0
+
+
 circleDefn.setParseAction(computeRadius, Circle)
 
 shapeExpr = squareDefn | rectDefn | circleDefn

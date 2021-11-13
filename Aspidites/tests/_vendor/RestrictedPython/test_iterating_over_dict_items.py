@@ -25,8 +25,8 @@ def test_iterate_over_dict_items_plain():
 
 def test_iterate_over_dict_items_safe():
     glb = safe_globals.copy()
-    glb['_getiter_'] = default_guarded_getiter
-    glb['_iter_unpack_sequence_'] = guarded_iter_unpack_sequence
+    glb["_getiter_"] = default_guarded_getiter
+    glb["_iter_unpack_sequence_"] = guarded_iter_unpack_sequence
     result = compile_restricted_exec(ITERATE_OVER_DICT_ITEMS)
     assert result.code is not None
     assert result.errors == ()

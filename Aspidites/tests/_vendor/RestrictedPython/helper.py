@@ -19,9 +19,9 @@ def _execute(code, glb, exc_func):
     """
     if glb is None:
         glb = {}
-    if '__builtins__' not in glb:
-        glb['__builtins__'] = safe_builtins.copy()
-    if exc_func == 'eval':
+    if "__builtins__" not in glb:
+        glb["__builtins__"] = safe_builtins.copy()
+    if exc_func == "eval":
         return eval(code, glb)
     else:
         exec(code, glb)
@@ -31,10 +31,10 @@ def _execute(code, glb, exc_func):
 def restricted_eval(source, glb=None):
     """Call compile_restricted_eval and actually eval it."""
     code = _compile(compile_restricted_eval, source)
-    return _execute(code, glb, 'eval')
+    return _execute(code, glb, "eval")
 
 
 def restricted_exec(source, glb=None):
     """Call compile_restricted_eval and actually exec it."""
     code = _compile(compile_restricted_exec, source)
-    return _execute(code, glb, 'exec')
+    return _execute(code, glb, "exec")

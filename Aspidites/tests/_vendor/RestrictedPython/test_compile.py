@@ -15,21 +15,21 @@ import types
 
 def test_compile__compile_restricted_invalid_code_input():
     with pytest.raises(TypeError):
-        compile_restricted(object(), '<string>', 'exec')
+        compile_restricted(object(), "<string>", "exec")
     with pytest.raises(TypeError):
-        compile_restricted(object(), '<string>', 'eval')
+        compile_restricted(object(), "<string>", "eval")
     with pytest.raises(TypeError):
-        compile_restricted(object(), '<string>', 'single')
+        compile_restricted(object(), "<string>", "single")
 
 
 def test_compile__compile_restricted_invalid_policy_input():
     with pytest.raises(TypeError):
-        compile_restricted("pass", '<string>', 'exec', policy=object)
+        compile_restricted("pass", "<string>", "exec", policy=object)
 
 
 def test_compile__compile_restricted_invalid_mode_input():
     with pytest.raises(TypeError):
-        compile_restricted("pass", '<string>', 'invalid')
+        compile_restricted("pass", "<string>", "invalid")
 
 
 INVALID_ASSINGMENT = """
@@ -39,7 +39,7 @@ INVALID_ASSINGMENT = """
 
 def test_compile__invalid_syntax():
     with pytest.raises(SyntaxError) as err:
-        compile_restricted(INVALID_ASSINGMENT, '<string>', 'exec')
+        compile_restricted(INVALID_ASSINGMENT, "<string>", "exec")
     if IS_PY3A_OR_GREATER:
         assert "cannot assign to literal here." in str(err.value)
     elif IS_PY38_OR_GREATER:
@@ -50,25 +50,25 @@ def test_compile__invalid_syntax():
 
 def test_compile__compile_restricted_exec__1():
     """It returns a CompileResult on success."""
-    result = compile_restricted_exec('a = 42')
+    result = compile_restricted_exec("a = 42")
     assert result.__class__ == CompileResult
     assert result.errors == ()
     assert result.warnings == []
     assert result.used_names == {}
     glob = {}
     exec(result.code, glob)
-    assert glob['a'] == 42
+    assert glob["a"] == 42
 
 
 def test_compile__compile_restricted_exec__2():
     """It compiles without restrictions if there is no policy."""
-    result = compile_restricted_exec('_a = 42', policy=None)
+    result = compile_restricted_exec("_a = 42", policy=None)
     assert result.errors == ()
     assert result.warnings == []
     assert result.used_names == {}
     glob = {}
     exec(result.code, glob)
-    assert glob['_a'] == 42
+    assert glob["_a"] == 42
 
 
 def test_compile__compile_restricted_exec__3():
@@ -76,10 +76,11 @@ def test_compile__compile_restricted_exec__3():
 
     There is no code in this case.
     """
-    result = compile_restricted_exec('_a = 42\n_b = 43')
+    result = compile_restricted_exec("_a = 42\n_b = 43")
     errors = (
         'Line 1: "_a" is an invalid variable name because it starts with "_"',
-        'Line 2: "_b" is an invalid variable name because it starts with "_"')
+        'Line 2: "_b" is an invalid variable name because it starts with "_"',
+    )
     assert result.errors == errors
     assert result.warnings == []
     assert result.used_names == {}
@@ -88,26 +89,25 @@ def test_compile__compile_restricted_exec__3():
 
 def test_compile__compile_restricted_exec__4():
     """It does not return code on a SyntaxError."""
-    result = compile_restricted_exec('asdf|')
+    result = compile_restricted_exec("asdf|")
     assert result.code is None
     assert result.warnings == []
     assert result.used_names == {}
     assert result.errors == (
-        "Line 1: SyntaxError: invalid syntax at statement: 'asdf|'",)
+        "Line 1: SyntaxError: invalid syntax at statement: 'asdf|'",
+    )
 
 
 def test_compile__compile_restricted_exec__5():
     """It does not return code if the code contains a NULL byte."""
-    result = compile_restricted_exec('a = 5\x00')
+    result = compile_restricted_exec("a = 5\x00")
     assert result.code is None
     assert result.warnings == []
     assert result.used_names == {}
     if IS_PY2:  # pragma: no cover
-        assert result.errors == (
-            'compile() expected string without null bytes',)
+        assert result.errors == ("compile() expected string without null bytes",)
     else:  # pragma: PY3
-        assert result.errors == (
-            'source code string cannot contain null bytes',)
+        assert result.errors == ("source code string cannot contain null bytes",)
 
 
 EXEC_STATEMENT = """\
@@ -118,15 +118,19 @@ def no_exec():
 
 @pytest.mark.skipif(
     IS_PY2,
-    reason="exec statement in Python 2 is handled by Aspidites._vendor.RestrictedPython ")
+    reason="exec statement in Python 2 is handled by Aspidites._vendor.RestrictedPython ",
+)
 def test_compile__compile_restricted_exec__10():  # pragma: PY3
     """It is a SyntaxError to use the `exec` statement. (Python 3 only)"""
     result = compile_restricted_exec(EXEC_STATEMENT)
     if IS_PY3A_OR_GREATER:
-        assert ('Line 2: SyntaxError: Missing parentheses in call to \'exec\'. Did you mean exec(...)? at statement: "exec \'q = 1\'"',) == result.errors
+        assert (
+            "Line 2: SyntaxError: Missing parentheses in call to 'exec'. Did you mean exec(...)? at statement: \"exec 'q = 1'\"",
+        ) == result.errors
     else:
         assert (
-         'Line 2: SyntaxError: Missing parentheses in call to \'exec\' at statement: "exec \'q = 1\'"',) == result.errors
+            "Line 2: SyntaxError: Missing parentheses in call to 'exec' at statement: \"exec 'q = 1'\"",
+        ) == result.errors
 
 
 FUNCTION_DEF = """\
@@ -142,28 +146,27 @@ def test_compile__compile_restricted_eval__1():
     """
     result = compile_restricted_eval(FUNCTION_DEF)
     assert result.errors == (
-        "Line 1: SyntaxError: invalid syntax at statement: 'def a():'",)
+        "Line 1: SyntaxError: invalid syntax at statement: 'def a():'",
+    )
 
 
 def test_compile__compile_restricted_eval__2():
     """It compiles code as an Expression."""
-    assert restricted_eval('4 * 6') == 24
+    assert restricted_eval("4 * 6") == 24
 
 
 def test_compile__compile_restricted_eval__used_names():
     result = compile_restricted_eval("a + b + func(x)")
     assert result.errors == ()
     assert result.warnings == []
-    assert result.used_names == {'a': True, 'b': True, 'x': True, 'func': True}
+    assert result.used_names == {"a": True, "b": True, "x": True, "func": True}
 
 
 def test_compile__compile_restricted_csingle():
     """It compiles code as an Interactive."""
-    result = compile_restricted_single('4 * 6')
+    result = compile_restricted_single("4 * 6")
     assert result.code is None
-    assert result.errors == (
-        'Line None: Interactive statements are not allowed.',
-    )
+    assert result.errors == ("Line None: Interactive statements are not allowed.",)
 
 
 PRINT_EXAMPLE = """
@@ -175,20 +178,23 @@ def a():
 @pytest.mark.skipif(
     IS_PY3,
     reason="Print statement is gone in Python 3."
-           "Test Deprecation Warming in Python 2")
+    "Test Deprecation Warming in Python 2",
+)
 def test_compile_restricted():  # pragma: no cover
     """This test checks compile_restricted itself if that emit Python warnings.
     For actual tests for print statement see: test_print_stmt.py
     """
     with pytest.warns(SyntaxWarning) as record:
-        result = compile_restricted(PRINT_EXAMPLE, '<string>', 'exec')
+        result = compile_restricted(PRINT_EXAMPLE, "<string>", "exec")
         assert isinstance(result, types.CodeType)
         # Non-CPython versions have a RuntimeWarning, too.
         if len(record) > 2:  # pragma: no cover
             record.pop()
         assert len(record) == 1
-        assert record[0].message.args[0] == \
-            "Line 2: Prints, but never reads 'printed' variable."
+        assert (
+            record[0].message.args[0]
+            == "Line 2: Prints, but never reads 'printed' variable."
+        )
 
 
 EVAL_EXAMPLE = """
@@ -198,39 +204,38 @@ def a():
 
 
 def test_compile_restricted_eval():
-    """This test checks compile_restricted itself if that raise Python errors.
-    """
-    with pytest.raises(SyntaxError,
-                       match="Line 3: Eval calls are not allowed."):
-        compile_restricted(EVAL_EXAMPLE, '<string>', 'exec')
+    """This test checks compile_restricted itself if that raise Python errors."""
+    with pytest.raises(SyntaxError, match="Line 3: Eval calls are not allowed."):
+        compile_restricted(EVAL_EXAMPLE, "<string>", "exec")
 
 
 def test_compile___compile_restricted_mode__1(recwarn, mocker):
     """It warns when using another Python implementation than CPython."""
-    if platform.python_implementation() == 'CPython':  # pragma: no cover
+    if platform.python_implementation() == "CPython":  # pragma: no cover
         # Using CPython we have to fake the check:
-        mocker.patch('Aspidites._vendor.RestrictedPython.compile.IS_CPYTHON', new=False)
+        mocker.patch("Aspidites._vendor.RestrictedPython.compile.IS_CPYTHON", new=False)
     with pytest.warns(RuntimeWarning) as record:
-        compile_restricted('42')
+        compile_restricted("42")
     assert len(record) == 1
     w = record.pop()
     assert w.category == RuntimeWarning
     assert str(w.message) == str(
-        'RestrictedPython is only supported on CPython: use on other Python '
-        'implementations may create security issues.'
+        "RestrictedPython is only supported on CPython: use on other Python "
+        "implementations may create security issues."
     )
 
 
 @pytest.mark.skipif(
-    platform.python_implementation() == 'CPython',
-    reason='Warning only present if not CPython.')
+    platform.python_implementation() == "CPython",
+    reason="Warning only present if not CPython.",
+)
 def test_compile_CPython_warning(recwarn, mocker):  # pragma: no cover
     """It warns when using another Python implementation than CPython."""
-    assert platform.python_implementation() != 'CPython'
+    assert platform.python_implementation() != "CPython"
     with pytest.warns(RuntimeWarning) as record:
-        compile_restricted('42')
+        compile_restricted("42")
     assert len(record) == 1
     assert str(record[0].message) == str(
-        'RestrictedPython is only supported on CPython: use on other Python '
-        'implementations may create security issues.'
+        "RestrictedPython is only supported on CPython: use on other Python "
+        "implementations may create security issues."
     )

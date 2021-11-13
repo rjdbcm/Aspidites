@@ -13,5 +13,5 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-__all__ = ['parse_module', 'parse_statement']
+__all__ = ["parse_module", "parse_statement"]
 from .parser import parse_module, parse_statement

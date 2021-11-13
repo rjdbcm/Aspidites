@@ -7,8 +7,9 @@ from Aspidites.tests._vendor.RestrictedPython.helper import restricted_exec
 import pytest
 
 
-functiondef_err_msg = 'Line 1: "_bad" is an invalid variable ' \
-                      'name because it starts with "_"'
+functiondef_err_msg = (
+    'Line 1: "_bad" is an invalid variable ' 'name because it starts with "_"'
+)
 
 
 def test_RestrictingNodeTransformer__visit_FunctionDef__1():
@@ -41,9 +42,7 @@ def test_RestrictingNodeTransformer__visit_FunctionDef__4():
     assert result.errors == (functiondef_err_msg,)
 
 
-@pytest.mark.skipif(
-    IS_PY3,
-    reason="tuple parameter unpacking is gone in Python 3")
+@pytest.mark.skipif(IS_PY3, reason="tuple parameter unpacking is gone in Python 3")
 def test_RestrictingNodeTransformer__visit_FunctionDef__5():  # pragma: no cover
     """It prevents function arguments starting with `_` in tuples."""
     result = compile_restricted_exec("def foo((a, _bad)): pass")
@@ -53,9 +52,7 @@ def test_RestrictingNodeTransformer__visit_FunctionDef__5():  # pragma: no cover
     assert functiondef_err_msg in result.errors
 
 
-@pytest.mark.skipif(
-    IS_PY3,
-    reason="tuple parameter unpacking is gone in Python 3")
+@pytest.mark.skipif(IS_PY3, reason="tuple parameter unpacking is gone in Python 3")
 def test_RestrictingNodeTransformer__visit_FunctionDef__6():  # pragma: no cover
     """It prevents function arguments starting with `_` in tuples."""
     result = compile_restricted_exec("def foo(a, (c, (_bad, c))): pass")
@@ -65,9 +62,7 @@ def test_RestrictingNodeTransformer__visit_FunctionDef__6():  # pragma: no cover
     assert functiondef_err_msg in result.errors
 
 
-@pytest.mark.skipif(
-    IS_PY2,
-    reason="There is no single `*` argument in Python 2")
+@pytest.mark.skipif(IS_PY2, reason="There is no single `*` argument in Python 2")
 def test_RestrictingNodeTransformer__visit_FunctionDef__7():  # pragma: PY3
     """It prevents `_` function arguments together with a single `*`."""
     result = compile_restricted_exec("def foo(good, *, _bad): pass")
@@ -83,23 +78,17 @@ def nested_with_order((a, b), (c, d)):
 """
 
 
-@pytest.mark.skipif(
-    IS_PY3,
-    reason="tuple parameter unpacking is gone in python 3")
-def test_RestrictingNodeTransformer__visit_FunctionDef__8(
-        mocker):  # pragma: no cover
+@pytest.mark.skipif(IS_PY3, reason="tuple parameter unpacking is gone in python 3")
+def test_RestrictingNodeTransformer__visit_FunctionDef__8(mocker):  # pragma: no cover
     _getiter_ = mocker.stub()
     _getiter_.side_effect = lambda it: it
 
-    glb = {
-        '_getiter_': _getiter_,
-        '_unpack_sequence_': guarded_unpack_sequence
-    }
+    glb = {"_getiter_": _getiter_, "_unpack_sequence_": guarded_unpack_sequence}
 
-    restricted_exec('def simple((a, b)): return a, b', glb)
+    restricted_exec("def simple((a, b)): return a, b", glb)
 
     val = (1, 2)
-    ret = glb['simple'](val)
+    ret = glb["simple"](val)
     assert ret == val
     _getiter_.assert_called_once_with(val)
     _getiter_.reset_mock()
@@ -107,7 +96,7 @@ def test_RestrictingNodeTransformer__visit_FunctionDef__8(
     restricted_exec(NESTED_SEQ_UNPACK, glb)
 
     val = (1, 2, (3, (4, 5)))
-    ret = glb['nested'](val)
+    ret = glb["nested"](val)
     assert ret == (1, 2, 3, 4, 5)
     assert 3 == _getiter_.call_count
     _getiter_.assert_any_call(val)
@@ -115,11 +104,9 @@ def test_RestrictingNodeTransformer__visit_FunctionDef__8(
     _getiter_.assert_any_call(val[2][1])
     _getiter_.reset_mock()
 
-    ret = glb['nested_with_order']((1, 2), (3, 4))
+    ret = glb["nested_with_order"]((1, 2), (3, 4))
     assert ret == (1, 2, 3, 4)
-    _getiter_.assert_has_calls([
-        mocker.call((1, 2)),
-        mocker.call((3, 4))])
+    _getiter_.assert_has_calls([mocker.call((1, 2)), mocker.call((3, 4))])
     _getiter_.reset_mock()
 
 

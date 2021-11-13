@@ -19,7 +19,6 @@ class User:
 
 
 class UnhappyCasesTest(unittest.TestCase):
-
     def test_dataclass_no_match(self):
         self.assertFalse(match(Record("qux", "quuz"), 7))
 
@@ -58,10 +57,15 @@ class UnhappyCasesTest(unittest.TestCase):
             Length(at_most=2, exactly=1)
 
     def test_string_no_match(self):
-        self.assertFalse(match("http://example.org/", String(
-            Capture("http://", name='protocol'),
-            Arguments(),
-        )))
+        self.assertFalse(
+            match(
+                "http://example.org/",
+                String(
+                    Capture("http://", name="protocol"),
+                    Arguments(),
+                ),
+            )
+        )
 
     def test_string_one_of_no_match(self):
         self.assertFalse(match("abc", String("ab", OneOf("e", "f"))))
@@ -84,6 +88,7 @@ class UnhappyCasesTest(unittest.TestCase):
 
     def test_parampattern_no_match(self):
         from Aspidites._vendor.apm.typefoo import ParamType, KwArgs, VarArgs
+
         self.assertFalse(match(1, KwArgs()))
         self.assertFalse(match(1, VarArgs()))
         self.assertFalse(match(1, ParamType(int)))

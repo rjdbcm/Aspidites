@@ -19,8 +19,7 @@ def _ignore_deprecated_imports(ignore=True):
     """
     if ignore:
         with warnings.catch_warnings():
-            warnings.filterwarnings("ignore", ".+ (module|package)",
-                                    DeprecationWarning)
+            warnings.filterwarnings("ignore", ".+ (module|package)", DeprecationWarning)
             yield
     else:
         yield
@@ -41,11 +40,11 @@ def forget(modname):
     """
     unload(modname)
     for dirname in sys.path:
-        source = os.path.join(dirname, modname + '.py')
+        source = os.path.join(dirname, modname + ".py")
         # It doesn't matter if they exist or not, unlink all possible
         # combinations of PEP 3147/488 and legacy pyc files.
-        unlink(source + 'c')
-        for opt in ('', 1, 2):
+        unlink(source + "c")
+        for opt in ("", 1, 2):
             unlink(importlib.util.cache_from_source(source, optimization=opt))
 
 
@@ -58,7 +57,7 @@ def make_legacy_pyc(source):
     """
     pyc_file = importlib.util.cache_from_source(source)
     up_one = os.path.dirname(os.path.abspath(source))
-    legacy_pyc = os.path.join(up_one, source + 'c')
+    legacy_pyc = os.path.join(up_one, source + "c")
     os.rename(pyc_file, legacy_pyc)
     return legacy_pyc
 
@@ -83,7 +82,7 @@ def import_module(name, deprecated=False, *, required_on=()):
 
 def _save_and_remove_modules(names):
     orig_modules = {}
-    prefixes = tuple(name + '.' for name in names)
+    prefixes = tuple(name + "." for name in names)
     for modname in list(sys.modules):
         if modname in names or modname.startswith(prefixes):
             orig_modules[modname] = sys.modules.pop(modname)
@@ -226,15 +225,14 @@ class DirsOnSysPath(object):
 
 
 def modules_setup():
-    return sys.modules.copy(),
+    return (sys.modules.copy(),)
 
 
 def modules_cleanup(oldmodules):
     # Encoders/decoders are registered permanently within the internal
     # codec cache. If we destroy the corresponding modules their
     # globals will be set to None which will trip up the cached functions.
-    encodings = [(k, v) for k, v in sys.modules.items()
-                 if k.startswith('encodings.')]
+    encodings = [(k, v) for k, v in sys.modules.items() if k.startswith("encodings.")]
     sys.modules.clear()
     sys.modules.update(encodings)
     # XXX: This kind of problem can affect more than just encodings.

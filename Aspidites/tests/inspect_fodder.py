@@ -1,12 +1,14 @@
 # line 1
-'A module docstring.'
+"A module docstring."
 
 import sys, Aspidites._vendor.contracts.inspection as inspect
+
 # line 5
 
 # line 7
 def spam(a, /, b, c, d=3, e=4, f=5, *g, **h):
     eggs(b + d, c + f)
+
 
 # line 11
 def eggs(x, y):
@@ -17,6 +19,7 @@ def eggs(x, y):
     p = x
     q = y / 0
 
+
 # line 20
 class StupidGit:
     """A longer,
@@ -24,20 +27,22 @@ class StupidGit:
     indented
 
     docstring."""
-# line 27
+
+    # line 27
 
     def abuse(self, a, b, c):
         """Another
 
-\tdocstring
+        \tdocstring
 
-        containing
+                containing
 
-\ttabs
-\t
+        \ttabs
+        \t
         """
         self.argue(a, b, c)
-# line 40
+
+    # line 40
     def argue(self, a, b, c):
         try:
             spam(a, b, c)
@@ -47,8 +52,9 @@ class StupidGit:
 
     @property
     def contradiction(self):
-        'The automatic gainsaying.'
+        "The automatic gainsaying."
         pass
+
 
 # line 53
 class MalodorousPervert(StupidGit):
@@ -59,10 +65,13 @@ class MalodorousPervert(StupidGit):
     def contradiction(self):
         pass
 
+
 Tit = MalodorousPervert
+
 
 class ParrotDroppings:
     pass
+
 
 class FesteringGob(MalodorousPervert, ParrotDroppings):
     def abuse(self, a, b, c):
@@ -72,8 +81,10 @@ class FesteringGob(MalodorousPervert, ParrotDroppings):
     def contradiction(self):
         pass
 
+
 async def lobbest(grenade):
     pass
+
 
 currentframe = inspect.currentframe()
 try:
@@ -81,28 +92,32 @@ try:
 except:
     tb = sys.exc_info()[2]
 
+
 class Callable:
     def __call__(self, *args):
         return args
 
     def as_method_of(self, obj):
         from types import MethodType
+
         return MethodType(self, obj)
+
 
 custom_method = Callable().as_method_of(42)
 del Callable
 
 # line 95
 class WhichComments:
-  # line 97
+    # line 97
     # before f
     def f(self):
-      # line 100
+        # line 100
         # start f
         return 1
         # line 103
         # end f
-       # line 105
+
+    # line 105
     # after f
 
     # before asyncf - line 108
@@ -110,6 +125,9 @@ class WhichComments:
         # start asyncf
         return 2
         # end asyncf
-       # after asyncf - line 113
+
+    # after asyncf - line 113
     # end of WhichComments - line 114
-  # after WhichComments - line 115
+
+
+# after WhichComments - line 115

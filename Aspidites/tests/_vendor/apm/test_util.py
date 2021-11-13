@@ -23,13 +23,9 @@ def h(a: int, *xs: float):
 
 
 class UtilTests(unittest.TestCase):
-
     def test_get_arg_types(self):
         arg_types = util.get_arg_types(f)
-        self.assertTrue(match(
-            arg_types,
-            [int, float, Remaining(str)]
-        ))
+        self.assertTrue(match(arg_types, [int, float, Remaining(str)]))
 
     def test_get_return_type(self):
         self.assertEqual(str, util.get_return_type(f))
@@ -46,7 +42,9 @@ class UtilTests(unittest.TestCase):
         self.assertEqual((None, 3), result)
 
     def test_get_kwarg_types(self):
-        self.assertEqual({"a": int, "b": float, "c": str, "d": str}, util.get_kwarg_types(f))
+        self.assertEqual(
+            {"a": int, "b": float, "c": str, "d": str}, util.get_kwarg_types(f)
+        )
         self.assertEqual({"a": int, "b": str}, util.get_kwarg_types(g))
 
     def test_vararg_types(self):

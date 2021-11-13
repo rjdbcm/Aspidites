@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 """Provides decorators to deal with tail calls in recursive functions."""
 import warnings
 from collections import namedtuple
@@ -51,15 +51,18 @@ class tco(object):
             if callable(action):
                 __self = action
             else:
-                str_args = ''
+                str_args = ""
                 for i in args:
-                    if hasattr(i, '__name__'):
-                        str_args += i.__name__ + ', '
+                    if hasattr(i, "__name__"):
+                        str_args += i.__name__ + ", "
                     else:
-                        str_args += str(type(i)) + ', '
-                str_args = str_args.rstrip(', ')
+                        str_args += str(type(i)) + ", "
+                str_args = str_args.rstrip(", ")
                 # DO NOT try inspecting the stack from here
-                w = "\nOptimized tail call to %s(%s) failed, object of type '%s' is not callable.\n" % (str(action), str_args, type(action).__name__)
+                w = (
+                    "\nOptimized tail call to %s(%s) failed, object of type '%s' is not callable.\n"
+                    % (str(action), str_args, type(action).__name__)
+                )
                 warnings.warn(w, TailCallWarning)
             kwargs = result[2] if len(result) > 2 else {}
 
@@ -112,7 +115,7 @@ class stackless(object):
 
     """
 
-    __slots__ = "func",
+    __slots__ = ("func",)
 
     Thunk = namedtuple("Thunk", ("func", "args", "kwargs", "is_tailcall"))
 

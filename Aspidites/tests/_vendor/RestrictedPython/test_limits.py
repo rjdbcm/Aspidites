@@ -49,8 +49,8 @@ def test_limited_range_range_overflow():
     with pytest.raises(ValueError) as excinfo:
         limited_range(0, 5000, 1)
     assert (
-        'To be created range() object would be to large, '
-        'in RestrictedPython we only allow 1000 elements in a range.'
+        "To be created range() object would be to large, "
+        "in RestrictedPython we only allow 1000 elements in a range."
         in str(excinfo.value)
     )
 
@@ -63,7 +63,7 @@ def test_limited_list_valid_list_input():
 
 def test_limited_list_invalid_string_input():
     with pytest.raises(TypeError):
-        limited_list('input')
+        limited_list("input")
 
 
 def test_limited_tuple_valid_list_input():
@@ -74,4 +74,4 @@ def test_limited_tuple_valid_list_input():
 
 def test_limited_tuple_invalid_string_input():
     with pytest.raises(TypeError):
-        limited_tuple('input')
+        limited_tuple("input")

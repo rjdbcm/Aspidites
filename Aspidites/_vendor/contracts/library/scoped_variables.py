@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 from ..interface import ExternalScopedVariableNotFound
 from ..syntax import S, W
 from ..utils import ignore_typeerror
@@ -44,7 +44,7 @@ def _lookup_from_calling_scope(token):
         #          hidden function inside @contract.
         idx = fcodes.index(_code(decorate))
 
-        if frames[idx - 1].f_code.co_name == 'tmp_wrap':
+        if frames[idx - 1].f_code.co_name == "tmp_wrap":
             # decorate() called via @contract, Step out 2 frames
             return frames[idx - 2]
 
@@ -52,10 +52,12 @@ def _lookup_from_calling_scope(token):
         return frames[idx - 1]
 
     # search order important
-    searchers = [find_decorate,
-                 find_invokation(check),
-                 find_invokation(fail),
-                 find_invokation(parse)]
+    searchers = [
+        find_decorate,
+        find_invokation(check),
+        find_invokation(fail),
+        find_invokation(parse),
+    ]
     for s in searchers:
         try:
             f = s()
@@ -90,6 +92,7 @@ def _lookup_from_calling_scope(token):
 #     def __str__(self):
 #         return str(self.value)
 
+
 @ignore_typeerror
 def scoped_parse_action(s, loc, tokens):
     assert len(tokens) == 1
@@ -103,10 +106,6 @@ def scoped_parse_action(s, loc, tokens):
     else:
         return SimpleRValue(value=val, where=where, representation=s)
 
-scoped_variables = (S('$') + Word(alphanums + '_'))
+
+scoped_variables = S("$") + Word(alphanums + "_")
 scoped_variables_ref = scoped_variables.setParseAction(scoped_parse_action)
-
-
-
-
-

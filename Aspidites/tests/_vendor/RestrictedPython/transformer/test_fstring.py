@@ -17,8 +17,8 @@ def test_transform():
     assert result.errors == ()
     loc = {}
     exec(result.code, {}, loc)
-    assert loc['a'] == '3'
-    assert result.used_names == {'max': True}
+    assert loc["a"] == "3"
+    assert result.used_names == {"max": True}
 
 
 @pytest.mark.skipif(
@@ -57,6 +57,8 @@ def test_f_string_self_documenting_expressions():
     )
     assert result.errors == ()
 
-    glb = {'_print_': PrintCollector, '_getattr_': None}
+    glb = {"_print_": PrintCollector, "_getattr_": None}
     exec(result.code, glb)
-    assert glb['_print']() == "user='eric_idle' member_since=datetime.date(1975, 7, 31)\n"  # NOQA: E501
+    assert (
+        glb["_print"]() == "user='eric_idle' member_since=datetime.date(1975, 7, 31)\n"
+    )  # NOQA: E501

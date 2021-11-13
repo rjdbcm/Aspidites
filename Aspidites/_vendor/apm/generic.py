@@ -27,7 +27,6 @@ def elements(thing):
 
 
 class AutoEqHash:
-
     def __eq__(self, other):
         return type(self) == type(other) and self.__dict__ == other.__dict__
 
@@ -56,6 +55,5 @@ def _repr(t):
 
 
 class AutoRepr:
-
     def __repr__(self):
         return f"{type(self).__name__}({_repr(self.__dict__)})"

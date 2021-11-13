@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 from itertools import chain
 from sys import maxsize as maxint
 
@@ -13,7 +13,7 @@ class Stream(object):
 
         def __init__(self, stream):
             self._stream = stream
-            self._position = - 1  # not started yet
+            self._position = -1  # not started yet
 
         def __next__(self):
             # check if elements are available for next position
@@ -28,7 +28,7 @@ class Stream(object):
 
     def __init__(self, *origin):
         self._collection = []
-        self._last = - 1  # not started yet
+        self._last = -1  # not started yet
         self._origin = iter(origin) if origin else []
 
     def __lshift__(self, rvalue):

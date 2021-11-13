@@ -31,5 +31,5 @@ class TypeFooTest(unittest.TestCase):
         self.assertFalse(match(f, pat))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

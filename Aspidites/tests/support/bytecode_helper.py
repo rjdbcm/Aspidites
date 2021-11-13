@@ -6,6 +6,7 @@ import io
 
 _UNSPECIFIED = object()
 
+
 class BytecodeTestCase(unittest.TestCase):
     """Custom assertion methods for inspecting bytecode."""
 
@@ -22,9 +23,9 @@ class BytecodeTestCase(unittest.TestCase):
                     return instr
         disassembly = self.get_disassembly_as_string(x)
         if argval is _UNSPECIFIED:
-            msg = '%s not found in bytecode:\n%s' % (opname, disassembly)
+            msg = "%s not found in bytecode:\n%s" % (opname, disassembly)
         else:
-            msg = '(%s,%r) not found in bytecode:\n%s'
+            msg = "(%s,%r) not found in bytecode:\n%s"
             msg = msg % (opname, argval, disassembly)
         self.fail(msg)
 
@@ -34,9 +35,9 @@ class BytecodeTestCase(unittest.TestCase):
             if instr.opname == opname:
                 disassembly = self.get_disassembly_as_string(x)
                 if argval is _UNSPECIFIED:
-                    msg = '%s occurs in bytecode:\n%s' % (opname, disassembly)
+                    msg = "%s occurs in bytecode:\n%s" % (opname, disassembly)
                     self.fail(msg)
                 elif instr.argval == argval:
-                    msg = '(%s,%r) occurs in bytecode:\n%s'
+                    msg = "(%s,%r) occurs in bytecode:\n%s"
                     msg = msg % (opname, argval, disassembly)
                     self.fail(msg)

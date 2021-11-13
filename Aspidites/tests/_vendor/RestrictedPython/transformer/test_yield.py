@@ -18,7 +18,7 @@ def test_yield():
     assert result.code is not None
     local = {}
     exec(result.code, {}, local)
-    test_generator = local['test_generator']
+    test_generator = local["test_generator"]
     exec_result = list(test_generator())
     assert exec_result == [42]
 
@@ -30,8 +30,8 @@ def reader_wapper(input):
 
 
 @pytest.mark.skipif(
-    not IS_PY3,
-    reason="`yield from` statement was first introduced in Python 3.3")
+    not IS_PY3, reason="`yield from` statement was first introduced in Python 3.3"
+)
 def test_yield_from():
     """`yield from` statement should be allowed."""
     result = compile_restricted_exec(YIELD_FORM_EXAMPLE)
@@ -41,11 +41,11 @@ def test_yield_from():
     def my_external_generator():
         my_list = [1, 2, 3, 4, 5]
         for elem in my_list:
-            yield(elem)
+            yield (elem)
 
     local = {}
     exec(result.code, {}, local)
-    reader_wapper = local['reader_wapper']
+    reader_wapper = local["reader_wapper"]
     exec_result = list(reader_wapper(my_external_generator()))
     assert exec_result == [1, 2, 3, 4, 5]
 
@@ -61,8 +61,8 @@ def get_json(client, url):
 
 
 @pytest.mark.skipif(
-    not IS_PY3,
-    reason="`yield from` statement was first introduced in Python 3.3")
+    not IS_PY3, reason="`yield from` statement was first introduced in Python 3.3"
+)
 def test_asyncio_yield_from():
     """`yield from` statement should be allowed."""
     result = compile_restricted_exec(ASYNCIO_YIELD_FORM_EXAMPLE)
@@ -80,11 +80,10 @@ async def get_json(client, url):
 
 @pytest.mark.skipif(
     not IS_PY35_OR_GREATER,
-    reason="`yield from` statement was first introduced in Python 3.3")
+    reason="`yield from` statement was first introduced in Python 3.3",
+)
 def test_async_yield_from():
     """`yield from` statement should be allowed."""
     result = compile_restricted_exec(ASYNC_YIELD_FORM_EXAMPLE)
-    assert result.errors == (
-        'Line 4: AsyncFunctionDef statements are not allowed.',
-    )
+    assert result.errors == ("Line 4: AsyncFunctionDef statements are not allowed.",)
     assert result.code is None

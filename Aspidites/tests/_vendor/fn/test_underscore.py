@@ -5,9 +5,9 @@ from Aspidites._vendor.fn import underscore
 from Aspidites._vendor.fn import reduce
 
 
-
 def test_identity_default():
     assert 10, _(10)
+
 
 def test_arithmetic():
     # operator +
@@ -34,19 +34,21 @@ def test_arithmetic():
     # operator >>
     assert 2 == (_ >> 2)(8)
     # operator (-a)
-    assert 10,  (-_)(-10)
+    assert 10, (-_)(-10)
     assert -10 == (-_)(10)
     # operator (+a)
-    assert 10,  (+_)(10)
+    assert 10, (+_)(10)
     assert -10 == (+_)(-10)
     # operator (~a)
     assert -11 == (~_)(10)
+
 
 def test_arithmetic_multiple():
     assert 10 == (_ + _)(5, 5)
     assert 0 == (_ - _)(5, 5)
     assert 25 == (_ * _)(5, 5)
     assert 1 == (_ / _)(5, 5)
+
 
 def test_arithmetic_swap():
     # operator +
@@ -65,7 +67,7 @@ def test_arithmetic_swap():
     assert 6 == (10 / _ + 1)(2)
     assert [10, 5, 2], list(map(100 / _, [10, 20, 50]))
     # operator **
-    assert 100 == (10**_)(2)
+    assert 100 == (10 ** _)(2)
     # operator %
     assert 1 == (11 % _)(2)
     # operator <<
@@ -131,9 +133,9 @@ def test_call_method_args():
 
 
 def test_call_method_kwargs():
-    test_dict = {'num': 23}
+    test_dict = {"num": 23}
     _.call("update", num=42)(test_dict)
-    assert {'num': 42} == test_dict
+    assert {"num": 42} == test_dict
 
 
 def test_comparator():
@@ -162,6 +164,7 @@ def test_none():
 
     assert [None] == (_ << None)(pushlist())
 
+
 # noinspection PyCallingNonCallable
 def test_comparator_multiple():
     assert (_ < _)(1, 2) is True
@@ -177,8 +180,10 @@ def test_comparator_multiple():
     assert (_ == _)(10, 10) is True
     assert (_ == _)(9, 10) is False
 
+
 def test_comparator_filter():
     assert [0, 1, 2] == list(filter(_ < 5, [0, 1, 2, 10, 11, 12]))
+
 
 def test_slicing():
     assert 0 == (_[0])(list(range(10)))
@@ -205,9 +210,9 @@ def test_arity_error():
 
 def test_more_than_2_operations():
     assert 12 == (_ * 2 + 10)(1)
-    assert 6,  (_ + _ + _)(1, 2, 3)
+    assert 6, (_ + _ + _)(1, 2, 3)
     assert 10 == (_ + _ + _ + _)(1, 2, 3, 4)
-    assert 7,  (_ + _ * _)(1, 2, 3)
+    assert 7, (_ + _ * _)(1, 2, 3)
 
 
 def test_string_converting():
@@ -293,7 +298,7 @@ def test_reverse_string_converting():
 def test_multi_underscore_string_converting():
     assert "(x1) => (x1 + '_')", str(_ + "_")
     assert "(x1, x2) => getattr((x1 + x2), '__and_now__')" == str((_ + _).__and_now__)
-    assert "(x1, x2) => x1['__name__'][x2]" == str(_['__name__'][_])
+    assert "(x1, x2) => x1['__name__'][x2]" == str(_["__name__"][_])
 
 
 def test_repr():
@@ -303,5 +308,7 @@ def test_repr():
 
 
 def test_repr_parse_str():
-    assert '=> ' + _ == eval(repr('=> ' + _))
-    assert reduce(lambda f, n: f.format(n), ('({0} & _)',) * 11).format('_') == repr(reduce(_ & _, (_,) * 12))
+    assert "=> " + _ == eval(repr("=> " + _))
+    assert reduce(lambda f, n: f.format(n), ("({0} & _)",) * 11).format("_") == repr(
+        reduce(_ & _, (_,) * 12)
+    )

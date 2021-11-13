@@ -38,7 +38,7 @@ def get_kwarg_types(obj) -> Dict[str, type]:
 
 def get_return_type(obj) -> Optional[Type]:
     type_hints = get_type_hints(obj)
-    return type_hints.get('return', None)
+    return type_hints.get("return", None)
 
 
 def invoke(func, args: Union[Mapping, Iterable]):

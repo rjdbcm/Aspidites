@@ -13,11 +13,23 @@ from Aspidites._vendor.pyrsistent._plist import plist, l, PList
 from Aspidites._vendor.pyrsistent._pdeque import pdeque, dq, PDeque
 
 from Aspidites._vendor.pyrsistent._checked_types import (
-    CheckedPMap, CheckedPVector, CheckedPSet, InvariantException, CheckedKeyTypeError,
-    CheckedValueTypeError, CheckedType, optional)
+    CheckedPMap,
+    CheckedPVector,
+    CheckedPSet,
+    InvariantException,
+    CheckedKeyTypeError,
+    CheckedValueTypeError,
+    CheckedType,
+    optional,
+)
 
 from Aspidites._vendor.pyrsistent._field_common import (
-    field, PTypeError, pset_field, pmap_field, pvector_field)
+    field,
+    PTypeError,
+    pset_field,
+    pmap_field,
+    pvector_field,
+)
 
 from Aspidites._vendor.pyrsistent._precord import PRecord
 
@@ -31,18 +43,49 @@ from Aspidites._vendor.pyrsistent._transformations import inc, discard, rex, ny
 
 from Aspidites._vendor.pyrsistent._toolz import get_in
 
-__version__ = '0.18.0'
+__version__ = "0.18.0"
 
-__all__ = ('pmap', 'm', 'PMap',
-           'pvector', 'v', 'PVector',
-           'pset', 's', 'PSet',
-           'pbag', 'b', 'PBag',
-           'plist', 'l', 'PList',
-           'pdeque', 'dq', 'PDeque',
-           'CheckedPMap', 'CheckedPVector', 'CheckedPSet', 'InvariantException', 'CheckedKeyTypeError', 'CheckedValueTypeError', 'CheckedType', 'optional',
-           'PRecord', 'field', 'pset_field', 'pmap_field', 'pvector_field',
-           'PClass', 'PClassMeta',
-           'immutable',
-           'freeze', 'thaw', 'mutant',
-           'get_in',
-           'inc', 'discard', 'rex', 'ny')
+__all__ = (
+    "pmap",
+    "m",
+    "PMap",
+    "pvector",
+    "v",
+    "PVector",
+    "pset",
+    "s",
+    "PSet",
+    "pbag",
+    "b",
+    "PBag",
+    "plist",
+    "l",
+    "PList",
+    "pdeque",
+    "dq",
+    "PDeque",
+    "CheckedPMap",
+    "CheckedPVector",
+    "CheckedPSet",
+    "InvariantException",
+    "CheckedKeyTypeError",
+    "CheckedValueTypeError",
+    "CheckedType",
+    "optional",
+    "PRecord",
+    "field",
+    "pset_field",
+    "pmap_field",
+    "pvector_field",
+    "PClass",
+    "PClassMeta",
+    "immutable",
+    "freeze",
+    "thaw",
+    "mutant",
+    "get_in",
+    "inc",
+    "discard",
+    "rex",
+    "ny",
+)

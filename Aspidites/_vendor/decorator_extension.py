@@ -1,4 +1,4 @@
-#cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=True, initializedcheck=False
 # #########################     LICENSE     ############################ #
 
 # Copyright (c) 2005-2021, Michele Simionato
@@ -65,41 +65,55 @@ class FunctionMaker(object):
     defaults: str
     kwonlyargs: str
     kwonlydefaults: str
-    __version__ = '5.0.9'
+    __version__ = "5.0.9"
 
-    def __init__(self, func=None, name=None, signature=None,
-                 defaults=None, doc=None, module=None, funcdict=None):
+    def __init__(
+        self,
+        func=None,
+        name=None,
+        signature=None,
+        defaults=None,
+        doc=None,
+        module=None,
+        funcdict=None,
+    ):
         self.shortsignature = signature
         if func:
             # func can be a class or a callable, but not an instance method
             self.name = func.__name__
-            if self.name == '<lambda>':  # small hack for lambda functions
-                self.name = '_lambda_'
+            if self.name == "<lambda>":  # small hack for lambda functions
+                self.name = "_lambda_"
             self.doc = func.__doc__
             self.module = func.__module__
             if inspect.isfunction(func):
                 argspec = getfullargspec(func)
-                self.annotations = getattr(func, '__annotations__', {})
-                for a in ('args', 'varargs', 'varkw', 'defaults', 'kwonlyargs',
-                          'kwonlydefaults'):
+                self.annotations = getattr(func, "__annotations__", {})
+                for a in (
+                    "args",
+                    "varargs",
+                    "varkw",
+                    "defaults",
+                    "kwonlyargs",
+                    "kwonlydefaults",
+                ):
                     setattr(self, a, getattr(argspec, a))
                 for i, arg in enumerate(self.args):
-                    setattr(self, 'arg%d' % i, arg)
+                    setattr(self, "arg%d" % i, arg)
                 allargs = list(self.args)
                 allshortargs = list(self.args)
                 if self.varargs:
-                    allargs.append('*' + self.varargs)
-                    allshortargs.append('*' + self.varargs)
+                    allargs.append("*" + self.varargs)
+                    allshortargs.append("*" + self.varargs)
                 elif self.kwonlyargs:
-                    allargs.append('*')  # single star syntax
+                    allargs.append("*")  # single star syntax
                 for a in self.kwonlyargs:
-                    allargs.append('%s=None' % a)
-                    allshortargs.append('%s=%s' % (a, a))
+                    allargs.append("%s=None" % a)
+                    allshortargs.append("%s=%s" % (a, a))
                 if self.varkw:
-                    allargs.append('**' + self.varkw)
-                    allshortargs.append('**' + self.varkw)
-                self.signature = ', '.join(allargs)
-                self.shortsignature = ', '.join(allshortargs)
+                    allargs.append("**" + self.varkw)
+                    allshortargs.append("**" + self.varkw)
+                self.signature = ", ".join(allargs)
+                self.shortsignature = ", ".join(allshortargs)
                 self.dict = func.__dict__.copy()
         # func=None happens when decorating a caller
         if name:
@@ -115,28 +129,28 @@ class FunctionMaker(object):
         if funcdict:
             self.dict = funcdict
         # check existence required attributes
-        assert hasattr(self, 'name')
-        if not hasattr(self, 'signature'):
-            raise TypeError('You are decorating a non function: %s' % func)
+        assert hasattr(self, "name")
+        if not hasattr(self, "signature"):
+            raise TypeError("You are decorating a non function: %s" % func)
 
     def update(self, func, **kw):
         """
         Update the signature of func with the data in self
         """
         func.__name__ = self.name
-        func.__doc__ = getattr(self, 'doc', None)
-        func.__dict__ = getattr(self, 'dict', {})
+        func.__doc__ = getattr(self, "doc", None)
+        func.__dict__ = getattr(self, "dict", {})
         func.__defaults__ = self.defaults
         func.__kwdefaults__ = self.kwonlydefaults or None
-        func.__annotations__ = getattr(self, 'annotations', None)
+        func.__annotations__ = getattr(self, "annotations", None)
         try:
             # noinspection PyUnresolvedReferences,PyProtectedMember
             frame = sys._getframe(3)
         except AttributeError:  # for IronPython and similar implementations
-            callermodule = '?'
+            callermodule = "?"
         else:
-            callermodule = frame.f_globals.get('__name__', '?')
-        func.__module__ = getattr(self, 'module', callermodule)
+            callermodule = frame.f_globals.get("__name__", "?")
+        func.__module__ = getattr(self, "module", callermodule)
         func.__dict__.update(kw)
 
     def make(self, src_templ, evaldict=None, addsource=False, **attrs):
@@ -147,37 +161,47 @@ class FunctionMaker(object):
         evaldict = evaldict or {}
         mo = DEF.search(src)
         if mo is None:
-            raise SyntaxError('not a valid function template\n%s' % src)
+            raise SyntaxError("not a valid function template\n%s" % src)
         name = mo.group(1)  # extract the function name
-        names = set([name] + [arg.strip(' *') for arg in
-                              self.shortsignature.split(',')])
+        names = set(
+            [name] + [arg.strip(" *") for arg in self.shortsignature.split(",")]
+        )
         for n in names:
-            if n in ('_func_', '_call_'):
-                raise NameError('%s is overridden in\n%s' % (n, src))
+            if n in ("_func_", "_call_"):
+                raise NameError("%s is overridden in\n%s" % (n, src))
 
-        if not src.endswith('\n'):  # add a newline for old Pythons
-            src += '\n'
+        if not src.endswith("\n"):  # add a newline for old Pythons
+            src += "\n"
 
         # Ensure each generated function has a unique filename for profilers
         # (such as cProfile) that depend on the tuple of (<filename>,
         # <definition line>, <function name>) being unique.
-        filename = '<decorator-gen-%d>' % next(self._compile_count)
+        filename = "<decorator-gen-%d>" % next(self._compile_count)
         try:
-            code = compile(src, filename, 'single')
+            code = compile(src, filename, "single")
             exec(code, evaldict)
         except Exception:
-            print('Error in generated code:', sys.stderr)
+            print("Error in generated code:", sys.stderr)
             print(src, sys.stderr)
             raise
         func = evaldict[name]
         if addsource:
-            attrs['__source__'] = src
+            attrs["__source__"] = src
         self.update(func, **attrs)
         return func
 
     @classmethod
-    def create(cls, obj, body, evaldict, defaults=None,
-               doc=None, module=None, addsource=True, **attrs):
+    def create(
+        cls,
+        obj,
+        body,
+        evaldict,
+        defaults=None,
+        doc=None,
+        module=None,
+        addsource=True,
+        **attrs
+    ):
         """
         Create a function from the strings name, signature and body.
         evaldict is the evaluation dictionary. If addsource is true an
@@ -185,7 +209,7 @@ class FunctionMaker(object):
         are added, if any.
         """
         if isinstance(obj, str):  # "name(signature)"
-            name, rest = obj.strip().split('(', 1)
+            name, rest = obj.strip().split("(", 1)
             signature = rest[:-1]  # strip a right parens
             func = None
         else:  # a function
@@ -193,13 +217,14 @@ class FunctionMaker(object):
             signature = None
             func = obj
         self = cls(func, name, signature, defaults, doc, module)
-        ibody = '\n'.join('    ' + line for line in body.splitlines())
-        caller = evaldict.get('_call_')  # when called from `decorate`
+        ibody = "\n".join("    " + line for line in body.splitlines())
+        caller = evaldict.get("_call_")  # when called from `decorate`
         if caller and iscoroutinefunction(caller):
-            body = ('async def %(name)s(%(signature)s):\n' + ibody).replace(
-                'return', 'return await')
+            body = ("async def %(name)s(%(signature)s):\n" + ibody).replace(
+                "return", "return await"
+            )
         else:
-            body = 'def %(name)s(%(signature)s):\n' + ibody
+            body = "def %(name)s(%(signature)s):\n" + ibody
         return self.make(body, evaldict, addsource, **attrs)
 
 
@@ -212,7 +237,7 @@ def fix(args, kwargs, sig):
     return ba.args, ba.kwargs
 
 
-F = TypeVar('F', bound=Callable[..., Any])
+F = TypeVar("F", bound=Callable[..., Any])
 
 
 def append(a, vancestors):
@@ -238,14 +263,16 @@ def dispatch_on(*dispatch_args):
     Factory of decorators turning a function into a generic function
     dispatching on the given arguments.
     """
-    assert dispatch_args, 'No dispatch args passed'
-    dispatch_str = '(%s,)' % ', '.join(dispatch_args)
+    assert dispatch_args, "No dispatch args passed"
+    dispatch_str = "(%s,)" % ", ".join(dispatch_args)
 
-    def check(arguments, wrong=operator.ne, msg=''):
+    def check(arguments, wrong=operator.ne, msg=""):
         """Make sure one passes the expected number of arguments"""
         if wrong(len(arguments), len(dispatch_args)):
-            raise TypeError('Expected %d arguments, got %d%s' %
-                            (len(dispatch_args), len(arguments), msg))
+            raise TypeError(
+                "Expected %d arguments, got %d%s"
+                % (len(dispatch_args), len(arguments), msg)
+            )
 
     def gen_func_dec(func):
         """Decorator turning a function into a generic function"""
@@ -253,7 +280,7 @@ def dispatch_on(*dispatch_args):
         # first check the dispatch arguments
         argset = set(getfullargspec(func).args)
         if not set(dispatch_args) <= argset:
-            raise NameError('Unknown dispatch arguments %s' % dispatch_str)
+            raise NameError("Unknown dispatch arguments %s" % dispatch_str)
 
         typemap = {}
 
@@ -278,11 +305,10 @@ def dispatch_on(*dispatch_args):
             for t, vas in zip(types, vancestors(*types)):
                 n_vas = len(vas)
                 if n_vas > 1:
-                    raise RuntimeError(
-                        'Ambiguous dispatch for %s: %s' % (t, vas))
+                    raise RuntimeError("Ambiguous dispatch for %s: %s" % (t, vas))
                 elif n_vas == 1:
-                    va, = vas
-                    mro = type('t', (t, va), {}).mro()[1:]
+                    (va,) = vas
+                    mro = type("t", (t, va), {}).mro()[1:]
                 else:
                     mro = t.mro()
                 lists.append(mro[:-1])  # discard t and object
@@ -295,7 +321,7 @@ def dispatch_on(*dispatch_args):
             check(types)
 
             def dec(f):
-                check(getfullargspec(f).args, operator.lt, ' in ' + f.__name__)
+                check(getfullargspec(f).args, operator.lt, " in " + f.__name__)
                 typemap[types] = f
                 return f
 
@@ -330,11 +356,17 @@ def dispatch_on(*dispatch_args):
             return func(*args, **kw)
 
         return FunctionMaker.create(
-            func, 'return _f_(%s, %%(shortsignature)s)' % dispatch_str,
-            dict(_f_=_dispatch), register=register, default=func,
-            typemap=typemap, vancestors=vancestors, ancestors=ancestors,
-            dispatch_info=dispatch_info, __wrapped__=func)
+            func,
+            "return _f_(%s, %%(shortsignature)s)" % dispatch_str,
+            dict(_f_=_dispatch),
+            register=register,
+            default=func,
+            typemap=typemap,
+            vancestors=vancestors,
+            ancestors=ancestors,
+            dispatch_info=dispatch_info,
+            __wrapped__=func,
+        )
 
-    gen_func_dec.__name__ = 'dispatch_on' + dispatch_str
+    gen_func_dec.__name__ = "dispatch_on" + dispatch_str
     return gen_func_dec
-

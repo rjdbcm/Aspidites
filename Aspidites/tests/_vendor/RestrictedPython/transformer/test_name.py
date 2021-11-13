@@ -15,7 +15,8 @@ def test_RestrictingNodeTransformer__visit_Name__1():
     """It denies a variable name starting in `__`."""
     result = compile_restricted_exec(BAD_NAME_STARTING_WITH_UNDERSCORE)
     assert result.errors == (
-        'Line 2: "__" is an invalid variable name because it starts with "_"',)
+        'Line 2: "__" is an invalid variable name because it starts with "_"',
+    )
 
 
 BAD_NAME_OVERRIDE_GUARD_WITH_NAME = """\
@@ -28,14 +29,14 @@ def test_RestrictingNodeTransformer__visit_Name__2():
     """It denies a variable name starting in `_`."""
     result = compile_restricted_exec(BAD_NAME_OVERRIDE_GUARD_WITH_NAME)
     assert result.errors == (
-        'Line 2: "_getattr" is an invalid variable name because '
-        'it starts with "_"',)
+        'Line 2: "_getattr" is an invalid variable name because ' 'it starts with "_"',
+    )
 
 
 def test_RestrictingNodeTransformer__visit_Name__2_5():
     """It allows `_` as variable name."""
-    glb = restricted_exec('_ = 2411')
-    assert glb['_'] == 2411
+    glb = restricted_exec("_ = 2411")
+    assert glb["_"] == 2411
 
 
 BAD_NAME_OVERRIDE_OVERRIDE_GUARD_WITH_FUNCTION = """\
@@ -47,11 +48,10 @@ def overrideGuardWithFunction():
 
 def test_RestrictingNodeTransformer__visit_Name__3():
     """It denies a function name starting in `_`."""
-    result = compile_restricted_exec(
-        BAD_NAME_OVERRIDE_OVERRIDE_GUARD_WITH_FUNCTION)
+    result = compile_restricted_exec(BAD_NAME_OVERRIDE_OVERRIDE_GUARD_WITH_FUNCTION)
     assert result.errors == (
-        'Line 2: "_getattr" is an invalid variable name because it '
-        'starts with "_"',)
+        'Line 2: "_getattr" is an invalid variable name because it ' 'starts with "_"',
+    )
 
 
 BAD_NAME_OVERRIDE_GUARD_WITH_CLASS = """\
@@ -65,8 +65,8 @@ def test_RestrictingNodeTransformer__visit_Name__4():
     """It denies a class name starting in `_`."""
     result = compile_restricted_exec(BAD_NAME_OVERRIDE_GUARD_WITH_CLASS)
     assert result.errors == (
-        'Line 2: "_getattr" is an invalid variable name because it '
-        'starts with "_"',)
+        'Line 2: "_getattr" is an invalid variable name because it ' 'starts with "_"',
+    )
 
 
 BAD_NAME_IN_WITH = """\
@@ -81,7 +81,8 @@ def test_RestrictingNodeTransformer__visit_Name__4_4():
     result = compile_restricted_exec(BAD_NAME_IN_WITH)
     assert result.errors == (
         'Line 2: "_leading_underscore" is an invalid variable name because '
-        'it starts with "_"',)
+        'it starts with "_"',
+    )
 
 
 BAD_NAME_IN_COMPOUND_WITH = """\
@@ -96,7 +97,8 @@ def test_RestrictingNodeTransformer__visit_Name__4_5():
     result = compile_restricted_exec(BAD_NAME_IN_COMPOUND_WITH)
     assert result.errors == (
         'Line 2: "_restricted_name" is an invalid variable name because '
-        'it starts with "_"',)
+        'it starts with "_"',
+    )
 
 
 BAD_NAME_DICT_COMP = """\
@@ -110,7 +112,8 @@ def test_RestrictingNodeTransformer__visit_Name__4_6():
     result = compile_restricted_exec(BAD_NAME_DICT_COMP)
     assert result.errors == (
         'Line 2: "_restricted_name" is an invalid variable name because '
-        'it starts with "_"',)
+        'it starts with "_"',
+    )
 
 
 BAD_NAME_SET_COMP = """\
@@ -124,7 +127,8 @@ def test_RestrictingNodeTransformer__visit_Name__4_7():
     result = compile_restricted_exec(BAD_NAME_SET_COMP)
     assert result.errors == (
         'Line 2: "_restricted_name" is an invalid variable name because '
-        'it starts with "_"',)
+        'it starts with "_"',
+    )
 
 
 BAD_NAME_ENDING_WITH___ROLES__ = """\
@@ -138,7 +142,8 @@ def test_RestrictingNodeTransformer__visit_Name__5():
     result = compile_restricted_exec(BAD_NAME_ENDING_WITH___ROLES__)
     assert result.errors == (
         'Line 2: "myvar__roles__" is an invalid variable name because it '
-        'ends with "__roles__".',)
+        'ends with "__roles__".',
+    )
 
 
 BAD_NAME_PRINTED = """\
@@ -160,8 +165,7 @@ def bad_name():
 """
 
 
-@pytest.mark.skipif(IS_PY2,
-                    reason="print is a statement in Python 2")
+@pytest.mark.skipif(IS_PY2, reason="print is a statement in Python 2")
 def test_RestrictingNodeTransformer__visit_Name__7():
     """It denies a variable named `print`."""
     result = compile_restricted_exec(BAD_NAME_PRINT)

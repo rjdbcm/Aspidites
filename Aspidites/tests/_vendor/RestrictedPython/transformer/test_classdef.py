@@ -6,10 +6,10 @@ from Aspidites.tests._vendor.RestrictedPython.helper import restricted_exec
 import pytest
 
 
-GOOD_CLASS = '''
+GOOD_CLASS = """
 class Good:
     pass
-'''
+"""
 
 
 def test_RestrictingNodeTransformer__visit_ClassDef__1():
@@ -19,31 +19,31 @@ def test_RestrictingNodeTransformer__visit_ClassDef__1():
     assert result.code is not None
 
 
-BAD_CLASS = '''\
+BAD_CLASS = """\
 class _bad:
     pass
-'''
+"""
 
 
 def test_RestrictingNodeTransformer__visit_ClassDef__2():
     """It does not allow class names which start with an underscore."""
     result = compile_restricted_exec(BAD_CLASS)
     assert result.errors == (
-        'Line 1: "_bad" is an invalid variable name '
-        'because it starts with "_"',)
+        'Line 1: "_bad" is an invalid variable name ' 'because it starts with "_"',
+    )
 
 
-IMPLICIT_METACLASS = '''
+IMPLICIT_METACLASS = """
 class Meta:
     pass
 
 b = Meta().foo
-'''
+"""
 
 
 def test_RestrictingNodeTransformer__visit_ClassDef__3():
-    """It applies the global __metaclass__ to all generated classes if present.
-    """
+    """It applies the global __metaclass__ to all generated classes if present."""
+
     def _metaclass(name, bases, dict):
         ob = type(name, bases, dict)
         ob.foo = 2411
@@ -51,19 +51,20 @@ def test_RestrictingNodeTransformer__visit_ClassDef__3():
 
     restricted_globals = dict(
         __metaclass__=_metaclass,
-        __name__='implicit_metaclass',
+        __name__="implicit_metaclass",
         b=None,
-        _getattr_=getattr)
+        _getattr_=getattr,
+    )
 
     restricted_exec(IMPLICIT_METACLASS, restricted_globals)
 
-    assert restricted_globals['b'] == 2411
+    assert restricted_globals["b"] == 2411
 
 
-EXPLICIT_METACLASS = '''
+EXPLICIT_METACLASS = """
 class WithMeta(metaclass=MyMetaClass):
     pass
-'''
+"""
 
 
 @pytest.mark.skipif(IS_PY2, reason="No valid syntax in Python 2.")
@@ -73,11 +74,12 @@ def test_RestrictingNodeTransformer__visit_ClassDef__4():
     result = compile_restricted_exec(EXPLICIT_METACLASS)
 
     assert result.errors == (
-        'Line 2: The keyword argument "metaclass" is not allowed.',)
+        'Line 2: The keyword argument "metaclass" is not allowed.',
+    )
     assert result.code is None
 
 
-DECORATED_CLASS = '''\
+DECORATED_CLASS = """\
 def wrap(cls):
     cls.wrap_att = 23
     return cls
@@ -90,19 +92,24 @@ class Combined(Base):
     class_att = 2342
 
 comb = Combined()
-'''
+"""
 
 
 def test_RestrictingNodeTransformer__visit_ClassDef__5():
     """It preserves base classes and decorators for classes."""
 
     restricted_globals = dict(
-        comb=None, _getattr_=getattr, _write_=lambda x: x, __metaclass__=type,
-        __name__='restricted_module', __builtins__=safe_builtins)
+        comb=None,
+        _getattr_=getattr,
+        _write_=lambda x: x,
+        __metaclass__=type,
+        __name__="restricted_module",
+        __builtins__=safe_builtins,
+    )
 
     restricted_exec(DECORATED_CLASS, restricted_globals)
 
-    comb = restricted_globals['comb']
+    comb = restricted_globals["comb"]
     assert comb.class_att == 2342
     assert comb.base_att == 42
     assert comb.wrap_att == 23
@@ -123,11 +130,11 @@ def test_RestrictingNodeTransformer__visit_ClassDef__6():
         t=None,
         _write_=lambda x: x,
         __metaclass__=type,
-        __name__='constructor_test',
+        __name__="constructor_test",
     )
 
     restricted_exec(CONSTRUCTOR_TEST, restricted_globals)
-    t = restricted_globals['t']
+    t = restricted_globals["t"]
     assert t.input == 42
 
 
@@ -157,12 +164,12 @@ def test_RestrictingNodeTransformer__visit_ClassDef__7():
         _getattr_=getattr,
         _write_=lambda x: x,
         __metaclass__=type,
-        __name__='compare_test',
+        __name__="compare_test",
     )
 
     restricted_exec(COMPARE_TEST, restricted_globals)
-    assert restricted_globals['result1'] is True
-    assert restricted_globals['result2'] is False
+    assert restricted_globals["result1"] is True
+    assert restricted_globals["result2"] is False
 
 
 CONTAINER_TEST = """\
@@ -189,10 +196,10 @@ def test_RestrictingNodeTransformer__visit_ClassDef__8():
         _getattr_=getattr,
         _write_=lambda x: x,
         __metaclass__=type,
-        __name__='container_test',
+        __name__="container_test",
         object=object,
     )
 
     restricted_exec(CONTAINER_TEST, restricted_globals)
-    assert restricted_globals['result1'] is True
-    assert restricted_globals['result2'] is True
+    assert restricted_globals["result1"] is True
+    assert restricted_globals["result2"] is True

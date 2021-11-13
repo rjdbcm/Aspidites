@@ -12,13 +12,16 @@ from .no_value import NoValue
 try:
     from typing import get_origin
 except ImportError:
+
     def get_origin():
         print("WARNING: typing.get_origin() is only available from python 3.8+")
         return None
 
+
 try:
     from typing import get_args
 except ImportError:
+
     def get_args():
         print("WARNING: typing.get_args() is only available from python 3.8+")
         return ()
@@ -41,15 +44,14 @@ class Parameter:
 
     @property
     def is_varargs(self):
-        return self.kind == '*'
+        return self.kind == "*"
 
     @property
     def is_kwargs(self):
-        return self.kind == '**'
+        return self.kind == "**"
 
 
 class ParamPattern(Pattern):
-
     def match(self, value, *, ctx: MatchContext, strict: bool) -> MatchResult:
         if not isinstance(value, Parameter):
             return ctx.no_match()
@@ -91,7 +93,6 @@ def mk_pattern(p) -> Union[Pattern, Many]:
 
 
 class Parameters(Pattern, Nested):
-
     def __init__(self, *positional, **kwargs):
         self._params: List[Union[Pattern, Many]] = []
         for p in positional:
@@ -108,11 +109,13 @@ class Parameters(Pattern, Nested):
         except TypeError:
             return ctx.no_match()
 
-        positional_params = list(chain(
-            filter(lambda p: p.is_positional, params),
-            filter(lambda p: p.is_varargs, params),
-            filter(lambda p: p.is_kwargs, params),
-        ))
+        positional_params = list(
+            chain(
+                filter(lambda p: p.is_positional, params),
+                filter(lambda p: p.is_varargs, params),
+                filter(lambda p: p.is_kwargs, params),
+            )
+        )
 
         kwargs = {}
         for param in params:
@@ -143,13 +146,29 @@ def describe_parameters(func) -> List[Parameter]:
     parameters = []
     for name, parameter in sig.parameters.items():
         type_hint = type_hints[name] if name in type_hints else NoValue
-        parameter = case(parameter.kind) \
-            .of(inspect.Parameter.POSITIONAL_OR_KEYWORD, lambda: Parameter(index, name, type_hint)) \
-            .of(inspect.Parameter.POSITIONAL_ONLY, lambda: Parameter(index, None, type_hint)) \
-            .of(inspect.Parameter.KEYWORD_ONLY, lambda: Parameter(None, name, type_hint)) \
-            .of(inspect.Parameter.VAR_POSITIONAL, lambda: Parameter(None, None, type_hint, '*')) \
-            .of(inspect.Parameter.VAR_KEYWORD, lambda: Parameter(None, None, type_hint, '**')) \
+        parameter = (
+            case(parameter.kind)
+            .of(
+                inspect.Parameter.POSITIONAL_OR_KEYWORD,
+                lambda: Parameter(index, name, type_hint),
+            )
+            .of(
+                inspect.Parameter.POSITIONAL_ONLY,
+                lambda: Parameter(index, None, type_hint),
+            )
+            .of(
+                inspect.Parameter.KEYWORD_ONLY, lambda: Parameter(None, name, type_hint)
+            )
+            .of(
+                inspect.Parameter.VAR_POSITIONAL,
+                lambda: Parameter(None, None, type_hint, "*"),
+            )
+            .of(
+                inspect.Parameter.VAR_KEYWORD,
+                lambda: Parameter(None, None, type_hint, "**"),
+            )
             .otherwise(...)
+        )
         parameters.append(parameter)
         index += 1
     return parameters

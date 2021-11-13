@@ -20,19 +20,14 @@ def test_with_stmt_unpack_sequence(mocker):
     _getiter_ = mocker.stub()
     _getiter_.side_effect = lambda ob: ob
 
-    glb = {
-        '_getiter_': _getiter_,
-        '_unpack_sequence_': guarded_unpack_sequence
-    }
+    glb = {"_getiter_": _getiter_, "_unpack_sequence_": guarded_unpack_sequence}
 
     restricted_exec(WITH_STMT_WITH_UNPACK_SEQUENCE, glb)
 
-    ret = glb['call'](ctx)
+    ret = glb["call"](ctx)
 
     assert ret == (1, 2, 3)
-    _getiter_.assert_has_calls([
-        mocker.call((1, (2, 3))),
-        mocker.call((2, 3))])
+    _getiter_.assert_has_calls([mocker.call((1, (2, 3))), mocker.call((2, 3))])
 
 
 WITH_STMT_MULTI_CTX_WITH_UNPACK_SEQUENCE = """
@@ -57,23 +52,22 @@ def test_with_stmt_multi_ctx_unpack_sequence(mocker):
     _getiter_ = mocker.stub()
     _getiter_.side_effect = lambda ob: ob
 
-    glb = {
-        '_getiter_': _getiter_,
-        '_unpack_sequence_': guarded_unpack_sequence
-    }
+    glb = {"_getiter_": _getiter_, "_unpack_sequence_": guarded_unpack_sequence}
 
     exec(result.code, glb)
 
-    ret = glb['call'](ctx1, ctx2)
+    ret = glb["call"](ctx1, ctx2)
 
     assert ret == (1, 2, 3, 4, 5, 6, 7)
-    _getiter_.assert_has_calls([
-        mocker.call((1, (2, 3))),
-        mocker.call((2, 3)),
-        mocker.call(((4, 5), (6, 7))),
-        mocker.call((4, 5)),
-        mocker.call((6, 7))
-    ])
+    _getiter_.assert_has_calls(
+        [
+            mocker.call((1, (2, 3))),
+            mocker.call((2, 3)),
+            mocker.call(((4, 5), (6, 7))),
+            mocker.call((4, 5)),
+            mocker.call((6, 7)),
+        ]
+    )
 
 
 WITH_STMT_ATTRIBUTE_ACCESS = """
@@ -99,32 +93,29 @@ def test_with_stmt_attribute_access(mocker):
     _write_ = mocker.stub()
     _write_.side_effect = lambda ob: ob
 
-    glb = {'_getattr_': _getattr_, '_write_': _write_}
+    glb = {"_getattr_": _getattr_, "_write_": _write_}
     restricted_exec(WITH_STMT_ATTRIBUTE_ACCESS, glb)
 
     # Test simple
     ctx = mocker.MagicMock(y=1)
     ctx.__enter__.return_value = ctx
 
-    glb['simple'](ctx)
+    glb["simple"](ctx)
 
     assert ctx.z == 2
     _write_.assert_called_once_with(ctx)
-    _getattr_.assert_called_once_with(ctx, 'y')
+    _getattr_.assert_called_once_with(ctx, "y")
 
     _write_.reset_mock()
     _getattr_.reset_mock()
 
     # Test assign_attr
     x = mocker.Mock()
-    glb['assign_attr'](ctx, x)
+    glb["assign_attr"](ctx, x)
 
     assert x.z == 1
     assert x.y == ctx
-    _write_.assert_has_calls([
-        mocker.call(x),
-        mocker.call(x)
-    ])
+    _write_.assert_has_calls([mocker.call(x), mocker.call(x)])
 
     _write_.reset_mock()
 
@@ -134,10 +125,10 @@ def test_with_stmt_attribute_access(mocker):
 
     w = mocker.Mock(ctx=ctx)
 
-    glb['load_attr'](w)
+    glb["load_attr"](w)
 
     assert w.ctx.z == 1
-    _getattr_.assert_called_once_with(w, 'ctx')
+    _getattr_.assert_called_once_with(w, "ctx")
     _write_.assert_called_once_with(w.ctx)
 
 
@@ -157,7 +148,7 @@ def test_with_stmt_subscript(mocker):
     _write_ = mocker.stub()
     _write_.side_effect = lambda ob: ob
 
-    glb = {'_write_': _write_}
+    glb = {"_write_": _write_}
     restricted_exec(WITH_STMT_SUBSCRIPT, glb)
 
     # Test single_key
@@ -165,9 +156,9 @@ def test_with_stmt_subscript(mocker):
     ctx.__enter__.return_value = ctx
     x = {}
 
-    glb['single_key'](ctx, x)
+    glb["single_key"](ctx, x)
 
-    assert x['key'] == ctx
+    assert x["key"] == ctx
     _write_.assert_called_once_with(x)
     _write_.reset_mock()
 
@@ -176,7 +167,7 @@ def test_with_stmt_subscript(mocker):
     ctx.__enter__.return_value = (1, 2)
 
     x = [0, 0, 0, 0, 0, 0]
-    glb['slice_key'](ctx, x)
+    glb["slice_key"](ctx, x)
 
     assert x == [0, 0, 1, 2, 0, 0, 0]
     _write_.assert_called_once_with(x)

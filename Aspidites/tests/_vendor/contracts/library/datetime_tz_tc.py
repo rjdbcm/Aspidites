@@ -3,5 +3,5 @@ from datetime import datetime
 
 date = datetime(2021, 3, 21)
 
-good('dtz(2021,3,21,GMT)', date.astimezone())
-fail('dtz', date)
+good("dtz(2021,3,21,GMT)", date.astimezone())
+fail("dtz", date)

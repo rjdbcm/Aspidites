@@ -1,8 +1,17 @@
 # cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 from collections import deque
 from functools import partial
-from itertools import (chain, combinations, cycle, dropwhile, islice, repeat,
-                       starmap, takewhile, tee)
+from itertools import (
+    chain,
+    combinations,
+    cycle,
+    dropwhile,
+    islice,
+    repeat,
+    starmap,
+    takewhile,
+    tee,
+)
 from operator import add, attrgetter, itemgetter
 from sys import version_info
 
@@ -10,6 +19,7 @@ from .func import F
 from .op import flip
 from .uniform import filterfalse, zip_longest, Iterable
 from Aspidites._vendor.pyrsistent import pvector
+
 
 def take(limit, base):
     return islice(base, limit)
@@ -81,8 +91,7 @@ some = F(partial(map)) >> compact >> first
 
 
 def iterate(f, x):
-    """Return an iterator yielding x, f(x), f(f(x)) etc.
-    """
+    """Return an iterator yielding x, f(x), f(f(x)) etc."""
     while True:
         yield x
         x = f(x)
@@ -202,7 +211,7 @@ def pairwise(iterable):
 
 
 def iter_suppress(func, exception, first_=None):
-    """ Call a function repeatedly until an exception is raised.
+    """Call a function repeatedly until an exception is raised.
 
     Converts a call-until-exception interface to an iterator interface.
     Like __builtin__.iter(func, sentinel) but uses an exception instead

@@ -6,7 +6,7 @@ import pytest
 
 def test_Num():
     """It allows to use number literals."""
-    assert restricted_eval('42') == 42
+    assert restricted_eval("42") == 42
 
 
 def test_Bytes():
@@ -16,12 +16,11 @@ def test_Bytes():
 
 def test_Set():
     """It allows to use set literals."""
-    assert restricted_eval('{1, 2, 3}') == set([1, 2, 3])
+    assert restricted_eval("{1, 2, 3}") == set([1, 2, 3])
 
 
-@pytest.mark.skipif(IS_PY2,
-                    reason="... is new in Python 3")
+@pytest.mark.skipif(IS_PY2, reason="... is new in Python 3")
 def test_Ellipsis():
     """It prevents using the `ellipsis` statement."""
-    result = compile_restricted_exec('...')
-    assert result.errors == ('Line 1: Ellipsis statements are not allowed.',)
+    result = compile_restricted_exec("...")
+    assert result.errors == ("Line 1: Ellipsis statements are not allowed.",)

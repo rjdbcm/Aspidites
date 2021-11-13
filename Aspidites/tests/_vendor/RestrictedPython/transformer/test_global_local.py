@@ -14,9 +14,9 @@ x()
 
 
 def test_Global():
-    glb = {'a': None}
+    glb = {"a": None}
     restricted_exec(GLOBAL_EXAMPLE, glb)
-    assert glb['a'] == 11
+    assert glb["a"] == 11
 
 
 # Example from:
@@ -35,9 +35,9 @@ outside()
 
 
 @pytest.mark.skipif(
-    not IS_PY3,
-    reason="The `nonlocal` statement was introduced in Python 3.0.")
+    not IS_PY3, reason="The `nonlocal` statement was introduced in Python 3.0."
+)
 def test_Nonlocal():
     result = compile_restricted_exec(NONLOCAL_EXAMPLE)
-    assert result.errors == ('Line 5: Nonlocal statements are not allowed.',)
+    assert result.errors == ("Line 5: Nonlocal statements are not allowed.",)
     assert result.code is None

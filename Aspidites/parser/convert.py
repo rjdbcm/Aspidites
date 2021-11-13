@@ -8,15 +8,15 @@ end = lit_rparen + lit_lparen + lit_rparen
 
 
 def factorial(expr):
-    expr = "__maybe(__safeFactorial, " + expr.replace('!', '', 1) + end
+    expr = "__maybe(__safeFactorial, " + expr.replace("!", "", 1) + end
     if expr.count(end) > 1:
         expr = "__maybe(__safeFactorial, " + expr
     return expr
 
 
 def expon(expr):
-    a, op, b = expr.partition('**')
-    expr = a + op + b.replace('**', end, 1) + sep
+    a, op, b = expr.partition("**")
+    expr = a + op + b.replace("**", end, 1) + sep
     expr = "__maybe(__safeExp, " + expr.replace("**", sep, 1) + end
     if expr.count(end) > 1:
         expr = "__maybe(__safeExp, " + expr
@@ -24,8 +24,8 @@ def expon(expr):
 
 
 def floordiv(expr):
-    a, op, b = expr.partition('//')
-    expr = a + op + b.replace('//', end, 1) + sep
+    a, op, b = expr.partition("//")
+    expr = a + op + b.replace("//", end, 1) + sep
     expr = "__maybe(__safeFloorDiv, " + expr.replace("//", sep, 1) + end
     if expr.count(end) > 1:
         expr = "__maybe(__safeFloorDiv, " + expr
@@ -33,8 +33,8 @@ def floordiv(expr):
 
 
 def div(expr):
-    a, op, b = expr.partition('/')
-    expr = a + op + b.replace('/', end + sep, 1)
+    a, op, b = expr.partition("/")
+    expr = a + op + b.replace("/", end + sep, 1)
     expr = "__maybe(__safeDiv, " + expr.replace("/", sep, 1) + end
     if expr.count(end) > 1:
         expr = "__maybe(__safeDiv, " + expr
@@ -42,8 +42,8 @@ def div(expr):
 
 
 def mod(expr):
-    a, op, b = expr.partition('%')
-    expr = a + op + b.replace('%', end, 1) + sep
+    a, op, b = expr.partition("%")
+    expr = a + op + b.replace("%", end, 1) + sep
     expr = "__maybe(__safeMod, " + expr.replace("%", sep, 1) + end
     if expr.count(end) > 1:
         expr = "__maybe(__safeMod, " + expr
@@ -51,30 +51,29 @@ def mod(expr):
 
 
 def double_negation(expr):
-    return "__maybe(__safeUnaryAdd, " + expr.replace("+", '') + end
+    return "__maybe(__safeUnaryAdd, " + expr.replace("+", "") + end
 
 
 def single_negation(expr):
-    return "__maybe(__safeUnarySub, " + expr.replace("-", '') + end
+    return "__maybe(__safeUnarySub, " + expr.replace("-", "") + end
 
 
 def cvt_arith_expr(s, loc, t):
     expr = "".join((str(i) for i in t))
-    substr = ['!', '**', '//', '/', '%']
+    substr = ["!", "**", "//", "/", "%"]
 
     # TODO Unary ops don't get caught during parsing.
     while any([s in expr for s in substr]):
         handler = {
-            lambda x: '!' in x: factorial,
-            lambda x: '**' in x: expon,
-            lambda x: '//' in x: floordiv,
-            lambda x: '/' in x: div,
-            lambda x: '%' in x: mod,
-            lambda x: '-' in x and x.count('-') % 2 == 0: double_negation,
-            lambda x: '-' in x and x.count('-') % 2 == 1: single_negation,
-            lambda x: '+' in x: double_negation
-
-                   }
+            lambda x: "!" in x: factorial,
+            lambda x: "**" in x: expon,
+            lambda x: "//" in x: floordiv,
+            lambda x: "/" in x: div,
+            lambda x: "%" in x: mod,
+            lambda x: "-" in x and x.count("-") % 2 == 0: double_negation,
+            lambda x: "-" in x and x.count("-") % 2 == 1: single_negation,
+            lambda x: "+" in x: double_negation,
+        }
         for k, v in handler.items():
             if k(expr):
                 expr = v(expr)
@@ -84,7 +83,7 @@ def cvt_arith_expr(s, loc, t):
 
 def cvt_pragma(s, loc, t):
     t: list = t.asList()
-    return '\n'.join(t) + '\n'
+    return "\n".join(t) + "\n"
 
 
 def cvt_int(s, loc, t):
@@ -111,10 +110,10 @@ def cvt_for_loop_decl(s, loc, t):
             m = r.group(1) + ".items()"
         else:
             m = t[4]
-        s = str(t[3] + ''.join(t[:3]) + ' in ' + m + lit_colon).encode('UTF-8')
+        s = str(t[3] + "".join(t[:3]) + " in " + m + lit_colon).encode("UTF-8")
     else:
-        s = str(t[1] + t[0] + ' in ' + t[2] + lit_colon).encode('UTF-8')
-    return s.decode('UTF-8')
+        s = str(t[1] + t[0] + " in " + t[2] + lit_colon).encode("UTF-8")
+    return s.decode("UTF-8")
 
 
 def cvt_dict(s, loc, t):
@@ -126,7 +125,7 @@ def cvt_dict(s, loc, t):
             t[i] = f"{key}: {val}"
         else:  # integer key
             t[i] = f"{key}: {val}"
-    s = f'{", ".join(t)}'.encode('UTF-8')
+    s = f'{", ".join(t)}'.encode("UTF-8")
     return f"__pmap({{{s.decode('UTF-8')}}})"
 
 
@@ -138,7 +137,7 @@ def cvt_list(s, loc, t):
             t[i] = v
         else:  # integer key
             t[i] = int(v)
-    s = f'{", ".join(t)}'.encode('UTF-8')
+    s = f'{", ".join(t)}'.encode("UTF-8")
     return f"__pvector([{s.decode('UTF-8')}])"
 
 
@@ -147,7 +146,7 @@ def cvt_list_index(s, loc, t):
     t.insert(2, lit_lparen)
     t[3] = str(t[3])
     t.append(lit_rparen)
-    return ''.join(t)
+    return "".join(t)
 
 
 def cvt_set(s, loc, t):
@@ -158,7 +157,7 @@ def cvt_set(s, loc, t):
             t[i] = v
         else:  # integer key
             t[i] = int(v)
-    s = f'{", ".join(t)}'.encode('UTF-8')
+    s = f'{", ".join(t)}'.encode("UTF-8")
     return f"__pset({{{s.decode('UTF-8')}}})"
 
 
@@ -193,4 +192,13 @@ def cvt_clos_call(s, loc, t):
 
 
 def cvt_func_call(s, loc, t):
-    return "__maybe" + t[0][1] + t[0][0] + sep + sep.join(t[0][2:-1]) + t[0][-1] + lit_lparen + lit_rparen
+    return (
+        "__maybe"
+        + t[0][1]
+        + t[0][0]
+        + sep
+        + sep.join(t[0][2:-1])
+        + t[0][-1]
+        + lit_lparen
+        + lit_rparen
+    )

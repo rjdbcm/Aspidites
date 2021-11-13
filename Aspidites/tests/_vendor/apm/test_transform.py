@@ -25,7 +25,6 @@ def record_type(s):
 
 
 class TransformTest(unittest.TestCase):
-
     def test_transform(self):
         ps0 = (
             Regex(r".+"),
@@ -74,7 +73,9 @@ class TransformTest(unittest.TestCase):
             self.assertEqual(expected_to_match, bool(match(None, t)))
             # also do a check for captureall=, which is using a more fancy transform
             results = {}
-            self.assertEqual(expected_to_match, bool(match(None, p, captureall=results)))
+            self.assertEqual(
+                expected_to_match, bool(match(None, p, captureall=results))
+            )
             if expected_to_match:
                 self.assertTrue(bool(results))
 
@@ -90,18 +91,21 @@ class TransformTest(unittest.TestCase):
 
     def test_fancy_transform(self):
         # noinspection PyDefaultArgument
-        def generate_name(static={'count': 0}):
-            static['count'] += 1
+        def generate_name(static={"count": 0}):
+            static["count"] += 1
             return f"n{static['count']}"
 
         pattern = (1, Many(...), 3)
         transformed = transform(pattern, lambda x: Capture(x, name=generate_name()))
         result = match((1, 2, 3), transformed)
         self.assertTrue(result)
-        self.assertEqual({
-            'n1': 1,
-            'n2': 2,
-            'n3': [2],
-            'n4': 3,
-            'n5': (1, 2, 3),
-        }, result.groups())
+        self.assertEqual(
+            {
+                "n1": 1,
+                "n2": 2,
+                "n3": [2],
+                "n4": 3,
+                "n5": (1, 2, 3),
+            },
+            result.groups(),
+        )

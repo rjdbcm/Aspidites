@@ -1,7 +1,11 @@
 import hypothesis, hypothesis.strategies as st
-from Aspidites._vendor.contracts.inspection import can_accept_exactly_one_argument, can_accept_self_plus_one_argument
+from Aspidites._vendor.contracts.inspection import (
+    can_accept_exactly_one_argument,
+    can_accept_self_plus_one_argument,
+)
 from Aspidites._vendor.fn import _
 from operator import add, sub, eq, ne, gt, lt, le, ge
+
 
 class C1(object):
 

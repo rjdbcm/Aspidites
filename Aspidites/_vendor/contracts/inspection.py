@@ -156,15 +156,15 @@ def iscode(object):
 def getfile(object):
     """Work out which source or compiled file an object was defined in."""
     if ismodule(object):
-        if getattr(object, '__file__', None):
+        if getattr(object, "__file__", None):
             return object.__file__
-        raise TypeError('{!r} is a built-in module'.format(object))
+        raise TypeError("{!r} is a built-in module".format(object))
     if isclass(object):
-        if hasattr(object, '__module__'):
+        if hasattr(object, "__module__"):
             module = sys.modules.get(object.__module__)
-            if getattr(module, '__file__', None):
+            if getattr(module, "__file__", None):
                 return module.__file__
-        raise TypeError('{!r} is a built-in class'.format(object))
+        raise TypeError("{!r} is a built-in class".format(object))
     if ismethod(object):
         object = object.__func__
     if isfunction(object):
@@ -175,11 +175,13 @@ def getfile(object):
         object = object.f_code
     if iscode(object):
         return object.co_filename
-    raise TypeError('module, class, method, function, traceback, frame, or '
-                    'code object was expected, got {}'.format(type(object).__name__))
+    raise TypeError(
+        "module, class, method, function, traceback, frame, or "
+        "code object was expected, got {}".format(type(object).__name__)
+    )
 
 
-Arguments = namedtuple('Arguments', 'args, varargs, varkw')
+Arguments = namedtuple("Arguments", "args, varargs, varkw")
 
 
 def getabsfile(object, _filename=None):
@@ -200,7 +202,7 @@ def getmodule(object, _filename=None):
     """Return the module an object was defined in, or None if not found."""
     if ismodule(object):
         return object
-    if hasattr(object, '__module__'):
+    if hasattr(object, "__module__"):
         return sys.modules.get(object.__module__)
     # Try the filename to modulename cache
     if _filename is not None and _filename in modulesbyfile:
@@ -215,7 +217,7 @@ def getmodule(object, _filename=None):
     # Update the filename to module name cache and check yet again
     # Copy sys.modules in order to cope with changes while iterating
     for modname, module in sys.modules.copy().items():
-        if ismodule(module) and hasattr(module, '__file__'):
+        if ismodule(module) and hasattr(module, "__file__"):
             f = module.__file__
             if f == _filesbymodname.get(modname, None):
                 # Have already mapped this module, so skip it
@@ -223,20 +225,19 @@ def getmodule(object, _filename=None):
             _filesbymodname[modname] = f
             f = getabsfile(module)
             # Always map to the name the module knows itself by
-            modulesbyfile[f] = modulesbyfile[
-                os.path.realpath(f)] = module.__name__
+            modulesbyfile[f] = modulesbyfile[os.path.realpath(f)] = module.__name__
     if file in modulesbyfile:
         return sys.modules.get(modulesbyfile[file])
     # Check the main module
-    main = sys.modules['__main__']
-    if not hasattr(object, '__name__'):
+    main = sys.modules["__main__"]
+    if not hasattr(object, "__name__"):
         return None
     if hasattr(main, object.__name__):
         mainobject = getattr(main, object.__name__)
         if mainobject is object:
             return main
     # Check builtins
-    builtin = sys.modules['builtins']
+    builtin = sys.modules["builtins"]
     if hasattr(builtin, object.__name__):
         builtinobject = getattr(builtin, object.__name__)
         if builtinobject is object:
@@ -251,15 +252,15 @@ def getsourcefile(object):
     all_bytecode_suffixes = importlib.machinery.DEBUG_BYTECODE_SUFFIXES[:]
     all_bytecode_suffixes += importlib.machinery.OPTIMIZED_BYTECODE_SUFFIXES[:]
     if any(filename.endswith(s) for s in all_bytecode_suffixes):
-        filename = (os.path.splitext(filename)[0] +
-                    importlib.machinery.SOURCE_SUFFIXES[0])
-    elif any(filename.endswith(s) for s in
-             importlib.machinery.EXTENSION_SUFFIXES):
+        filename = (
+            os.path.splitext(filename)[0] + importlib.machinery.SOURCE_SUFFIXES[0]
+        )
+    elif any(filename.endswith(s) for s in importlib.machinery.EXTENSION_SUFFIXES):
         return None
     if os.path.exists(filename):
         return filename
     # only return a non-existent filename if the module has a PEP 302 loader
-    if getattr(getmodule(object, filename), '__loader__', None) is not None:
+    if getattr(getmodule(object, filename), "__loader__", None) is not None:
         return filename
     # or it is in the linecache
     if filename in linecache.cache:
@@ -288,11 +289,21 @@ def getcallargs(func, *positional, **named):
     names of the * and ** arguments, if any), and values the respective bound
     values from 'positional' and 'named'.
     """
-    args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, annotations = getfullargspec(func)
+    (
+        args,
+        varargs,
+        varkw,
+        defaults,
+        kwonlyargs,
+        kwonlydefaults,
+        annotations,
+    ) = getfullargspec(func)
 
     if kwonlyargs:
-        raise ValueError("I'm sorry, I don't have the logic to use kwonlyargs. "
-                         "Perhapse you can help PyContracts and implement this? Thanks.")
+        raise ValueError(
+            "I'm sorry, I don't have the logic to use kwonlyargs. "
+            "Perhapse you can help PyContracts and implement this? Thanks."
+        )
 
     f_name = func.__name__
     arg2value = {}
@@ -316,22 +327,24 @@ def getcallargs(func, *positional, **named):
                 try:
                     subvalue = next(value)
                 except StopIteration:
-                    raise ValueError('need more than %d %s to unpack' %
-                                     (i, 'values' if i > 1 else 'value'))
+                    raise ValueError(
+                        "need more than %d %s to unpack"
+                        % (i, "values" if i > 1 else "value")
+                    )
                 assign(subarg, subvalue)
             try:
                 next(value)
             except StopIteration:
                 pass
             else:
-                raise ValueError('too many values to unpack')
+                raise ValueError("too many values to unpack")
 
     def is_assigned(arg):
         if isinstance(arg, str):
             return arg in arg2value
         return arg in assigned_tuple_params
 
-    im_self = getattr(func, '__self__', None)
+    im_self = getattr(func, "__self__", None)
 
     if ismethod(func) and im_self is not None:
         # implicit 'self' (or 'cls' for classmethods) argument
@@ -344,21 +357,29 @@ def getcallargs(func, *positional, **named):
         assign(arg, value)
     if varargs:
         if num_pos > num_args:
-            assign(varargs, positional[-(num_pos - num_args):])
+            assign(varargs, positional[-(num_pos - num_args) :])
         else:
             assign(varargs, ())
     elif 0 < num_args < num_pos:
-        raise TypeError('%s() takes %s %d %s (%d given)' % (
-            f_name, 'at most' if defaults else 'exactly', num_args,
-            'arguments' if num_args > 1 else 'argument', num_total))
+        raise TypeError(
+            "%s() takes %s %d %s (%d given)"
+            % (
+                f_name,
+                "at most" if defaults else "exactly",
+                num_args,
+                "arguments" if num_args > 1 else "argument",
+                num_total,
+            )
+        )
     elif num_args == 0 and num_total:
-        raise TypeError('%s() takes no arguments (%d given)' %
-                        (f_name, num_total))
+        raise TypeError("%s() takes no arguments (%d given)" % (f_name, num_total))
     for arg in args:
         if isinstance(arg, str) and arg in named:
             if is_assigned(arg):
-                raise TypeError("%s() got multiple values for keyword "
-                                "argument '%s'" % (f_name, arg))
+                raise TypeError(
+                    "%s() got multiple values for keyword "
+                    "argument '%s'" % (f_name, arg)
+                )
             else:
                 assign(arg, named.pop(arg))
     if defaults:  # fill in any missing values with the defaults
@@ -370,19 +391,27 @@ def getcallargs(func, *positional, **named):
     elif named:
         unexpected = next(iter(named))
         if isinstance(unexpected, str):
-            unexpected = unexpected.encode(sys.getdefaultencoding(), 'replace')
-        raise TypeError("%s() got an unexpected keyword argument '%s'" %
-                        (f_name, unexpected))
+            unexpected = unexpected.encode(sys.getdefaultencoding(), "replace")
+        raise TypeError(
+            "%s() got an unexpected keyword argument '%s'" % (f_name, unexpected)
+        )
     unassigned = num_args - len([arg for arg in args if is_assigned(arg)])
     if unassigned:
         num_required = num_args - num_defaults
-        raise TypeError('%s() takes %s %d %s (%d given)' % (
-            f_name, 'at least' if defaults else 'exactly', num_required,
-            'arguments' if num_required > 1 else 'argument', num_total))
+        raise TypeError(
+            "%s() takes %s %d %s (%d given)"
+            % (
+                f_name,
+                "at least" if defaults else "exactly",
+                num_required,
+                "arguments" if num_required > 1 else "argument",
+                num_total,
+            )
+        )
     return arg2value
 
 
-ArgSpec = namedtuple('ArgSpec', 'args varargs keywords defaults')
+ArgSpec = namedtuple("ArgSpec", "args varargs keywords defaults")
 
 
 def getargspec(func):
@@ -405,33 +434,42 @@ def getargspec(func):
 
     Deprecated since Python 3.5, use `inspect.getfullargspec()`.
     """
-    warnings.warn("inspect.getargspec() is deprecated since Python 3.0, "
-                  "use inspect.signature() or inspect.getfullargspec()",
-                  DeprecationWarning, stacklevel=2)
-    args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, ann = \
-        getfullargspec(func)
+    warnings.warn(
+        "inspect.getargspec() is deprecated since Python 3.0, "
+        "use inspect.signature() or inspect.getfullargspec()",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, ann = getfullargspec(
+        func
+    )
     if kwonlyargs or ann:
-        raise ValueError("Function has keyword-only parameters or annotations"
-                         ", use inspect.signature() API which can support them")
+        raise ValueError(
+            "Function has keyword-only parameters or annotations"
+            ", use inspect.signature() API which can support them"
+        )
     return ArgSpec(args, varargs, varkw, defaults)
 
 
-FullArgSpec = namedtuple('FullArgSpec', 'args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, annotations')
+FullArgSpec = namedtuple(
+    "FullArgSpec",
+    "args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, annotations",
+)
 
-ArgInfo = namedtuple('ArgInfo', 'args varargs keywords locals')
+ArgInfo = namedtuple("ArgInfo", "args varargs keywords locals")
 
 
 def formatannotation(annotation, base_module=None):
-    if getattr(annotation, '__module__', None) == 'typing':
-        return repr(annotation).replace('typing.', '')
+    if getattr(annotation, "__module__", None) == "typing":
+        return repr(annotation).replace("typing.", "")
     if isinstance(annotation, type):
-        if annotation.__module__ in ('builtins', base_module):
+        if annotation.__module__ in ("builtins", base_module):
             return annotation.__qualname__
-        return annotation.__module__ + '.' + annotation.__qualname__
+        return annotation.__module__ + "." + annotation.__qualname__
     return repr(annotation)
 
 
-Traceback = namedtuple('Traceback', 'filename lineno function code_context index')
+Traceback = namedtuple("Traceback", "filename lineno function code_context index")
 
 
 class ClassFoundException(Exception):
@@ -439,14 +477,13 @@ class ClassFoundException(Exception):
 
 
 class _ClassFinder(ast.NodeVisitor):
-
     def __init__(self, qualname):
         self.stack = []
         self.qualname = qualname
 
     def visit_FunctionDef(self, node):
         self.stack.append(node.name)
-        self.stack.append('<locals>')
+        self.stack.append("<locals>")
         self.generic_visit(node)
         self.stack.pop()
         self.stack.pop()
@@ -455,7 +492,7 @@ class _ClassFinder(ast.NodeVisitor):
 
     def visit_ClassDef(self, node):
         self.stack.append(node.name)
-        if self.qualname == '.'.join(self.stack):
+        if self.qualname == ".".join(self.stack):
             # Return the decorator for the class if present
             if node.decorator_list:
                 line_number = node.decorator_list[0].lineno
@@ -486,8 +523,8 @@ def findsource(object):
         # Allow filenames in form of "<something>" to pass through.
         # `doctest` monkeypatches `linecache` module to enable
         # inspection, so let `linecache.getlines` to be called.
-        if not (file.startswith('<') and file.endswith('>')):
-            raise OSError('source code not available')
+        if not (file.startswith("<") and file.endswith(">")):
+            raise OSError("source code not available")
 
     module = getmodule(object, file)
     if module:
@@ -495,14 +532,14 @@ def findsource(object):
     else:
         lines = linecache.getlines(file)
     if not lines:
-        raise OSError('could not get source code')
+        raise OSError("could not get source code")
 
     if ismodule(object):
         return lines, 0
 
     if isclass(object):
         qualname = object.__qualname__
-        source = ''.join(lines)
+        source = "".join(lines)
         tree = ast.parse(source)
         class_finder = _ClassFinder(qualname)
         try:
@@ -511,7 +548,7 @@ def findsource(object):
             line_number = e.args[0]
             return lines, line_number
         else:
-            raise OSError('could not find class definition')
+            raise OSError("could not find class definition")
 
     if ismethod(object):
         object = object.__func__
@@ -522,20 +559,22 @@ def findsource(object):
     if isframe(object):
         object = object.f_code
     if iscode(object):
-        if not hasattr(object, 'co_firstlineno'):
-            raise OSError('could not find function definition')
+        if not hasattr(object, "co_firstlineno"):
+            raise OSError("could not find function definition")
         lnum = object.co_firstlineno - 1
-        pat = re.compile(r'^(\s*def\s)|(\s*async\s+def\s)|(.*(?<!\w)lambda(:|\s))|^(\s*@)')
+        pat = re.compile(
+            r"^(\s*def\s)|(\s*async\s+def\s)|(.*(?<!\w)lambda(:|\s))|^(\s*@)"
+        )
         while lnum > 0:
             try:
                 line = lines[lnum]
             except IndexError:
-                raise OSError('lineno is out of bounds')
+                raise OSError("lineno is out of bounds")
             if pat.match(line):
                 break
             lnum = lnum - 1
         return lines, lnum
-    raise OSError('could not find code object')
+    raise OSError("could not find code object")
 
 
 def getframeinfo(frame, context=1):
@@ -552,7 +591,7 @@ def getframeinfo(frame, context=1):
     else:
         lineno = frame.f_lineno
     if not isframe(frame):
-        raise TypeError('{!r} is not a frame or traceback object'.format(frame))
+        raise TypeError("{!r} is not a frame or traceback object".format(frame))
 
     filename = getsourcefile(frame) or getfile(frame)
     if context > 0:
@@ -563,7 +602,7 @@ def getframeinfo(frame, context=1):
             lines = index = None
         else:
             start = max(0, min(start, len(lines) - context))
-            lines = lines[start:start + context]
+            lines = lines[start : start + context]
             index = lineno - 1 - start
     else:
         lines = index = None
@@ -577,7 +616,7 @@ def getlineno(frame):
     return frame.f_lineno
 
 
-FrameInfo = namedtuple('FrameInfo', ('frame',) + Traceback._fields)
+FrameInfo = namedtuple("FrameInfo", ("frame",) + Traceback._fields)
 
 
 def getouterframes(frame, context=1):
@@ -653,11 +692,11 @@ _KEYWORD_ONLY = _ParameterKind.KEYWORD_ONLY
 _VAR_KEYWORD = _ParameterKind.VAR_KEYWORD
 
 _PARAM_NAME_MAPPING = {
-    _POSITIONAL_ONLY: 'positional-only',
-    _POSITIONAL_OR_KEYWORD: 'positional or keyword',
-    _VAR_POSITIONAL: 'variadic positional',
-    _KEYWORD_ONLY: 'keyword-only',
-    _VAR_KEYWORD: 'variadic keyword'
+    _POSITIONAL_ONLY: "positional-only",
+    _POSITIONAL_OR_KEYWORD: "positional or keyword",
+    _VAR_POSITIONAL: "variadic positional",
+    _KEYWORD_ONLY: "keyword-only",
+    _VAR_KEYWORD: "variadic keyword",
 }
 
 
@@ -683,7 +722,7 @@ class Parameter:
         `Parameter.KEYWORD_ONLY`, `Parameter.VAR_KEYWORD`.
     """
 
-    __slots__ = ('_name', '_kind', '_default', '_annotation')
+    __slots__ = ("_name", "_kind", "_default", "_annotation")
 
     POSITIONAL_ONLY = _POSITIONAL_ONLY
     POSITIONAL_OR_KEYWORD = _POSITIONAL_OR_KEYWORD
@@ -697,51 +736,52 @@ class Parameter:
         try:
             self._kind = _ParameterKind(kind)
         except ValueError:
-            raise ValueError(f'value {kind!r} is not a valid Parameter.kind')
+            raise ValueError(f"value {kind!r} is not a valid Parameter.kind")
         if default is not _empty:
             if self._kind in (_VAR_POSITIONAL, _VAR_KEYWORD):
-                msg = '{} parameters cannot have default values'
+                msg = "{} parameters cannot have default values"
                 msg = msg.format(self._kind.description)
                 raise ValueError(msg)
         self._default = default
         self._annotation = annotation
 
         if name is _empty:
-            raise ValueError('name is a required attribute for Parameter')
+            raise ValueError("name is a required attribute for Parameter")
 
         if not isinstance(name, str):
-            msg = 'name must be a str, not a {}'.format(type(name).__name__)
+            msg = "name must be a str, not a {}".format(type(name).__name__)
             raise TypeError(msg)
 
-        if name[0] == '.' and name[1:].isdigit():
+        if name[0] == "." and name[1:].isdigit():
             # These are implicit arguments generated by comprehensions. In
             # order to provide a friendlier interface to users, we recast
             # their name as "implicitN" and treat them as positional-only.
             # See issue 19611.
             if self._kind != _POSITIONAL_OR_KEYWORD:
                 msg = (
-                    'implicit arguments must be passed as '
-                    'positional or keyword arguments, not {}'
+                    "implicit arguments must be passed as "
+                    "positional or keyword arguments, not {}"
                 )
                 msg = msg.format(self._kind.description)
                 raise ValueError(msg)
             self._kind = _POSITIONAL_ONLY
-            name = 'implicit{}'.format(name[1:])
+            name = "implicit{}".format(name[1:])
 
         if not name.isidentifier():
-            raise ValueError('{!r} is not a valid parameter name'.format(name))
+            raise ValueError("{!r} is not a valid parameter name".format(name))
 
         self._name = name
 
     def __reduce__(self):
-        return (type(self),
-                (self._name, self._kind),
-                {'_default': self._default,
-                 '_annotation': self._annotation})
+        return (
+            type(self),
+            (self._name, self._kind),
+            {"_default": self._default, "_annotation": self._annotation},
+        )
 
     def __setstate__(self, state):
-        self._default = state['_default']
-        self._annotation = state['_annotation']
+        self._default = state["_default"]
+        self._annotation = state["_annotation"]
 
     @property
     def name(self):
@@ -759,8 +799,7 @@ class Parameter:
     def kind(self):
         return self._kind
 
-    def replace(self, *, name=_void, kind=_void,
-                annotation=_void, default=_void):
+    def replace(self, *, name=_void, kind=_void, annotation=_void, default=_void):
         """Creates a customized copy of the Parameter."""
 
         if name is _void:
@@ -783,19 +822,18 @@ class Parameter:
 
         # Add annotation and default value
         if self._annotation is not _empty:
-            formatted = '{}: {}'.format(formatted,
-                                        formatannotation(self._annotation))
+            formatted = "{}: {}".format(formatted, formatannotation(self._annotation))
 
         if self._default is not _empty:
             if self._annotation is not _empty:
-                formatted = '{} = {}'.format(formatted, repr(self._default))
+                formatted = "{} = {}".format(formatted, repr(self._default))
             else:
-                formatted = '{}={}'.format(formatted, repr(self._default))
+                formatted = "{}={}".format(formatted, repr(self._default))
 
         if kind == _VAR_POSITIONAL:
-            formatted = '*' + formatted
+            formatted = "*" + formatted
         elif kind == _VAR_KEYWORD:
-            formatted = '**' + formatted
+            formatted = "**" + formatted
 
         return formatted
 
@@ -810,10 +848,12 @@ class Parameter:
             return True
         if not isinstance(other, Parameter):
             return NotImplemented
-        return (self._name == other._name and
-                self._kind == other._kind and
-                self._default == other._default and
-                self._annotation == other._annotation)
+        return (
+            self._name == other._name
+            and self._kind == other._kind
+            and self._default == other._default
+            and self._annotation == other._annotation
+        )
 
 
 # class BoundArguments:
@@ -947,18 +987,21 @@ class Parameter:
 
 
 def can_accept_exactly_one_argument(callable_thing):
-    """ Checks that a callable can accept exactly one argument
-        using introspection.
+    """Checks that a callable can accept exactly one argument
+    using introspection.
     """
     if ismethod(callable_thing):  # bound method
         f = callable_thing.__func__
-        args = (callable_thing.__self__, 'test',)
+        args = (
+            callable_thing.__self__,
+            "test",
+        )
     else:
         if not isfunction(callable_thing):
             f = callable_thing.__call__
         else:
             f = callable_thing
-        args = ('test',)
+        args = ("test",)
 
     try:
         getcallargs(f, *args)
@@ -991,39 +1034,39 @@ def get_callable_fullargspec(callable_thing):
 
 
 def can_accept_at_least_one_argument(callable_thing):
-    """ 
-        Checks that a callable can accept at least one argument
-        using introspection.
+    """
+    Checks that a callable can accept at least one argument
+    using introspection.
     """
     spec = get_callable_fullargspec(callable_thing)
     return len(spec.args) > 0 or spec.varargs
 
 
 def can_accept_self(callable_thing):
-    """ 
-        Checks that a callable's first argument is self
+    """
+    Checks that a callable's first argument is self
     """
     spec = get_callable_fullargspec(callable_thing)
 
-    if len(spec.args) == 0 or spec.args[0] != 'self':
+    if len(spec.args) == 0 or spec.args[0] != "self":
         return False
 
     return True
 
 
 def can_accept_self_plus_one_argument(callable_thing):
-    """ 
-        Checks that a callable can accept exactly self plus one argument
-        using introspection.
+    """
+    Checks that a callable can accept exactly self plus one argument
+    using introspection.
     """
 
     spec = get_callable_fullargspec(callable_thing)
-    if len(spec.args) == 0 or spec.args[0] != 'self':
+    if len(spec.args) == 0 or spec.args[0] != "self":
         return False
 
     f = get_f_from_callable(callable_thing)
     try:
-        getcallargs(f, 'self', 'value')
+        getcallargs(f, "self", "value")
     except (TypeError, ValueError, ArityError) as e:  # @UnusedVariable
         return False
     else:
@@ -1035,15 +1078,15 @@ class InvalidArgs(Exception):
 
 
 def check_callable_accepts_these_arguments(callable_thing, args, kwargs):
-    """ Checks that a callable can accept the args and kwargs. 
-    
-        Returns either None or raises InvalidArgs. 
+    """Checks that a callable can accept the args and kwargs.
+
+    Returns either None or raises InvalidArgs.
     """
     f = get_f_from_callable(callable_thing)
 
     try:
         getcallargs(f, *args, **kwargs)
     except Exception as e:
-        raise InvalidArgs('%s does not accept %s, %s: %s' % (f, args, kwargs, e))
+        raise InvalidArgs("%s does not accept %s, %s: %s" % (f, args, kwargs, e))
     else:
         return True

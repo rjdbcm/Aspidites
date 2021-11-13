@@ -37,8 +37,8 @@ class TestNamedExpr(TestCase):
         mod = parse("if x:= x + 1: True\n")
         mod = TransformNamedExprTarget().visit(mod)
         with self.assertRaisesRegex(
-                SyntaxError,
-                "Assignment expressions are only allowed for simple target"):
+            SyntaxError, "Assignment expressions are only allowed for simple target"
+        ):
             code, gs = compile_str(mod)
 
 
@@ -50,7 +50,7 @@ def compile_str(s, name="<unknown>"):
 
     *name* is a ``str`` used in error messages.
     """
-    code = compile_restricted(s, name, 'exec')
+    code = compile_restricted(s, name, "exec")
     gs = safe_globals.copy()
     gs["__debug__"] = True  # assert active
     return code, gs

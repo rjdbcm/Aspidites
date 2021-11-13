@@ -7,51 +7,54 @@ from Aspidites._vendor._compat import IS_PY3, unicode, basestring
 from .interface import describe_type, describe_value  # @UnusedImport # old interface
 
 __all__ = [
-    'indent',
-    'deprecated',
-    'raise_type_mismatch',
-    'raise_wrapped',
-    'raise_desc',
-    'check_isinstance',
+    "indent",
+    "deprecated",
+    "raise_type_mismatch",
+    "raise_wrapped",
+    "raise_desc",
+    "check_isinstance",
 ]
 
 
-def indent(s, prefix, first=None): # pragma: no cover
+def indent(s, prefix, first=None):  # pragma: no cover
     if not isinstance(s, basestring):
-        s = u'{}'.format(s)
+        s = u"{}".format(s)
 
     assert isinstance(prefix, basestring)
     try:
-        lines = s.split('\n')
+        lines = s.split("\n")
     except UnicodeDecodeError:
-        print(type(s)) # XXX
-        print(s) # XXX
+        print(type(s))  # XXX
+        print(s)  # XXX
         lines = [s]
     if not lines:
-        return u''
+        return u""
 
     if first is None:
         first = prefix
 
     m = max(len(prefix), len(first))
 
-    prefix = ' ' * (m - len(prefix)) + prefix
-    first = ' ' * (m - len(first)) + first
+    prefix = " " * (m - len(prefix)) + prefix
+    first = " " * (m - len(first)) + first
 
     # differnet first prefix
-    res = [u'%s%s' % (prefix, line.rstrip()) for line in lines]
-    res[0] = u'%s%s' % (first, lines[0].rstrip())
-    return '\n'.join(res)
+    res = [u"%s%s" % (prefix, line.rstrip()) for line in lines]
+    res[0] = u"%s%s" % (first, lines[0].rstrip())
+    return "\n".join(res)
 
 
-def deprecated(func): # pragma: no cover
+def deprecated(func):  # pragma: no cover
     """This is a decorator which can be used to mark functions
     as deprecated. It will result in a warning being emitted
     when the function is used."""
 
     def new_func(*args, **kwargs):
-        warnings.warn("Call to deprecated function %s." % func.__name__,
-                      category=DeprecationWarning, stacklevel=2)
+        warnings.warn(
+            "Call to deprecated function %s." % func.__name__,
+            category=DeprecationWarning,
+            stacklevel=2,
+        )
         return func(*args, **kwargs)
 
     new_func.__name__ = func.__name__
@@ -62,51 +65,52 @@ def deprecated(func): # pragma: no cover
 
 def check_isinstance(ob, expected, **kwargs):
     if not isinstance(ob, expected):
-        kwargs['object'] = ob
+        kwargs["object"] = ob
         raise_type_mismatch(ob, expected, **kwargs)
 
 
-def raise_type_mismatch(ob, expected, **kwargs): # pragma: no cover
-    """ Raises an exception concerning ob having the wrong type. """
-    e = 'Object not of expected type:'
-    e += '\n  expected: {}'.format(expected)
-    e += '\n  obtained: {}'.format(type(ob))
-    e += '\n' + indent(format_obs(kwargs), ' ')
+def raise_type_mismatch(ob, expected, **kwargs):  # pragma: no cover
+    """Raises an exception concerning ob having the wrong type."""
+    e = "Object not of expected type:"
+    e += "\n  expected: {}".format(expected)
+    e += "\n  obtained: {}".format(type(ob))
+    e += "\n" + indent(format_obs(kwargs), " ")
     raise ValueError(e)
 
 
-def format_dict_long(d, informal=False): # pragma: no cover
+def format_dict_long(d, informal=False):  # pragma: no cover
     """
-        k: value
-           kooked
-        k: value
+    k: value
+       kooked
+    k: value
     """
     if not d:
-        return '{}'
+        return "{}"
 
     maxlen = max([len(n) for n in d]) + 2
 
     def pad(pre):
-        return ' ' * (maxlen - len(pre)) + pre
+        return " " * (maxlen - len(pre)) + pre
 
     res = ""
     order = sorted(d)
     for i, name in enumerate(order):
         value = d[name]
-        prefix = pad('%s: ' % name)
+        prefix = pad("%s: " % name)
         if i > 0:
-            res += '\n'
+            res += "\n"
 
         s = _get_str(value, informal)
 
         if len(s) > 512:
-            s = s[:512] + ' [truncated]'
-        res += indent(s, ' ', first=prefix)
+            s = s[:512] + " [truncated]"
+        res += indent(s, " ", first=prefix)
     return res
 
 
 def _get_str(x, informal):  # pragma: no cover
     from ..contracts.interface import describe_value_multiline
+
     if informal:
         s = x.__str__()
     else:
@@ -114,24 +118,24 @@ def _get_str(x, informal):  # pragma: no cover
     return s
 
 
-def format_list_long(l, informal=False): # pragma: no cover
+def format_list_long(l, informal=False):  # pragma: no cover
     """
-        - My 
-          first
-        - Second
+    - My
+      first
+    - Second
     """
     res = ""
     for i, value in enumerate(l):
-        prefix = '- '
+        prefix = "- "
         if i > 0:
-            res += '\n'
+            res += "\n"
         s = _get_str(value, informal)
-        res += indent(s, ' ', first=prefix)
+        res += indent(s, " ", first=prefix)
     return res
 
 
-def format_obs(d, informal=False): # pragma: no cover
-    """ Shows objects values and typed for the given dictionary """
+def format_obs(d, informal=False):  # pragma: no cover
+    """Shows objects values and typed for the given dictionary"""
     if not d:
         return d.__str__()
 
@@ -140,36 +144,36 @@ def format_obs(d, informal=False): # pragma: no cover
         maxlen = max(len(name), maxlen)
 
     def pad(pre):
-        return ' ' * (maxlen - len(pre)) + pre
+        return " " * (maxlen - len(pre)) + pre
 
-    res = ''
+    res = ""
 
     S = sorted(d)
     for i, name in enumerate(S):
         value = d[name]
-        prefix = pad('%s: ' % name)
+        prefix = pad("%s: " % name)
         if i > 0:
-            res += '\n'
+            res += "\n"
 
         s = _get_str(value, informal)
 
-        res += indent(s, ' ', first=prefix)
+        res += indent(s, " ", first=prefix)
 
     return res
 
 
-def raise_wrapped(etype, e, msg, compact=False, **kwargs): # pragma: no cover
-    """ Raises an exception of type etype by wrapping
-        another exception "e" with its backtrace and adding
-        the objects in kwargs as formatted by format_obs.
-        
-        if compact = False, write the whole traceback, otherwise just str(e).
-    
-        exc = output of sys.exc_info()
+def raise_wrapped(etype, e, msg, compact=False, **kwargs):  # pragma: no cover
+    """Raises an exception of type etype by wrapping
+    another exception "e" with its backtrace and adding
+    the objects in kwargs as formatted by format_obs.
+
+    if compact = False, write the whole traceback, otherwise just str(e).
+
+    exc = output of sys.exc_info()
     """
 
     if IS_PY3:
-        msg += '\n' + indent(e, '│ ')
+        msg += "\n" + indent(e, "│ ")
         e2 = etype(_format_exc(msg, **kwargs))
         # e2 = raise_wrapped_make(etype, e, msg, compact=compact, **kwargs)
         try:
@@ -182,13 +186,13 @@ def raise_wrapped(etype, e, msg, compact=False, **kwargs): # pragma: no cover
         raise e2
 
 
-def raise_wrapped_make(etype, e, msg, compact=False, **kwargs): # pragma: no cover
-    """ Constructs the exception to be thrown by raise_wrapped() """
+def raise_wrapped_make(etype, e, msg, compact=False, **kwargs):  # pragma: no cover
+    """Constructs the exception to be thrown by raise_wrapped()"""
     assert isinstance(e, BaseException), type(e)
     check_isinstance(msg, unicode)
     s = msg
     if kwargs:
-        s += '\n' + format_obs(kwargs)
+        s += "\n" + format_obs(kwargs)
 
     # import sys
     # if sys.version_info[0] >= 3:
@@ -199,24 +203,24 @@ def raise_wrapped_make(etype, e, msg, compact=False, **kwargs): # pragma: no cov
     else:  # pragma: no cover
         es = traceback.format_exc()  # only PY2
 
-    s += '\n' + indent(es.strip(), '| ')
+    s += "\n" + indent(es.strip(), "| ")
 
     return etype(s)
 
 
-def _format_exc(msg, **kwargs): # pragma: no cover
+def _format_exc(msg, **kwargs):  # pragma: no cover
     check_isinstance(msg, unicode)
     s = msg
     if kwargs:
-        s += '\n' + format_obs(kwargs)
+        s += "\n" + format_obs(kwargs)
     return s
 
 
 def raise_desc(etype, msg, args_first=False, **kwargs):  # pragma: no cover
     """
-    
-        Example:
-            raise_desc(ValueError, "I don't know", a=a, b=b)
+
+    Example:
+        raise_desc(ValueError, "I don't know", a=a, b=b)
     """
     assert isinstance(msg, basestring), type(msg)
     s1 = msg
@@ -274,8 +278,9 @@ def raise_desc(etype, msg, args_first=False, **kwargs):  # pragma: no cover
 
 # from decorator import decorator  # @UnresolvedImport
 
+
 def ignore_typeerror(f):  # pragma: no cover
-    """ Recasts TypeError as Exception; otherwise pyparsing gets confused. """
+    """Recasts TypeError as Exception; otherwise pyparsing gets confused."""
 
     def f2(*args, **kwargs):
         try:

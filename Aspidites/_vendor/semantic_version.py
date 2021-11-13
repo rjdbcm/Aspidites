@@ -6,21 +6,18 @@ import functools
 import re
 import warnings
 
-__version__ = '0.1.7'
+__version__ = "0.1.7"
 
 
 def _has_leading_zero(value):
-    return (value
-            and value[0] == '0'
-            and value.isdigit()
-            and value != '0')
+    return value and value[0] == "0" and value.isdigit() and value != "0"
 
 
 class MaxIdentifier(object):
     __slots__ = []
 
     def __repr__(self):
-        return 'MaxIdentifier()'
+        return "MaxIdentifier()"
 
     def __eq__(self, other):
         return isinstance(other, self.__class__)
@@ -28,13 +25,13 @@ class MaxIdentifier(object):
 
 @functools.total_ordering
 class NumericIdentifier(object):
-    __slots__ = ['value']
+    __slots__ = ["value"]
 
     def __init__(self, value):
         self.value = int(value)
 
     def __repr__(self):
-        return 'NumericIdentifier(%r)' % self.value
+        return "NumericIdentifier(%r)" % self.value
 
     def __eq__(self, other):
         if isinstance(other, NumericIdentifier):
@@ -54,13 +51,13 @@ class NumericIdentifier(object):
 
 @functools.total_ordering
 class AlphaIdentifier(object):
-    __slots__ = ['value']
+    __slots__ = ["value"]
 
     def __init__(self, value):
-        self.value = value.encode('ascii')
+        self.value = value.encode("ascii")
 
     def __repr__(self):
-        return 'AlphaIdentifier(%r)' % self.value
+        return "AlphaIdentifier(%r)" % self.value
 
     def __eq__(self, other):
         if isinstance(other, AlphaIdentifier):
@@ -80,18 +77,23 @@ class AlphaIdentifier(object):
 
 class Version(object):
 
-    version_re = re.compile(r'^(\d+)\.(\d+)\.(\d+)(?:-([0-9a-zA-Z.-]+))?(?:\+([0-9a-zA-Z.-]+))?$')
-    partial_version_re = re.compile(r'^(\d+)(?:\.(\d+)(?:\.(\d+))?)?(?:-([0-9a-zA-Z.-]*))?(?:\+([0-9a-zA-Z.-]*))?$')
+    version_re = re.compile(
+        r"^(\d+)\.(\d+)\.(\d+)(?:-([0-9a-zA-Z.-]+))?(?:\+([0-9a-zA-Z.-]+))?$"
+    )
+    partial_version_re = re.compile(
+        r"^(\d+)(?:\.(\d+)(?:\.(\d+))?)?(?:-([0-9a-zA-Z.-]*))?(?:\+([0-9a-zA-Z.-]*))?$"
+    )
 
     def __init__(
-            self,
-            version_string=None,
-            major=None,
-            minor=None,
-            patch=None,
-            prerelease=None,
-            build=None,
-            partial=False):
+        self,
+        version_string=None,
+        major=None,
+        minor=None,
+        patch=None,
+        prerelease=None,
+        build=None,
+        partial=False,
+    ):
         if partial:
             warnings.warn(
                 "Partial versions will be removed in 3.0; use SimpleSpec('1.x.x') instead.",
@@ -225,11 +227,11 @@ class Version(object):
                 partial=self.partial,
             )
 
-    def truncate(self, level='patch'):
+    def truncate(self, level="patch"):
         """Return a new Version object, truncated up to the selected level."""
-        if level == 'build':
+        if level == "build":
             return self
-        elif level == 'prerelease':
+        elif level == "prerelease":
             return Version(
                 major=self.major,
                 minor=self.minor,
@@ -237,21 +239,21 @@ class Version(object):
                 prerelease=self.prerelease,
                 partial=self.partial,
             )
-        elif level == 'patch':
+        elif level == "patch":
             return Version(
                 major=self.major,
                 minor=self.minor,
                 patch=self.patch,
                 partial=self.partial,
             )
-        elif level == 'minor':
+        elif level == "minor":
             return Version(
                 major=self.major,
                 minor=self.minor,
                 patch=None if self.partial else 0,
                 partial=self.partial,
             )
-        elif level == 'major':
+        elif level == "major":
             return Version(
                 major=self.major,
                 minor=None if self.partial else 0,
@@ -282,62 +284,61 @@ class Version(object):
             >>> Version.coerce('0.1+2-3+4_5')
             Version(0, 1, 0, (), ('2-3', '4-5'))
         """
-        base_re = re.compile(r'^\d+(?:\.\d+(?:\.\d+)?)?')
+        base_re = re.compile(r"^\d+(?:\.\d+(?:\.\d+)?)?")
 
         match = base_re.match(version_string)
         if not match:
             raise ValueError(
-                "Version string lacks a numerical component: %r"
-                % version_string
+                "Version string lacks a numerical component: %r" % version_string
             )
 
-        version = version_string[:match.end()]
+        version = version_string[: match.end()]
         if not partial:
             # We need a not-partial version.
-            while version.count('.') < 2:
-                version += '.0'
+            while version.count(".") < 2:
+                version += ".0"
 
         # Strip leading zeros in components
         # Version is of the form nn, nn.pp or nn.pp.qq
-        version = '.'.join(
+        version = ".".join(
             # If the part was '0', we end up with an empty string.
-            part.lstrip('0') or '0'
-            for part in version.split('.')
+            part.lstrip("0") or "0"
+            for part in version.split(".")
         )
 
         if match.end() == len(version_string):
             return Version(version, partial=partial)
 
-        rest = version_string[match.end():]
+        rest = version_string[match.end() :]
 
         # Cleanup the 'rest'
-        rest = re.sub(r'[^a-zA-Z0-9+.-]', '-', rest)
+        rest = re.sub(r"[^a-zA-Z0-9+.-]", "-", rest)
 
-        if rest[0] == '+':
+        if rest[0] == "+":
             # A 'build' component
-            prerelease = ''
+            prerelease = ""
             build = rest[1:]
-        elif rest[0] == '.':
+        elif rest[0] == ".":
             # An extra version component, probably 'build'
-            prerelease = ''
+            prerelease = ""
             build = rest[1:]
-        elif rest[0] == '-':
+        elif rest[0] == "-":
             rest = rest[1:]
-            if '+' in rest:
-                prerelease, build = rest.split('+', 1)
+            if "+" in rest:
+                prerelease, build = rest.split("+", 1)
             else:
-                prerelease, build = rest, ''
-        elif '+' in rest:
-            prerelease, build = rest.split('+', 1)
+                prerelease, build = rest, ""
+        elif "+" in rest:
+            prerelease, build = rest.split("+", 1)
         else:
-            prerelease, build = rest, ''
+            prerelease, build = rest, ""
 
-        build = build.replace('+', '.')
+        build = build.replace("+", ".")
 
         if prerelease:
-            version = '%s-%s' % (version, prerelease)
+            version = "%s-%s" % (version, prerelease)
         if build:
-            version = '%s+%s' % (version, build)
+            version = "%s+%s" % (version, build)
 
         return cls(version, partial=partial)
 
@@ -352,7 +353,7 @@ class Version(object):
                 valid Version.
         """
         if not version_string:
-            raise ValueError('Invalid empty version string: %r' % version_string)
+            raise ValueError("Invalid empty version string: %r" % version_string)
 
         if partial:
             version_re = cls.partial_version_re
@@ -361,7 +362,7 @@ class Version(object):
 
         match = version_re.match(version_string)
         if not match:
-            raise ValueError('Invalid version string: %r' % version_string)
+            raise ValueError("Invalid version string: %r" % version_string)
 
         major, minor, patch, prerelease, build = match.groups()
 
@@ -382,10 +383,10 @@ class Version(object):
                 return (major, minor, patch, None, None)
             else:
                 prerelease = ()
-        elif prerelease == '':
+        elif prerelease == "":
             prerelease = ()
         else:
-            prerelease = tuple(prerelease.split('.'))
+            prerelease = tuple(prerelease.split("."))
             cls._validate_identifiers(prerelease, allow_leading_zeroes=False)
 
         if build is None:
@@ -393,10 +394,10 @@ class Version(object):
                 build = None
             else:
                 build = ()
-        elif build == '':
+        elif build == "":
             build = ()
         else:
-            build = tuple(build.split('.'))
+            build = tuple(build.split("."))
             cls._validate_identifiers(build, allow_leading_zeroes=True)
 
         return (major, minor, patch, prerelease, build)
@@ -406,27 +407,33 @@ class Version(object):
         for item in identifiers:
             if not item:
                 raise ValueError(
-                    "Invalid empty identifier %r in %r"
-                    % (item, '.'.join(identifiers))
+                    "Invalid empty identifier %r in %r" % (item, ".".join(identifiers))
                 )
 
-            if item[0] == '0' and item.isdigit() and item != '0' and not allow_leading_zeroes:
+            if (
+                item[0] == "0"
+                and item.isdigit()
+                and item != "0"
+                and not allow_leading_zeroes
+            ):
                 raise ValueError("Invalid leading zero in identifier %r" % item)
 
     @classmethod
     def _validate_kwargs(cls, major, minor, patch, prerelease, build, partial):
         if (
-                major != int(major)
-                or minor != cls._coerce(minor, partial)
-                or patch != cls._coerce(patch, partial)
-                or prerelease is None and not partial
-                or build is None and not partial
+            major != int(major)
+            or minor != cls._coerce(minor, partial)
+            or patch != cls._coerce(patch, partial)
+            or prerelease is None
+            and not partial
+            or build is None
+            and not partial
         ):
             raise ValueError(
                 "Invalid kwargs to Version(major=%r, minor=%r, patch=%r, "
-                "prerelease=%r, build=%r, partial=%r" % (
-                    major, minor, patch, prerelease, build, partial
-                ))
+                "prerelease=%r, build=%r, partial=%r"
+                % (major, minor, patch, prerelease, build, partial)
+            )
         if prerelease is not None:
             cls._validate_identifiers(prerelease, allow_leading_zeroes=False)
         if build is not None:
@@ -436,23 +443,25 @@ class Version(object):
         return iter((self.major, self.minor, self.patch, self.prerelease, self.build))
 
     def __str__(self):
-        version = '%d' % self.major
+        version = "%d" % self.major
         if self.minor is not None:
-            version = '%s.%d' % (version, self.minor)
+            version = "%s.%d" % (version, self.minor)
         if self.patch is not None:
-            version = '%s.%d' % (version, self.patch)
+            version = "%s.%d" % (version, self.patch)
 
-        if self.prerelease or (self.partial and self.prerelease == () and self.build is None):
-            version = '%s-%s' % (version, '.'.join(self.prerelease))
+        if self.prerelease or (
+            self.partial and self.prerelease == () and self.build is None
+        ):
+            version = "%s-%s" % (version, ".".join(self.prerelease))
         if self.build or (self.partial and self.build == ()):
-            version = '%s+%s' % (version, '.'.join(self.build))
+            version = "%s+%s" % (version, ".".join(self.build))
         return version
 
     def __repr__(self):
-        return '%s(%r%s)' % (
+        return "%s(%r%s)" % (
             self.__class__.__name__,
             str(self),
-            ', partial=True' if self.partial else '',
+            ", partial=True" if self.partial else "",
         )
 
     def __hash__(self):
@@ -464,13 +473,13 @@ class Version(object):
     def precedence_key(self):
         if self.prerelease:
             prerelease_key = tuple(
-                NumericIdentifier(part) if re.match(r'^[0-9]+$', part) else AlphaIdentifier(part)
+                NumericIdentifier(part)
+                if re.match(r"^[0-9]+$", part)
+                else AlphaIdentifier(part)
                 for part in self.prerelease
             )
         else:
-            prerelease_key = (
-                MaxIdentifier(),
-            )
+            prerelease_key = (MaxIdentifier(),)
 
         return (
             self.major,
@@ -531,18 +540,18 @@ class Version(object):
 class SpecItem(object):
     """A requirement specification."""
 
-    KIND_ANY = '*'
-    KIND_LT = '<'
-    KIND_LTE = '<='
-    KIND_EQUAL = '=='
-    KIND_SHORTEQ = '='
-    KIND_EMPTY = ''
-    KIND_GTE = '>='
-    KIND_GT = '>'
-    KIND_NEQ = '!='
-    KIND_CARET = '^'
-    KIND_TILDE = '~'
-    KIND_COMPATIBLE = '~='
+    KIND_ANY = "*"
+    KIND_LT = "<"
+    KIND_LTE = "<="
+    KIND_EQUAL = "=="
+    KIND_SHORTEQ = "="
+    KIND_EMPTY = ""
+    KIND_GTE = ">="
+    KIND_GT = ">"
+    KIND_NEQ = "!="
+    KIND_CARET = "^"
+    KIND_TILDE = "~"
+    KIND_COMPATIBLE = "~="
 
     # Map a kind alias to its full version
     KIND_ALIASES = {
@@ -550,7 +559,7 @@ class SpecItem(object):
         KIND_EMPTY: KIND_EQUAL,
     }
 
-    re_spec = re.compile(r'^(<|<=||=|==|>=|>|!=|\^|~|~=)(\d.*)$')
+    re_spec = re.compile(r"^(<|<=||=|==|>=|>|!=|\^|~|~=)(\d.*)$")
 
     def __init__(self, requirement_string, _warn=True):
         if _warn:
@@ -567,15 +576,19 @@ class SpecItem(object):
     @classmethod
     def parse(cls, requirement_string):
         if not requirement_string:
-            raise ValueError("Invalid empty requirement specification: %r" % requirement_string)
+            raise ValueError(
+                "Invalid empty requirement specification: %r" % requirement_string
+            )
 
         # Special case: the 'any' version spec.
-        if requirement_string == '*':
-            return (cls.KIND_ANY, '')
+        if requirement_string == "*":
+            return (cls.KIND_ANY, "")
 
         match = cls.re_spec.match(requirement_string)
         if not match:
-            raise ValueError("Invalid requirement specification: %r" % requirement_string)
+            raise ValueError(
+                "Invalid requirement specification: %r" % requirement_string
+            )
 
         kind, version = match.groups()
         if kind in cls.KIND_ALIASES:
@@ -592,20 +605,20 @@ class SpecItem(object):
     @classmethod
     def from_matcher(cls, matcher):
         if matcher == Always():
-            return cls('*', _warn=False)
+            return cls("*", _warn=False)
         elif matcher == Never():
-            return cls('<0.0.0-', _warn=False)
+            return cls("<0.0.0-", _warn=False)
         elif isinstance(matcher, Range):
-            return cls('%s%s' % (matcher.operator, matcher.target), _warn=False)
+            return cls("%s%s" % (matcher.operator, matcher.target), _warn=False)
 
     def match(self, version):
         return self._clause.match(version)
 
     def __str__(self):
-        return '%s%s' % (self.kind, self.spec)
+        return "%s%s" % (self.kind, self.spec)
 
     def __repr__(self):
-        return '<SpecItem: %s %r>' % (self.kind, self.spec)
+        return "<SpecItem: %s %r>" % (self.kind, self.spec)
 
     def __eq__(self, other):
         if not isinstance(other, SpecItem):
@@ -633,7 +646,7 @@ def validate(version_string):
         return False
 
 
-DEFAULT_SYNTAX = 'simple'
+DEFAULT_SYNTAX = "simple"
 
 
 class BaseSpec(object):
@@ -650,6 +663,7 @@ class BaseSpec(object):
         AllOf(...),
     )
     """
+
     SYNTAXES = {}
 
     @classmethod
@@ -716,7 +730,7 @@ class BaseSpec(object):
         return self.expression
 
     def __repr__(self):
-        return '<%s: %r>' % (self.__class__.__name__, self.expression)
+        return "<%s: %r>" % (self.__class__.__name__, self.expression)
 
 
 class Clause(object):
@@ -734,10 +748,9 @@ class Clause(object):
     def __eq__(self, other):
         raise NotImplementedError()
 
-    def prettyprint(self, indent='\t'):
-        """Pretty-print the clause.
-        """
-        return '\n'.join(self._pretty()).replace('\t', indent)
+    def prettyprint(self, indent="\t"):
+        """Pretty-print the clause."""
+        return "\n".join(self._pretty()).replace("\t", indent)
 
     def _pretty(self):
         """Actual pretty-printing logic.
@@ -755,7 +768,7 @@ class Clause(object):
 
 
 class AnyOf(Clause):
-    __slots__ = ['clauses']
+    __slots__ = ["clauses"]
 
     def __init__(self, *clauses):
         super(AnyOf, self).__init__()
@@ -805,20 +818,20 @@ class AnyOf(Clause):
         return AnyOf(*clauses)
 
     def __repr__(self):
-        return 'AnyOf(%s)' % ', '.join(sorted(repr(c) for c in self.clauses))
+        return "AnyOf(%s)" % ", ".join(sorted(repr(c) for c in self.clauses))
 
     def _pretty(self):
-        yield 'AnyOF('
+        yield "AnyOF("
         for clause in self.clauses:
             lines = list(clause._pretty())
             for line in lines[:-1]:
-                yield '\t' + line
-            yield '\t' + lines[-1] + ','
-        yield ')'
+                yield "\t" + line
+            yield "\t" + lines[-1] + ","
+        yield ")"
 
 
 class AllOf(Clause):
-    __slots__ = ['clauses']
+    __slots__ = ["clauses"]
 
     def __init__(self, *clauses):
         super(AllOf, self).__init__()
@@ -870,16 +883,16 @@ class AllOf(Clause):
             return NotImplemented
 
     def __repr__(self):
-        return 'AllOf(%s)' % ', '.join(sorted(repr(c) for c in self.clauses))
+        return "AllOf(%s)" % ", ".join(sorted(repr(c) for c in self.clauses))
 
     def _pretty(self):
-        yield 'AllOF('
+        yield "AllOF("
         for clause in self.clauses:
             lines = list(clause._pretty())
             for line in lines[:-1]:
-                yield '\t' + line
-            yield '\t' + lines[-1] + ','
-        yield ')'
+                yield "\t" + line
+            yield "\t" + lines[-1] + ","
+        yield ")"
 
 
 class Matcher(Clause):
@@ -921,7 +934,7 @@ class Never(Matcher):
         return other
 
     def __repr__(self):
-        return 'Never()'
+        return "Never()"
 
 
 class Always(Matcher):
@@ -943,37 +956,44 @@ class Always(Matcher):
         return self
 
     def __repr__(self):
-        return 'Always()'
+        return "Always()"
 
 
 class Range(Matcher):
-    OP_EQ = '=='
-    OP_GT = '>'
-    OP_GTE = '>='
-    OP_LT = '<'
-    OP_LTE = '<='
-    OP_NEQ = '!='
+    OP_EQ = "=="
+    OP_GT = ">"
+    OP_GTE = ">="
+    OP_LT = "<"
+    OP_LTE = "<="
+    OP_NEQ = "!="
 
     # <1.2.3 matches 1.2.3-a1
-    PRERELEASE_ALWAYS = 'always'
+    PRERELEASE_ALWAYS = "always"
     # <1.2.3 does not match 1.2.3-a1
-    PRERELEASE_NATURAL = 'natural'
+    PRERELEASE_NATURAL = "natural"
     # 1.2.3-a1 is only considered if target == 1.2.3-xxx
-    PRERELEASE_SAMEPATCH = 'same-patch'
+    PRERELEASE_SAMEPATCH = "same-patch"
 
     # 1.2.3 matches 1.2.3+*
-    BUILD_IMPLICIT = 'implicit'
+    BUILD_IMPLICIT = "implicit"
     # 1.2.3 matches only 1.2.3, not 1.2.3+4
-    BUILD_STRICT = 'strict'
+    BUILD_STRICT = "strict"
 
-    __slots__ = ['operator', 'target', 'prerelease_policy', 'build_policy']
+    __slots__ = ["operator", "target", "prerelease_policy", "build_policy"]
 
-    def __init__(self, operator, target, prerelease_policy=PRERELEASE_NATURAL, build_policy=BUILD_IMPLICIT):
+    def __init__(
+        self,
+        operator,
+        target,
+        prerelease_policy=PRERELEASE_NATURAL,
+        build_policy=BUILD_IMPLICIT,
+    ):
         super(Range, self).__init__()
         if target.build and operator not in (self.OP_EQ, self.OP_NEQ):
             raise ValueError(
                 "Invalid range %s%s: build numbers have no ordering."
-                % (operator, target))
+                % (operator, target)
+            )
         self.operator = operator
         self.target = target
         self.prerelease_policy = prerelease_policy
@@ -981,7 +1001,7 @@ class Range(Matcher):
 
     def match(self, version):
         if self.build_policy != self.BUILD_STRICT:
-            version = version.truncate('prerelease')
+            version = version.truncate("prerelease")
 
         if version.prerelease:
             same_patch = self.target.truncate() == version.truncate()
@@ -992,7 +1012,7 @@ class Range(Matcher):
         if self.operator == self.OP_EQ:
             if self.build_policy == self.BUILD_STRICT:
                 return (
-                    self.target.truncate('prerelease') == version.truncate('prerelease')
+                    self.target.truncate("prerelease") == version.truncate("prerelease")
                     and version.build == self.target.build
                 )
             return version == self.target
@@ -1015,7 +1035,7 @@ class Range(Matcher):
             assert self.operator == self.OP_NEQ
             if self.build_policy == self.BUILD_STRICT:
                 return not (
-                    self.target.truncate('prerelease') == version.truncate('prerelease')
+                    self.target.truncate("prerelease") == version.truncate("prerelease")
                     and version.build == self.target.build
                 )
 
@@ -1040,17 +1060,19 @@ class Range(Matcher):
         )
 
     def __str__(self):
-        return '%s%s' % (self.operator, self.target)
+        return "%s%s" % (self.operator, self.target)
 
     def __repr__(self):
         policy_part = (
-            '' if self.prerelease_policy == self.PRERELEASE_NATURAL
-            else ', prerelease_policy=%r' % self.prerelease_policy
+            ""
+            if self.prerelease_policy == self.PRERELEASE_NATURAL
+            else ", prerelease_policy=%r" % self.prerelease_policy
         ) + (
-            '' if self.build_policy == self.BUILD_IMPLICIT
-            else ', build_policy=%r' % self.build_policy
+            ""
+            if self.build_policy == self.BUILD_IMPLICIT
+            else ", build_policy=%r" % self.build_policy
         )
-        return 'Range(%r, %r%s)' % (
+        return "Range(%r, %r%s)" % (
             self.operator,
             self.target,
             policy_part,
@@ -1060,27 +1082,30 @@ class Range(Matcher):
 @BaseSpec.register_syntax
 class SimpleSpec(BaseSpec):
 
-    SYNTAX = 'simple'
+    SYNTAX = "simple"
 
     @classmethod
     def _parse_to_clause(cls, expression):
         return cls.Parser.parse(expression)
 
     class Parser:
-        NUMBER = r'\*|0|[1-9][0-9]*'
-        NAIVE_SPEC = re.compile(r"""^
+        NUMBER = r"\*|0|[1-9][0-9]*"
+        NAIVE_SPEC = re.compile(
+            r"""^
             (?P<op><|<=||=|==|>=|>|!=|\^|~|~=)
             (?P<major>{nb})(?:\.(?P<minor>{nb})(?:\.(?P<patch>{nb}))?)?
             (?:-(?P<prerel>[a-z0-9A-Z.-]*))?
             (?:\+(?P<build>[a-z0-9A-Z.-]*))?
             $
-            """.format(nb=NUMBER),
+            """.format(
+                nb=NUMBER
+            ),
             re.VERBOSE,
         )
 
         @classmethod
         def parse(cls, expression):
-            blocks = expression.split(',')
+            blocks = expression.split(",")
             clause = Always()
             for block in blocks:
                 if not cls.NAIVE_SPEC.match(block):
@@ -1089,28 +1114,30 @@ class SimpleSpec(BaseSpec):
 
             return clause
 
-        PREFIX_CARET = '^'
-        PREFIX_TILDE = '~'
-        PREFIX_COMPATIBLE = '~='
-        PREFIX_EQ = '=='
-        PREFIX_NEQ = '!='
-        PREFIX_GT = '>'
-        PREFIX_GTE = '>='
-        PREFIX_LT = '<'
-        PREFIX_LTE = '<='
+        PREFIX_CARET = "^"
+        PREFIX_TILDE = "~"
+        PREFIX_COMPATIBLE = "~="
+        PREFIX_EQ = "=="
+        PREFIX_NEQ = "!="
+        PREFIX_GT = ">"
+        PREFIX_GTE = ">="
+        PREFIX_LT = "<"
+        PREFIX_LTE = "<="
 
         PREFIX_ALIASES = {
-            '=': PREFIX_EQ,
-            '': PREFIX_EQ,
+            "=": PREFIX_EQ,
+            "": PREFIX_EQ,
         }
 
-        EMPTY_VALUES = ['*', 'x', 'X', None]
+        EMPTY_VALUES = ["*", "x", "X", None]
 
         @classmethod
         def parse_block(cls, expr):
             if not cls.NAIVE_SPEC.match(expr):
                 raise ValueError("Invalid simple spec component: %r" % expr)
-            prefix, major_t, minor_t, patch_t, prerel, build = cls.NAIVE_SPEC.match(expr).groups()
+            prefix, major_t, minor_t, patch_t, prerel, build = cls.NAIVE_SPEC.match(
+                expr
+            ).groups()
             prefix = cls.PREFIX_ALIASES.get(prefix, prefix)
 
             major = None if major_t in cls.EMPTY_VALUES else int(major_t)
@@ -1130,8 +1157,8 @@ class SimpleSpec(BaseSpec):
                     major=major,
                     minor=minor,
                     patch=patch,
-                    prerelease=prerel.split('.') if prerel else (),
-                    build=build.split('.') if build else (),
+                    prerelease=prerel.split(".") if prerel else (),
+                    build=build.split(".") if build else (),
                 )
 
             if (major is None or minor is None or patch is None) and (prerel or build):
@@ -1174,10 +1201,14 @@ class SimpleSpec(BaseSpec):
                 if major is None:
                     return Range(Range.OP_GTE, target)
                 elif minor is None:
-                    return Range(Range.OP_GTE, target) & Range(Range.OP_LT, target.next_major())
+                    return Range(Range.OP_GTE, target) & Range(
+                        Range.OP_LT, target.next_major()
+                    )
                 elif patch is None:
-                    return Range(Range.OP_GTE, target) & Range(Range.OP_LT, target.next_minor())
-                elif build == '':
+                    return Range(Range.OP_GTE, target) & Range(
+                        Range.OP_LT, target.next_minor()
+                    )
+                elif build == "":
                     return Range(Range.OP_EQ, target, build_policy=Range.BUILD_STRICT)
                 else:
                     return Range(Range.OP_EQ, target)
@@ -1186,14 +1217,20 @@ class SimpleSpec(BaseSpec):
                 assert major is not None
                 if minor is None:
                     # !=1.x => <1.0.0 || >=2.0.0
-                    return Range(Range.OP_LT, target) | Range(Range.OP_GTE, target.next_major())
+                    return Range(Range.OP_LT, target) | Range(
+                        Range.OP_GTE, target.next_major()
+                    )
                 elif patch is None:
                     # !=1.2.x => <1.2.0 || >=1.3.0
-                    return Range(Range.OP_LT, target) | Range(Range.OP_GTE, target.next_minor())
-                elif prerel == '':
+                    return Range(Range.OP_LT, target) | Range(
+                        Range.OP_GTE, target.next_minor()
+                    )
+                elif prerel == "":
                     # !=1.2.3-
-                    return Range(Range.OP_NEQ, target, prerelease_policy=Range.PRERELEASE_ALWAYS)
-                elif build == '':
+                    return Range(
+                        Range.OP_NEQ, target, prerelease_policy=Range.PRERELEASE_ALWAYS
+                    )
+                elif build == "":
                     # !=1.2.3+ or !=1.2.3-a2+
                     return Range(Range.OP_NEQ, target, build_policy=Range.BUILD_STRICT)
                 else:
@@ -1214,9 +1251,11 @@ class SimpleSpec(BaseSpec):
 
             elif prefix == cls.PREFIX_LT:
                 assert major is not None
-                if prerel == '':
+                if prerel == "":
                     # <1.2.3-
-                    return Range(Range.OP_LT, target, prerelease_policy=Range.PRERELEASE_ALWAYS)
+                    return Range(
+                        Range.OP_LT, target, prerelease_policy=Range.PRERELEASE_ALWAYS
+                    )
                 return Range(Range.OP_LT, target)
 
             else:
@@ -1245,7 +1284,7 @@ class LegacySpec(SimpleSpec):
                 DeprecationWarning,
                 stacklevel=2,
             )
-        expression = ','.join(expressions)
+        expression = ",".join(expressions)
         super(LegacySpec, self).__init__(expression)
 
     @property
@@ -1271,25 +1310,28 @@ Spec = LegacySpec
 
 @BaseSpec.register_syntax
 class NpmSpec(BaseSpec):
-    SYNTAX = 'npm'
+    SYNTAX = "npm"
 
     @classmethod
     def _parse_to_clause(cls, expression):
         return cls.Parser.parse(expression)
 
     class Parser:
-        JOINER = '||'
-        HYPHEN = ' - '
+        JOINER = "||"
+        HYPHEN = " - "
 
-        NUMBER = r'x|X|\*|0|[1-9][0-9]*'
-        PART = r'[a-zA-Z0-9.-]*'
-        NPM_SPEC_BLOCK = re.compile(r"""
+        NUMBER = r"x|X|\*|0|[1-9][0-9]*"
+        PART = r"[a-zA-Z0-9.-]*"
+        NPM_SPEC_BLOCK = re.compile(
+            r"""
             ^(?:v)?                     # Strip optional initial v
             (?P<op><|<=|>=|>|=|\^|~|)   # Operator, can be empty
             (?P<major>{nb})(?:\.(?P<minor>{nb})(?:\.(?P<patch>{nb}))?)?
             (?:-(?P<prerel>{part}))?    # Optional re-release
             (?:\+(?P<build>{part}))?    # Optional build
-            $""".format(nb=NUMBER, part=PART),
+            $""".format(
+                nb=NUMBER, part=PART
+            ),
             re.VERBOSE,
         )
 
@@ -1304,18 +1346,22 @@ class NpmSpec(BaseSpec):
             for group in groups:
                 group = group.strip()
                 if not group:
-                    group = '>=0.0.0'
+                    group = ">=0.0.0"
 
                 subclauses = []
                 if cls.HYPHEN in group:
                     low, high = group.split(cls.HYPHEN, 2)
-                    subclauses = cls.parse_simple('>=' + low) + cls.parse_simple('<=' + high)
+                    subclauses = cls.parse_simple(">=" + low) + cls.parse_simple(
+                        "<=" + high
+                    )
 
                 else:
-                    blocks = group.split(' ')
+                    blocks = group.split(" ")
                     for block in blocks:
                         if not cls.NPM_SPEC_BLOCK.match(block):
-                            raise ValueError("Invalid NPM block in %r: %r" % (expression, block))
+                            raise ValueError(
+                                "Invalid NPM block in %r: %r" % (expression, block)
+                            )
 
                         subclauses.extend(cls.parse_simple(block))
 
@@ -1324,31 +1370,37 @@ class NpmSpec(BaseSpec):
                 for clause in subclauses:
                     if clause.target.prerelease:
                         if clause.operator in (Range.OP_GT, Range.OP_GTE):
-                            prerelease_clauses.append(Range(
-                                operator=Range.OP_LT,
-                                target=Version(
-                                    major=clause.target.major,
-                                    minor=clause.target.minor,
-                                    patch=clause.target.patch + 1,
-                                ),
-                                prerelease_policy=Range.PRERELEASE_ALWAYS,
-                            ))
+                            prerelease_clauses.append(
+                                Range(
+                                    operator=Range.OP_LT,
+                                    target=Version(
+                                        major=clause.target.major,
+                                        minor=clause.target.minor,
+                                        patch=clause.target.patch + 1,
+                                    ),
+                                    prerelease_policy=Range.PRERELEASE_ALWAYS,
+                                )
+                            )
                         elif clause.operator in (Range.OP_LT, Range.OP_LTE):
-                            prerelease_clauses.append(Range(
-                                operator=Range.OP_GTE,
-                                target=Version(
-                                    major=clause.target.major,
-                                    minor=clause.target.minor,
-                                    patch=0,
-                                    prerelease=(),
-                                ),
-                                prerelease_policy=Range.PRERELEASE_ALWAYS,
-                            ))
+                            prerelease_clauses.append(
+                                Range(
+                                    operator=Range.OP_GTE,
+                                    target=Version(
+                                        major=clause.target.major,
+                                        minor=clause.target.minor,
+                                        patch=0,
+                                        prerelease=(),
+                                    ),
+                                    prerelease_policy=Range.PRERELEASE_ALWAYS,
+                                )
+                            )
                         prerelease_clauses.append(clause)
-                        non_prerel_clauses.append(cls.range(
-                            operator=clause.operator,
-                            target=clause.target.truncate(),
-                        ))
+                        non_prerel_clauses.append(
+                            cls.range(
+                                operator=clause.operator,
+                                target=clause.target.truncate(),
+                            )
+                        )
                     else:
                         non_prerel_clauses.append(clause)
                 if prerelease_clauses:
@@ -1357,16 +1409,16 @@ class NpmSpec(BaseSpec):
 
             return result
 
-        PREFIX_CARET = '^'
-        PREFIX_TILDE = '~'
-        PREFIX_EQ = '='
-        PREFIX_GT = '>'
-        PREFIX_GTE = '>='
-        PREFIX_LT = '<'
-        PREFIX_LTE = '<='
+        PREFIX_CARET = "^"
+        PREFIX_TILDE = "~"
+        PREFIX_EQ = "="
+        PREFIX_GT = ">"
+        PREFIX_GTE = ">="
+        PREFIX_LT = "<"
+        PREFIX_LTE = "<="
 
         PREFIX_ALIASES = {
-            '': PREFIX_EQ,
+            "": PREFIX_EQ,
         }
 
         PREFIX_TO_OPERATOR = {
@@ -1377,7 +1429,7 @@ class NpmSpec(BaseSpec):
             PREFIX_GT: Range.OP_GT,
         }
 
-        EMPTY_VALUES = ['*', 'x', 'X', None]
+        EMPTY_VALUES = ["*", "x", "X", None]
 
         @classmethod
         def parse_simple(cls, simple):
@@ -1408,8 +1460,8 @@ class NpmSpec(BaseSpec):
                     major=major,
                     minor=minor,
                     patch=patch,
-                    prerelease=prerel.split('.') if prerel else (),
-                    build=build.split('.') if build else (),
+                    prerelease=prerel.split(".") if prerel else (),
+                    build=build.split(".") if build else (),
                 )
 
             if (major is None or minor is None or patch is None) and (prerel or build):
@@ -1440,9 +1492,15 @@ class NpmSpec(BaseSpec):
                 if major is None:
                     return [cls.range(Range.OP_GTE, target)]
                 elif minor is None:
-                    return [cls.range(Range.OP_GTE, target), cls.range(Range.OP_LT, target.next_major())]
+                    return [
+                        cls.range(Range.OP_GTE, target),
+                        cls.range(Range.OP_LT, target.next_major()),
+                    ]
                 elif patch is None:
-                    return [cls.range(Range.OP_GTE, target), cls.range(Range.OP_LT, target.next_minor())]
+                    return [
+                        cls.range(Range.OP_GTE, target),
+                        cls.range(Range.OP_LT, target.next_minor()),
+                    ]
                 else:
                     return [cls.range(Range.OP_EQ, target)]
 
