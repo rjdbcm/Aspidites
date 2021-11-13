@@ -1,5 +1,10 @@
 **unreleased**
 **v1.15.1**
+
+- acbbfef repl now compiles using pyximport
+- eef4c10 repl now compiles quietly
+
+
 **v1.15.0**
 
 - 4c33042 repl now runs woma as statically compiled woma
