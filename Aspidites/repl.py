@@ -362,8 +362,7 @@ class ReadEvalParse:  # pragma: no cover
                         self.eval_exec(line)
                         continue
                     try:
-                        with Spinner():
-                            p = Aspidites.parser.parser.parse_module(line)
+                        p = Aspidites.parser.parser.parse_module(line)
                     except ParseException:
                         self.warn(f'Warning: Failed to parse "{line}" as Woma.\n'
                                   f'Remember that Woma does not allow literal evaluation, try assigning to a variable.\n'
@@ -375,8 +374,10 @@ class ReadEvalParse:  # pragma: no cover
                         num = randint(1, 10000000000000000000)
                         file = self.tmpdir / f'module{num}.pyx'
                         args = CompilerArgs(fname=file, code=p, force=True, bytecode=False, c=True, build_requires='',
-                                            verbose=False, **cy_kwargs)
-                        Compiler(args)
+                                            verbose=0, **cy_kwargs)
+                        with suppress(ResourceWarning):
+                            with Spinner():
+                                Compiler(args)
                         module = __import__(f'tmp.module{num}', locals=globals(), fromlist=['*'])
                         all_names = [name for name in dir(module) if not name.startswith('_')]
                         self.__locals__.update({name: getattr(module, name) for name in all_names})

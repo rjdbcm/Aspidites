@@ -132,8 +132,8 @@ Options.error_on_uninitialized=$error_on_uninitialized
 Options.gcc_branch_hints=$gcc_branch_hints
 Options.lookup_module_cpdef=$lookup_module_cpdef
 Options.embed=$embed
-exts=[Extension('$app_name',['$src_file'],include_dirs=$inc_dirs,libraries=$libs,extra_compile_args=['-Wall','-O2'],library_dirs=$lib_dirs),]
-setup(name='$app_name',ext_modules=cythonize(exts,include_path=[get_include()]))
+ext = cythonize('$src_file', include_path=[get_include()], quiet=$quiet)
+setup(name='$app_name',ext_modules=ext)
 if Options.embed: BuildExecutable.build('$src_file')
 
 """)

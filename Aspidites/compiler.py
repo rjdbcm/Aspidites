@@ -14,6 +14,7 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import contextlib
 import inspect
 import os
 import py_compile
@@ -75,21 +76,14 @@ class CheckedFileStack:
         base, name = fname.parent, fname.name
         base = Path(base)
         fname_sha256 = base / ("." + name + ".sha256")
-        old = open(fname_sha256, "rb").read()
+        with contextlib.suppress(ResourceWarning):
+            old = open(fname_sha256, "rb").read()
         with open(fname, "rb") as data:
             curr_hash = self._read(data, hash_func=sha256)
             new = curr_hash.digest()
             if new == old:
-                print(
-                    "sha256 digest check successful: %s %s"
-                    % (name, new.hex())
-                )
                 return new
             else:
-                print(
-                    "sha256 digest failure: %s %s"
-                    % (name, new.hex())
-                )
                 return ""
 
     def _commit(self):
@@ -109,7 +103,8 @@ class CheckedFileStack:
         else:
             file = fname
         try:
-            open(file, mode).write(text)
+            with contextlib.suppress(ResourceWarning):
+                open(file, mode).write(text)
         except FileExistsError:
             self.register(file)
 
@@ -119,7 +114,6 @@ class CheckedFileStack:
         if not all_file_checksums:
             self.all_files.persistent()
             return None
-        print("running checksums")
         for k, v in all_file_checksums.items():
             digest = self._read_checksum(v)
             try:
@@ -218,10 +212,11 @@ class Compiler:
         text = setup_template.substitute(
            app_name=module_name,
            src_file=kwargs['fname'],
-           inc_dirs=[],
-           libs=[],
-           exe_name=self.app_name,
-           lib_dirs=[],
+           quiet=not kwargs.verbose,
+           # inc_dirs=[],
+           # libs=[],
+           # exe_name=self.app_name,
+           # lib_dirs=[],
            **kwargs
         )
         self.file_stack.create_file('setup.py', self.mode, root=str(self.root), text=text)
@@ -229,8 +224,11 @@ class Compiler:
 
     def compile_object(self) -> None:
         glob_so = str(self.app_name) + ".*.so"
-        setup_runner = "%s %s build_ext -b ." % (sys.executable, str(Path(self.root) / 'setup.py'))
-        print("running", setup_runner)
+        opt = '-q' if not self.args.verbose else ''
+        setup_py = str(Path(self.root) / 'setup.py')
+        setup_runner = f"{sys.executable} {setup_py} {opt} build_ext -b ."
+        if self.args.verbose:
+            print("running", setup_runner)
         with os.popen(setup_runner) as p:
             chunk = p.read(64)
             while chunk:
