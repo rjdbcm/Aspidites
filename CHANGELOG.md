@@ -1,4 +1,5 @@
 **unreleased**
+**v1.15.1**
 **v1.15.0**
 
 - 4c33042 repl now runs woma as statically compiled woma
