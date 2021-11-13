@@ -13,8 +13,15 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import contextlib
+import importlib
+import pathlib
+import shutil
 import subprocess
 import sys
+import tempfile
+from random import randint
+import traceback
 from itertools import cycle
 import threading
 import os
@@ -26,6 +33,7 @@ from pathlib import Path
 from traceback import print_exc
 from typing import List, AnyStr, Union
 
+from Cython.Compiler import Options
 # noinspection PyUnresolvedReferences
 from cython import declare as decl, address as addr, sizeof, typeof, struct, cfunc, ccall, nogil, no_gc, inline, union, \
     typedef, cast, char, short, int as cint, bint, short, double, long, longdouble, longdoublecomplex, longlong, \
@@ -50,6 +58,7 @@ from Aspidites._vendor.pyparsing import ParseException, ParseResults
 from cmath import inf
 # noinspection PyUnresolvedReferences
 import Aspidites.parser.parser
+from Aspidites.compiler import Compiler, CompilerArgs
 from Aspidites.api import _format_locals
 
 try:
@@ -92,6 +101,29 @@ class Spinner:  # pragma: no cover
 
 single_arg_help = re.compile(r'(?:help[\(])(\w+)(?:[\)])')
 
+cy_opt = v(
+    "annotate",
+    "annotate_coverage_xml",
+    "buffer_max_dims",
+    "cache_builtins",
+    "cimport_from_pyx",
+    "clear_to_none",
+    "closure_freelist_size",
+    "convert_range",
+    "docstrings",
+    "embed_pos_in_docstring",
+    "generate_cleanup_code",
+    "fast_fail",
+    "warning_errors",
+    "error_on_unknown_names",
+    "error_on_uninitialized",
+    "gcc_branch_hints",
+    "lookup_module_cpdef",
+    "embed",
+)
+cy_kwargs = dict(
+    zip(cy_opt,
+        map(lambda x: getattr(Options, x), cy_opt)))
 
 class Help:
     doc_leader = ""
@@ -233,6 +265,7 @@ class ReadEvalParse:  # pragma: no cover
         else:
             self.stdout = sys.stdout
         self.warn = lambda x: sys.stderr.write(x) and sys.stderr.flush()
+        self.tmpdir = pathlib.Path('tmp')
         self.__locals__ = dict(locals(), **globals())
 
     def input(self):
@@ -291,6 +324,8 @@ class ReadEvalParse:  # pragma: no cover
     def preloop(self):
         if readline and Path(histfile).exists():
             readline.read_history_file(histfile)
+        with contextlib.suppress(FileExistsError):
+            self.tmpdir.mkdir()
 
     def postloop(self):
         if readline:
@@ -300,6 +335,7 @@ class ReadEvalParse:  # pragma: no cover
     def loop(self) -> None:
         os.system('cls' if os.name == 'nt' else 'clear')
         self.stdout.write(self.intro + '\n')
+        count = 0
         try:
             while True:
                 self.postloop()
@@ -336,11 +372,21 @@ class ReadEvalParse:  # pragma: no cover
                             self.eval_exec(line)
                         continue
                     else:
-                        self.eval_exec(p)
+                        num = randint(1, 10000000000000000000)
+                        file = self.tmpdir / f'module{num}.pyx'
+                        args = CompilerArgs(fname=file, code=p, force=True, bytecode=False, c=True, build_requires='',
+                                            verbose=False, **cy_kwargs)
+                        Compiler(args)
+                        module = __import__(f'tmp.module{num}', locals=globals(), fromlist=['*'])
+                        all_names = [name for name in dir(module) if not name.startswith('_')]
+                        self.__locals__.update({name: getattr(module, name) for name in all_names})
+                        shutil.rmtree(self.tmpdir)
                         continue
 
                 except Exception as e:
                     self.stdout.write(f"Error: {e}\n")
+                    traceback.print_tb(e.__traceback__)
+                    shutil.rmtree(self.tmpdir)
                     continue
         except KeyboardInterrupt as e:
             self.do_exit()
@@ -351,6 +397,7 @@ class ReadEvalParse:  # pragma: no cover
 
     def do_exit(self, arg=None):
         """Exit the woma interactive interpreter."""
+        shutil.rmtree(self.tmpdir)
         self.stdout.write("\nExiting...")
         raise SystemExit
 
