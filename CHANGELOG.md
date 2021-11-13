@@ -1,6 +1,11 @@
 **unreleased**
 **v1.15.2**
 
+- 9342004 No tree removal while running
+- 313af2d changelog updated
+
+
+
 - 
 
 
