@@ -377,12 +377,11 @@ class ReadEvalParse:  # pragma: no cover
                                             verbose=0, **cy_kwargs)
                         with suppress(ResourceWarning):
                             Compiler(args)
-                        with suppress(ImportWarning):
+                        with suppress(Exception):
                             try:
                                 module = __import__(f'tmp.module{num}', locals=globals(), fromlist=['*'])
                                 all_names = [name for name in dir(module) if not name.startswith('_')]
                                 self.__locals__.update({name: getattr(module, name) for name in all_names})
-                                shutil.rmtree(self.tmpdir)
                             except Exception:
                                 self.eval_exec(p)
                         continue
