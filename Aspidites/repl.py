@@ -33,6 +33,7 @@ from pathlib import Path
 from traceback import print_exc
 from typing import List, AnyStr, Union
 
+import pyximport; pyximport.install()
 from Cython.Compiler import Options
 # noinspection PyUnresolvedReferences
 from cython import declare as decl, address as addr, sizeof, typeof, struct, cfunc, ccall, nogil, no_gc, inline, union, \
@@ -316,7 +317,6 @@ class ReadEvalParse:  # pragma: no cover
             out = eval(compile(x, filename='<inline code>', mode='eval'), self.__locals__, self.__locals__)
         except Exception:
             out = exec(compile(x, filename='<inline code>', mode='exec'), self.__locals__, self.__locals__)
-            self.stdout.write('\n')
             # if out is not None:
             #     print(out)
         self.displayhook(out)
@@ -362,7 +362,7 @@ class ReadEvalParse:  # pragma: no cover
                         self.eval_exec(line)
                         continue
                     try:
-                        p = Aspidites.parser.parser.parse_module(line)
+                            p = Aspidites.parser.parser.parse_module(line)
                     except ParseException:
                         self.warn(f'Warning: Failed to parse "{line}" as Woma.\n'
                                   f'Remember that Woma does not allow literal evaluation, try assigning to a variable.\n'
@@ -373,15 +373,18 @@ class ReadEvalParse:  # pragma: no cover
                     else:
                         num = randint(1, 10000000000000000000)
                         file = self.tmpdir / f'module{num}.pyx'
-                        args = CompilerArgs(fname=file, code=p, force=True, bytecode=False, c=True, build_requires='',
+                        args = CompilerArgs(fname=file, code=p, force=True, bytecode=False, c=False, build_requires='',
                                             verbose=0, **cy_kwargs)
                         with suppress(ResourceWarning):
-                            with Spinner():
-                                Compiler(args)
-                        module = __import__(f'tmp.module{num}', locals=globals(), fromlist=['*'])
-                        all_names = [name for name in dir(module) if not name.startswith('_')]
-                        self.__locals__.update({name: getattr(module, name) for name in all_names})
-                        shutil.rmtree(self.tmpdir)
+                            Compiler(args)
+                        with suppress(ImportWarning):
+                            try:
+                                module = __import__(f'tmp.module{num}', locals=globals(), fromlist=['*'])
+                                all_names = [name for name in dir(module) if not name.startswith('_')]
+                                self.__locals__.update({name: getattr(module, name) for name in all_names})
+                                shutil.rmtree(self.tmpdir)
+                            except Exception:
+                                self.eval_exec(p)
                         continue
 
                 except Exception as e:
