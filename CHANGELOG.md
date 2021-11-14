@@ -1,4 +1,5 @@
 **unreleased**
+**v1.15.6**
 **v1.15.5**
 
 - 80a9506 fix docker build
