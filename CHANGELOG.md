@@ -1,4 +1,5 @@
 **unreleased**
+**v1.15.4**
 **v1.15.3**
 
 - 35403f4 type now returns a final class rather than a PClass
