@@ -121,7 +121,7 @@ except:
         try:
             return sysconfig.get_config_vars()['CONFINCLUDEPY']
         except KeyError:
-            pass
+            return ''
 Options.annotate=$annotate
 Options.annotate_coverage_xml=$annotate_coverage_xml
 Options.buffer_max_dims=$buffer_max_dims
