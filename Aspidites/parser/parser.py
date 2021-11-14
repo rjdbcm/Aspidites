@@ -118,6 +118,7 @@ arith_expr.setName("arithmetic expression")
 comp_expr = infixNotation(
     arith_expr,
     [
+        (negateop, 1, opAssoc.RIGHT),
         (comparisonop, 2, opAssoc.LEFT),
     ],
 ).setParseAction(lambda s, l, t: "".join(t[0]))
