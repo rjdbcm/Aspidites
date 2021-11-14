@@ -16,7 +16,11 @@ try:
     module_paths = [str(Path('Aspidites/_vendor/contracts/useful_contracts/numpy_specific.py')),]
 except ModuleNotFoundError:
     def get_include():
-        return sysconfig.get_config_vars()['CONFINCLUDEPY']
+        try:
+            return sysconfig.get_config_vars()['CONFINCLUDEPY']
+        except KeyError:
+            return ''
+
     module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                     str(Path('Aspidites/_vendor/contracts/interface.py')),
                     str(Path('Aspidites/_vendor/contracts/syntax.py')),
