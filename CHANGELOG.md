@@ -1,4 +1,5 @@
 **unreleased**
+**v1.15.7**
 **v1.15.6**
 
 - a0265f9 fix windows build
