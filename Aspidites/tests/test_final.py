@@ -12,10 +12,20 @@ class B:
     pass
 
 
+class C:
+    pass
+
+
+c = final()
+
+
 def test_final_classes():
     with pt.raises(ContractNotRespected):
 
-        class C(A):
+        class D(A):
+            pass
+
+        class D(c(C)):
             pass
 
 

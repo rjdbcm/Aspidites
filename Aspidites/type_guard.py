@@ -1,4 +1,5 @@
 from ._vendor.pyrsistent import PClass
+from .final import final
 
 
 def safer_type(*args):
@@ -7,11 +8,7 @@ def safer_type(*args):
     attributes: dict
     if len(args) < 2:
         raise RuntimeError("Type introspection is not supported.")
-    elif len(args) == 2:
-        name, attributes = args
-        bases = (PClass,)
-    else:
-        name, bases, attributes = args
-        bases = (PClass,) + bases
-
-    return type(name, bases, dict(attributes))
+    name, attributes = args
+    bases = tuple()
+    t = type(name, bases, dict(attributes))
+    return final()(t)
