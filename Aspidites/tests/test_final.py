@@ -16,7 +16,7 @@ class C:
     pass
 
 
-c = final()
+c = final(C)
 
 
 def test_final_classes():
