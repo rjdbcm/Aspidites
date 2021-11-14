@@ -1,5 +1,11 @@
 **unreleased**
 **v1.15.3**
+
+- 35403f4 type now returns a final class rather than a PClass
+- 51ea189 fix docker build
+- 674a208 blackening
+
+
 **v1.15.2**
 
 - 9342004 No tree removal while running
