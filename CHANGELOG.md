@@ -1,5 +1,9 @@
 **unreleased**
 **v1.15.6**
+
+- a0265f9 fix windows build
+
+
 **v1.15.5**
 
 - 80a9506 fix docker build
