@@ -211,7 +211,6 @@ print('bootstrapping standard library in Aspidites/woma')
 from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
 from Aspidites.__main__ import get_cy_kwargs
 cy_kwargs = get_cy_kwargs()
-cy_kwargs.update(embed="'main'")
 code = open(Path('Aspidites/woma/library.wom'), 'r').read()
 cy_kwargs.update(
     code=parser.parse_module(code),

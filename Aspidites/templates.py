@@ -118,7 +118,10 @@ try:
     from numpy import get_include
 except:
     def get_include():
-        return sysconfig.get_config_vars()['CONFINCLUDEPY']
+        try:
+            return sysconfig.get_config_vars()['CONFINCLUDEPY']
+        except KeyError:
+            pass
 Options.annotate=$annotate
 Options.annotate_coverage_xml=$annotate_coverage_xml
 Options.buffer_max_dims=$buffer_max_dims
