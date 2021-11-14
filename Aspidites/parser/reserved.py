@@ -40,7 +40,7 @@ available_bool_pragmas = [
     "cython.warn.unused_result",
     "cython.warn.multiple_declarators",
 ]
-available_pragmas = ["cfunc", "ccall", "nogil", "no_gc", "inline", "curried"]
+available_pragmas = ["cfunc", "ccall", "nogil", "no_gc", "inline", "curried", "new_contract"]
 indent = "    "
 nl_indent = "\n" + indent
 sep = ", "
