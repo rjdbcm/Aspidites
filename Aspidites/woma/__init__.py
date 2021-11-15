@@ -29,7 +29,7 @@ try:
 except ImportError:
     pass
 
-__version__ = "1.15.7"
+__version__ = "1.16.0"
 
 
 def woma_version():

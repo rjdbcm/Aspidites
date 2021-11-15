@@ -1,4 +1,5 @@
 **unreleased**
+**v1.16.0**
 **v1.15.7**
 
 - 860f2cd matching now works with normal identifiers
