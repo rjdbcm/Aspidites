@@ -24,6 +24,10 @@
 (neg(x = 0 -> number)) number
     <*> -x
 
+(inv(x=/0 -> bool)) *
+    x = -x + 1 -> int
+    <*>bool(x)
+
 (iterate(f = /0 -> Callable; x = /0 -> *)) coroutine
     i<@>iter(int, 1)
         x = f(x)

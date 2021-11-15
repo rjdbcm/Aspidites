@@ -79,6 +79,7 @@ cont_if = Forward().setName("conditional continue")
 if_slice = Forward().setName("conditional slice")
 if_simple = Forward().setName("conditional assignment")
 if_func_call = Forward().setName("conditional function call")
+if_append = Forward().setName("conditional list append")
 if_return = Forward().setName("conditional return")
 rvalue = Forward().setName("return value")
 stmt = Forward().setName("statement")
@@ -118,7 +119,6 @@ arith_expr.setName("arithmetic expression")
 comp_expr = infixNotation(
     arith_expr,
     [
-        (negateop, 1, opAssoc.RIGHT),
         (comparisonop, 2, opAssoc.LEFT),
     ],
 ).setParseAction(lambda s, l, t: "".join(t[0]))
@@ -408,6 +408,9 @@ if_simple <<= (rvalue + if_cond + simple_assign).setParseAction(
 if_func_call <<= (rvalue + if_cond + func_call).setParseAction(
     lambda s, l, t: t[1] + t[0] + lit_colon + t[2]
 )
+if_append <<= (rvalue + if_cond + list_append).setParseAction(
+    lambda s, l, t: t[1] + t[0] + lit_colon + t[2]
+)
 if_return <<= (rvalue + if_cond + return_value | return_none).setParseAction(
     lambda s, l, t: t[1] + t[0] + lit_colon + t[2] + t[3]
 )
@@ -423,6 +426,7 @@ loop_suite <<= IndentedBlock(
         | if_slice
         | if_simple
         | if_func_call
+        | if_append
         | if_return
         | func_call
         | simple_assign
@@ -450,6 +454,7 @@ suite <<= IndentedBlock(
         | if_slice
         | if_simple
         | if_func_call
+        | if_append
         | if_return
         | slice_assign
         | contract_assign

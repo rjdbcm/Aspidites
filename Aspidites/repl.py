@@ -147,7 +147,7 @@ from Aspidites.math import (
 )
 from Aspidites._vendor.contracts import (
     contract as __contract,
-    new_contract as __new_contract,
+    new_contract,
 )
 from Aspidites._vendor.contracts.library.extensions import Extension
 from Aspidites._vendor.RestrictedPython import safe_builtins as __safe_builtins

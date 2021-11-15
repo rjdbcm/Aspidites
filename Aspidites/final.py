@@ -54,13 +54,11 @@ def final(_final: Final = _Final):  # This is 100% a hack: but it works.
         __name = str(mcs.__name__)
         __bases = tuple(mcs.__bases__)
         __dict = dict(mcs.__dict__)
-
-        for slot in __dict.get("__slots__", tuple()):
-            __dict.pop(slot, None)
-
         __dict["__metaclass__"] = _final
         __dict["__wrapped__"] = mcs
 
+        for slot in __dict.get("__slots__", tuple()):
+            __dict.pop(slot, None)
         return _final(__name, __bases, __dict)
 
     return wrapper

@@ -24,6 +24,11 @@ from .mathutils import clamp, ceil, floor
 from contextlib import contextmanager
 from functools import lru_cache
 
+try:
+    from library import *
+except ImportError:
+    pass
+
 __version__ = "1.15.7"
 
 

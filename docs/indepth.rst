@@ -149,7 +149,8 @@ avoid raising errors.
 +------------+------------+----------------+
 | 2          |    ``**``  |    ``right``   |
 +------------+------------+----------------+
-
+| 2          |    ``**``  |    ``right``   |
++------------+------------+----------------+
 Literals
 ~~~~~~~~
 
@@ -169,6 +170,16 @@ Pragmas
 
 Pragmas are directives for the compiler and other integral components of the Woma Programming Language that alter it's
 behavior. Pragmas are activated by prepending ``#`` to name of the pragma. Available pragmas are listed below.
+
+Contracts
+---------
+
+``new_contract``
+    Turns a function into a contract that can be used in contract assignments.
+    The fucntion must accept one parameter, and either:
+
+        - return True or None, to signify it accepts
+        - return False, to signify it doesn't
 
 Cython
 ------

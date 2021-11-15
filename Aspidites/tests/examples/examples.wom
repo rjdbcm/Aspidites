@@ -43,6 +43,20 @@
         <$>i > 10
         <%>i == 10
 
+(walk()) *
+    <#>
+
+(swim()) *
+    <#>
+
+(critter(x = '' -> str)) *
+    (!)x
+        "fins" : type('SeaCritter', {'swim': swim})
+        "legs" : type('LandCritter', {'walk': walk})
+    <*>x
+
+Critter = type('Critter', {'create': critter})
+
 `matching is valid in a function body`
 (match(x = 0 -> int)) int
     (!)x

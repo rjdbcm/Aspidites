@@ -1,5 +1,8 @@
 from ._vendor.pyrsistent import PClass
-from .final import final
+try:
+    from .woma.library import final
+except ImportError:
+    from .final import final
 
 
 def safer_type(*args):
