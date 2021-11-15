@@ -1,5 +1,15 @@
 **unreleased**
 **v1.15.7**
+
+- 860f2cd matching now works with normal identifiers
+- 1775575 moved pragmas to builtins.rst
+- 0c53f04 match trigram now works properly with Captures
+- 8c1c98a add docs for atomic operations
+- 572d8fd add new_contract to builtins
+- 7858b3d add negation operator
+- efab711 add new_contract to available_pragmas
+
+
 **v1.15.6**
 
 - a0265f9 fix windows build
