@@ -1,4 +1,5 @@
 **unreleased**
+**v1.16.1**
 **v1.16.0**
 
 - ede9cb8 removed future as a requirement
