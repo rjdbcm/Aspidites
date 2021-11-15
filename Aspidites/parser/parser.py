@@ -340,7 +340,7 @@ case_stmt = Group(assignable + Optional(colon + func_call)).setParseAction(
 match_suite = Group(IndentedBlock(OneOrMore(case_stmt))).setParseAction(
     lambda s, l, t: (sep.join(t.asList()[0]))
 )
-match_decl = Group(match_none + identifier).setParseAction(
+match_decl = Group(match_none + assignable).setParseAction(
     lambda s, l, t: t[0][1] + "=" + t[0][0] + lit_lparen + t[0][1]
 )
 match_def = Group(match_decl + match_suite).setParseAction(

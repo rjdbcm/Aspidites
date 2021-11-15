@@ -58,12 +58,12 @@
 Critter = type('Critter', {'create': critter})
 
 `matching is valid in a function body`
-(match(x = 0 -> int)) int
-    (!)x
-        0: Add(x, 1)
-        1: Add(x, 2)
-      ...: Add(x, 3)
-    <*>x
+(match(xy = 0 -> int)) *
+    (!)xy
+        0: Add(xy, 1)
+        1: Add(xy, 2)
+      ...: Add(xy, 3)
+    <*>xy
 
 nullity = /0
 
