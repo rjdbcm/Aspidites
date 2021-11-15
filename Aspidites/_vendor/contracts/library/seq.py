@@ -2,7 +2,6 @@
 from ..interface import Contract, ContractNotRespected
 from ..syntax import add_contract, W, contract_expression, O, S, add_keyword, Keyword
 import collections.abc as collections
-from past.builtins import xrange
 
 try:
     import numpy
@@ -26,7 +25,7 @@ class Seq(Contract):
 
             if self.elements_contract is not None:
                 n = value.size
-                for i in xrange(n):
+                for i in range(n):
                     element = value.flat[i]
                     if (element.dtype == numpy.int32) or (element.dtype == numpy.int64):
                         element = int(element)
