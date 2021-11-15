@@ -333,8 +333,9 @@ context_decl = Group(context_def + context_suite).setParseAction(
 )
 
 # TODO (!): trigram only binds a single letter variable identifier
-case_stmt = Group(assignable + colon + func_call).setParseAction(
+case_stmt = Group(assignable + Optional(colon + func_call)).setParseAction(
     lambda s, l, t: sep.join(t[0])
+
 )
 match_suite = Group(IndentedBlock(OneOrMore(case_stmt))).setParseAction(
     lambda s, l, t: (sep.join(t.asList()[0]))
