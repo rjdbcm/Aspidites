@@ -1,5 +1,9 @@
 **unreleased**
 **v1.16.0**
+
+- ede9cb8 removed future as a requirement
+
+
 **v1.15.7**
 
 - 860f2cd matching now works with normal identifiers
