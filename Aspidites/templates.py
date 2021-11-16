@@ -159,7 +159,7 @@ from Aspidites._vendor.pyrsistent import pset as __pset,pmap as __pmap,pvector a
 from Aspidites.woma import *
 from Aspidites._vendor import take,drop,takelast,droplast,consume,nth,first_true,iterate,padnone,ncycles,repeatfunc,grouper,group_by,roundrobin,partition,splitat,splitby,powerset,pairwise,iter_suppress,flatten,accumulate,reduce,filterfalse,zip_longest,chain,combinations,cycle,dropwhile,islice,repeat,starmap,takewhile,tee,call,apply,flip,curry,curried,zipwith,foldl,foldr,unfold,Capture,Strict,OneOf,AllOf,NoneOf,Not,Each,EachItem,Some,Between,Length,Contains,Regex,Check,InstanceOf,SubclassOf,Arguments,Returns,Transformed,At,Object,match as __match,_
 from Aspidites.monads import Maybe as __maybe,Surely as __surely
-from Aspidites.math import Undefined as __undefined,SafeDiv as __safeDiv,SafeExp as __safeExp,SafeMod as __safeMod,SafeFloorDiv as __safeFloorDiv,SafeUnaryAdd as __safeUnaryAdd,SafeUnarySub as __safeUnarySub,SafeFactorial as __safeFactorial
+from Aspidites.math import Undefined as __undefined,SafeDiv as __safeDiv,SafeMul as __safeMul,SafeAdd as __safeAdd,SafeSub as __safeSub,SafeExp as __safeExp,SafeMod as __safeMod,SafeFloorDiv as __safeFloorDiv,SafeUnaryAdd as __safeUnaryAdd,SafeUnarySub as __safeUnarySub,SafeFactorial as __safeFactorial
 from Aspidites._vendor.contracts import contract as __contract,new_contract as __new_contract,check
 from Aspidites._vendor.RestrictedPython.Guards import safe_builtins as __safe_builtins
 from Aspidites._vendor.RestrictedPython.compile import compile_restricted as compile

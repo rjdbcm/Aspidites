@@ -31,6 +31,9 @@ from ..math import (
     SafeDiv as __safeDiv,
     SafeExp as __safeExp,
     SafeMod as __safeMod,
+    SafeSub as __safeSub,
+    SafeAdd as __safeAdd,
+    SafeMul as __safeMul,
     SafeFloorDiv as __safeFloorDiv,
     SafeUnaryAdd as __safeUnaryAdd,
     SafeUnarySub as __safeUnarySub,
@@ -129,7 +132,6 @@ def test_parse_func_def(w, x, y, z):
         args += f"{x + str(i)} = {y} -> int;"
     args = args[:-1]
     f2 = f"({w}({x} = {y} -> int; {args})) int\n    <*>{x}"
-    print(f2)
     exec("".join(func_def.parseString(f2)))
 
 
@@ -144,7 +146,6 @@ def test_parse_literals(v, x, y):
     assert "".join(list_item.parseString("True")) == "True"
     assert "".join(list_item.parseString("False")) == "False"
     assert "".join(list_item.parseString(f"{x}.{y}")) == f"{x}.{y}"
-    assert "".join(list_item.parseString(f"{y}+{x}j")) == f"{y}+{x}j"
 
 
 @hypothesis.settings(deadline=None)
@@ -180,10 +181,10 @@ def test_parse_collections(t, u, v, w, x, y):
     assert (
         "".join(
             list_item.parseString(
-                f"{{'a': ({y}+5), '{w}': 8, '{v}': True, {x}: None, 'd': 6**2*5+3}}"
+                f"{{'a': {y}+5, '{w}': 8, '{v}': True, {x}: None, 'd': 6**2*5}}"
             )
         )
-        == f"__pmap({{'a': ({y}+5), '{w}': 8, '{v}': True, {x}: None, 'd': __maybe(__safeExp, 6, 2*5+3, )()}})"
+        == f"__pmap({{'a': __maybe(__safeAdd, {y}, 5, )(), '{w}': 8, '{v}': True, {x}: None, 'd': __maybe(__safeExp, 6, 2*5, )()}})"
     )
     assert (
         "".join(list_item.parseString(f"{{'{v}', '{w}'}}"))
@@ -206,10 +207,10 @@ def test_parse_evolvers(w, x, y, z):
     assert (
         "".join(
             list_item.parseString(
-                "{'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}..."
+                "{'a': 3+5, 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}..."
             )
         )
-        == "__pmap({'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': __maybe(__safeExp, 6, 2*5+3, )()}).evolver()"
+        == "__pmap({'a': __maybe(__safeAdd, 3, 5, )(), 'b': 8, 'c': True, 4: None, 'd': __maybe(__safeAdd, __maybe(__safeMul, __maybe(__safeExp, 6, 2)(), 5)(), 3, )()}).evolver()"
     )
     assert (
         "".join(list_item.parseString("{'a', 'b', 'c'}..."))

@@ -17,36 +17,92 @@ def factorial(expr):
 def expon(expr):
     a, op, b = expr.partition("**")
     expr = a + op + b.replace("**", end, 1) + sep
-    expr = "__maybe(__safeExp, " + expr.replace("**", sep, 1) + end
-    if expr.count(end) > 1:
-        expr = "__maybe(__safeExp, " + expr
+    if '__maybe' in expr:  # nesting
+        expr = "__maybe(__safeExp, " + expr.replace("**", end + sep, 1) + end
+        expr = ''.join(expr.rsplit(end + sep, 1))
+    else:
+        expr = "__maybe(__safeExp, " + expr.replace("**", sep, 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeExp, " + expr
     return expr
 
 
 def floordiv(expr):
     a, op, b = expr.partition("//")
     expr = a + op + b.replace("//", end, 1) + sep
-    expr = "__maybe(__safeFloorDiv, " + expr.replace("//", sep, 1) + end
-    if expr.count(end) > 1:
-        expr = "__maybe(__safeFloorDiv, " + expr
+    if '__maybe' in expr:  # nesting
+        expr = "__maybe(__safeFloorDiv, " + expr.replace("//", end + sep, 1) + end
+        expr = ''.join(expr.rsplit(end + sep, 1))
+    else:
+        expr = "__maybe(__safeFloorDiv, " + expr.replace("//", sep, 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeFloorDiv, " + expr
     return expr
 
 
 def div(expr):
     a, op, b = expr.partition("/")
     expr = a + op + b.replace("/", end + sep, 1)
-    expr = "__maybe(__safeDiv, " + expr.replace("/", sep, 1) + end
-    if expr.count(end) > 1:
-        expr = "__maybe(__safeDiv, " + expr
+    if '__maybe' in expr:  # nesting
+        expr = "__maybe(__safeDiv, " + expr.replace("/", end + sep, 1) + end
+        expr = ''.join(expr.rsplit(end + sep, 1))
+    else:
+        expr = "__maybe(__safeDiv, " + expr.replace("/", sep, 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeDiv, " + expr
     return expr
 
 
 def mod(expr):
     a, op, b = expr.partition("%")
     expr = a + op + b.replace("%", end, 1) + sep
-    expr = "__maybe(__safeMod, " + expr.replace("%", sep, 1) + end
-    if expr.count(end) > 1:
-        expr = "__maybe(__safeMod, " + expr
+    if '__maybe' in expr:  # nesting
+        expr = "__maybe(__safeMod, " + expr.replace("%", end + sep, 1) + end
+        expr = ''.join(expr.rsplit(end + sep, 1))
+    else:
+        expr = "__maybe(__safeMod, " + expr.replace("%", sep, 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeMod, " + expr
+    return expr
+
+
+def mult(expr):
+    a, op, b = expr.partition("*")
+    expr = a + op + b.replace("*", end, 1) + sep
+    if '__maybe' in expr:  # nesting
+        expr = "__maybe(__safeMul, " + expr.replace("*", end + sep, 1) + end
+        expr = ''.join(expr.rsplit(end + sep, 1))
+    else:
+        expr = "__maybe(__safeMul, " + expr.replace("*", sep, 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeMul, " + expr
+    print(expr)
+    return expr
+
+
+def sub(expr):
+    a, op, b = expr.partition("-")
+    expr = a + op + b.replace("-", end, 1) + sep
+    if '__maybe' in expr:  # nesting
+        expr = "__maybe(__safeSub, " + expr.replace("-", end + sep, 1) + end
+        expr = ''.join(expr.rsplit(end + sep, 1))
+    else:
+        expr = "__maybe(__safeSub, " + expr.replace("-", sep, 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeSub, " + expr
+    return expr
+
+
+def add(expr):
+    a, op, b = expr.partition("+")
+    expr = a + op + b.replace("+", end, 1) + sep
+    if '__maybe' in expr:  # nesting
+        expr = "__maybe(__safeAdd, " + expr.replace("+", end + sep, 1) + end
+        expr = ''.join(expr.rsplit(end + sep, 1))
+    else:
+        expr = "__maybe(__safeAdd, " + expr.replace("+", sep, 1) + end
+        if expr.count(end) > 1:
+            expr = "__maybe(__safeAdd, " + expr
     return expr
 
 
@@ -60,19 +116,22 @@ def single_negation(expr):
 
 def cvt_arith_expr(s, loc, t):
     expr = "".join((str(i) for i in t))
-    substr = ["!", "**", "//", "/", "%"]
+    substr = ["!", "**", "//", "/", "%", '*' '-', '+']
 
     # TODO Unary ops don't get caught during parsing.
     while any([s in expr for s in substr]):
         handler = {
             lambda x: "!" in x: factorial,
             lambda x: "**" in x: expon,
+            lambda x: "*" in x: mult,
             lambda x: "//" in x: floordiv,
             lambda x: "/" in x: div,
             lambda x: "%" in x: mod,
-            lambda x: "-" in x and x.count("-") % 2 == 0: double_negation,
-            lambda x: "-" in x and x.count("-") % 2 == 1: single_negation,
-            lambda x: "+" in x: double_negation,
+            lambda x: x.startswith('-') and x.count("-") % 2 == 0: double_negation,
+            lambda x: x.startswith('-') and x.count("-") % 2 == 1: single_negation,
+            lambda x: x.startswith('+'): double_negation,
+            lambda x: "-" in x: sub,
+            lambda x: "+" in x: add,
         }
         for k, v in handler.items():
             if k(expr):

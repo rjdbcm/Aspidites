@@ -122,6 +122,21 @@ def SafeFloorDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
+def SafeMul(a: Any, b: Any) -> Any:
+    return a * b
+
+
+# noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
+def SafeSub(a: Any, b: Any) -> Any:
+    return a - b
+
+
+# noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
+def SafeAdd(a: Any, b: Any) -> Any:
+    return a + b
+
+
+# noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
     if b == 0 or (isinf(a) and isinf(b)):
         return Undefined(SafeDiv, a, b)

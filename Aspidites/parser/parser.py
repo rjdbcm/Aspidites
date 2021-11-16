@@ -94,7 +94,7 @@ complex_ = Combine(real | integer + "+" + real | integer + "j")
 complex_.setName("complex numeric literal")
 identifier = Word(alphas + "_", alphanums + "_") + Optional(persist)
 identifier.setName("identifier")
-operand = nullit | complex_ | real | bool_literal | integer | identifier | underscore
+operand = nullit | complex_ | real | bool_literal | integer | list_str | identifier | underscore
 operand.setName("operand")
 arith_expr = Combine(
     infixNotation(
@@ -127,6 +127,9 @@ comp_expr.setName("comparison expression")
 #  maximum recursion depth exceeded while getting the str of an object
 list_item = (  # Precedence important!!!
     slice_str
+    | list_str_evolver
+    | set_str_evolver
+    | dict_str_evolver
     | comp_expr  # Expressions
     | arith_expr
     | identifier
@@ -136,9 +139,6 @@ list_item = (  # Precedence important!!!
     | bool_literal
     | nullit
     | quoted_str
-    | list_str_evolver
-    | set_str_evolver
-    | dict_str_evolver
     | list_str
     | set_str
     | dict_str

@@ -17,10 +17,8 @@
 
 (primes_upto(limit = 4 -> int)) list(int)
     primes = [] -> list
-    f = [False, False] -> list(bool)
-    t = [True] -> list(bool)
-    u = limit - 1 -> int
-    tt = t * u -> list(bool)
+    f = [False] * 2 -> list(bool)
+    tt = [True] * (limit - 1) -> list(bool)
     is_prime = flatten(f[^]tt) -> list(bool)
     limit_sqrt = limit ** 0.5 -> float
     iter1 = int(limit_sqrt + 1.5) -> int
@@ -93,9 +91,9 @@ G = {'a', 'b', 'c'}
 H = {'e', 'f', 'g'}...
 
 `persistent mappings`
-C = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}
+C = {'a': 3+5, 'b': 8, 'c': True, 4: None, 'd': 6**2*5+5}
 `evolver mappings`
-B = {'a': (3+5), 'b': 8, 'c': True, 4: None, 'd': 6**2*5+3}...
+B = {'a': 3+5, 'b': 8, 'c': True, 4: None, 'd': 6**2*5+5}...
 
 
 `new contracts can impose more complex contractual clauses`
