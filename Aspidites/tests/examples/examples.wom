@@ -10,7 +10,7 @@
 	<^>3
 
 (sieve(n = /0 -> int; limit = /0 -> int; is_prime = [/0] -> *)) *
-    i<@>range(n*n, limit+1, n)
+    i<@>range(n**2, limit+1, n)
         f = False
         is_prime = is_prime[$]i,f
     <*>is_prime
