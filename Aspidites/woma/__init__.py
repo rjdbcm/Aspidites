@@ -19,7 +19,6 @@ This should allow for some semblance of backwards compatibility.
 from .gcutils import get_all
 from .fileutils import mkdir_p, atomic_save, iglob, iter_find_files, copytree
 from .pickleutils import pickle_loads
-from .guiutils import *
 from .mathutils import clamp, ceil, floor
 from contextlib import contextmanager
 from functools import lru_cache

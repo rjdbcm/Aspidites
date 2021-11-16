@@ -1,2 +1,2 @@
 [build-system]
-requires = ["setuptools", "wheel", "Cython", "dearpygui", "pytest"]
+requires = ["setuptools", "wheel", "Cython", "pytest"]
