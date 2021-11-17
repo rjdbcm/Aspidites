@@ -202,10 +202,9 @@ def cvt_list(s, loc, t):
 
 def cvt_list_index(s, loc, t):
     t = t.asList()
-    t.insert(2, lit_lparen)
-    t[3] = str(t[3])
-    t.append(lit_rparen)
-    return "".join(t)
+    arg = ''.join(t[2:])
+    fn = ''.join(t[:2])
+    return f"__maybe({fn}, {arg})()"
 
 
 def cvt_set(s, loc, t):

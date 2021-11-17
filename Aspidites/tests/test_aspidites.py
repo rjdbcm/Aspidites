@@ -155,7 +155,7 @@ def test_parse_literals(v, x, y):
 def test_set_remove(v, x, y):
     assert (
         "".join(collection_trigrams.parseString(f"{{{y},{x}}}[*]{y}"))
-        == f"__pset({{{y}, {x}}}).remove({y})"
+        == f"__maybe(__pset({{{y}, {x}}}).remove, {y})()"
     )
 
 
