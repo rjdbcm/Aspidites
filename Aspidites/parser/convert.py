@@ -2,6 +2,7 @@
 import re
 
 from .reserved import *
+from .._vendor.pyparsing import ParserElement
 
 pmap_re = re.compile(r"(pmap\(\{.*\}\))")
 end = lit_rparen + lit_lparen + lit_rparen
@@ -76,7 +77,6 @@ def mult(expr):
         expr = "__maybe(__safeMul, " + expr.replace("*", sep, 1) + end
         if expr.count(end) > 1:
             expr = "__maybe(__safeMul, " + expr
-    print(expr)
     return expr
 
 
@@ -117,26 +117,28 @@ def single_negation(expr):
 def cvt_arith_expr(s, loc, t):
     expr = "".join((str(i) for i in t))
     substr = ["!", "**", "//", "/", "%", '*' '-', '+']
-
+    handler = {
+        lambda x: "!" in x: factorial,
+        lambda x: "**" in x: expon,
+        lambda x: "*" in x: mult,
+        lambda x: "//" in x: floordiv,
+        lambda x: "/" in x: div,
+        lambda x: "%" in x: mod,
+        lambda x: x.startswith('-'): single_negation,
+        lambda x: x.startswith('+'): double_negation,
+        lambda x: "-" in x: sub,
+        lambda x: "+" in x: add,
+    }
+    ParserElement.resetCache()  # clearing the cache prevents missing operands
     # TODO Unary ops don't get caught during parsing.
     while any([s in expr for s in substr]):
-        handler = {
-            lambda x: "!" in x: factorial,
-            lambda x: "**" in x: expon,
-            lambda x: "*" in x: mult,
-            lambda x: "//" in x: floordiv,
-            lambda x: "/" in x: div,
-            lambda x: "%" in x: mod,
-            lambda x: x.startswith('-') and x.count("-") % 2 == 0: double_negation,
-            lambda x: x.startswith('-') and x.count("-") % 2 == 1: single_negation,
-            lambda x: x.startswith('+'): double_negation,
-            lambda x: "-" in x: sub,
-            lambda x: "+" in x: add,
-        }
         for k, v in handler.items():
             if k(expr):
                 expr = v(expr)
-                break
+    else:
+        for k, v in handler.items():
+            if k(expr):
+                expr = v(expr)
     return expr
 
 

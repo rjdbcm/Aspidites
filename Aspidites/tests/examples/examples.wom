@@ -17,9 +17,10 @@
 
 (primes_upto(limit = 4 -> int)) list(int)
     primes = [] -> list
-    f = [False] * 2 -> list(bool)
-    tt = [True] * (limit - 1) -> list(bool)
-    is_prime = flatten(f[^]tt) -> list(bool)
+    upper = limit - 1 -> int
+    ff = [False]*2 -> list(bool)
+    tt = [True] * upper -> list(bool)
+    is_prime = flatten(ff[^]tt) -> list(bool)
     limit_sqrt = limit ** 0.5 -> float
     iter1 = int(limit_sqrt + 1.5) -> int
 
@@ -110,7 +111,7 @@ y = Add(4, 3.5)...
 z = Add(x(), 3)
 
 `Scala-style closure functions`
-scala = (_ * 2)
+scala = _ * 2
 val = scala(_ + _)
 `This will be Undefined because of arity`
 val = val(scala)...

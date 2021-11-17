@@ -137,7 +137,7 @@ def test_parse_func_def(w, x, y, z):
 
 @hypothesis.settings(deadline=None)
 @hypothesis.given(
-    st.text([c for c in ascii_letters]), st.integers(), st.integers(min_value=0)
+    st.text([c for c in ascii_letters]), st.integers(min_value=0), st.integers(min_value=0)
 )
 def test_parse_literals(v, x, y):
     assert "".join(list_item.parseString(f"'{v}'")) == f"'{v}'"
@@ -150,7 +150,7 @@ def test_parse_literals(v, x, y):
 
 @hypothesis.settings(deadline=None)
 @hypothesis.given(
-    st.text([c for c in ascii_letters]), st.integers(), st.integers(min_value=0)
+    st.text([c for c in ascii_letters]), st.integers(min_value=0), st.integers(min_value=0)
 )
 def test_set_remove(v, x, y):
     assert (
@@ -170,11 +170,11 @@ def test_set_remove(v, x, y):
 
 @hypothesis.settings(deadline=None)
 @hypothesis.given(
-    st.sets(st.integers()),
-    st.lists(st.integers()),
+    st.sets(st.integers(min_value=0)),
+    st.lists(st.integers(min_value=0)),
     st.text([c for c in ascii_letters]),
     st.text([c for c in ascii_lowercase]),
-    st.integers(),
+    st.integers(min_value=0),
     st.integers(min_value=0),
 )
 def test_parse_collections(t, u, v, w, x, y):
@@ -184,7 +184,7 @@ def test_parse_collections(t, u, v, w, x, y):
                 f"{{'a': {y}+5, '{w}': 8, '{v}': True, {x}: None, 'd': 6**2*5}}"
             )
         )
-        == f"__pmap({{'a': __maybe(__safeAdd, {y}, 5, )(), '{w}': 8, '{v}': True, {x}: None, 'd': __maybe(__safeExp, 6, 2*5, )()}})"
+        == f"__pmap({{'a': __maybe(__safeAdd, {y}, 5, )(), '{w}': 8, '{v}': True, {x}: None, 'd': __maybe(__safeMul, __maybe(__safeExp, 6, 2)(), 5, )()}})"
     )
     assert (
         "".join(list_item.parseString(f"{{'{v}', '{w}'}}"))
