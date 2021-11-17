@@ -118,7 +118,8 @@ val = val(scala)...
 
 `modulus and division by 0 handled by returning Undefined()`
 denom = 0
-chained = -1 / 2 / 1
+`TODO: chaining division causes parse issues`
+`chained = -1 / 2 / 1`
 div_by_zero = 1 / denom
 mod_zero = 1 % denom
 div_by_zero2 = 1 / 0
