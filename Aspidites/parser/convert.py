@@ -129,8 +129,6 @@ def cvt_arith_expr(s, loc, t):
         lambda x: "-" in x: sub,
         lambda x: "+" in x: add,
     }
-    ParserElement.resetCache()  # clearing the cache prevents missing operands
-    # TODO Unary ops don't get caught during parsing.
     while any([s in expr for s in substr]):
         for k, v in handler.items():
             if k(expr):
