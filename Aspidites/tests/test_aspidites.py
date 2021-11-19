@@ -308,7 +308,7 @@ def test_compile_to_shared_object(inject_config):
         Compiler(compile_args)
     except (FileNotFoundError, ValueError):
         kwargs.update(
-            code=code, fname=Path(inject_config) / python_file_, bytecode=True
+            code=code, fname=Path(inject_config) / full_path, bytecode=True
         )
         compile_args = CompilerArgs(**kwargs)
         Compiler(compile_args)
