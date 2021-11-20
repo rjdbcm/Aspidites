@@ -10,7 +10,7 @@ Examples
 
         .. code:: woma
 
-            (Add(x = 3 -> int; y = 3 -> int)) int
+            (add(x = 3 -> int; y = 3 -> int)) int
                 <*>x+y
 
     .. tab::
@@ -19,7 +19,7 @@ Examples
 
         .. code:: woma
 
-            (Yield123()) coroutine
+            (yield123()) coroutine
                 <^>1
                 <^>2
                 <^>3
@@ -30,12 +30,12 @@ Examples
 
         .. code:: woma
 
-            (Yield123()) coroutine
+            (yield123()) coroutine
                 <^>1
                 <^>2
                 <^>3
             `ellipsis calling creates a true coroutine`
-            c = Yield123()...
+            c = yield123()...
 
 .. tabs::
 
@@ -95,7 +95,7 @@ Examples
             z = Add(x(), 3)
 
             `Scala-style closure functions`
-            scala = (_ * 2)
+            scala = _ * 2
             val = scala(_ + _)
             val = val(scala)...
 
