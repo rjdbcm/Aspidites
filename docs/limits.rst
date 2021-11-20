@@ -4,9 +4,7 @@ Known Limitations
 Literal Arithmetic
 ~~~~~~~~~~~~~~~~~~
 
- - ``--N != N``
-  - Workaround: don't use ``--``
- - Chained arithmetic doesn't parse properly.
-  - Example: ``2/1/2 == 2/(1/2)``
-  - Workaround 1: Don't chain arithmetic prefer explicit assignment.
-  - Workaround 2: Use ``(2/1)/2`` for python-style evaluation.
+ - Chained arithmetic doesn't parse properly when using the same operator.
+  - Issue: `#40 <https://github.com/rjdbcm/Aspidites/issues/40>`_
+  - Example: ``2/1/2`` ``2/(1/2)``
+  - Workaround: Don't chain arithmetic prefer explicit assignment.
