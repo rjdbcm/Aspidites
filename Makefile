@@ -40,7 +40,16 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/_vendor/contracts/useful_contracts/numpy_specific.c
 	rm -fr Aspidites/_vendor/contracts/useful_contracts/numbers.c
 	rm -fr Aspidites/_vendor/contracts/library/*.c
+	rm -fr Aspidites/_vendor/apm/_util.c
+	rm -fr Aspidites/_vendor/apm/error.c
+	rm -fr Aspidites/_vendor/apm/generic.c
+	rm -fr Aspidites/_vendor/apm/match.c
+	rm -fr Aspidites/_vendor/apm/no_value.c
+	rm -fr Aspidites/_vendor/apm/overload.c
+	rm -fr Aspidites/_vendor/apm/patterns.c
+	rm -fr Aspidites/_vendor/apm/try_match.c
 	rm -fr Aspidites/_vendor/fn/*.c
+	rm -fr Aspidites/_vendor/RestrictedPython/Limits.c
 	rm -fr Aspidites/parser/convert.c
 	rm -fr Aspidites/parser/parser.c
 	rm -fr Aspidites/parser/reserved.c
@@ -58,11 +67,20 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/math.*.so
 	rm -fr Aspidites/monads.*.so
 	rm -fr Aspidites/templates.*.so
+	rm -fr Aspidites/_vendor/apm/_util.*.so
+	rm -fr Aspidites/_vendor/apm/error.*.so
+	rm -fr Aspidites/_vendor/apm/generic.*.so
+	rm -fr Aspidites/_vendor/apm/match.*.so
+	rm -fr Aspidites/_vendor/apm/no_value.*.so
+	rm -fr Aspidites/_vendor/apm/overload.*.so
+	rm -fr Aspidites/_vendor/apm/patterns.*.so
+	rm -fr Aspidites/_vendor/apm/try_match.*.so
 	rm -fr Aspidites/_vendor/decorator_extension.*.so
 	rm -fr Aspidites/_vendor/pyparsing_extension.*.so
 	rm -fr Aspidites/_vendor/fn/*.*.so
 	rm -fr Aspidites/_vendor/contracts/metaclass.*.so
 	rm -fr Aspidites/_vendor/contracts/interface.*.so
+	rm -fr Aspidites/_vendor/contracts/parser.*.so
 	rm -fr Aspidites/_vendor/contracts/syntax.*.so
 	rm -fr Aspidites/_vendor/contracts/inspection.*.so
 	rm -fr Aspidites/_vendor/contracts/docstring_parsing.*.so
@@ -70,6 +88,7 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/_vendor/contracts/library/*.*.so
 	rm -fr Aspidites/_vendor/contracts/useful_contracts/numpy_specific.*.so
 	rm -fr Aspidites/_vendor/contracts/useful_contracts/numbers.*.so
+	rm -fr Aspidites/_vendor/RestrictedPython/Limits.*.so
 	rm -fr Aspidites/parser/convert.*.so
 	rm -fr Aspidites/parser/parser.*.so
 	rm -fr Aspidites/parser/reserved.*.so

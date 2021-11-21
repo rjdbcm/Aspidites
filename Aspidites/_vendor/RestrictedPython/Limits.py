@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 ##############################################################################
 #
 # Copyright (c) 2002 Zope Foundation and Contributors.
@@ -10,7 +11,7 @@
 # FOR A PARTICULAR PURPOSE
 #
 ##############################################################################
-
+from ..pyrsistent import pvector
 limited_builtins = {}
 
 
@@ -45,7 +46,7 @@ limited_builtins["range"] = limited_range
 def limited_list(seq):
     if isinstance(seq, str):
         raise TypeError("cannot convert string to list")
-    return list(seq)
+    return pvector(seq)
 
 
 limited_builtins["list"] = limited_list
