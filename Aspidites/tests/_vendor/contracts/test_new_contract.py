@@ -4,7 +4,7 @@ from Aspidites._vendor.contracts import new_contract, check, Contract, contract
 from Aspidites._vendor.contracts.library.extensions import identifier_expression
 
 from .utils import check_contracts_fail, check_contracts_ok
-from Aspidites._vendor.contracts.main_actual import Storage
+from Aspidites._vendor.contracts.parser import Storage
 from Aspidites._vendor.contracts.syntax import ParsingTmp
 
 # The different patterns
