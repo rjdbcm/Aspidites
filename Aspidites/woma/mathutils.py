@@ -1,7 +1,4 @@
 # cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
-"""This module provides useful math functions on top of Python's
-built-in :mod:`math` module.
-"""
 from __future__ import division
 
 from math import ceil as _ceil, floor as _floor

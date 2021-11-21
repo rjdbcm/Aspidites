@@ -3,9 +3,11 @@
 
 `Here are some (not at all optimal) functional interfaces for atomic arithmetic ops`
 
+#contract
 (add(x = 0 -> number; y = 0 -> number)) number
 	<*> x + y
 
+#contract
 (sub(x = 0 -> number; y = 0 -> number)) number
 	<*> x - y
 

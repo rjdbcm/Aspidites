@@ -42,8 +42,10 @@ def get_all(type_obj, include_subtypes=True):
     """Get a list containing all instances of a given type.  This will
     work for the vast majority of types out there.
 
-    >>> class Ratking(object): pass
-    >>> wiki, hak, sport = Ratking(), Ratking(), Ratking()
+    >>> RatKing = type('Ratking', {})
+    >>> foo = Ratking() -> *
+    >>> bar = Ratking() -> *
+    >>> baz = Ratking() -> *
     >>> len(get_all(Ratking))
     3
 

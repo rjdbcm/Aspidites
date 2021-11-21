@@ -1,5 +1,6 @@
 `first-class functions`
 #curried
+#contract
 (Add(x = 3 -> int; y = 3 -> int)) int
 	<*>x+y
 
@@ -9,12 +10,16 @@
 	<^>2
 	<^>3
 
+#cython.boundscheck(False)
+#cython.wraparound(False)
 (sieve(n = /0 -> int; limit = /0 -> int; is_prime = [/0] -> *)) *
     i<@>range(n**2, limit+1, n)
         f = False
         is_prime = is_prime[$]i,f
     <*>is_prime
 
+#cython.boundscheck(False)
+#cython.wraparound(False)
 (primes_upto(limit = 4 -> int)) list(int)
     primes = [] -> list
     upper = limit - 1 -> int

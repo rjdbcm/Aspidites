@@ -165,6 +165,7 @@ from Aspidites._vendor.RestrictedPython.Guards import safe_builtins as __safe_bu
 from Aspidites._vendor.RestrictedPython.compile import compile_restricted as compile
 from Aspidites.type_guard import safer_type as type
 __safe_builtins['new_contract']=__new_contract
+__safe_builtins['contract']=__contract
 __safe_builtins['check']=check
 __safe_builtins['type']=type
 __safe_builtins['compile']=compile
@@ -239,6 +240,7 @@ procedure: None
 coroutine: Generator
 number: Any
 new_contract = __new_contract
+contract = __contract
 
 $code
 

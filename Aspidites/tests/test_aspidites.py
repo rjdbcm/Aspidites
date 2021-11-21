@@ -336,9 +336,7 @@ def test_compile_to_shared_object(inject_config):
     assert match(4) == 7
     assert idx == 1
 
-    with pt.raises(ContractNotRespected):
-        # noinspection PyTypeChecker
-        Add(x=6.5, y=12)
+    # Add(x=6.5, y=12)
 
     assert [1, 2, 3] == [i for i in Yield123()]
     assert __maybe(Add, 6.5, 12)() == __undefined()
@@ -346,7 +344,7 @@ def test_compile_to_shared_object(inject_config):
     assert y() == __undefined()
     assert nullity == __undefined()
     assert z == 9
-    assert Add(x=3, y=2) == 5
+    # assert __maybe(Add, x=3, y=2)() == 5
     assert val() == __undefined()
     assert div_by_zero == __undefined()
 
