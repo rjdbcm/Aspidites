@@ -1,3 +1,4 @@
+# cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
 import inspect
 from inspect import CO_VARARGS  # pylint: disable=no-name-in-module
 from itertools import chain, repeat

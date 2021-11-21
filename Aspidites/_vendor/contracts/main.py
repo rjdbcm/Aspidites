@@ -15,10 +15,10 @@ from .interface import (
     MissingContract,
     describe_value,
 )
+from .parser import parse_contract_string_actual, check_contracts
+
 from .main_actual import (
-    parse_contract_string_actual,
-    check_contracts,
-    get_all_arg_names,
+    get_all_arg_names
 )
 from .library import CheckType
 

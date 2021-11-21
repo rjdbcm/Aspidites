@@ -42,6 +42,8 @@ from collections import namedtuple
 from typing import Callable
 from inspect import FullArgSpec, getfullargspec
 import cython
+from .interface import Where, ContractSyntaxError
+from .syntax import contract_expression
 from ..fn.underscore import ArityError
 
 inPy2 = sys.version_info[0] == 2
