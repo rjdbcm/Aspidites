@@ -48,9 +48,9 @@ def test_safe_div(x, y):
 @hypothesis.settings(deadline=None)
 @pt.mark.filterwarnings("ignore::RuntimeWarning")
 def test_safe_exp(x, y):
-    assert SafeExp(0, 0) == 1
-    assert SafeExp(0, inf) == 0.0
-    assert SafeExp(inf, 0) == 1.0
+    assert SafeExp(0, 0) == Undefined()
+    assert SafeExp(0, inf) == Undefined()
+    assert SafeExp(inf, 0) == Undefined()
     assume(x != 0 and y != 0)
     try:
         x ** y
