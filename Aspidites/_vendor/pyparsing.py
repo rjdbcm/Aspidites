@@ -180,7 +180,8 @@ except ImportError:  # pragma: no cover
 
     class SimpleNamespace:
         pass
-from .pyparsing_extension import _trim_arity
+
+
 # version compatibility configuration
 __compat__ = SimpleNamespace()
 __compat__.__doc__ = """
@@ -316,11 +317,65 @@ __all__ = [
     "re",
 ]
 
-_MAX_INT = sys.maxsize
-basestring = str
-unichr = chr
-unicode = str
-_ustr = str
+system_version = tuple(sys.version_info)[:3]
+PY_3 = system_version[0] == 3
+if PY_3:
+    _MAX_INT = sys.maxsize
+    basestring = str
+    unichr = chr
+    unicode = str
+    _ustr = str
+
+    # build list of single arg builtins, that can be used as parse actions
+    singleArgBuiltins = [
+        sum,
+        len,
+        sorted,
+        reversed,
+        list,
+        tuple,
+        set,
+        any,
+        all,
+        min,
+        max,
+    ]
+
+else:
+    _MAX_INT = sys.maxint
+    range = xrange
+
+    def _ustr(obj):
+        """Drop-in replacement for str(obj) that tries to be Unicode
+        friendly. It first tries str(obj). If that fails with
+        a UnicodeEncodeError, then it tries unicode(obj). It then
+        < returns the unicode object | encodes it with the default
+        encoding | ... >.
+        """
+        if isinstance(obj, unicode):
+            return obj
+
+        try:
+            # If this works, then _ustr(obj) has the same behaviour as str(obj), so
+            # it won't break any existing code.
+            return str(obj)
+
+        except UnicodeEncodeError:
+            # Else encode it
+            ret = unicode(obj).encode(sys.getdefaultencoding(), "xmlcharrefreplace")
+            xmlcharref = Regex(r"&#\d+;")
+            xmlcharref.setParseAction(lambda t: "\\u" + hex(int(t[0][2:-1]))[2:])
+            return xmlcharref.transformString(ret)
+
+    # build list of single arg builtins, tolerant of Python version, that can be used as parse actions
+    singleArgBuiltins = []
+    import __builtin__
+
+    for fname in "sum len sorted reversed list tuple set any all min max".split():
+        try:
+            singleArgBuiltins.append(getattr(__builtin__, fname))
+        except AttributeError:
+            continue
 
 _generatorType = type((y for y in range(1)))
 
@@ -347,6 +402,99 @@ def conditionAsParseAction(fn, message=None, fatal=False):
 
 MutableMapping.register(ParseResults)
 
+# Only works on Python 3.x - nonlocal is toxic to Python 2 installs
+# ~ 'decorator to trim function calls to match the arity of the target'
+# ~ def _trim_arity(func, maxargs=3):
+# ~ if func in singleArgBuiltins:
+# ~ return lambda s,l,t: func(t)
+# ~ limit = 0
+# ~ foundArity = False
+# ~ def wrapper(*args):
+# ~ nonlocal limit,foundArity
+# ~ while 1:
+# ~ try:
+# ~ ret = func(*args[limit:])
+# ~ foundArity = True
+# ~ return ret
+# ~ except TypeError:
+# ~ if limit == maxargs or foundArity:
+# ~ raise
+# ~ limit += 1
+# ~ continue
+# ~ return wrapper
+
+# this version is Python 2.x-3.x cross-compatible
+"decorator to trim function calls to match the arity of the target"
+
+
+def _trim_arity(func, maxargs=2):
+    if func in singleArgBuiltins:
+        return lambda s, l, t: func(t)
+    limit = [0]
+    foundArity = [False]
+
+    # traceback return data structure changed in Py3.5 - normalize back to plain tuples
+    if system_version[:2] >= (3, 5):
+
+        def extract_stack(limit=0):
+            # special handling for Python 3.5.0 - extra deep call stack by 1
+            offset = -3 if system_version == (3, 5, 0) else -2
+            frame_summary = traceback.extract_stack(limit=-offset + limit - 1)[offset]
+            return [frame_summary[:2]]
+
+        def extract_tb(tb, limit=0):
+            frames = traceback.extract_tb(tb, limit=limit)
+            frame_summary = frames[-1]
+            return [frame_summary[:2]]
+
+    else:
+        extract_stack = traceback.extract_stack
+        extract_tb = traceback.extract_tb
+
+    # synthesize what would be returned by traceback.extract_stack at the call to
+    # user's parse action 'func', so that we don't incur call penalty at parse time
+
+    LINE_DIFF = 6
+    # IF ANY CODE CHANGES, EVEN JUST COMMENTS OR BLANK LINES, BETWEEN THE NEXT LINE AND
+    # THE CALL TO FUNC INSIDE WRAPPER, LINE_DIFF MUST BE MODIFIED!!!!
+    this_line = extract_stack(limit=2)[-1]
+    pa_call_line_synth = (this_line[0], this_line[1] + LINE_DIFF)
+
+    def wrapper(*args):
+        while 1:
+            try:
+                ret = func(*args[limit[0] :])
+                foundArity[0] = True
+                return ret
+            except TypeError:
+                # re-raise TypeErrors if they did not come from our arity testing
+                if foundArity[0]:
+                    raise
+                else:
+                    try:
+                        tb = sys.exc_info()[-1]
+                        if not extract_tb(tb, limit=2)[-1][:2] == pa_call_line_synth:
+                            raise
+                    finally:
+                        try:
+                            del tb
+                        except NameError:
+                            pass
+
+                if limit[0] <= maxargs:
+                    limit[0] += 1
+                    continue
+                raise
+
+    # copy func name to wrapper for sensible debug output
+    func_name = "<parse action>"
+    try:
+        func_name = getattr(func, "__name__", getattr(func, "__class__").__name__)
+    except Exception:
+        func_name = str(func)
+    wrapper.__name__ = func_name
+
+    return wrapper
 
 
 class _PendingSkip(ParserElement):
@@ -2241,15 +2389,16 @@ pyparsing_unicode.Japanese._ranges = (
 )
 
 # define ranges in language character sets
-setattr(pyparsing_unicode, u"العربية", pyparsing_unicode.Arabic)
-setattr(pyparsing_unicode, u"中文", pyparsing_unicode.Chinese)
-setattr(pyparsing_unicode, u"кириллица", pyparsing_unicode.Cyrillic)
-setattr(pyparsing_unicode, u"Ελληνικά", pyparsing_unicode.Greek)
-setattr(pyparsing_unicode, u"עִברִית", pyparsing_unicode.Hebrew)
-setattr(pyparsing_unicode, u"日本語", pyparsing_unicode.Japanese)
-setattr(pyparsing_unicode.Japanese, u"漢字", pyparsing_unicode.Japanese.Kanji)
-setattr(pyparsing_unicode.Japanese, u"カタカナ", pyparsing_unicode.Japanese.Katakana)
-setattr(pyparsing_unicode.Japanese, u"ひらがな", pyparsing_unicode.Japanese.Hiragana)
-setattr(pyparsing_unicode, u"한국어", pyparsing_unicode.Korean)
-setattr(pyparsing_unicode, u"ไทย", pyparsing_unicode.Thai)
-setattr(pyparsing_unicode, u"देवनागरी", pyparsing_unicode.Devanagari)
+if PY_3:
+    setattr(pyparsing_unicode, u"العربية", pyparsing_unicode.Arabic)
+    setattr(pyparsing_unicode, u"中文", pyparsing_unicode.Chinese)
+    setattr(pyparsing_unicode, u"кириллица", pyparsing_unicode.Cyrillic)
+    setattr(pyparsing_unicode, u"Ελληνικά", pyparsing_unicode.Greek)
+    setattr(pyparsing_unicode, u"עִברִית", pyparsing_unicode.Hebrew)
+    setattr(pyparsing_unicode, u"日本語", pyparsing_unicode.Japanese)
+    setattr(pyparsing_unicode.Japanese, u"漢字", pyparsing_unicode.Japanese.Kanji)
+    setattr(pyparsing_unicode.Japanese, u"カタカナ", pyparsing_unicode.Japanese.Katakana)
+    setattr(pyparsing_unicode.Japanese, u"ひらがな", pyparsing_unicode.Japanese.Hiragana)
+    setattr(pyparsing_unicode, u"한국어", pyparsing_unicode.Korean)
+    setattr(pyparsing_unicode, u"ไทย", pyparsing_unicode.Thai)
+    setattr(pyparsing_unicode, u"देवनागरी", pyparsing_unicode.Devanagari)
