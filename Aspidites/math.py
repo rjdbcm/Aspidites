@@ -152,10 +152,6 @@ def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
 
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
 def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
-    if (
-        (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0)
-    ):  # pragma: no cover
-        return Undefined(SafeExp, a, b)
     try:
         return a ** b
     except OverflowError:
