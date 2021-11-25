@@ -18,6 +18,9 @@ __all__ = [
     "SafeFactorial",
     "SafeUnarySub",
     "SafeUnaryAdd",
+    "SafeAdd",
+    "SafeMul",
+    "SafeSub",
     "Undefined",
     "Maybe",
     "Surely",
@@ -25,11 +28,13 @@ __all__ = [
     "parse_module",
     "parse_statement",
     "bordered",
+    "Compiler",
+    "CompilerArgs"
 ]
+try:
+    from Aspidites.api import *
 
-from Aspidites.api import *
-from Aspidites.parser import *
-from Aspidites.monads import *
-from Aspidites.math import *
+    Maybe.__doc__ = Maybe.__doc__
+except ImportError:
+    pass
 
-Maybe.__doc__ = Maybe.__doc__

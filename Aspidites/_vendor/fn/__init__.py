@@ -1,5 +1,4 @@
 from .func import F, curried
-from .stream import Stream
 from .underscore import shortcut as _
 from .iters import (
     take,
@@ -36,9 +35,10 @@ from .iters import (
 )
 from .op import call, apply, flip, curry, zipwith, foldl, foldr, unfold
 
-from .recur import tco, stackless
 
-from .uniform import reduce, filterfalse, zip_longest
+from functools import reduce
+from itertools import filterfalse
+from itertools import zip_longest
 
 __version__ = "0.5.2"
 
@@ -75,9 +75,6 @@ __all__ = [
     "foldl",
     "foldr",
     "unfold",  # END op.py
-    "tco",
-    "stackless",
-    "Stream",
     "_",
     "reduce",
     "filterfalse",

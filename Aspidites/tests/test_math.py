@@ -3,8 +3,8 @@ import pytest
 from hypothesis import given, assume
 import hypothesis.strategies as st
 import pytest as pt
-from ..monads import Maybe, Surely
-from ..math import (
+from Aspidites.api.monads import Maybe, Surely
+from Aspidites.api.math import (
     SafeFloorDiv,
     SafeMod,
     SafeDiv,

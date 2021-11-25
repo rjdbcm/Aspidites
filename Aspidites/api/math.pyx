@@ -14,7 +14,7 @@ try:
 except ModuleNotFoundError:
     Numeric = Union[int, float, complex]
 
-from .api import Warn
+from Aspidites.api import Warn
 
 
 class Undefined:
@@ -93,29 +93,33 @@ class Undefined:
         self.kwargs = kwargs
 
 
+def SafeSlice(x: Any, start=None, stop=None, step=None):
+    return x[start:stop:step]
+
+
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeFactorial(a: Numeric) -> Union[Numeric, Undefined]:
+def SafeFactorial(a: Any) -> Any:
     if a < 0 or isnan(a) or isinf(a) or isinstance(a, (float, complex)):
         return Undefined(SafeFactorial, a)
     return factorial(a)
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeUnaryAdd(a: Numeric) -> Union[Numeric, Undefined]:
+def SafeUnaryAdd(a: Any) -> Any:
     if isnan(a) or not isinstance(a, numbers.Number):
         return Undefined(SafeUnaryAdd, a)
     return +a
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeUnarySub(a: Numeric) -> Union[Numeric, Undefined]:
+def SafeUnarySub(a: Any) -> Any:
     if isnan(a) or not isinstance(a, numbers.Number):
         return Undefined(SafeUnarySub, a)
     return -a
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeFloorDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
+def SafeFloorDiv(a: Any, b: Any) -> Any:
     if isinf(a) or b == 0 or (isinf(a) and isinf(b)):
         return Undefined(SafeFloorDiv, a, b)
     return a // b
@@ -137,21 +141,21 @@ def SafeAdd(a: Any, b: Any) -> Any:
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeDiv(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
+def SafeDiv(a: Any, b: Any) -> Any:
     if b == 0 or (isinf(a) and isinf(b)):
         return Undefined(SafeDiv, a, b)
     return a / b
 
 
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
-def SafeMod(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
+def SafeMod(a: Any, b: Any) -> Any:
     if isinf(a) or b == 0:
         return Undefined(SafeMod, a, b)
     return a % b
 
 
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
-def SafeExp(a: Numeric, b: Numeric) -> Union[Numeric, Undefined]:
+def SafeExp(a: Any, b: Any) -> Any:
     if (
         (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0)
     ):  # pragma: no cover

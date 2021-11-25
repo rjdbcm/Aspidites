@@ -14,7 +14,7 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from .._vendor.pyparsing import (
+from Aspidites._vendor.pyparsing import (
     IndentedBlock,
     Combine,
     Empty,
@@ -42,9 +42,9 @@ from .._vendor.pyparsing import (
     unicodeString,
 )
 
-from .._vendor.contracts.syntax import contract_expression
-from .._vendor.contracts.library.suggester import create_suggester
-from ..parser.convert import *
+from Aspidites._vendor.contracts.syntax import contract_expression
+from Aspidites._vendor.contracts.library.suggester import create_suggester
+from .convert import *
 
 list_str = Forward().setName("list literal")
 list_str_evolver = Forward().setName("list evolver literal")

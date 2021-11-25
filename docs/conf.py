@@ -22,8 +22,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath('..'))
-from Aspidites.parser.parser import comparisonop, identifier
-from Aspidites import __version__, __mimetype__
+from Aspidites import __version__
 
 # -- Project information -----------------------------------------------------
 

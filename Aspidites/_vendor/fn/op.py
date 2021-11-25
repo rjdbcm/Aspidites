@@ -4,7 +4,7 @@ from sys import version_info
 from typing import Callable
 
 from .func import F, identity
-from .uniform import reduce
+from functools import reduce
 
 
 def _apply(f, args=None, kwargs=None):

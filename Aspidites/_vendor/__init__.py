@@ -40,9 +40,6 @@ __all__ = [
     "foldl",
     "foldr",
     "unfold",  # END op.py
-    "tco",
-    "stackless",
-    "Stream",
     "_",
     "reduce",
     "filterfalse",

@@ -14,12 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import contextlib
-import importlib
 import pathlib
 import shutil
-import subprocess
 import sys
-import tempfile
 from random import randint
 import traceback
 from itertools import cycle
@@ -69,88 +66,10 @@ from cython import (
 from Aspidites._vendor.pyrsistent import (
     pset as __pset,
     pmap as __pmap,
-    pvector as __pvector,
     s,
     v,
-    m,
-)
-from Aspidites.woma import *
-from Aspidites._vendor import (
-    take,
-    drop,
-    takelast,
-    droplast,
-    consume,
-    nth,
-    first_true,
-    iterate,
-    padnone,
-    ncycles,
-    repeatfunc,
-    grouper,
-    group_by,
-    roundrobin,
-    partition,
-    splitat,
-    splitby,
-    powerset,
-    pairwise,
-    iter_suppress,
-    flatten,
-    accumulate,
-    reduce,
-    filterfalse,
-    zip_longest,
-    call,
-    apply,
-    flip,
-    curry,
-    curried,
-    zipwith,
-    foldl,
-    foldr,
-    unfold,
-    Capture,
-    Strict,
-    OneOf,
-    AllOf,
-    NoneOf,
-    Not,
-    Each,
-    EachItem,
-    Some,
-    Between,
-    Length,
-    Contains,
-    Regex,
-    Check,
-    InstanceOf,
-    SubclassOf,
-    Arguments,
-    Returns,
-    Transformed,
-    At,
-    Object,
-    match as __match,
-    _,
-)
-from Aspidites.monads import Maybe as __maybe, Surely as __surely
-from Aspidites.math import (
-    Undefined as __undefined,
-    SafeDiv as __safeDiv,
-    SafeExp as __safeExp,
-    SafeMod as __safeMod,
-    SafeFloorDiv as __safeFloorDiv,
-    SafeUnaryAdd as __safeUnaryAdd,
-    SafeUnarySub as __safeUnarySub,
-    SafeFactorial as __safeFactorial,
-)
-from Aspidites._vendor.contracts import (
-    contract as __contract,
-    new_contract,
 )
 from Aspidites._vendor.contracts.library.extensions import Extension
-from Aspidites._vendor.RestrictedPython import safe_builtins as __safe_builtins
 
 from Aspidites._vendor.pyparsing import ParseException, ParseResults
 
@@ -158,9 +77,8 @@ from Aspidites._vendor.pyparsing import ParseException, ParseResults
 from cmath import inf
 
 # noinspection PyUnresolvedReferences
-import Aspidites.parser.parser
-from Aspidites.compiler import Compiler, CompilerArgs
-from Aspidites.api import _format_locals
+import Aspidites.api.parser
+from Aspidites.api.compiler import Compiler, CompilerArgs
 
 try:
     import readline
@@ -422,11 +340,8 @@ class ReadEvalParse:  # pragma: no cover
                 self.__locals__,
             )
         except Exception:
-            out = exec(
-                compile(x, filename="<inline code>", mode="exec"),
-                self.__locals__,
-                self.__locals__,
-            )
+            code = compile(x, filename="<inline code>", mode="exec")
+            out = exec(code, self.__locals__, self.__locals__)
             # if out is not None:
             #     print(out)
         self.displayhook(out)
@@ -472,7 +387,7 @@ class ReadEvalParse:  # pragma: no cover
                         self.eval_exec(line)
                         continue
                     try:
-                        p = Aspidites.parser.parser.parse_module(line)
+                        p = Aspidites.api.parser.parse_module(line)
                     except ParseException:
                         self.warn(
                             f'Warning: Failed to parse "{line}" as Woma.\n'
@@ -545,7 +460,7 @@ class ReadEvalParse:  # pragma: no cover
                 continue
             else:
                 visible[k] = v
-
+        from Aspidites.api.api import _format_locals
         self.stdout.write(_format_locals(visible).decode("UTF-8"))
 
     def do_flush(self):

@@ -40,6 +40,7 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/_vendor/contracts/useful_contracts/numpy_specific.c
 	rm -fr Aspidites/_vendor/contracts/useful_contracts/numbers.c
 	rm -fr Aspidites/_vendor/contracts/library/*.c
+	rm -fr Aspidites/_vendor/contracts/parser.c
 	rm -fr Aspidites/_vendor/apm/_util.c
 	rm -fr Aspidites/_vendor/apm/error.c
 	rm -fr Aspidites/_vendor/apm/generic.c
@@ -50,23 +51,23 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/_vendor/apm/try_match.c
 	rm -fr Aspidites/_vendor/fn/*.c
 	rm -fr Aspidites/_vendor/RestrictedPython/Limits.c
-	rm -fr Aspidites/parser/convert.c
-	rm -fr Aspidites/parser/parser.c
-	rm -fr Aspidites/parser/reserved.c
+	rm -fr Aspidites/api/convert.c
+	rm -fr Aspidites/api/parser.c
+	rm -fr Aspidites/api/reserved.c
 	rm -fr Aspidites/_vendor/decorator_extension.c
 	rm -fr Aspidites/_vendor/pyparsing_extension.c
-	rm -fr Aspidites/templates.c
-	rm -fr Aspidites/monads.c
-	rm -fr Aspidites/math.c
-	rm -fr Aspidites/api.c
+	rm -fr Aspidites/api/templates.c
+	rm -fr Aspidites/api/monads.c
+	rm -fr Aspidites/api/math.c
+	rm -fr Aspidites/api/api.c
 	rm -fr Aspidites/__main__.c
-	rm -fr Aspidites/compiler.c
-	rm -fr Aspidites/compiler.*.so
-	rm -fr Aspidites/__main__.*.so
-	rm -fr Aspidites/api.*.so
-	rm -fr Aspidites/math.*.so
-	rm -fr Aspidites/monads.*.so
-	rm -fr Aspidites/templates.*.so
+	rm -fr Aspidites/api/compiler.c
+	rm -fr Aspidites/api/compiler.*.so
+	rm -fr Aspidites/api/__main__.*.so
+	rm -fr Aspidites/api/api.*.so
+	rm -fr Aspidites/api/math.*.so
+	rm -fr Aspidites/api/monads.*.so
+	rm -fr Aspidites/api/templates.*.so
 	rm -fr Aspidites/_vendor/apm/_util.*.so
 	rm -fr Aspidites/_vendor/apm/error.*.so
 	rm -fr Aspidites/_vendor/apm/generic.*.so
@@ -88,10 +89,24 @@ clean-build: ## remove build artifacts
 	rm -fr Aspidites/_vendor/contracts/library/*.*.so
 	rm -fr Aspidites/_vendor/contracts/useful_contracts/numpy_specific.*.so
 	rm -fr Aspidites/_vendor/contracts/useful_contracts/numbers.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_helpers.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_checked_types.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_immutable.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_pbag.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_pclass.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_pdeque.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_plist.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_pmap.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_precord.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_pset.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_pvector.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/_toolz.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/pvectorc.*.so
+	rm -fr Aspidites/_vendor/pyrsistent/typing.*.so
 	rm -fr Aspidites/_vendor/RestrictedPython/Limits.*.so
-	rm -fr Aspidites/parser/convert.*.so
-	rm -fr Aspidites/parser/parser.*.so
-	rm -fr Aspidites/parser/reserved.*.so
+	rm -fr Aspidites/api/convert.*.so
+	rm -fr Aspidites/api/parser.*.so
+	rm -fr Aspidites/api/reserved.*.so
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
 	find . -name '*.DS_Store' -exec rm -f {} +

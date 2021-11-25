@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from ._vendor.contracts import check, contract, new_contract, ContractsMeta
+from Aspidites._vendor.contracts import check, contract, new_contract, ContractsMeta
 from typing import NewType
 
 heritable = NewType("heritable", ContractsMeta)

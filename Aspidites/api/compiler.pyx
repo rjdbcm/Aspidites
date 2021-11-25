@@ -33,7 +33,7 @@ from .templates import (
 from Aspidites._vendor.pyrsistent import pmap, v
 from hashlib import sha256
 from pathlib import Path
-from ._vendor.semantic_version import Version
+from Aspidites._vendor.semantic_version import Version
 from Aspidites._vendor.pyparsing import ParseResults
 import cython
 

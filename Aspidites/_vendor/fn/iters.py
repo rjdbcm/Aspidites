@@ -17,7 +17,8 @@ from sys import version_info
 
 from .func import F
 from .op import flip
-from .uniform import filterfalse, zip_longest, Iterable
+from itertools import filterfalse, zip_longest
+from collections.abc import Iterable
 from Aspidites._vendor.pyrsistent import pvector
 
 

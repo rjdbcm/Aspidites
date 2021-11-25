@@ -1,5 +1,4 @@
 # cython: language_level=3, annotation_typing=True, c_string_encoding=utf-8, boundscheck=False, wraparound=False, initializedcheck=False
-import argparse
 import argparse as ap
 import os
 import sys
@@ -15,8 +14,8 @@ from Aspidites._vendor.pyrsistent import v
 import pytest
 
 from ._vendor.semantic_version import Version
-from .compiler import Compiler, CompilerArgs
-from .parser import parse_module
+from .api.compiler import Compiler, CompilerArgs
+from .api.parser import parse_module
 from . import __description__
 
 cy_version = Version.coerce(cy_version)
@@ -85,7 +84,7 @@ def setup_test_env(argv):
 
 def check_noargs(argv, __test):
     if len(argv) == 1:
-        from .repl import ReadEvalParse
+        from Aspidites.api.repl import ReadEvalParse
 
         rep = ReadEvalParse()
         rep.loop()

@@ -1,4 +1,4 @@
-from ._vendor.pyrsistent import PClass
+from Aspidites._vendor.pyrsistent import PClass
 try:
     from .woma.library import final
 except ImportError:

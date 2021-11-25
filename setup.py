@@ -49,22 +49,11 @@ module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                 str(Path("Aspidites/_vendor/fn/func.py")),
                 str(Path("Aspidites/_vendor/fn/iters.py")),
                 str(Path("Aspidites/_vendor/fn/op.py")),
-                str(Path("Aspidites/_vendor/fn/recur.py")),
-                str(Path("Aspidites/_vendor/fn/stream.py")),
                 str(Path("Aspidites/_vendor/fn/underscore.py")),
-                str(Path("Aspidites/_vendor/fn/uniform.py")),
                 str(Path('Aspidites/_vendor/decorator_extension.py')),
                 str(Path('Aspidites/_vendor/pyparsing_extension.py')),
                 str(Path('Aspidites/_vendor/RestrictedPython/Limits.py')),
-                str(Path('Aspidites/parser/convert.py')),
-                str(Path('Aspidites/parser/reserved.py')),
-                str(Path('Aspidites/parser/parser.py')),
-                str(Path('Aspidites/templates.py')),
-                str(Path('Aspidites/monads.py')),
-                str(Path('Aspidites/math.py')),
-                str(Path('Aspidites/api.py')),
                 str(Path('Aspidites/__main__.py')),
-                str(Path('Aspidites/compiler.py')),
                 str(Path('Aspidites/woma/fileutils.py')),
                 str(Path('Aspidites/woma/gcutils.py')),
                 str(Path('Aspidites/woma/mathutils.py')),
@@ -96,7 +85,18 @@ module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                 str(Path('Aspidites/_vendor/apm/no_value.py')),
                 str(Path('Aspidites/_vendor/apm/match.py')),
                 ]
-
+bootstrap_paths = [
+                str(Path('Aspidites/api/compiler.pyx')),
+                str(Path('Aspidites/api/convert.pyx')),
+                str(Path('Aspidites/api/reserved.pyx')),
+                str(Path('Aspidites/api/parser.pyx')),
+                str(Path('Aspidites/api/templates.pyx')),
+                str(Path('Aspidites/api/type_guard.pyx')),
+                str(Path('Aspidites/api/final.pyx')),
+                str(Path('Aspidites/api/monads.pyx')),
+                str(Path('Aspidites/api/math.pyx')),
+                str(Path('Aspidites/api/api.pyx')),
+]
 try:
     from numpy import get_include
     module_paths += [str(Path('Aspidites/_vendor/contracts/useful_contracts/numpy_specific.py'))]
@@ -121,31 +121,20 @@ extensions = []
 for i in module_paths:
     extensions.append(Extension(i.replace('.py', '').replace(sep, '.'), sources=[i], extra_compile_args=['-fno-wrapv']))
 
-print('compiling vendored extensions\n'
-      '-----------------------------')
-for lib in vendored:
-    module = importlib.import_module('Aspidites._vendor.' + lib)
-    print(lib, getattr(module, '__version__'))
-print('-----------------------------')
+for i in bootstrap_paths:
+    extensions.append(Extension(i.replace('.pyx', '').replace(sep, '.'), sources=[i], extra_compile_args=['-fno-wrapv']))
+
+print('compiling vendored extensions')
+#       '-----------------------------')
+# for lib in vendored:
+#     module = importlib.import_module('Aspidites._vendor.' + lib)
+#     print(lib, getattr(module, '__version__'))
+# print('-----------------------------')
+
 
 ext_modules = cythonize(extensions, quiet=True)
 ext_modules += [Extension('Aspidites._vendor.pyrsistent.pvectorc', sources=['Aspidites/_vendor/pyrsistent/pvectorcmodule.c'])]
-print('bootstrapping standard library in Aspidites/woma')
-from Aspidites import __version__, __license__, __title__, __author__, compiler, parser
-from Aspidites.__main__ import get_cy_kwargs
-cy_kwargs = get_cy_kwargs()
-code = open(Path('Aspidites/woma/library.wom'), 'r').read()
-cy_kwargs.update(
-    code=parser.parse_module(code),
-    force=True,
-    fname='Aspidites/woma/library.pyx',
-    bytecode=False,
-    c=True,
-    verbose=0,
-    build_requires=''
-)
-compile_args = compiler.CompilerArgs(**cy_kwargs)
-compiler.Compiler(compile_args)
+ext_modules += [Extension('Aspidites.api', sources=bootstrap_paths)]
 
 
 def read(fname):
@@ -200,13 +189,31 @@ class BuildExtWrapper(build_ext):
 
     def prebuild(self):
         """prebuild hook"""
-        pass
 
     def postbuild(self):
         """postbuild hook"""
         for i in module_paths:
             os.remove(i.replace('.py', '.c'))
 
+        print('bootstrapping standard library in Aspidites/woma')
+        from Aspidites.__main__ import get_cy_kwargs
+        from Aspidites.api import Compiler, CompilerArgs, parser
+        cy_kwargs = get_cy_kwargs()
+        code = open(Path('Aspidites/woma/library.wom'), 'r').read()
+        cy_kwargs.update(
+            code=parser.parse_module(code),
+            force=True,
+            fname='Aspidites/woma/library.pyx',
+            bytecode=False,
+            c=True,
+            verbose=0,
+            build_requires=''
+        )
+        compile_args = CompilerArgs(**cy_kwargs)
+        Compiler(compile_args)
+
+
+from Aspidites import __version__, __license__, __title__, __author__
 
 setup(
     name=__title__,

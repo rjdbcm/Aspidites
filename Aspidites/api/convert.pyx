@@ -2,7 +2,7 @@
 import re
 
 from .reserved import *
-from .._vendor.pyparsing import ParserElement
+from Aspidites._vendor.pyparsing import ParserElement
 
 pmap_re = re.compile(r"(pmap\(\{.*\}\))")
 end = lit_rparen + lit_lparen + lit_rparen

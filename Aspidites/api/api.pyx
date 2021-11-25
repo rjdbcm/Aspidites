@@ -20,7 +20,7 @@ from collections import OrderedDict
 from typing import Union, ItemsView
 from textwrap import wrap
 from inspect import isfunction, signature
-from ._vendor.fn.underscore import ArityError, _Callable
+from Aspidites._vendor.fn.underscore import ArityError, _Callable
 from .templates import warning_template
 import cython
 

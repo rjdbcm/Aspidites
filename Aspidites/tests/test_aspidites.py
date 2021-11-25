@@ -17,16 +17,16 @@ except ImportError:
 
 from .._vendor.contracts import ContractNotRespected
 from ..__main__ import get_cy_kwargs, main
-from ..parser.parser import (
+from Aspidites.api.parser import (
     parse_module,
     func_def,
     arith_expr,
     list_item,
     collection_trigrams,
 )
-from ..templates import woma_template
-from ..monads import Maybe as __maybe, Surely
-from ..math import (
+from Aspidites.api.templates import woma_template
+from Aspidites.api.monads import Maybe as __maybe, Surely
+from Aspidites.api.math import (
     Undefined as __undefined,
     SafeDiv as __safeDiv,
     SafeExp as __safeExp,
@@ -39,7 +39,7 @@ from ..math import (
     SafeUnarySub as __safeUnarySub,
     SafeFactorial as __safeFactorial,
 )
-from ..compiler import Compiler, CompilerArgs
+from Aspidites.api.compiler import Compiler, CompilerArgs
 
 docker = os.getenv("ASPIDITES_DOCKER_BUILD")
 
