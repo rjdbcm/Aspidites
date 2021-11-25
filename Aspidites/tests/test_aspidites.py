@@ -24,6 +24,7 @@ from Aspidites.api.parser import (
     list_item,
     collection_trigrams,
 )
+from Aspidites._vendor.pyrsistent import pvector
 from Aspidites.api.templates import woma_template
 from Aspidites.api.monads import Maybe as __maybe, Surely
 from Aspidites.api.math import (
@@ -324,12 +325,13 @@ def test_compile_to_shared_object(inject_config):
         test_unary_sub,
         test_unary_add,
         test_factorial,
+        primes_upto,
         match,
         nullity,
         D,
         idx,
     )
-
+    assert primes_upto(10) == pvector([2, 3, 5, 7])
     assert match() == 1
     assert match(0) == 1
     assert match(1) == 3

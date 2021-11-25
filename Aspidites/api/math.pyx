@@ -94,7 +94,10 @@ class Undefined:
 
 
 def SafeSlice(x: Any, start=None, stop=None, step=None):
-    return x[start:stop:step]
+    if not stop and not step:
+        return x[start]
+    else:
+        return x[start:stop:step]
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences

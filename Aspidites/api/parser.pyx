@@ -262,17 +262,22 @@ dict_str_evolver <<= (
     ).setParseAction(cvt_dict)
     + noclosure
 ).setParseAction(lambda s, l, t: "".join(t))
+
+def cvt_slice_str(s, l ,t):
+    return '__maybe(__safeSlice, ' + ", ".join(str(i) for i in t) + end
+
+
 slice_str <<= (
     identifier
-    + lit_lbrack
-    + Optional(integer | identifier)
-    + Optional(lit_colon)
-    + Optional(integer | identifier)
-    + Optional(lit_colon)
-    + Optional(integer | identifier)
-    + lit_rbrack
+    + lbrack
+    + Optional(integer | identifier, default='None')
+    + Optional(colon + integer | identifier, default='None')
+    + Optional(colon + integer | identifier, default='None')
+    + rbrack
 )
-slice_str.setParseAction(lambda s, l, t: "".join(str(i) for i in t))
+slice_str.setParseAction(cvt_slice_str)
+
+
 def_args = Optional(delimitedList(contract_assign, delim=";")).setParseAction(
     lambda s, l, t: sep.join(t)
 )
