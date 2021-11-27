@@ -16,7 +16,7 @@ except ImportError:
     from math import inf, nan, isinf, isnan
 
 from Aspidites._vendor.contracts import ContractNotRespected
-from Aspidites.api.__main__ import get_cy_kwargs, main
+from Aspidites.__main__ import get_cy_kwargs, main
 from Aspidites.api.parser import (
     parse_module,
     func_def,
