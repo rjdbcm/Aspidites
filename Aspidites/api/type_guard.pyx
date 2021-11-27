@@ -1,4 +1,4 @@
-from Aspidites._vendor.pyrsistent import PClass
+from Aspidites._vendor.pyrsistent import PMap
 try:
     from .woma.library import final
 except ImportError:
@@ -8,7 +8,7 @@ except ImportError:
 def safer_type(*args):
     name: str
     bases: tuple
-    attributes: dict
+    attributes: PMap
     if len(args) < 2:
         raise RuntimeError("Type introspection is not supported.")
     name, attributes = args
