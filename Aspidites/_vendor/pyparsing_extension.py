@@ -1579,48 +1579,49 @@ class ParserElement(object):
     def _parseNoCache(self, instring, loc, doActions=True, callPreParse=True):
         TRY, MATCH, FAIL = 0, 1, 2
         debugging = self.debug  # and doActions)
+        len_instring = len(instring)
 
         if debugging or self.failAction:
-            # ~ print ("Match", self, "at loc", loc, "(%d, %d)" % (lineno(loc, instring), col(loc, instring)))
-            if self.debugActions[TRY]:
-                self.debugActions[TRY](instring, loc, self)
+            # print("Match {} at loc {}({}, {})".format(self, loc, lineno(loc, instring), col(loc, instring)))
             try:
                 if callPreParse and self.callPreparse:
-                    preloc = self.preParse(instring, loc)
+                    pre_loc = self.preParse(instring, loc)
                 else:
-                    preloc = loc
-                tokensStart = preloc
-                if self.mayIndexError or preloc >= len(instring):
+                    pre_loc = loc
+                tokens_start = pre_loc
+                if self.debugActions[TRY]:
+                    self.debugActions[TRY](instring, tokens_start, self)
+                if self.mayIndexError or pre_loc >= len_instring:
                     try:
-                        loc, tokens = self.parseImpl(instring, preloc, doActions)
+                        loc, tokens = self.parseImpl(instring, pre_loc, doActions)
                     except IndexError:
-                        raise ParseException(instring, len(instring), self.errmsg, self)
+                        raise ParseException(instring, len_instring, self.errmsg, self)
                 else:
-                    loc, tokens = self.parseImpl(instring, preloc, doActions)
+                    loc, tokens = self.parseImpl(instring, pre_loc, doActions)
             except Exception as err:
-                # ~ print ("Exception raised:", err)
+                # print("Exception raised:", err)
                 if self.debugActions[FAIL]:
-                    self.debugActions[FAIL](instring, tokensStart, self, err)
+                    self.debugActions[FAIL](instring, tokens_start, self, err)
                 if self.failAction:
-                    self.failAction(instring, tokensStart, self, err)
+                    self.failAction(instring, tokens_start, self, err)
                 raise
         else:
             if callPreParse and self.callPreparse:
-                preloc = self.preParse(instring, loc)
+                pre_loc = self.preParse(instring, loc)
             else:
-                preloc = loc
-            tokensStart = preloc
-            if self.mayIndexError or preloc >= len(instring):
+                pre_loc = loc
+            tokens_start = pre_loc
+            if self.mayIndexError or pre_loc >= len_instring:
                 try:
-                    loc, tokens = self.parseImpl(instring, preloc, doActions)
+                    loc, tokens = self.parseImpl(instring, pre_loc, doActions)
                 except IndexError:
-                    raise ParseException(instring, len(instring), self.errmsg, self)
+                    raise ParseException(instring, len_instring, self.errmsg, self)
             else:
-                loc, tokens = self.parseImpl(instring, preloc, doActions)
+                loc, tokens = self.parseImpl(instring, pre_loc, doActions)
 
         tokens = self.postParse(instring, loc, tokens)
 
-        retTokens = ParseResults(
+        ret_tokens = ParseResults(
             tokens, self.resultsName, asList=self.saveAsList, modal=self.modalResults
         )
         if self.parseAction and (doActions or self.callDuringTry):
@@ -1628,14 +1629,13 @@ class ParserElement(object):
                 try:
                     for fn in self.parseAction:
                         try:
-                            tokens = fn(instring, tokensStart, retTokens)
+                            tokens = fn(instring, tokens_start, ret_tokens)
                         except IndexError as parse_action_exc:
                             exc = ParseException("exception raised in parse action")
-                            exc.__cause__ = parse_action_exc
-                            raise exc
+                            raise exc from parse_action_exc
 
-                        if tokens is not None and tokens is not retTokens:
-                            retTokens = ParseResults(
+                        if tokens is not None and tokens is not ret_tokens:
+                            ret_tokens = ParseResults(
                                 tokens,
                                 self.resultsName,
                                 asList=self.saveAsList
@@ -1643,21 +1643,20 @@ class ParserElement(object):
                                 modal=self.modalResults,
                             )
                 except Exception as err:
-                    # ~ print "Exception raised in user parse action:", err
+                    # print "Exception raised in user parse action:", err
                     if self.debugActions[FAIL]:
-                        self.debugActions[FAIL](instring, tokensStart, self, err)
+                        self.debugActions[FAIL](instring, tokens_start, self, err)
                     raise
             else:
                 for fn in self.parseAction:
                     try:
-                        tokens = fn(instring, tokensStart, retTokens)
+                        tokens = fn(instring, tokens_start, ret_tokens)
                     except IndexError as parse_action_exc:
                         exc = ParseException("exception raised in parse action")
-                        exc.__cause__ = parse_action_exc
-                        raise exc
+                        raise exc from parse_action_exc
 
-                    if tokens is not None and tokens is not retTokens:
-                        retTokens = ParseResults(
+                    if tokens is not None and tokens is not ret_tokens:
+                        ret_tokens = ParseResults(
                             tokens,
                             self.resultsName,
                             asList=self.saveAsList
@@ -1665,11 +1664,11 @@ class ParserElement(object):
                             modal=self.modalResults,
                         )
         if debugging:
-            # ~ print ("Matched", self, "->", retTokens.asList())
+            # print("Matched", self, "->", ret_tokens.as_list())
             if self.debugActions[MATCH]:
-                self.debugActions[MATCH](instring, tokensStart, loc, self, retTokens)
+                self.debugActions[MATCH](instring, tokens_start, loc, self, ret_tokens)
 
-        return loc, retTokens
+        return loc, ret_tokens
 
     def tryParse(self, instring, loc):
         try:
