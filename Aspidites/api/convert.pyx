@@ -169,9 +169,9 @@ def cvt_for_loop_decl(s, loc, t):
             m = r.group(1) + ".items()"
         else:
             m = t[4]
-        s = str(t[3] + "".join(t[:3]) + " in " + m + lit_colon).encode("UTF-8")
+        s = str(t[3] + "".join(t[:3]) + " in __maybe(__safeLoop, " + m + end + lit_colon).encode("UTF-8")
     else:
-        s = str(t[1] + t[0] + " in " + t[2] + lit_colon).encode("UTF-8")
+        s = str(t[1] + t[0] + " in __maybe(__safeLoop, " + t[2] + end + lit_colon).encode("UTF-8")
     return s.decode("UTF-8")
 
 

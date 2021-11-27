@@ -21,7 +21,7 @@ class Undefined:
     """A monad for a failed programmatic unit; like NoneType but hashable.
     Falsy singleton acts as an absorbing element for division."""
 
-    __slots__ = ("__weakref__", "__instance__", "func", "args", "kwargs")
+    __slots__ = ("__weakref__", "__instance__", "_consumed", "func", "args", "kwargs")
 
     def __hash__(self):
         # noinspection PyUnresolvedReferences
@@ -73,6 +73,16 @@ class Undefined:
         # Undefined has 0 elements
         return 0
 
+    def __iter__(self):
+        return Undefined(self)
+
+    def __next__(self):
+        if not self._consumed:
+            self._consumed = True
+            return Undefined(self)
+        else:
+            raise StopIteration
+
     def __repr__(self):
         if hasattr(self.func, "__name__"):
             r = (
@@ -91,6 +101,7 @@ class Undefined:
         self.func = func
         self.args = args
         self.kwargs = kwargs
+        self._consumed = False
 
 
 def SafeSlice(x: Any, start=None, stop=None, step=None):
@@ -99,6 +110,9 @@ def SafeSlice(x: Any, start=None, stop=None, step=None):
     else:
         return x[start:stop:step]
 
+
+def SafeLoop(x: Any):
+    return (i for i in x)
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 def SafeFactorial(a: Any) -> Any:
