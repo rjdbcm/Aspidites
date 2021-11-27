@@ -10,16 +10,14 @@
 	<^>2
 	<^>3
 
-#cython.boundscheck(False)
-#cython.wraparound(False)
+#ccall
 (sieve(n = /0 -> int; limit = /0 -> int; is_prime = [/0] -> *)) *
     i<@>range(n**2, limit+1, n)
         f = False
         is_prime = is_prime[$]i,f
     <*>is_prime
 
-#cython.boundscheck(False)
-#cython.wraparound(False)
+#ccall
 (primes_upto(limit = 4 -> int)) list(int)
     primes = [] -> list
     upper = limit - 1 -> int

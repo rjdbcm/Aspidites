@@ -6511,9 +6511,9 @@ class EnableDebugOnNamedExpressionsTest(ParseTestCase):
             """\
             Match integer at loc 0(1,1)
             Matched integer -> ['1']
-            Match integer at loc 1(1,2)
+            Match integer at loc 2(1,3)
             Matched integer -> ['2']
-            Match integer at loc 3(1,4)
+            Match integer at loc 4(1,5)
             Matched integer -> ['3']
             Match integer at loc 5(1,6)
             Exception raised:Expected integer, found end of text  (at char 5), (line:1, col:6)

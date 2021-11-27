@@ -22,11 +22,14 @@ from contextlib import suppress
 from warnings import warn
 from typing import Any, AnyStr, Union, Tuple, Dict, Callable
 
+import cython
+
 from Aspidites._vendor.pyrsistent import v, pvector
 
 from .math import Undefined, Warn
 
-
+@cython.ccall
+@cython.inline
 def _apply(f, args=None, kwargs=None):
     return f(*(args or tuple()), **(kwargs or {}))
 
@@ -93,7 +96,7 @@ class Surely:
 
 
 class Maybe:
-    """Sandboxes a :class:`Aspidites.monads.Surely` call and handles ContractNotRespected by returning an instance of
+    """Sandboxes a function call and handles Exceptions by returning an instance of
     :class:`Aspidites.math.Undefined`"""
 
     __slots__ = v("_func", "_args", "_kwargs", "_stack", "_warn", "__instance__")
@@ -122,10 +125,10 @@ class Maybe:
         kwargs = [str(k) + " = " + str(v) for k, v in self._kwargs.items()]
         return maybe + "(" + ", ".join([fname, args, *kwargs]) + ")" + debug
 
-    def __invert__(self) -> Union[Surely, Undefined]:
+    def __invert__(self):
         return ~self.__instance__
 
-    def __neg__(self) -> Union[Surely, Undefined]:
+    def __neg__(self):
         return -self.__instance__
 
     @property
@@ -140,12 +143,12 @@ class Maybe:
     def kwargs(self) -> Dict[AnyStr, Any]:
         return self._kwargs
 
-    def __call__(self, warn_undefined=True) -> Union[Surely, Undefined, Any]:
+    def __call__(self, warn_undefined=True):
         try:
             with suppress(ValueError):
                 val = self.__instance__ or _apply(self.func, self.args, self.kwargs)
             with suppress(UnboundLocalError):
-                self.__instance__ = Surely(val)
+                self.__instance__ = val
                 # SURELY #
                 return self.__instance__
             self.__instance__ = Undefined(self.func, self.args, self.kwargs)
