@@ -86,6 +86,7 @@ module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                 str(Path('Aspidites/_vendor/apm/match.py')),
                 ]
 bootstrap_paths = [
+
                 str(Path('Aspidites/api/compiler.py')),
                 str(Path('Aspidites/api/convert.py')),
                 str(Path('Aspidites/api/reserved.py')),
