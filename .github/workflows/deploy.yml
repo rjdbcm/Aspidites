@@ -36,9 +36,10 @@ jobs:
       with:
         python-version: "${{ matrix.python }}"
     - run: |
-        pip install -U pip pipenv wheel cython dearpygui
+        pip install -U pip pipenv wheel cython
         pipenv lock
         pipenv sync -d
+        pipenv run pip install .
         pipenv run pytest --cov=Aspidites --cov-report=xml
         rm -rf Pipfile.lock
 
@@ -73,9 +74,10 @@ jobs:
         with:
           python-version: "${{ matrix.python }}"
       - run: |
-          pip install -U pip pipenv wheel cython dearpygui
+          pip install -U pip pipenv wheel cython
           pipenv lock
           pipenv sync -d
+          pipenv run pip install .
           pipenv run pytest
           rm -rf Pipfile.lock
 
