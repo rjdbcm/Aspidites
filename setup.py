@@ -86,16 +86,16 @@ module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                 str(Path('Aspidites/_vendor/apm/match.py')),
                 ]
 bootstrap_paths = [
-                str(Path('Aspidites/api/compiler.pyx')),
-                str(Path('Aspidites/api/convert.pyx')),
-                str(Path('Aspidites/api/reserved.pyx')),
-                str(Path('Aspidites/api/parser.pyx')),
-                str(Path('Aspidites/api/templates.pyx')),
-                str(Path('Aspidites/api/type_guard.pyx')),
-                str(Path('Aspidites/api/final.pyx')),
-                str(Path('Aspidites/api/monads.pyx')),
-                str(Path('Aspidites/api/math.pyx')),
-                str(Path('Aspidites/api/api.pyx')),
+                str(Path('Aspidites/api/compiler.py')),
+                str(Path('Aspidites/api/convert.py')),
+                str(Path('Aspidites/api/reserved.py')),
+                str(Path('Aspidites/api/parser.py')),
+                str(Path('Aspidites/api/templates.py')),
+                str(Path('Aspidites/api/type_guard.py')),
+                str(Path('Aspidites/api/final.py')),
+                str(Path('Aspidites/api/monads.py')),
+                str(Path('Aspidites/api/math.py')),
+                str(Path('Aspidites/api/api.py')),
 ]
 try:
     from numpy import get_include

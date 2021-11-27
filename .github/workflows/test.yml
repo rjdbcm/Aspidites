@@ -40,7 +40,6 @@ jobs:
               pip install -U pip pipenv wheel cython
               pipenv lock
               pipenv sync -d
-              pipenv run pip install .
               pipenv run pytest -v -x --cov=Aspidites --cov-report=xml --profile --profile-svg
               rm -rf Pipfile.lock
 
@@ -84,7 +83,6 @@ jobs:
               pip install -U pip pipenv wheel cython
               pipenv lock
               pipenv sync -d
-              pipenv run pip install .
               pipenv run pytest -v -x --profile
               rm -rf Pipfile.lock
       - name: Archive production artifacts
