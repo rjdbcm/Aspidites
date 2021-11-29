@@ -123,7 +123,7 @@ for i in module_paths:
     extensions.append(Extension(i.replace('.py', '').replace(sep, '.'), sources=[i], extra_compile_args=['-fno-wrapv']))
 
 for i in bootstrap_paths:
-    extensions.append(Extension(i.replace('.pyx', '').replace(sep, '.'), sources=[i], extra_compile_args=['-fno-wrapv']))
+    extensions.append(Extension(i.replace('.py', '').replace(sep, '.'), sources=[i], extra_compile_args=['-fno-wrapv']))
 
 print('compiling vendored extensions')
 #       '-----------------------------')
@@ -135,7 +135,6 @@ print('compiling vendored extensions')
 
 ext_modules = cythonize(extensions, quiet=True)
 ext_modules += [Extension('Aspidites._vendor.pyrsistent.pvectorc', sources=['Aspidites/_vendor/pyrsistent/pvectorcmodule.c'])]
-ext_modules += [Extension('Aspidites.api', sources=bootstrap_paths)]
 
 
 def read(fname):

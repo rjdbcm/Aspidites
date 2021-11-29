@@ -7,6 +7,8 @@ from math import inf, isinf, nan, isnan
 from math import factorial
 import numbers
 
+import cython
+
 try:
     import numpy as np
 
@@ -104,7 +106,8 @@ class Undefined:
         self._consumed = False
 
 
-def SafeSlice(x: Any, start=None, stop=None, step=None):
+@cython.ccall
+def SafeSlice(x, start=None, stop=None, step=None):
     if not stop and not step:
         return x[start]
     else:
@@ -114,65 +117,76 @@ def SafeSlice(x: Any, start=None, stop=None, step=None):
 def SafeLoop(x: Any):
     return (i for i in x)
 
+
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeFactorial(a: Any) -> Any:
+@cython.ccall
+def SafeFactorial(a):
     if a < 0 or isnan(a) or isinf(a) or isinstance(a, (float, complex)):
         return Undefined(SafeFactorial, a)
     return factorial(a)
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeUnaryAdd(a: Any) -> Any:
+@cython.ccall
+def SafeUnaryAdd(a):
     if isnan(a) or not isinstance(a, numbers.Number):
         return Undefined(SafeUnaryAdd, a)
     return +a
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeUnarySub(a: Any) -> Any:
+@cython.ccall
+def SafeUnarySub(a):
     if isnan(a) or not isinstance(a, numbers.Number):
         return Undefined(SafeUnarySub, a)
     return -a
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeFloorDiv(a: Any, b: Any) -> Any:
+@cython.ccall
+def SafeFloorDiv(a, b):
     if isinf(a) or b == 0 or (isinf(a) and isinf(b)):
         return Undefined(SafeFloorDiv, a, b)
     return a // b
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeMul(a: Any, b: Any) -> Any:
+@cython.ccall
+def SafeMul(a, b):
     return a * b
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeSub(a: Any, b: Any) -> Any:
+@cython.ccall
+def SafeSub(a, b):
     return a - b
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeAdd(a: Any, b: Any) -> Any:
+@cython.ccall
+def SafeAdd(a, b):
     return a + b
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
-def SafeDiv(a: Any, b: Any) -> Any:
+@cython.ccall
+def SafeDiv(a, b):
     if b == 0 or (isinf(a) and isinf(b)):
         return Undefined(SafeDiv, a, b)
     return a / b
 
 
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
-def SafeMod(a: Any, b: Any) -> Any:
+@cython.ccall
+def SafeMod(a, b):
     if isinf(a) or b == 0:
         return Undefined(SafeMod, a, b)
     return a % b
 
 
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
-def SafeExp(a: Any, b: Any) -> Any:
+@cython.ccall
+def SafeExp(a, b):
     if (
         (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0)
     ):  # pragma: no cover
