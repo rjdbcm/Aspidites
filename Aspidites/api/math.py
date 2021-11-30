@@ -107,6 +107,7 @@ class Undefined:
 
 
 @cython.ccall
+@cython.inline
 def SafeSlice(x, start=None, stop=None, step=None):
     if not stop and not step:
         return x[start]
@@ -120,6 +121,7 @@ def SafeLoop(x: Any):
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 @cython.ccall
+@cython.inline
 def SafeFactorial(a):
     if a < 0 or isnan(a) or isinf(a) or isinstance(a, (float, complex)):
         return Undefined(SafeFactorial, a)
@@ -128,6 +130,7 @@ def SafeFactorial(a):
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 @cython.ccall
+@cython.inline
 def SafeUnaryAdd(a):
     if isnan(a) or not isinstance(a, numbers.Number):
         return Undefined(SafeUnaryAdd, a)
@@ -136,6 +139,7 @@ def SafeUnaryAdd(a):
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 @cython.ccall
+@cython.inline
 def SafeUnarySub(a):
     if isnan(a) or not isinstance(a, numbers.Number):
         return Undefined(SafeUnarySub, a)
@@ -144,6 +148,7 @@ def SafeUnarySub(a):
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 @cython.ccall
+@cython.inline
 def SafeFloorDiv(a, b):
     if isinf(a) or b == 0 or (isinf(a) and isinf(b)):
         return Undefined(SafeFloorDiv, a, b)
@@ -152,24 +157,28 @@ def SafeFloorDiv(a, b):
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 @cython.ccall
+@cython.inline
 def SafeMul(a, b):
     return a * b
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 @cython.ccall
+@cython.inline
 def SafeSub(a, b):
     return a - b
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 @cython.ccall
+@cython.inline
 def SafeAdd(a, b):
     return a + b
 
 
 # noinspection PyPep8Naming,PyProtectedMember,PyUnresolvedReferences
 @cython.ccall
+@cython.inline
 def SafeDiv(a, b):
     if b == 0 or (isinf(a) and isinf(b)):
         return Undefined(SafeDiv, a, b)
@@ -178,6 +187,7 @@ def SafeDiv(a, b):
 
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
 @cython.ccall
+@cython.inline
 def SafeMod(a, b):
     if isinf(a) or b == 0:
         return Undefined(SafeMod, a, b)
@@ -186,6 +196,7 @@ def SafeMod(a, b):
 
 # noinspection PyPep8Naming, PyProtectedMember,PyUnresolvedReferences
 @cython.ccall
+@cython.inline
 def SafeExp(a, b):
     if (
         (a == 0 and b == 0) or (isinf(a) and b == 0) or (isinf(b) and a == 0)

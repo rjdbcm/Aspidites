@@ -10,18 +10,21 @@
 #         # And after everything else is loaded, load the  utils
 #     else:
 #         print('already loading...')
+import cython
+
 from .syntax import ParseException
 from .library.extensions import CheckCallableWithSelf
-from .library import CheckCallable, Extension, SeparateContext, identifier_expression
+from .library import CheckCallable, Extension, SeparateContext, identifier_expression, CheckType
 from .inspection import can_accept_self, can_accept_at_least_one_argument
 from .interface import (
+    ContractException,
     ContractSyntaxError,
     Where,
     describe_value,
 )
-from .parser import parse_contract_string_actual
+from .parser import parse_contract_string_actual, Storage
+from .syntax import contract_expression
 from .inspection import getfullargspec
-
 
 
 def get_annotations(function):
@@ -35,8 +38,10 @@ def get_all_arg_names(function):
     return all_args
 
 
+@cython.ccall
+@cython.inline
 def new_contract_impl(identifier, condition):
-    from .main import parse_flexible_spec
+    msg: str
 
     # Be friendly
     if not isinstance(identifier, str):
@@ -85,14 +90,39 @@ def new_contract_impl(identifier, condition):
         # We assume it is a condition that should parse cleanly
         try:
             # could call parse_flexible_spec as well here
-            bare_contract = parse_contract_string_actual(condition)
+            if condition in Storage.string2contract:
+                bare_contract = Storage.string2contract[condition]
+            try:
+                c = contract_expression.parseString(condition, parseAll=True)[0]
+                assert hasattr(c, "__contract__"), "Want Contract, not %r" % c
+                if '$' not in condition:
+                    Storage.string2contract[condition] = c
+                bare_contract = c
+            except Exception as e:
+                msg = "%s" % e
+                if hasattr(e, "loc"):  # ParseBaseException
+                    where = Where(condition, character=e.loc)
+                    raise ContractSyntaxError(msg, where=where)
+                else:
+                    raise  # ContractDefinitionError
         except ContractSyntaxError as e:
             msg = "The given condition %r does not parse cleanly: %s" % (condition, e)
             raise ValueError(msg)
     # Important: types are callable, so check this first.
     elif hasattr(condition, "__weakrefoffset__"):
         # parse_flexible_spec can take care of types
-        bare_contract = parse_flexible_spec(condition)
+        if hasattr(
+                condition, "__contract__"
+        ):  # isinstance(spec, Contract) substitute using the __contract__ slot
+            bare_contract = condition
+        elif hasattr(condition, "__weakrefoffset__"):  # isinstance(spec, type)
+            bare_contract = CheckType(condition)
+        elif isinstance(condition, str):
+            bare_contract = parse_contract_string_actual(condition)
+        else:
+            msg = "I want either a string or a type, not %s." % describe_value(condition)
+            raise ContractException(msg)
+
     # Lastly, it should be a callable
     elif hasattr(condition, "__call__"):
         # Check that the signature is right

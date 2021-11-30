@@ -17,6 +17,7 @@
 import sys
 
 # ~ do not used the vendored version of getouterframes ~
+from types import FunctionType
 from inspect import getouterframes
 from contextlib import suppress
 from warnings import warn
@@ -27,11 +28,6 @@ import cython
 from Aspidites._vendor.pyrsistent import v, pvector
 
 from .math import Undefined, Warn
-
-@cython.ccall
-@cython.inline
-def _apply(f, args=None, kwargs=None):
-    return f(*(args or tuple()), **(kwargs or {}))
 
 
 class Surely:
@@ -95,10 +91,32 @@ class Surely:
         return cls.__instance__
 
 
+@cython.ccall
+@cython.inline
+def __maybe(instance, func, args, kwargs, _warn, warn_undefined):
+    e: Exception
+    w: str
+    warn_undefined: bool
+    try:
+        with suppress(ValueError):
+            val = instance or func(*(args or tuple()), **(kwargs or {}))
+        with suppress(UnboundLocalError):
+            instance = val
+            # SURELY #
+            return instance
+        instance = Undefined(func, args, kwargs)
+    except Exception as e:
+        if warn_undefined:
+            w = _warn.create(e)
+            warn(w, category=RuntimeWarning, stacklevel=0)
+        # UNDEFINED #
+        instance = Undefined(func, args, kwargs)
+        return instance
+
+
 class Maybe:
     """Sandboxes a function call and handles Exceptions by returning an instance of
     :class:`Aspidites.math.Undefined`"""
-
     __slots__ = v("_func", "_args", "_kwargs", "_stack", "_warn", "__instance__")
 
     def __init__(self, func, *args, **kwargs):
@@ -110,7 +128,7 @@ class Maybe:
         self._warn = Warn(self._stack, self._func, self._args, self._kwargs)
         self.__instance__ = Undefined()
         with suppress(Exception):
-            self.__instance__ = _apply(self.func, self.args, self.kwargs)
+            self.__instance__ = self._func(*(self._args or tuple()), **(self._kwargs or {}))
 
     def __repr__(self) -> str:
         maybe = self.__class__.__name__
@@ -144,18 +162,10 @@ class Maybe:
         return self._kwargs
 
     def __call__(self, warn_undefined=True):
-        try:
-            with suppress(ValueError):
-                val = self.__instance__ or _apply(self.func, self.args, self.kwargs)
-            with suppress(UnboundLocalError):
-                self.__instance__ = val
-                # SURELY #
-                return self.__instance__
-            self.__instance__ = Undefined(self.func, self.args, self.kwargs)
-        except Exception as e:
-            if warn_undefined:
-                w = self._warn.create(e)
-                warn(w, category=RuntimeWarning, stacklevel=0)
-            # UNDEFINED #
-            self.__instance__ = Undefined(self.func, self.args, self.kwargs)
-            return self.__instance__
+        return __maybe(
+            self.__instance__,
+            self._func,
+            self._args,
+            self.kwargs,
+            self._warn,
+            warn_undefined)

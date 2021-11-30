@@ -33,8 +33,6 @@ __all__ = [
 ]
 try:
     from Aspidites.api import *
-
-    Maybe.__doc__ = Maybe.__doc__
 except ImportError:
     pass
 
