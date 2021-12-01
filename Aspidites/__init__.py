@@ -23,7 +23,6 @@ __all__ = [
     "SafeSub",
     "Undefined",
     "Maybe",
-    "Surely",
     "Warn",
     "parse_module",
     "parse_statement",

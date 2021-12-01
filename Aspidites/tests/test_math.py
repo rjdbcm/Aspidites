@@ -3,7 +3,7 @@ import pytest
 from hypothesis import given, assume
 import hypothesis.strategies as st
 import pytest as pt
-from Aspidites.api.monads import Maybe, Surely
+from Aspidites.api.monads import Maybe
 from Aspidites.api.math import (
     SafeFloorDiv,
     SafeMod,
@@ -120,11 +120,6 @@ def test_undefined_sanity():
     from math import isnan
 
     assert isnan(float(Undefined())) == isnan(float(nan))
-    assert Surely() == Surely()
-    assert Surely() + Surely() == Surely()
-    assert Surely() - Surely() == Surely()
-    assert Surely() * Surely() == Surely()
-    assert Surely() / Surely() == Surely()
 
 
 @given(x=st.integers(min_value=MIN, max_value=MAX) | st.floats() | st.complex_numbers())
@@ -134,12 +129,6 @@ def test_number_undefined_sanity(x):
     assert Undefined() * x == Undefined()
     assert Undefined() / x == Undefined()
     assert Undefined() // x == Undefined()
-    assert Surely() + x == Surely()
-    assert Surely() - x == Surely()
-    assert Surely() * x == Surely()
-    assert Surely() / x == Surely()
-    assert Undefined(x) != Surely(x)
-
 
 @given(x=st.text() | st.characters())
 def test_text_undefined_sanity(x):
@@ -148,11 +137,6 @@ def test_text_undefined_sanity(x):
     assert Undefined() * x == Undefined()
     assert Undefined() / x == Undefined()
     assert Undefined() // x == Undefined()
-    assert Surely() + x == Surely()
-    assert Surely() - x == Surely()
-    assert Surely() * x == Surely()
-    assert Surely() / x == Surely()
-    assert Undefined(x) != Surely(x)
 
 
 @given(x=st.lists(st.randoms()))
@@ -162,11 +146,6 @@ def test_list_undefined_sanity(x):
     assert Undefined() * x == Undefined()
     assert Undefined() / x == Undefined()
     assert Undefined() // x == Undefined()
-    assert Surely() + x == Surely()
-    assert Surely() - x == Surely()
-    assert Surely() * x == Surely()
-    assert Surely() / x == Surely()
-    assert Undefined(x) != Surely(x)
 
 
 @given(x=st.dictionaries(st.randoms(), st.randoms()))
@@ -176,35 +155,12 @@ def test_dict_undefined_sanity(x):
     assert Undefined() * x == Undefined()
     assert Undefined() / x == Undefined()
     assert Undefined() // x == Undefined()
-    assert Surely() + x == Surely()
-    assert Surely() - x == Surely()
-    assert Surely() * x == Surely()
-    assert Surely() / x == Surely()
-    assert Undefined(x) != Surely(x)
 
 
 @given(x=st.integers(min_value=MIN, max_value=MAX))
 @hypothesis.settings(deadline=None)
 def test_integer_monad_sanity(x):
     assert Maybe(x) != x
-    assert Surely(x) == Surely(x)
-    assert Maybe(x) != Surely(x)
-    assert Surely(Maybe(x)) != x
-    assert Surely(Undefined()) == Undefined()
-    assert Surely(x) == x
-    assert -Surely(x) == -x
-    assert ~Surely(x) == ~x
     assert ~Maybe(x) != ~x
     assert -Maybe(x) != -x
-    assert ~Surely() == Undefined()
-    assert oct(Surely(x)) == oct(x)
-    assert (not not Surely(x)) == bool(x)
-    assert Surely(x) // 1 == x // 1
-    assert Surely(x) / 1 == x / 1
-    assert Surely(x) * 1 == x * 1
-    assert ~Surely(x) == ~x
-    assert -Surely(x) == -x
-    assert Surely(x) - 1 == x - 1
-    assert Surely(x) + 1 == x + 1
-    assert (Surely(x) == 1) == (x == 1)
-    assert hash(Surely(x)) == hash(x)
+

@@ -26,7 +26,7 @@ from Aspidites.api.parser import (
 )
 from Aspidites._vendor.pyrsistent import pvector
 from Aspidites.api.templates import woma_template
-from Aspidites.api.monads import Maybe as __maybe, Surely
+from Aspidites.api.monads import Maybe as __maybe
 from Aspidites.api.math import (
     Undefined as __undefined,
     SafeDiv as __safeDiv,

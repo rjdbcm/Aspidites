@@ -30,67 +30,6 @@ from Aspidites._vendor.pyrsistent import v, pvector
 from .math import Undefined, Warn
 
 
-class Surely:
-    """A monad for a successful programmatic unit.
-    Truthy, defers to an instance of a successful computation
-    """
-
-    __slots__ = v(
-        "__weakref__", "__instance__" "__str__", "__int__", "__float__", "__complex__"
-    )
-
-    # def __try_except_undefined__(self, other=None, call=None):
-    #     if call:
-    #         # noinspection PyComparisonWithNone
-    #         return (call(self.__instance__) if other is None else call(self.__instance__, other)
-    #         )
-    #     else:
-    #         return self.__instance__
-    #
-    # def __hash__(self):
-    #     return self.__try_except_undefined__(call=hash)
-    #
-    # def __eq__(self, other):
-    #     return self.__try_except_undefined__(other, op.eq)
-    #
-    # def __add__(self, other):
-    #     return self.__try_except_undefined__(other, op.add)
-    #
-    # def __sub__(self, other):
-    #     return self.__try_except_undefined__(other, op.sub)
-    #
-    # def __neg__(self):
-    #     return self.__try_except_undefined__(call=op.neg)
-    #
-    # def __invert__(self):
-    #     return self.__try_except_undefined__(call=op.invert)
-    #
-    # def __mul__(self, other):
-    #     return self.__try_except_undefined__(other, op.mul)
-    #
-    # def __truediv__(self, other):
-    #     return self.__try_except_undefined__(other, op.truediv)
-    #
-    # def __floordiv__(self, other):
-    #     return self.__try_except_undefined__(other, op.floordiv)
-    #
-    # def __oct__(self):
-    #     return self.__try_except_undefined__(call=oct)
-    #
-    # def __nonzero__(self):
-    #     return self.__try_except_undefined__(call=bool)
-    #
-    # @classmethod
-    # def __call__(cls, *args, **kwargs):
-    #     return cls.__instance__
-
-    # The default value for instance__ MUST BE Undefined()
-    def __new__(cls, instance__=Undefined(), *args, **kwargs):
-        cls.__instance__ = instance__
-        # noinspection PyUnresolvedReferences
-        return cls.__instance__
-
-
 @cython.ccall
 @cython.inline
 def maybe_call(instance, func, args, kwargs, _warn, warn_undefined):
@@ -102,7 +41,6 @@ def maybe_call(instance, func, args, kwargs, _warn, warn_undefined):
             val = instance or func(*(args or tuple()), **(kwargs or {}))
         with suppress(UnboundLocalError):
             instance = val
-            # SURELY #
             return instance
         instance = Undefined(func, args, kwargs)
     except Exception as e:
