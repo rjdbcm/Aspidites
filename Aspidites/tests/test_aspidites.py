@@ -248,29 +248,29 @@ def test_parse_evolvers(w, x, y, z):
 #  +      where <built-in method join of str object at 0x10ac04030> = ''.join
 #  +      and   (['__maybe(__safeDiv, __maybe(__safeFloorDiv, -1, 1, 1)())()'], {}) = <bound method ParserElement.parseString of Combine:(Forward: bitwise operator term)>('-1/1//1')
 #  +        where <bound method ParserElement.parseString of Combine:(Forward: bitwise operator term)> = arith_expr.parseString
-# @hypothesis.settings(deadline=None)
-# @hypothesis.given(
-#     st.integers(min_value=1, max_value=255),  # exponent
-#     st.integers(min_value=1),
-#     st.text(["/", "*", "%", "+", "-"], min_size=1, max_size=1),
-#     st.text(["+", "-"], min_size=1, max_size=1),
-# )
-# def test_parse_arith_expr(p, q, binop, unop):
-#     stmt = str(p) + binop + str(q)
-#     assert eval(stmt) == eval("".join(list_item.parseString(stmt)))
-#
-#
-# @hypothesis.settings(deadline=None)
-# @hypothesis.given(
-#     st.integers(min_value=1, max_value=255),  # exponent
-#     st.integers(min_value=1),
-#     st.text(["/", "*", "%", "+", "-"], min_size=1, max_size=1),
-#     st.text(["+", "-"], min_size=1, max_size=1),
-#     st.from_regex(">=|<=|>|<|==", fullmatch=True),
-# )
-# def test_parse_comp_expr(p, q, binop, unop, compop):
-#     stmt = str(p) + binop + str(q) + " " + compop + " " + str(p) + binop + str(q)
-#     assert eval(stmt) == eval("".join(list_item.parseString(stmt)))
+@hypothesis.settings(deadline=None)
+@hypothesis.given(
+    st.integers(min_value=1, max_value=255),  # exponent
+    st.integers(min_value=1),
+    st.text(["/", "*", "%", "+", "-"], min_size=1, max_size=1),
+    st.text(["+", "-"], min_size=1, max_size=1),
+)
+def test_parse_arith_expr(p, q, binop, unop):
+    stmt = str(p) + binop + str(q)
+    assert eval(stmt) == eval("".join(list_item.parseString(stmt)))
+
+
+@hypothesis.settings(deadline=None)
+@hypothesis.given(
+    st.integers(min_value=1, max_value=255),  # exponent
+    st.integers(min_value=1),
+    st.text(["/", "*", "%", "+", "-"], min_size=1, max_size=1),
+    st.text(["+", "-"], min_size=1, max_size=1),
+    st.from_regex(">=|<=|>|<|==", fullmatch=True),
+)
+def test_parse_comp_expr(p, q, binop, unop, compop):
+    stmt = str(p) + binop + str(q) + " " + compop + " " + str(p) + binop + str(q)
+    assert eval(stmt) == eval("".join(list_item.parseString(stmt)))
 
 
 bit_op = re.compile(r"<<|>>|&|\||\^")

@@ -93,7 +93,7 @@ class Surely:
 
 @cython.ccall
 @cython.inline
-def __maybe(instance, func, args, kwargs, _warn, warn_undefined):
+def maybe_call(instance, func, args, kwargs, _warn, warn_undefined):
     e: Exception
     w: str
     warn_undefined: bool
@@ -162,7 +162,7 @@ class Maybe:
         return self._kwargs
 
     def __call__(self, warn_undefined=True):
-        return __maybe(
+        return maybe_call(
             self.__instance__,
             self._func,
             self._args,
