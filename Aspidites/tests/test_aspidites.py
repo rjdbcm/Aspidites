@@ -341,7 +341,6 @@ def test_compile_to_shared_object(inject_config):
     # Add(x=6.5, y=12)
 
     assert [1, 2, 3] == [i for i in Yield123()]
-    assert __maybe(Add, 6.5, 12)() == __undefined()
     assert x() == 6
     assert y() == __undefined()
     assert nullity == __undefined()

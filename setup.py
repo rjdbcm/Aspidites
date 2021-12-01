@@ -165,7 +165,8 @@ class InstallWrapper(install):
 
     def preinstall(self):
         """preinstall hook"""
-        pass
+        for i in module_paths:
+            os.remove(i.replace('.py', '.c'))
 
     def postinstall(self):
         """postinstall hook"""
@@ -192,8 +193,7 @@ class BuildExtWrapper(build_ext):
 
     def postbuild(self):
         """postbuild hook"""
-        for i in module_paths:
-            os.remove(i.replace('.py', '.c'))
+
 
         print('bootstrapping standard library in Aspidites/woma')
         from Aspidites.__main__ import get_cy_kwargs
