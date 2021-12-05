@@ -12,13 +12,9 @@
 
 * * *
 
-- Who is the [Woma programming language](http://aspidites.org/woma) for?  
+- Who is the [Woma programming language](http://aspidites.org/woma) for?
 
-    - First and foremost it is for people wanting to write CPython extensions fast, like *really* fast. Traditionally these are written in C. Woma has the advantage of being shorthand for well constrained and type-checked Python Extensions.
-
-- Isn't this just Cython with extra steps? 
-
-    - Technically yes, but with totally different goals. Cython intends to be a syntactic superset of python where Woma syntax has taken inspiration from a variety of sources. You can think of Aspidites as a wrapper for Cython that parses Woma code into Cython's python superset with added support for contracts and nil-tracking. Cython does much of the "heavy lifting". The specifics of the Woma Programming Language are being standardized as a series of WEEPs ([Woma Extension and Evaluation Proposals](http://aspidites.org/woma/QQ.html)).
+    - First and foremost it is for people wanting to write CPython extensions fast, like *really* fast. Traditionally these are written in C. Woma has the advantage of being shorthand for well constrained and type-checked Python Extensions. The specifics of the Woma Programming Language are being standardized as a series of WEEPs ([Woma Extension and Evaluation Proposals](http://aspidites.org/woma/QQ.html)).
     
  - Why use the name _Aspidites_? What's a Woma?
  
