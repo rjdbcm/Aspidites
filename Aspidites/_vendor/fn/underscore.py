@@ -94,6 +94,9 @@ class _Callable(object):
             self._arity,
         )
 
+    def __hash__(self):
+        hash(str(self))
+
     def __getitem__(self, k):
         if isinstance(k, self.__class__):
             # noinspection PyTypeChecker
