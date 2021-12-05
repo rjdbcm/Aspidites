@@ -95,7 +95,7 @@ class _Callable(object):
         )
 
     def __hash__(self):
-        hash(self)
+        int(hash(str(self)))
 
     def __getitem__(self, k):
         if isinstance(k, self.__class__):
