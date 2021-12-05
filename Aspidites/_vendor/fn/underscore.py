@@ -136,6 +136,9 @@ class _Callable(object):
         """
         return re.sub(VAR_X, "_", str(self).split("=>", 1)[1].strip())
 
+    def __hash__(self):
+        return hash(self.__repr__())
+
     def __call__(self, *args):
         if len(args) != self._arity:
             raise ArityError(self, self._arity, len(args))
@@ -201,6 +204,5 @@ class _Callable(object):
     __ror__ = fmap(flip(operator.or_), "other | self")
     __rxor__ = fmap(flip(operator.xor), "other ^ self")
 
-    __hash__ = fmap(hash, "self")
 
 shortcut = _Callable()
