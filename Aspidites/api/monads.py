@@ -26,7 +26,7 @@ from typing import Any, AnyStr, Union, Tuple, Dict, Callable
 
 import cython
 
-from Aspidites._vendor.pyrsistent import v, pvector
+from Aspidites._vendor.pyrsistent import v, pvector, pmap
 
 from .math import Undefined, Warn
 
@@ -62,7 +62,7 @@ class Maybe:
     def __init__(self, func, *args, **kwargs):
         self._func = func
         self._args = args
-        self._kwargs = kwargs
+        self._kwargs = pmap(kwargs)
         # noinspection PyUnresolvedReferences,PyProtectedMember
         self._stack = pvector(getouterframes(sys._getframe(0), 1))
         self._warn = Warn(self._stack, self._func, self._args, self._kwargs)
