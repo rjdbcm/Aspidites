@@ -94,9 +94,6 @@ class _Callable(object):
             self._arity,
         )
 
-    def __hash__(self):
-        int(hash(str(self)))
-
     def __getitem__(self, k):
         if isinstance(k, self.__class__):
             # noinspection PyTypeChecker
@@ -204,5 +201,6 @@ class _Callable(object):
     __ror__ = fmap(flip(operator.or_), "other | self")
     __rxor__ = fmap(flip(operator.xor), "other ^ self")
 
+    __hash__ = fmap(hash, "self")
 
 shortcut = _Callable()
