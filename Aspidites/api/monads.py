@@ -14,6 +14,7 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import functools
 import sys
 
 # ~ do not used the vendored version of getouterframes ~
@@ -32,6 +33,7 @@ from .math import Undefined, Warn
 
 @cython.ccall
 @cython.inline
+@functools.lru_cache
 def maybe_call(instance, func, args, kwargs, _warn, warn_undefined):
     e: Exception
     w: str
