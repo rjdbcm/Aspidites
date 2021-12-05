@@ -42,3 +42,21 @@
     p1 = filterfalse(predictor, t1) -> Iterable
     p2 = filter(predictor, t2) -> Iterable
     <*>[p1,p2]
+
+#ccall
+#contract
+(splitstr(s = '' -> str;
+          sep = ' ' -> str;
+          num = -1 -> int,>-2)) str
+    s = s + sep -> str
+    items = [] -> list
+    current = '' -> str
+    count = 0 -> int
+    i<@>s
+        current = current + i
+        i == sep<?>items = items[^]current[:-1]
+        i == sep<?>current = ''
+        num > -1<?>count = count + 1
+        <%>count == num
+
+    <*>items

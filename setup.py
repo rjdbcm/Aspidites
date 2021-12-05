@@ -14,7 +14,7 @@ from setuptools.command.build_ext import build_ext
 
 module_paths = [str(Path('Aspidites/_vendor/contracts/metaclass.py')),
                 str(Path('Aspidites/_vendor/contracts/interface.py')),
-                str(Path('Aspidites/_vendor/contracts/parser.py')),
+                str(Path('Aspidites/_vendor/contracts/contract_parser.py')),
                 str(Path('Aspidites/_vendor/contracts/syntax.py')),
                 str(Path('Aspidites/_vendor/contracts/inspection.py')),
                 str(Path('Aspidites/_vendor/contracts/docstring_parsing.py')),

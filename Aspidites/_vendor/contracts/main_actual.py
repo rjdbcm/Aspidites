@@ -22,7 +22,7 @@ from .interface import (
     Where,
     describe_value,
 )
-from .parser import parse_contract_string_actual, Storage
+from .contract_parser import parse_contract_string_actual, Storage
 from .syntax import contract_expression
 from .inspection import getfullargspec
 

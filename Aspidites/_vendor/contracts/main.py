@@ -15,7 +15,7 @@ from .interface import (
     MissingContract,
     describe_value,
 )
-from .parser import parse_contract_string_actual, check_contracts
+from .contract_parser import parse_contract_string_actual, check_contracts
 
 from .main_actual import (
     get_all_arg_names

@@ -14,6 +14,8 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import re
+
 from Aspidites._vendor.pyparsing import (
     IndentedBlock,
     Combine,
@@ -94,7 +96,7 @@ complex_ = Combine(real | integer + "+" + real | integer + "j")
 complex_.setName("complex numeric literal")
 identifier = Word(alphas + "_", alphanums + "_") + Optional(persist)
 identifier.setName("identifier")
-operand = nullit | complex_ | real | bool_literal | integer | list_str | identifier | underscore
+operand = slice_str | nullit | complex_ | real | bool_literal | integer | list_str | identifier | underscore
 operand.setName("operand")
 arith_expr = Combine(
     infixNotation(
@@ -270,9 +272,9 @@ def cvt_slice_str(s, l ,t):
 slice_str <<= (
     identifier
     + lbrack
-    + Optional(integer | identifier, default='None')
-    + Optional(colon + integer | identifier, default='None')
-    + Optional(colon + integer | identifier, default='None')
+    + Optional(Combine(Optional('-') + integer) | identifier, default='None')
+    + Optional(colon + Combine(Optional('-') + integer) | identifier, default='None')
+    + Optional(colon + Combine(Optional('-') + integer) | identifier, default='None')
     + rbrack
 )
 slice_str.setParseAction(cvt_slice_str)
