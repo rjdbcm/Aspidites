@@ -30,6 +30,9 @@
     x = -x + 1 -> int
     <*>bool(x)
 
+(__identity(x = /0 -> *)) *
+    <*>x
+
 (iterate(f = /0 -> Callable; x = /0 -> *)) coroutine
     i<@>iter(int, 1)
         x = f(x)
@@ -58,5 +61,5 @@
         i == sep<?>current = ''
         num > -1<?>count = count + 1
         <%>count == num
-
     <*>items
+

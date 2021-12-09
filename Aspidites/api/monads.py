@@ -44,11 +44,10 @@ def maybe_call(instance, func, args, kwargs, _warn, warn_undefined):
         with suppress(UnboundLocalError):
             instance = val
             return instance
-        instance = Undefined(func, args, kwargs)
     except Exception as e:
         if warn_undefined:
             w = _warn.create(e)
-            warn(w, category=RuntimeWarning, stacklevel=0)
+            warn(w, category=RuntimeWarning)
         # UNDEFINED #
         instance = Undefined(func, args, kwargs)
         return instance

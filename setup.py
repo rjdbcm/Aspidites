@@ -120,10 +120,20 @@ else:
 extensions = []
 
 for i in module_paths:
-    extensions.append(Extension(i.replace('.py', '').replace(sep, '.'), sources=[i], extra_compile_args=['-fno-wrapv']))
+    extensions.append(
+        Extension(
+            i.replace('.py', '').replace(sep, '.'),
+            sources=[i],
+            extra_compile_args=['-fno-wrapv', '-flto'],
+            extra_link_args=['-flto']))
 
 for i in bootstrap_paths:
-    extensions.append(Extension(i.replace('.py', '').replace(sep, '.'), sources=[i], extra_compile_args=['-fno-wrapv']))
+    extensions.append(
+        Extension(
+            i.replace('.py', '').replace(sep, '.'),
+            sources=[i],
+            extra_compile_args=['-fno-wrapv', '-flto'],
+            extra_link_args=['-flto']))
 
 print('compiling vendored extensions')
 #       '-----------------------------')
@@ -207,7 +217,8 @@ class BuildExtWrapper(build_ext):
             bytecode=False,
             c=True,
             verbose=0,
-            build_requires=''
+            build_requires='',
+            bootstrap=True
         )
         compile_args = CompilerArgs(**cy_kwargs)
         Compiler(compile_args)

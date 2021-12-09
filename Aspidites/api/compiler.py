@@ -143,6 +143,7 @@ class CompilerArgs(dict):
         "build_requires",
         "verbose",
         "embed",
+        "bootstrap"
     )
 
     def __init__(self, **kwargs):
@@ -155,6 +156,7 @@ class CompilerArgs(dict):
         self.build_requires: t.Union[t.List, str] = kwargs["build_requires"]
         self.verbose: int = kwargs["verbose"]
         self.embed: t.Union[str, None] = kwargs["embed"]
+        self.bootstrap: bool = kwargs["bootstrap"]
 
     def __repr__(self) -> str:
         return self.__class__.__name__
@@ -181,7 +183,10 @@ class Compiler:
                 self.mode,
                 dict(
                     root="",
-                    text=woma_template.substitute(code="\n".join(self.args.code)),
+                    text=woma_template.substitute(
+                        code="\n".join(self.args.code),
+                        bootstrap=self.args.bootstrap
+                    ),
                 ),
             ),
             "__init__.py": (

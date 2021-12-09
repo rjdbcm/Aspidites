@@ -156,7 +156,8 @@ from collections.abc import Generator
 import cython  # type: ignore
 from cython import declare as decl,address as addr,sizeof,typeof,struct,cfunc,ccall,nogil,no_gc,inline,union,typedef,cast,char,short,int as cint,bint,short,double,long,longdouble,longdoublecomplex,longlong,complex,float as cfloat
 from Aspidites._vendor.pyrsistent import pset as __pset,pmap as __pmap,pvector as __pvector,s,v,m
-from Aspidites.woma import *
+if $bootstrap==False:
+    from Aspidites.woma.library import *
 from Aspidites._vendor import take,drop,takelast,droplast,consume,nth,first_true,iterate,padnone,ncycles,repeatfunc,grouper,group_by,roundrobin,partition,splitat,splitby,powerset,pairwise,iter_suppress,flatten,accumulate,reduce,filterfalse,zip_longest,chain,combinations,cycle,dropwhile,islice,repeat,starmap,takewhile,tee,call,apply,flip,curry,curried,zipwith,foldl,foldr,unfold,Capture,Strict,OneOf,AllOf,NoneOf,Not,Each,EachItem,Some,Between,Length,Contains,Regex,Check,InstanceOf,SubclassOf,Arguments,Returns,Transformed,At,Object,match as __match,_
 from Aspidites.api.monads import Maybe as __maybe
 from Aspidites.api.math import Undefined as __undefined,SafeSlice as __safeSlice,SafeLoop as __safeLoop,SafeDiv as __safeDiv,SafeMul as __safeMul,SafeAdd as __safeAdd,SafeSub as __safeSub,SafeExp as __safeExp,SafeMod as __safeMod,SafeFloorDiv as __safeFloorDiv,SafeUnaryAdd as __safeUnaryAdd,SafeUnarySub as __safeUnarySub,SafeFactorial as __safeFactorial

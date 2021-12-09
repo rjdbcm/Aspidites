@@ -75,6 +75,8 @@ test_unary_add = +5
 
 test_unary_sub = -5
 
+split = splitstr('foo bar baz')
+
 (FirstElem(x = [0] -> list(type(t)))) type(t)
     <*>x[0:1]
 

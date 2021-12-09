@@ -72,7 +72,7 @@ def setup_code(inject_config):
 def test_compile_module(inject_config):
     try:
         compile(
-            woma_template.substitute(code="\n".join(setup_code(inject_config))),
+            woma_template.substitute(code="\n".join(setup_code(inject_config)), bootstrap=False),
             "",
             "exec",
         )
@@ -303,6 +303,7 @@ def test_compile_to_shared_object(inject_config):
         c=True,
         build_requires="",
         verbose=False,
+        bootstrap=False,
     )
     compile_args = CompilerArgs(**kwargs)
     try:
@@ -330,8 +331,10 @@ def test_compile_to_shared_object(inject_config):
         nullity,
         D,
         idx,
+        split,
     )
     assert primes_upto(10) == pvector([2, 3, 5, 7])
+    assert split == pvector(['foo', 'bar', 'baz'])
     assert match() == 1
     assert match(0) == 1
     assert match(1) == 3
