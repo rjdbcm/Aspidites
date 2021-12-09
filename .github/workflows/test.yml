@@ -37,7 +37,7 @@ jobs:
         with:
            python-version: "${{ matrix.python }}"
       - run: |
-              pip install -U pip pipenv wheel cython
+              pip install -U pip pipenv wheel cython numpy
               pipenv lock
               pipenv sync -d
               pipenv run python setup.py build_ext --inplace
@@ -81,7 +81,7 @@ jobs:
         with:
            python-version: "${{ matrix.python }}"
       - run: |
-              pip install -U pip pipenv wheel cython
+              pip install -U pip pipenv wheel cython numpy
               pipenv lock
               pipenv sync -d
               pipenv run python setup.py build_ext --inplace
