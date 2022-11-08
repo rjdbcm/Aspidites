@@ -1,5 +1,5 @@
 Sphinx==4.1.2
-sphinx-rtd-theme==0.5.2
+sphinx-rtd-theme==1.1.1
 pyrsistent==0.18.0
 Pygments==2.10.0
 Cython==0.29.24
