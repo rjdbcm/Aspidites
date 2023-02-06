@@ -3,7 +3,7 @@ sphinx-rtd-theme==0.5.2
 pyrsistent==0.18.0
 Pygments==2.10.0
 Cython==0.29.24
-numpy==1.21.2
+numpy==1.24.2
 sphinx-copybutton==0.4.0
 sphinx-tabs==3.2.0
 pygments-woma-lexer>=1.0.8
